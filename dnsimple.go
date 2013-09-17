@@ -70,7 +70,7 @@ func (client *DNSimpleClient) FindDomain(domain, name string) (Record, error) {
 	return domains[0].Record, nil
 }
 
-func (client *DNSimpleClient) UpdateIP(record Record, IP string) error {
+func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
 	httpClient := &http.Client{}
 
 	// lame, but easy enough for now
