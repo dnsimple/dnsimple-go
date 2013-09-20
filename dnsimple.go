@@ -72,7 +72,7 @@ func (client *DNSimpleClient) sendRequest(method, url string, body io.Reader) (s
 	return string(responseBody), nil
 }
 
-func (client *DNSimpleClient) FindDomain(domain, name string) (Record, error) {
+func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
 	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records?name=%s", domain, name)
 
 	body, err := client.sendRequest("GET", reqStr, nil)
