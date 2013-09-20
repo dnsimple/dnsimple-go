@@ -25,7 +25,7 @@ type Domain struct {
 	Name string
 }
 
-type domainList struct {
+type domainWrapper struct {
 	Domain Domain
 }
 
@@ -97,8 +97,7 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 		return []Domain{}, err
 	}
 
-	fmt.Println(body)
-	var domainList []domainList
+	var domainList []domainWrapper
 
 	if err = json.Unmarshal([]byte(body), &domainList); err != nil {
 		return []Domain{}, err
@@ -110,6 +109,22 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 	}
 
 	return domains, nil
+}
+
+func (client *DNSimpleClient) Domain(domain string) (Domain, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s", domain)
+
+	body, err := client.sendRequest("GET", reqStr, nil)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	wrappedDomain := domainWrapper{}
+
+	if err = json.Unmarshal([]byte(body), &wrappedDomain); err != nil {
+		return Domain{}, err
+	}
+	return wrappedDomain.Domain, nil
 }
 
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
