@@ -7,13 +7,19 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type Record struct {
-	Id       int
-	Name     string
-	Content  string
-	DomainId int `json:"domain_id"`
+	Id         int
+	Content    string
+	Name       string
+	TTL        int
+	RecordType string    `json:"record_type"`
+	Priority   int       `json:"prio"`
+	DomainId   int       `json:"domain_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type recordWrapper struct {
@@ -21,8 +27,22 @@ type recordWrapper struct {
 }
 
 type Domain struct {
-	Id   int
-	Name string
+	Id           int
+	Name         string
+	Language     string
+	Lockable     bool
+	State        string
+	Token        string
+	AutoRenew    bool      `json:"auto_renew"`
+	ExpiresOn    string    `json:"expires_on"`
+	RegistrantId int       `json:"registrant_id"`
+	UnicodeName  string    `json:"unicode_name"`
+	UserId       int       `json:"user_id"`
+	RecordCount  int       `json:"record_count"`
+	ServiceCount int       `json:"service_count"`
+	PrivateWhois bool      `json:"private_whois?"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 type domainWrapper struct {
