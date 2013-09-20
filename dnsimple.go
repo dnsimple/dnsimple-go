@@ -16,22 +16,33 @@ type Record struct {
 	DomainId int `json:"domain_id"`
 }
 
-type Domain struct {
+type recordList struct {
 	Record Record
 }
 
+type Domain struct {
+	Id   int
+	Name string
+}
+
+type domainList struct {
+	Domain Domain
+}
+
 type DNSimpleClient struct {
+	ApiToken    string
+	Email       string
 	DomainToken string
 	HttpClient  *http.Client
 }
 
-func NewClient(domainToken string) *DNSimpleClient {
-	return &DNSimpleClient{DomainToken: domainToken, HttpClient: &http.Client{}}
+func NewClient(apiToken, email string) *DNSimpleClient {
+	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}}
 }
 
 func (client *DNSimpleClient) makeRequest(method, url string, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, body)
-	req.Header.Add("X-DNSimple-Domain-Token", client.DomainToken)
+	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 
@@ -69,13 +80,36 @@ func (client *DNSimpleClient) FindDomain(domain, name string) (Record, error) {
 		return Record{}, err
 	}
 
-	var domains []Domain
+	var records []recordList
 
-	if err = json.Unmarshal([]byte(body), &domains); err != nil {
+	if err = json.Unmarshal([]byte(body), &records); err != nil {
 		return Record{}, err
 	}
 
-	return domains[0].Record, nil
+	return records[0].Record, nil
+}
+
+func (client *DNSimpleClient) Domains() ([]Domain, error) {
+	reqStr := "https://dnsimple.com/domains"
+
+	body, err := client.sendRequest("GET", reqStr, nil)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	fmt.Println(body)
+	var domainList []domainList
+
+	if err = json.Unmarshal([]byte(body), &domainList); err != nil {
+		return []Domain{}, err
+	}
+
+	domains := []Domain{}
+	for _, domain := range domainList {
+		domains = append(domains, domain.Domain)
+	}
+
+	return domains, nil
 }
 
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
