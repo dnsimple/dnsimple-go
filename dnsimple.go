@@ -72,6 +72,28 @@ func (client *DNSimpleClient) sendRequest(method, url string, body io.Reader) (s
 	return string(responseBody), nil
 }
 
+func (client *DNSimpleClient) Records(domain string) ([]Record, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domain)
+
+	body, err := client.sendRequest("GET", reqStr, nil)
+	if err != nil {
+		return []Record{}, err
+	}
+
+	var recordList []recordWrapper
+
+	if err = json.Unmarshal([]byte(body), &recordList); err != nil {
+		return []Record{}, err
+	}
+
+	records := []Record{}
+	for _, record := range recordList {
+		records = append(records, record.Record)
+	}
+
+	return records, nil
+}
+
 func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
 	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records?name=%s", domain, name)
 
