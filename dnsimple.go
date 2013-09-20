@@ -16,7 +16,7 @@ type Record struct {
 	DomainId int `json:"domain_id"`
 }
 
-type recordList struct {
+type recordWrapper struct {
 	Record Record
 }
 
@@ -80,7 +80,7 @@ func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
 		return Record{}, err
 	}
 
-	var records []recordList
+	var records []recordWrapper
 
 	if err = json.Unmarshal([]byte(body), &records); err != nil {
 		return Record{}, err
