@@ -127,6 +127,22 @@ func (client *DNSimpleClient) Domain(domain string) (Domain, error) {
 	return wrappedDomain.Domain, nil
 }
 
+func (client *DNSimpleClient) DomainAvailable(domain string) (bool, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/check", domain)
+
+	req, err := client.makeRequest("GET", reqStr, nil)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := client.HttpClient.Do(req)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 404, nil
+}
+
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
 	// lame, but easy enough for now
 	jsonPayload := fmt.Sprintf(`{"record": {"content": "%s"}}`, IP)
