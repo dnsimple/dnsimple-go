@@ -50,8 +50,8 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 	return domains, nil
 }
 
-func (client *DNSimpleClient) Domain(domain string) (Domain, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s", domain)
+func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s", domainIdentifier(domain))
 
 	body, err := client.sendRequest("GET", reqStr, nil)
 	if err != nil {
@@ -66,8 +66,8 @@ func (client *DNSimpleClient) Domain(domain string) (Domain, error) {
 	return wrappedDomain.Domain, nil
 }
 
-func (client *DNSimpleClient) DomainAvailable(domain string) (bool, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/check", domain)
+func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/check", domainIdentifier(domain))
 
 	req, err := client.makeRequest("GET", reqStr, nil)
 	if err != nil {

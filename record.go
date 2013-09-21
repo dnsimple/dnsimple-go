@@ -24,8 +24,8 @@ type recordWrapper struct {
 	Record Record `json:"record"`
 }
 
-func (client *DNSimpleClient) Records(domain string) ([]Record, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domain)
+func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
 
 	body, err := client.sendRequest("GET", reqStr, nil)
 	if err != nil {
@@ -46,8 +46,8 @@ func (client *DNSimpleClient) Records(domain string) ([]Record, error) {
 	return records, nil
 }
 
-func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records?name=%s", domain, name)
+func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, error) {
+	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records?name=%s", domainIdentifier(domain), name)
 
 	body, err := client.sendRequest("GET", reqStr, nil)
 	if err != nil {
@@ -63,7 +63,7 @@ func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
 	return records[0].Record, nil
 }
 
-func (client *DNSimpleClient) CreateRecord(domain string, record Record) (Record, error) {
+func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (Record, error) {
 	// pre-validate the Record?
 	wrappedRecord := recordWrapper{Record: record}
 	jsonPayload, err := json.Marshal(wrappedRecord)
@@ -71,7 +71,7 @@ func (client *DNSimpleClient) CreateRecord(domain string, record Record) (Record
 		return Record{}, err
 	}
 
-	url := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domain)
+	url := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
 
 	resp, err := client.sendRequestResponse("POST", url, strings.NewReader(string(jsonPayload)))
 	if err != nil {
