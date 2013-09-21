@@ -2,24 +2,26 @@ package dnsimple
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"strings"
 )
 
 type Record struct {
-	Id         int
-	Content    string
-	Name       string
-	TTL        int
-	RecordType string `json:"record_type"`
-	Priority   int    `json:"prio"`
-	DomainId   int    `json:"domain_id"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
+	Id         int    `json:"id,omitempty"`
+	Content    string `json:"content,omitempty"`
+	Name       string `json:"name,omitempty"`
+	TTL        int    `json:"ttl,omitempty"`
+	RecordType string `json:"record_type,omitempty"`
+	Priority   int    `json:"prio,omitempty"`
+	DomainId   int    `json:"domain_id,omitempty"`
+	CreatedAt  string `json:"created_at,omitempty"`
+	UpdatedAt  string `json:"updated_at,omitempty"`
 }
 
 type recordWrapper struct {
-	Record Record
+	Record Record `json:"record"`
 }
 
 func (client *DNSimpleClient) Records(domain string) ([]Record, error) {
@@ -59,6 +61,41 @@ func (client *DNSimpleClient) Record(domain, name string) (Record, error) {
 	}
 
 	return records[0].Record, nil
+}
+
+func (client *DNSimpleClient) CreateRecord(domain string, record Record) (Record, error) {
+	// pre-validate the Record?
+	wrappedRecord := recordWrapper{Record: record}
+	jsonPayload, err := json.Marshal(wrappedRecord)
+	if err != nil {
+		return Record{}, err
+	}
+
+	fmt.Println(string(jsonPayload))
+
+	url := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domain)
+
+	resp, err := client.sendRequestResponse("POST", url, strings.NewReader(string(jsonPayload)))
+	if err != nil {
+		return Record{}, err
+	}
+
+	if resp.StatusCode == 400 {
+		// 400: bad request, validation failed
+		return Record{}, errors.New("Invalid Record")
+	}
+
+	defer resp.Body.Close()
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return Record{}, err
+	}
+
+	if err = json.Unmarshal(responseBody, &wrappedRecord); err != nil {
+		return Record{}, err
+	}
+
+	return wrappedRecord.Record, nil
 }
 
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
