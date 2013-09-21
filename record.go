@@ -71,8 +71,6 @@ func (client *DNSimpleClient) CreateRecord(domain string, record Record) (Record
 		return Record{}, err
 	}
 
-	fmt.Println(string(jsonPayload))
-
 	url := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domain)
 
 	resp, err := client.sendRequestResponse("POST", url, strings.NewReader(string(jsonPayload)))
@@ -98,15 +96,48 @@ func (client *DNSimpleClient) CreateRecord(domain string, record Record) (Record
 	return wrappedRecord.Record, nil
 }
 
-func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
-	// lame, but easy enough for now
-	jsonPayload := fmt.Sprintf(`{"record": {"content": "%s"}}`, IP)
-	url := fmt.Sprintf("https://dnsimple.com/domains/%d/records/%d", record.DomainId, record.Id)
+func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (Record, error) {
+	// pre-validate the Record?
+	// name, content, ttl, prio - only things allowed
+	wrappedRecord := recordWrapper{Record: Record{
+		Name:     recordAttributes.Name,
+		Content:  recordAttributes.Content,
+		TTL:      recordAttributes.TTL,
+		Priority: recordAttributes.Priority}}
 
-	_, err := client.sendRequest("PUT", url, strings.NewReader(jsonPayload))
+	jsonPayload, err := json.Marshal(wrappedRecord)
 	if err != nil {
-		return err
+		return Record{}, err
 	}
 
-	return nil
+	url := fmt.Sprintf("https://dnsimple.com/domains/%d/records/%d", record.DomainId, record.Id)
+	fmt.Println(string(jsonPayload))
+
+	resp, err := client.sendRequestResponse("PUT", url, strings.NewReader(string(jsonPayload)))
+	if err != nil {
+		return Record{}, err
+	}
+
+	if resp.StatusCode == 400 {
+		// 400: bad request, validation failed
+		return Record{}, errors.New("Invalid Record")
+	}
+
+	defer resp.Body.Close()
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return Record{}, err
+	}
+
+	if err = json.Unmarshal(responseBody, &wrappedRecord); err != nil {
+		return Record{}, err
+	}
+
+	return wrappedRecord.Record, nil
+}
+
+func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
+	newRecord := Record{Content: IP}
+	_, err := record.Update(client, newRecord)
+	return err
 }
