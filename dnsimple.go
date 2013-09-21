@@ -1,3 +1,6 @@
+// Package dnsimple implements a client for the DNSimple API.
+//
+// In order to use this package you will need a DNSimple account and your API Token.
 package dnsimple
 
 import (

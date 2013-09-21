@@ -41,6 +41,8 @@ func main() {
 }
 ```
 
+For more complete documentation, load up godoc and find the package.
+
 ## Development
 
 - Source hosted at [GitHub](https://github.com/rubyist/go-dnsimple)
