@@ -6,22 +6,22 @@ import (
 )
 
 type Domain struct {
-	Id           int
-	Name         string
-	Language     string
-	Lockable     bool
-	State        string
-	Token        string
-	AutoRenew    bool   `json:"auto_renew"`
-	ExpiresOn    string `json:"expires_on"`
-	RegistrantId int    `json:"registrant_id"`
-	UnicodeName  string `json:"unicode_name"`
-	UserId       int    `json:"user_id"`
-	RecordCount  int    `json:"record_count"`
-	ServiceCount int    `json:"service_count"`
-	PrivateWhois bool   `json:"private_whois?"`
-	CreatedAt    string `json:"created_at"`
-	UpdatedAt    string `json:"updated_at"`
+	Id           int    `json:"id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Language     string `json:"language,omitempty"`
+	Lockable     bool   `json:"lockable,omitempty"`
+	State        string `json:"state,omitempty"`
+	Token        string `json:"token,omitempty"`
+	AutoRenew    bool   `json:"auto_renew,omitempty"`
+	ExpiresOn    string `json:"expires_on,omitempty"`
+	RegistrantId int    `json:"registrant_id,omitempty"`
+	UnicodeName  string `json:"unicode_name,omitempty"`
+	UserId       int    `json:"user_id,omitempty"`
+	RecordCount  int    `json:"record_count,omitempty"`
+	ServiceCount int    `json:"service_count,omitempty"`
+	PrivateWhois bool   `json:"private_whois?,omitempty"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 type domainWrapper struct {
