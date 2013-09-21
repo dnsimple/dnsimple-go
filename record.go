@@ -136,6 +136,20 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 	return wrappedRecord.Record, nil
 }
 
+func (record *Record) Delete(client *DNSimpleClient) error {
+	url := fmt.Sprintf("https://dnsimple.com/domains/%d/records/%d", record.DomainId, record.Id)
+
+	resp, err := client.sendRequestResponse("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode == 200 {
+		return nil
+	}
+	return errors.New("Failed to delete domain")
+}
+
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
 	newRecord := Record{Content: IP}
 	_, err := record.Update(client, newRecord)
