@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 )
 
 type Record struct {
@@ -12,11 +11,11 @@ type Record struct {
 	Content    string
 	Name       string
 	TTL        int
-	RecordType string    `json:"record_type"`
-	Priority   int       `json:"prio"`
-	DomainId   int       `json:"domain_id"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	RecordType string `json:"record_type"`
+	Priority   int    `json:"prio"`
+	DomainId   int    `json:"domain_id"`
+	CreatedAt  string `json:"created_at"`
+	UpdatedAt  string `json:"updated_at"`
 }
 
 type recordWrapper struct {

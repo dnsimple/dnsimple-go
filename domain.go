@@ -3,7 +3,6 @@ package dnsimple
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type Domain struct {
@@ -13,16 +12,16 @@ type Domain struct {
 	Lockable     bool
 	State        string
 	Token        string
-	AutoRenew    bool      `json:"auto_renew"`
-	ExpiresOn    string    `json:"expires_on"`
-	RegistrantId int       `json:"registrant_id"`
-	UnicodeName  string    `json:"unicode_name"`
-	UserId       int       `json:"user_id"`
-	RecordCount  int       `json:"record_count"`
-	ServiceCount int       `json:"service_count"`
-	PrivateWhois bool      `json:"private_whois?"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	AutoRenew    bool   `json:"auto_renew"`
+	ExpiresOn    string `json:"expires_on"`
+	RegistrantId int    `json:"registrant_id"`
+	UnicodeName  string `json:"unicode_name"`
+	UserId       int    `json:"user_id"`
+	RecordCount  int    `json:"record_count"`
+	ServiceCount int    `json:"service_count"`
+	PrivateWhois bool   `json:"private_whois?"`
+	CreatedAt    string `json:"created_at"`
+	UpdatedAt    string `json:"updated_at"`
 }
 
 type domainWrapper struct {
