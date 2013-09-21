@@ -24,10 +24,16 @@ type recordWrapper struct {
 	Record Record `json:"record"`
 }
 
-func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
+func recordURL(domain interface{}, record *Record) string {
+	str := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
+	if record != nil {
+		str += fmt.Sprintf("/%d", record.Id)
+	}
+	return str
+}
 
-	body, err := client.sendRequest("GET", reqStr, nil)
+func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
+	body, err := client.sendRequest("GET", recordURL(domain, nil), nil)
 	if err != nil {
 		return []Record{}, err
 	}
@@ -47,7 +53,7 @@ func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
 }
 
 func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/records?name=%s", domainIdentifier(domain), name)
+	reqStr := fmt.Sprintf("%s?name=%s", recordURL(domain, nil), name)
 
 	body, err := client.sendRequest("GET", reqStr, nil)
 	if err != nil {
@@ -71,9 +77,7 @@ func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (R
 		return Record{}, err
 	}
 
-	url := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
-
-	resp, err := client.sendRequestResponse("POST", url, strings.NewReader(string(jsonPayload)))
+	resp, err := client.sendRequestResponse("POST", recordURL(domain, nil), strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return Record{}, err
 	}
@@ -110,10 +114,9 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 		return Record{}, err
 	}
 
-	url := fmt.Sprintf("https://dnsimple.com/domains/%d/records/%d", record.DomainId, record.Id)
 	fmt.Println(string(jsonPayload))
 
-	resp, err := client.sendRequestResponse("PUT", url, strings.NewReader(string(jsonPayload)))
+	resp, err := client.sendRequestResponse("PUT", recordURL(record.DomainId, record), strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return Record{}, err
 	}
@@ -137,9 +140,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	url := fmt.Sprintf("https://dnsimple.com/domains/%d/records/%d", record.DomainId, record.Id)
-
-	resp, err := client.sendRequestResponse("DELETE", url, nil)
+	resp, err := client.sendRequestResponse("DELETE", recordURL(record.DomainId, record), nil)
 	if err != nil {
 		return err
 	}

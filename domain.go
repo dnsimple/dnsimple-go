@@ -28,10 +28,16 @@ type domainWrapper struct {
 	Domain Domain
 }
 
-func (client *DNSimpleClient) Domains() ([]Domain, error) {
-	reqStr := "https://dnsimple.com/domains"
+func domainURL(domain interface{}) string {
+	str := "https://dnsimple.com/domains"
+	if domain != nil {
+		str += fmt.Sprintf("/%s", domainIdentifier(domain))
+	}
+	return str
+}
 
-	body, err := client.sendRequest("GET", reqStr, nil)
+func (client *DNSimpleClient) Domains() ([]Domain, error) {
+	body, err := client.sendRequest("GET", domainURL(nil), nil)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -51,9 +57,7 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 }
 
 func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s", domainIdentifier(domain))
-
-	body, err := client.sendRequest("GET", reqStr, nil)
+	body, err := client.sendRequest("GET", domainURL(domain), nil)
 	if err != nil {
 		return Domain{}, err
 	}
@@ -67,7 +71,7 @@ func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
 }
 
 func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) {
-	reqStr := fmt.Sprintf("https://dnsimple.com/domains/%s/check", domainIdentifier(domain))
+	reqStr := fmt.Sprintf("%s/check", domainURL(domain))
 
 	req, err := client.makeRequest("GET", reqStr, nil)
 	if err != nil {
