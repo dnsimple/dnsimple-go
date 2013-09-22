@@ -66,6 +66,10 @@ func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, e
 		return Record{}, err
 	}
 
+	if len(records) == 0 {
+		return Record{}, errors.New("Domain not found")
+	}
+
 	return records[0].Record, nil
 }
 
