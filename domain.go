@@ -1,7 +1,6 @@
 package dnsimple
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -37,19 +36,14 @@ func domainURL(domain interface{}) string {
 }
 
 func (client *DNSimpleClient) Domains() ([]Domain, error) {
-	body, _, err := client.sendRequest("GET", domainURL(nil), nil)
-	if err != nil {
-		return []Domain{}, err
-	}
+	wrappedDomains := []domainWrapper{}
 
-	var domainList []domainWrapper
-
-	if err = json.Unmarshal([]byte(body), &domainList); err != nil {
+	if err := client.get(domainURL(nil), &wrappedDomains); err != nil {
 		return []Domain{}, err
 	}
 
 	domains := []Domain{}
-	for _, domain := range domainList {
+	for _, domain := range wrappedDomains {
 		domains = append(domains, domain.Domain)
 	}
 
@@ -57,16 +51,12 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 }
 
 func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
-	body, _, err := client.sendRequest("GET", domainURL(domain), nil)
-	if err != nil {
-		return Domain{}, err
-	}
-
 	wrappedDomain := domainWrapper{}
 
-	if err = json.Unmarshal([]byte(body), &wrappedDomain); err != nil {
+	if err := client.get(domainURL(domain), &wrappedDomain); err != nil {
 		return Domain{}, err
 	}
+
 	return wrappedDomain.Domain, nil
 }
 

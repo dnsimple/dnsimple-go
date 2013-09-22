@@ -1,10 +1,8 @@
 package dnsimple
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 )
 
 type Record struct {
@@ -32,19 +30,14 @@ func recordURL(domain interface{}, record *Record) string {
 }
 
 func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
-	body, _, err := client.sendRequest("GET", recordURL(domain, nil), nil)
-	if err != nil {
-		return []Record{}, err
-	}
+	wrappedRecords := []recordWrapper{}
 
-	var recordList []recordWrapper
-
-	if err = json.Unmarshal([]byte(body), &recordList); err != nil {
+	if err := client.get(recordURL(domain, nil), &wrappedRecords); err != nil {
 		return []Record{}, err
 	}
 
 	records := []Record{}
-	for _, record := range recordList {
+	for _, record := range wrappedRecords {
 		records = append(records, record.Record)
 	}
 
@@ -54,47 +47,33 @@ func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
 func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, error) {
 	reqStr := fmt.Sprintf("%s?name=%s", recordURL(domain, nil), name)
 
-	body, _, err := client.sendRequest("GET", reqStr, nil)
-	if err != nil {
+	wrappedRecords := []recordWrapper{}
+	if err := client.get(reqStr, &wrappedRecords); err != nil {
 		return Record{}, err
 	}
 
-	var records []recordWrapper
-
-	if err = json.Unmarshal([]byte(body), &records); err != nil {
-		return Record{}, err
-	}
-
-	if len(records) == 0 {
+	if len(wrappedRecords) == 0 {
 		return Record{}, errors.New("Domain not found")
 	}
 
-	return records[0].Record, nil
+	return wrappedRecords[0].Record, nil
 }
 
 func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (Record, error) {
 	// pre-validate the Record?
 	wrappedRecord := recordWrapper{Record: record}
-	jsonPayload, err := json.Marshal(wrappedRecord)
-	if err != nil {
-		return Record{}, err
-	}
+	returnedRecord := recordWrapper{}
 
-	resp, status, err := client.sendRequest("POST", recordURL(domain, nil), strings.NewReader(string(jsonPayload)))
+	status, err := client.post(recordURL(domain, nil), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
 
 	if status == 400 {
-		// 400: bad request, validation failed
 		return Record{}, errors.New("Invalid Record")
 	}
 
-	if err = json.Unmarshal([]byte(resp), &wrappedRecord); err != nil {
-		return Record{}, err
-	}
-
-	return wrappedRecord.Record, nil
+	return returnedRecord.Record, nil
 }
 
 func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (Record, error) {
@@ -106,26 +85,18 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 		TTL:      recordAttributes.TTL,
 		Priority: recordAttributes.Priority}}
 
-	jsonPayload, err := json.Marshal(wrappedRecord)
-	if err != nil {
-		return Record{}, err
-	}
+	returnedRecord := recordWrapper{}
 
-	resp, status, err := client.sendRequest("PUT", recordURL(record.DomainId, record), strings.NewReader(string(jsonPayload)))
+	status, err := client.put(recordURL(record.DomainId, record), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
 
 	if status == 400 {
-		// 400: bad request, validation failed
 		return Record{}, errors.New("Invalid Record")
 	}
 
-	if err = json.Unmarshal([]byte(resp), &wrappedRecord); err != nil {
-		return Record{}, err
-	}
-
-	return wrappedRecord.Record, nil
+	return returnedRecord.Record, nil
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
