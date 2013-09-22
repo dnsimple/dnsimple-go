@@ -114,8 +114,6 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 		return Record{}, err
 	}
 
-	fmt.Println(string(jsonPayload))
-
 	resp, err := client.sendRequestResponse("PUT", recordURL(record.DomainId, record), strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return Record{}, err
