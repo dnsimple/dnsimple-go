@@ -73,15 +73,11 @@ func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
 func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) {
 	reqStr := fmt.Sprintf("%s/check", domainURL(domain))
 
-	req, err := client.makeRequest("GET", reqStr, nil)
+	_, status, err := client.sendRequest("GET", reqStr, nil)
+
 	if err != nil {
 		return false, err
 	}
 
-	resp, err := client.HttpClient.Do(req)
-	if err != nil {
-		return false, err
-	}
-
-	return resp.StatusCode == 404, nil
+	return status == 404, nil
 }
