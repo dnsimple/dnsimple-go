@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"errors"
 	"fmt"
+	"net/url"
 )
 
 type Record struct {
@@ -29,10 +30,23 @@ func recordURL(domain interface{}, record *Record) string {
 	return str
 }
 
-func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
+func (client *DNSimpleClient) Records(domain interface{}, name, recordType string) ([]Record, error) {
+	reqStr := recordURL(domain, nil)
+	v := url.Values{}
+
+	if name != "" {
+		v.Add("name", name)
+	}
+
+	if recordType != "" {
+		v.Add("type", recordType)
+	}
+
+	reqStr += "?" + v.Encode()
+
 	wrappedRecords := []recordWrapper{}
 
-	if err := client.get(recordURL(domain, nil), &wrappedRecords); err != nil {
+	if err := client.get(reqStr, &wrappedRecords); err != nil {
 		return []Record{}, err
 	}
 
@@ -42,21 +56,6 @@ func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
 	}
 
 	return records, nil
-}
-
-func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, error) {
-	reqStr := fmt.Sprintf("%s?name=%s", recordURL(domain, nil), name)
-
-	wrappedRecords := []recordWrapper{}
-	if err := client.get(reqStr, &wrappedRecords); err != nil {
-		return Record{}, err
-	}
-
-	if len(wrappedRecords) == 0 {
-		return Record{}, errors.New("Domain not found")
-	}
-
-	return wrappedRecords[0].Record, nil
 }
 
 func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (Record, error) {
