@@ -33,34 +33,24 @@ func (client *DNSimpleClient) makeRequest(method, url string, body io.Reader) (*
 	return req, nil
 }
 
-func (client *DNSimpleClient) sendRequestResponse(method, url string, body io.Reader) (*http.Response, error) {
+func (client *DNSimpleClient) sendRequest(method, url string, body io.Reader) (string, int, error) {
 	req, err := client.makeRequest(method, url, body)
 	if err != nil {
-		return nil, err
+		return "", 0, err
 	}
 
 	resp, err := client.HttpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return "", 0, err
 	}
-
-	return resp, nil
-}
-
-func (client *DNSimpleClient) sendRequest(method, url string, body io.Reader) (string, error) {
-	resp, err := client.sendRequestResponse(method, url, body)
-	if err != nil {
-		return "", err
-	}
-
 	defer resp.Body.Close()
 
-	responseBody, err := ioutil.ReadAll(resp.Body)
+	responseBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 
-	return string(responseBody), nil
+	return string(responseBytes), resp.StatusCode, nil
 }
 
 func domainIdentifier(value interface{}) string {

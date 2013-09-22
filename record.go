@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"strings"
 )
 
@@ -33,7 +32,7 @@ func recordURL(domain interface{}, record *Record) string {
 }
 
 func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
-	body, err := client.sendRequest("GET", recordURL(domain, nil), nil)
+	body, _, err := client.sendRequest("GET", recordURL(domain, nil), nil)
 	if err != nil {
 		return []Record{}, err
 	}
@@ -55,7 +54,7 @@ func (client *DNSimpleClient) Records(domain interface{}) ([]Record, error) {
 func (client *DNSimpleClient) Record(domain interface{}, name string) (Record, error) {
 	reqStr := fmt.Sprintf("%s?name=%s", recordURL(domain, nil), name)
 
-	body, err := client.sendRequest("GET", reqStr, nil)
+	body, _, err := client.sendRequest("GET", reqStr, nil)
 	if err != nil {
 		return Record{}, err
 	}
@@ -81,23 +80,17 @@ func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (R
 		return Record{}, err
 	}
 
-	resp, err := client.sendRequestResponse("POST", recordURL(domain, nil), strings.NewReader(string(jsonPayload)))
+	resp, status, err := client.sendRequest("POST", recordURL(domain, nil), strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return Record{}, err
 	}
 
-	if resp.StatusCode == 400 {
+	if status == 400 {
 		// 400: bad request, validation failed
 		return Record{}, errors.New("Invalid Record")
 	}
 
-	defer resp.Body.Close()
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return Record{}, err
-	}
-
-	if err = json.Unmarshal(responseBody, &wrappedRecord); err != nil {
+	if err = json.Unmarshal([]byte(resp), &wrappedRecord); err != nil {
 		return Record{}, err
 	}
 
@@ -118,23 +111,17 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 		return Record{}, err
 	}
 
-	resp, err := client.sendRequestResponse("PUT", recordURL(record.DomainId, record), strings.NewReader(string(jsonPayload)))
+	resp, status, err := client.sendRequest("PUT", recordURL(record.DomainId, record), strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return Record{}, err
 	}
 
-	if resp.StatusCode == 400 {
+	if status == 400 {
 		// 400: bad request, validation failed
 		return Record{}, errors.New("Invalid Record")
 	}
 
-	defer resp.Body.Close()
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return Record{}, err
-	}
-
-	if err = json.Unmarshal(responseBody, &wrappedRecord); err != nil {
+	if err = json.Unmarshal([]byte(resp), &wrappedRecord); err != nil {
 		return Record{}, err
 	}
 
@@ -142,12 +129,12 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	resp, err := client.sendRequestResponse("DELETE", recordURL(record.DomainId, record), nil)
+	_, status, err := client.sendRequest("DELETE", recordURL(record.DomainId, record), nil)
 	if err != nil {
 		return err
 	}
 
-	if resp.StatusCode == 200 {
+	if status == 200 {
 		return nil
 	}
 	return errors.New("Failed to delete domain")

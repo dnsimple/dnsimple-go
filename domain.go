@@ -37,7 +37,7 @@ func domainURL(domain interface{}) string {
 }
 
 func (client *DNSimpleClient) Domains() ([]Domain, error) {
-	body, err := client.sendRequest("GET", domainURL(nil), nil)
+	body, _, err := client.sendRequest("GET", domainURL(nil), nil)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -57,7 +57,7 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 }
 
 func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
-	body, err := client.sendRequest("GET", domainURL(domain), nil)
+	body, _, err := client.sendRequest("GET", domainURL(domain), nil)
 	if err != nil {
 		return Domain{}, err
 	}
