@@ -71,3 +71,20 @@ func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) 
 
 	return status == 404, nil
 }
+
+func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) error {
+	reqStr := fmt.Sprintf("%s/auto_renewal", domainURL(domain))
+
+	method := ""
+	if autorenew {
+		method = "POST"
+	} else {
+		method = "DELETE"
+	}
+	_, _, err := client.sendRequest(method, reqStr, nil)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
