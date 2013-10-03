@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -19,12 +20,13 @@ type Domain struct {
 	RecordCount  int    `json:"record_count,omitempty"`
 	ServiceCount int    `json:"service_count,omitempty"`
 	PrivateWhois bool   `json:"private_whois?,omitempty"`
+	RenewWhois   bool   `json:"renew_whois_privacy,omitempty"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 type domainWrapper struct {
-	Domain Domain
+	Domain Domain `json:"domain"`
 }
 
 func domainURL(domain interface{}) string {
@@ -86,5 +88,22 @@ func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) e
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (client *DNSimpleClient) Renew(domain string, renewWhoisPrivacy bool) error {
+	wrappedDomain := domainWrapper{Domain: Domain{
+		Name:       domain,
+		RenewWhois: renewWhoisPrivacy}}
+
+	status, err := client.post("https://dnsimple.com/domain_renewals", wrappedDomain, nil)
+	if err != nil {
+		return err
+	}
+
+	if status == 400 {
+		return errors.New("Failed to Renew")
+	}
+
 	return nil
 }
