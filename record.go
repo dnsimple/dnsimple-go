@@ -111,7 +111,7 @@ func (record *Record) Delete(client *DNSimpleClient) error {
 }
 
 func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
-	newRecord := Record{Content: IP}
+	newRecord := Record{Content: IP, Name: record.Name}
 	_, err := record.Update(client, newRecord)
 	return err
 }
