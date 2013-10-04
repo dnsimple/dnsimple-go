@@ -99,17 +99,3 @@ func (client *DNSimpleClient) sendRequest(method, path string, body io.Reader) (
 
 	return string(responseBytes), resp.StatusCode, nil
 }
-
-func domainIdentifier(value interface{}) string {
-	switch value := value.(type) {
-	case string:
-		return value
-	case int:
-		return fmt.Sprintf("%d", value)
-	case Domain:
-		return fmt.Sprintf("%d", value.Id)
-	case Record:
-		return fmt.Sprintf("%d", value.DomainId)
-	}
-	return ""
-}

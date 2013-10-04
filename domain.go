@@ -29,6 +29,20 @@ type domainWrapper struct {
 	Domain Domain `json:"domain"`
 }
 
+func domainIdentifier(value interface{}) string {
+	switch value := value.(type) {
+	case string:
+		return value
+	case int:
+		return fmt.Sprintf("%d", value)
+	case Domain:
+		return fmt.Sprintf("%d", value.Id)
+	case Record:
+		return fmt.Sprintf("%d", value.DomainId)
+	}
+	return ""
+}
+
 func domainPath(domain interface{}) string {
 	if domain != nil {
 		return fmt.Sprintf("domains/%s", domainIdentifier(domain))
