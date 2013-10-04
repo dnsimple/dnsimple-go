@@ -22,8 +22,8 @@ type recordWrapper struct {
 	Record Record `json:"record"`
 }
 
-func recordURL(domain interface{}, record *Record) string {
-	str := fmt.Sprintf("https://dnsimple.com/domains/%s/records", domainIdentifier(domain))
+func recordPath(domain interface{}, record *Record) string {
+	str := fmt.Sprintf("domains/%s/records", domainIdentifier(domain))
 	if record != nil {
 		str += fmt.Sprintf("/%d", record.Id)
 	}
@@ -31,7 +31,7 @@ func recordURL(domain interface{}, record *Record) string {
 }
 
 func (client *DNSimpleClient) Records(domain interface{}, name, recordType string) ([]Record, error) {
-	reqStr := recordURL(domain, nil)
+	reqStr := recordPath(domain, nil)
 	v := url.Values{}
 
 	if name != "" {
@@ -63,7 +63,7 @@ func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (R
 	wrappedRecord := recordWrapper{Record: record}
 	returnedRecord := recordWrapper{}
 
-	status, err := client.post(recordURL(domain, nil), wrappedRecord, &returnedRecord)
+	status, err := client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
@@ -86,7 +86,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 
 	returnedRecord := recordWrapper{}
 
-	status, err := client.put(recordURL(record.DomainId, record), wrappedRecord, &returnedRecord)
+	status, err := client.put(recordPath(record.DomainId, record), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
@@ -99,7 +99,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	_, status, err := client.sendRequest("DELETE", recordURL(record.DomainId, record), nil)
+	_, status, err := client.sendRequest("DELETE", recordPath(record.DomainId, record), nil)
 	if err != nil {
 		return err
 	}

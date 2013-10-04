@@ -29,18 +29,18 @@ type domainWrapper struct {
 	Domain Domain `json:"domain"`
 }
 
-func domainURL(domain interface{}) string {
-	str := "https://dnsimple.com/domains"
+func domainPath(domain interface{}) string {
 	if domain != nil {
-		str += fmt.Sprintf("/%s", domainIdentifier(domain))
+		return fmt.Sprintf("domains/%s", domainIdentifier(domain))
+	} else {
+		return "domains"
 	}
-	return str
 }
 
 func (client *DNSimpleClient) Domains() ([]Domain, error) {
 	wrappedDomains := []domainWrapper{}
 
-	if err := client.get(domainURL(nil), &wrappedDomains); err != nil {
+	if err := client.get(domainPath(nil), &wrappedDomains); err != nil {
 		return []Domain{}, err
 	}
 
@@ -55,7 +55,7 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
 	wrappedDomain := domainWrapper{}
 
-	if err := client.get(domainURL(domain), &wrappedDomain); err != nil {
+	if err := client.get(domainPath(domain), &wrappedDomain); err != nil {
 		return Domain{}, err
 	}
 
@@ -63,7 +63,7 @@ func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
 }
 
 func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) {
-	reqStr := fmt.Sprintf("%s/check", domainURL(domain))
+	reqStr := fmt.Sprintf("%s/check", domainPath(domain))
 
 	_, status, err := client.sendRequest("GET", reqStr, nil)
 
@@ -75,7 +75,7 @@ func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) 
 }
 
 func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) error {
-	reqStr := fmt.Sprintf("%s/auto_renewal", domainURL(domain))
+	reqStr := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
 	method := ""
 	if autorenew {
@@ -96,7 +96,7 @@ func (client *DNSimpleClient) Renew(domain string, renewWhoisPrivacy bool) error
 		Name:       domain,
 		RenewWhois: renewWhoisPrivacy}}
 
-	status, err := client.post("https://dnsimple.com/domain_renewals", wrappedDomain, nil)
+	status, err := client.post("domain_renewals", wrappedDomain, nil)
 	if err != nil {
 		return err
 	}

@@ -12,19 +12,24 @@ import (
 	"strings"
 )
 
+const (
+	defaultBaseURL = "https://dnsimple.com/"
+)
+
 type DNSimpleClient struct {
 	ApiToken    string
 	Email       string
 	DomainToken string
 	HttpClient  *http.Client
+	BaseURL     string
 }
 
 func NewClient(apiToken, email string) *DNSimpleClient {
-	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}}
+	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL}
 }
 
-func (client *DNSimpleClient) get(url string, val interface{}) error {
-	body, _, err := client.sendRequest("GET", url, nil)
+func (client *DNSimpleClient) get(path string, val interface{}) error {
+	body, _, err := client.sendRequest("GET", path, nil)
 	if err != nil {
 		return err
 	}
@@ -36,13 +41,13 @@ func (client *DNSimpleClient) get(url string, val interface{}) error {
 	return nil
 }
 
-func (client *DNSimpleClient) postOrPut(method, url string, payload, val interface{}) (int, error) {
+func (client *DNSimpleClient) postOrPut(method, path string, payload, val interface{}) (int, error) {
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		return 0, err
 	}
 
-	body, status, err := client.sendRequest(method, url, strings.NewReader(string(jsonPayload)))
+	body, status, err := client.sendRequest(method, path, strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return 0, err
 	}
@@ -54,15 +59,16 @@ func (client *DNSimpleClient) postOrPut(method, url string, payload, val interfa
 	return status, nil
 }
 
-func (client *DNSimpleClient) put(url string, payload, val interface{}) (int, error) {
-	return client.postOrPut("PUT", url, payload, val)
+func (client *DNSimpleClient) put(path string, payload, val interface{}) (int, error) {
+	return client.postOrPut("PUT", path, payload, val)
 }
 
-func (client *DNSimpleClient) post(url string, payload, val interface{}) (int, error) {
-	return client.postOrPut("POST", url, payload, val)
+func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, error) {
+	return client.postOrPut("POST", path, payload, val)
 }
 
-func (client *DNSimpleClient) makeRequest(method, url string, body io.Reader) (*http.Request, error) {
+func (client *DNSimpleClient) makeRequest(method, path string, body io.Reader) (*http.Request, error) {
+	url := client.BaseURL + path
 	req, err := http.NewRequest(method, url, body)
 	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 	req.Header.Set("Content-Type", "application/json")
@@ -74,8 +80,8 @@ func (client *DNSimpleClient) makeRequest(method, url string, body io.Reader) (*
 	return req, nil
 }
 
-func (client *DNSimpleClient) sendRequest(method, url string, body io.Reader) (string, int, error) {
-	req, err := client.makeRequest(method, url, body)
+func (client *DNSimpleClient) sendRequest(method, path string, body io.Reader) (string, int, error) {
+	req, err := client.makeRequest(method, path, body)
 	if err != nil {
 		return "", 0, err
 	}
