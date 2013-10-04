@@ -3,7 +3,7 @@
 A Go library for using the DNSimple API.
 
 **Build Status:** [![Build Status](https://travis-ci.org/rubyist/go-dnsimple.png?branch=master)](https://travis-ci.org/rubyist/go-dnsimple)
-
+**Test Coverage:** [![Coverage Status](https://coveralls.io/repos/rubyist/go-dnsimple/badge.png)](https://coveralls.io/r/rubyist/go-dnsimple)
 ## Examples
 
 ```go
