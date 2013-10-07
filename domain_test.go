@@ -8,31 +8,22 @@ import (
 )
 
 func TestDomain_domainPath(t *testing.T) {
-	var path string
-
-	path = domainPath(nil)
-	if path != "domains" {
-		t.Errorf("domainPath returned %+v, want domains", path)
+	var pathTests = []struct {
+		input    interface{}
+		expected string
+	}{
+		{nil, "domains"},
+		{"example.com", "domains/example.com"},
+		{42, "domains/42"},
+		{Domain{Id: 64}, "domains/64"},
+		{Record{DomainId: 23}, "domains/23"},
 	}
 
-	path = domainPath("example.com")
-	if path != "domains/example.com" {
-		t.Errorf("domainPath returned %+v, want domains/example.com", path)
-	}
-
-	path = domainPath(42)
-	if path != "domains/42" {
-		t.Errorf("domainPath returned %+v, want domains/42", path)
-	}
-
-	path = domainPath(Domain{Id: 64})
-	if path != "domains/64" {
-		t.Errorf("domainPath returned %+v, want domains/64", path)
-	}
-
-	path = domainPath(Record{DomainId: 23})
-	if path != "domains/23" {
-		t.Errorf("domainPath returned %+v, want domains/23", path)
+	for _, pt := range pathTests {
+		actual := domainPath(pt.input)
+		if actual != pt.expected {
+			t.Errorf("domainPath(%+v): expected %s, actual %s", pt.input, pt.expected)
+		}
 	}
 }
 

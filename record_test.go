@@ -8,15 +8,25 @@ import (
 )
 
 func TestRecord_recordPath(t *testing.T) {
-	var path, want string
+	var pathTest = []struct {
+		domainInput interface{}
+		recordInput *Record
+		expected    string
+	}{
+		{"example.com", nil, "domains/example.com/records"},
+		{"example.com", &Record{Id: 42}, "domains/example.com/records/42"},
+		{23, nil, "domains/23/records"},
+		{23, &Record{Id: 42}, "domains/23/records/42"},
+		{Domain{Id: 23}, nil, "domains/23/records"},
+		{Domain{Id: 23}, &Record{Id: 42}, "domains/23/records/42"},
+	}
 
-	path = recordPath("example.com", nil)
-	want = "domains/example.com/records"
-	testString(t, "recordPath", path, want)
-
-	path = recordPath("example.com", &Record{Id: 42})
-	want = "domains/example.com/records/42"
-	testString(t, "recordPath", path, want)
+	for _, pt := range pathTest {
+		actual := recordPath(pt.domainInput, pt.recordInput)
+		if actual != pt.expected {
+			t.Errorf("recordPath(%+v, %+v): expected %s, actual %s", pt.domainInput, pt.recordInput, pt.expected, actual)
+		}
+	}
 }
 
 func TestRecord_Records_All(t *testing.T) {
