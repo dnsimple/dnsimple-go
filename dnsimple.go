@@ -13,7 +13,10 @@ import (
 )
 
 const (
+	libraryVersion = "0.1"
 	defaultBaseURL = "https://api.dnsimple.com/"
+	userAgent      = "go-dnsimple/" + libraryVersion
+
 	apiVersion     = "v1"
 )
 
@@ -24,21 +27,24 @@ type DNSimpleClient struct {
 	// API Token for the DNSimple account you want to use.
 	ApiToken string
 
-	// Email associated with the provided API Token.
+	// Email associated with the provided DNSimple API Token.
 	Email string
 
 	// Domain Token to be used for authentication
-	// as an alternative to the API Token for some Domain-scoped operations.
+	// as an alternative to the DNSimple API Token for some domain-scoped operations.
 	DomainToken string
 
 	// Base URL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
 	// BaseURL should always be specified with a trailing slash.
 	BaseURL string
+
+	// User agent used when communicating with the DNSimple API.
+	UserAgent string
 }
 
 func NewClient(apiToken, email string) *DNSimpleClient {
-	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL}
+	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
 }
 
 func (client *DNSimpleClient) get(path string, val interface{}) error {
@@ -83,9 +89,10 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 func (client *DNSimpleClient) makeRequest(method, path string, body io.Reader) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
 	req, err := http.NewRequest(method, url, body)
-	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("User-Agent", client.UserAgent)
+	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 
 	if err != nil {
 		return nil, err

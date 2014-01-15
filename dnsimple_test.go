@@ -87,6 +87,12 @@ func TestMakeRequest(t *testing.T) {
 
 	// test that relative URL was expanded with the proper BaseURL
 	if req.URL.String() != outURL {
-		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+		t.Errorf("makeRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+	}
+
+	// test that default user-agent is attached to the request
+	userAgent := req.Header.Get("User-Agent")
+	if c.UserAgent != userAgent {
+		t.Errorf("makeRequest() User-Agent = %v, want %v", userAgent, c.UserAgent)
 	}
 }
