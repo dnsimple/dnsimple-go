@@ -21,7 +21,11 @@ type DNSimpleClient struct {
 	Email       string
 	DomainToken string
 	HttpClient  *http.Client
-	BaseURL     string
+
+	// Base URL for API requests.
+	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
+	// BaseURL should always be specified with a trailing slash.
+	BaseURL string
 }
 
 func NewClient(apiToken, email string) *DNSimpleClient {
