@@ -10,7 +10,7 @@ A Go library for using the DNSimple API.
 package main
 import (
   "fmt"
-  "github.com/rubyist/g-dnsimple"
+  dnsimple "github.com/rubyist/go-dnsimple"
 )
 
 func main() {
