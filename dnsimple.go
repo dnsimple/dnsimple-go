@@ -18,10 +18,18 @@ const (
 )
 
 type DNSimpleClient struct {
-	ApiToken    string
-	Email       string
+	// HTTP client used to communicate with the API.
+	HttpClient *http.Client
+
+	// API Token for the DNSimple account you want to use.
+	ApiToken string
+
+	// Email associated with the provided API Token.
+	Email string
+
+	// Domain Token to be used for authentication
+	// as an alternative to the API Token for some Domain-scoped operations.
 	DomainToken string
-	HttpClient  *http.Client
 
 	// Base URL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
