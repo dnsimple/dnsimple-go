@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://dnsimple.com/"
+	defaultBaseURL = "https://api.dnsimple.com/"
+	apiVersion     = "v1"
 )
 
 type DNSimpleClient struct {
@@ -72,7 +73,7 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 }
 
 func (client *DNSimpleClient) makeRequest(method, path string, body io.Reader) (*http.Request, error) {
-	url := client.BaseURL + path
+	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
 	req, err := http.NewRequest(method, url, body)
 	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 	req.Header.Set("Content-Type", "application/json")

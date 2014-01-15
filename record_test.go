@@ -33,7 +33,7 @@ func TestRecord_Records_All(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
@@ -54,7 +54,7 @@ func TestRecord_Records_Subdomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{"name": "foo"})
 
@@ -77,7 +77,7 @@ func TestRecord_Records_RecordType(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{"name": "foo", "type": "CNAME"})
 
@@ -100,7 +100,7 @@ func TestRecord_CreateRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["record"] = map[string]interface{}{"name": "foo", "content": "192.168.0.10", "record_type": "A"}
 
@@ -127,7 +127,7 @@ func TestRecord_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 	})
 
@@ -143,7 +143,7 @@ func TestRecord_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		// TODO: there's a problem when verifying adding prio and ttl integers. Why?
 		want["record"] = map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
@@ -168,7 +168,7 @@ func TestRecord_UpdateIP(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["record"] = map[string]interface{}{"name": "foo", "content": "192.168.0.1"}
 

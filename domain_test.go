@@ -31,7 +31,7 @@ func TestDomain_Domains(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"foo.com"}}]`)
 	})
@@ -52,7 +52,7 @@ func TestDomain_Domain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
 	})
@@ -73,7 +73,7 @@ func TestDomain_DomainAvailable_available(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
@@ -94,7 +94,7 @@ func TestDomain_DomainAavailable_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
@@ -115,7 +115,7 @@ func TestDomain_SetAutoRenew_enable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 	})
 
@@ -130,7 +130,7 @@ func TestDomain_SetAutoRenew_disable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 	})
 
@@ -145,7 +145,7 @@ func TestDomain_Renew(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
 
