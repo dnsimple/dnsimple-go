@@ -88,15 +88,17 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 
 func (client *DNSimpleClient) makeRequest(method, path string, body io.Reader) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
+
 	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", client.UserAgent)
 	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 
-	if err != nil {
-		return nil, err
-	}
 	return req, nil
 }
 
