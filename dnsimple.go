@@ -17,7 +17,7 @@ const (
 	defaultBaseURL = "https://api.dnsimple.com/"
 	userAgent      = "go-dnsimple/" + libraryVersion
 
-	apiVersion     = "v1"
+	apiVersion = "v1"
 )
 
 type DNSimpleClient struct {

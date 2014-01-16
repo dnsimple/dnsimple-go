@@ -1,28 +1,27 @@
 package dnsimple
 
 import (
-	"errors"
+	//	"errors"
 	"fmt"
 )
 
 type Domain struct {
-	Id           int    `json:"id,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Language     string `json:"language,omitempty"`
-	Lockable     bool   `json:"lockable,omitempty"`
-	State        string `json:"state,omitempty"`
-	Token        string `json:"token,omitempty"`
-	AutoRenew    bool   `json:"auto_renew,omitempty"`
-	ExpiresOn    string `json:"expires_on,omitempty"`
-	RegistrantId int    `json:"registrant_id,omitempty"`
-	UnicodeName  string `json:"unicode_name,omitempty"`
-	UserId       int    `json:"user_id,omitempty"`
-	RecordCount  int    `json:"record_count,omitempty"`
-	ServiceCount int    `json:"service_count,omitempty"`
-	PrivateWhois bool   `json:"private_whois?,omitempty"`
-	RenewWhois   bool   `json:"renew_whois_privacy,omitempty"`
-	CreatedAt    string `json:"created_at,omitempty"`
-	UpdatedAt    string `json:"updated_at,omitempty"`
+	Id             int    `json:"id,omitempty"`
+	UserId         int    `json:"user_id,omitempty"`
+	RegistrantId   int    `json:"registrant_id,omitempty"`
+	Name           string `json:"name,omitempty"`
+	UnicodeName    string `json:"unicode_name,omitempty"`
+	Token          string `json:"token,omitempty"`
+	State          string `json:"state,omitempty"`
+	Language       string `json:"language,omitempty"`
+	Lockable       bool   `json:"lockable,omitempty"`
+	AutoRenew      bool   `json:"auto_renew,omitempty"`
+	WhoisProtected bool   `json:"whois_protected,omitempty"`
+	RecordCount    int    `json:"record_count,omitempty"`
+	ServiceCount   int    `json:"service_count,omitempty"`
+	ExpiresOn      string `json:"expires_on,omitempty"`
+	CreatedAt      string `json:"created_at,omitempty"`
+	UpdatedAt      string `json:"updated_at,omitempty"`
 }
 
 type domainWrapper struct {
@@ -46,9 +45,8 @@ func domainIdentifier(value interface{}) string {
 func domainPath(domain interface{}) string {
 	if domain != nil {
 		return fmt.Sprintf("domains/%s", domainIdentifier(domain))
-	} else {
-		return "domains"
 	}
+	return "domains"
 }
 
 func (client *DNSimpleClient) Domains() ([]Domain, error) {
@@ -105,19 +103,19 @@ func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) e
 	return nil
 }
 
-func (client *DNSimpleClient) Renew(domain string, renewWhoisPrivacy bool) error {
-	wrappedDomain := domainWrapper{Domain: Domain{
-		Name:       domain,
-		RenewWhois: renewWhoisPrivacy}}
-
-	status, err := client.post("domain_renewals", wrappedDomain, nil)
-	if err != nil {
-		return err
-	}
-
-	if status == 400 {
-		return errors.New("Failed to Renew")
-	}
-
-	return nil
-}
+//func (client *DNSimpleClient) Renew(domain string, renewWhoisPrivacy bool) error {
+//	wrappedDomain := domainWrapper{Domain: Domain{
+//		Name:       domain,
+//		RenewWhois: renewWhoisPrivacy}}
+//
+//	status, err := client.post("domain_renewals", wrappedDomain, nil)
+//	if err != nil {
+//		return err
+//	}
+//
+//	if status == 400 {
+//		return errors.New("Failed to Renew")
+//	}
+//
+//	return nil
+//}
