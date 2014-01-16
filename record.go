@@ -8,12 +8,12 @@ import (
 
 type Record struct {
 	Id         int    `json:"id,omitempty"`
-	Content    string `json:"content,omitempty"`
-	Name       string `json:"name,omitempty"`
-	TTL        int    `json:"ttl,omitempty"`
-	RecordType string `json:"record_type,omitempty"`
-	Priority   int    `json:"prio,omitempty"`
 	DomainId   int    `json:"domain_id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Content    string `json:"content,omitempty"`
+	TTL        int    `json:"ttl,omitempty"`
+	Priority   int    `json:"prio,omitempty"`
+	RecordType string `json:"record_type,omitempty"`
 	CreatedAt  string `json:"created_at,omitempty"`
 	UpdatedAt  string `json:"updated_at,omitempty"`
 }
