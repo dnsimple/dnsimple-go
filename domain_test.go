@@ -141,23 +141,23 @@ func TestDomain_SetAutoRenew_disable(t *testing.T) {
 	}
 }
 
-//func TestDomain_Renew(t *testing.T) {
-//	setup()
-//	defer teardown()
-//
-//	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
-//		want := make(map[string]interface{})
-//		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
-//
-//		testMethod(t, r, "POST")
-//		testRequestJSON(t, r, want)
-//
-//		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
-//	})
-//
-//	err := client.Renew("example.com", true)
-//
-//	if err != nil {
-//		t.Errorf("Renew returned %v", err)
-//	}
-//}
+func TestDomain_Renew(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
+		want := make(map[string]interface{})
+		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
+
+		testMethod(t, r, "POST")
+		testRequestJSON(t, r, want)
+
+		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
+	})
+
+	err := client.Renew("example.com", true)
+
+	if err != nil {
+		t.Errorf("Renew returned %v", err)
+	}
+}
