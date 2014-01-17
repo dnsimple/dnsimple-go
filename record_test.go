@@ -10,15 +10,18 @@ import (
 func TestRecord_recordPath(t *testing.T) {
 	var pathTest = []struct {
 		domainInput interface{}
-		recordInput *Record
+		recordInput interface {}
 		expected    string
 	}{
 		{"example.com", nil, "domains/example.com/records"},
-		{"example.com", &Record{Id: 42}, "domains/example.com/records/42"},
+		{"example.com", 2, "domains/example.com/records/2"},
+		{"example.com", Record{Id: 2}, "domains/example.com/records/2"},
 		{23, nil, "domains/23/records"},
-		{23, &Record{Id: 42}, "domains/23/records/42"},
+		{23, 2, "domains/23/records/2"},
+		{23, Record{Id: 2}, "domains/23/records/2"},
 		{Domain{Id: 23}, nil, "domains/23/records"},
-		{Domain{Id: 23}, &Record{Id: 42}, "domains/23/records/42"},
+		{Domain{Id: 23}, 2, "domains/23/records/2"},
+		{Domain{Id: 23}, Record{Id: 2}, "domains/23/records/2"},
 	}
 
 	for _, pt := range pathTest {
@@ -120,6 +123,27 @@ func TestRecordsService_Create(t *testing.T) {
 	want := Record{Id: 42, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("CreateRecord returned %+v, want %+v", record, want)
+	}
+}
+
+func TestRecordsService_Get(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
+			testMethod(t, r, "GET")
+			fmt.Fprint(w, `{"record":{"id":1539,"domain_id":227,"parent_id":null,"name":"","content":"mail.example.com","ttl":3600,"prio":1,"record_type":"MX","system_record":null,"created_at":"2014-01-15T22:03:03Z","updated_at":"2014-01-15T22:03:04Z"}}`)
+		})
+
+	record, err := client.Records.Get("example.com", 1539)
+
+	if err != nil {
+		t.Errorf("Record returned error: %v", err)
+	}
+
+	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, RecordType: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
+	if !reflect.DeepEqual(record, want) {
+		t.Errorf("Record returned %+v, want %+v", record, want)
 	}
 }
 

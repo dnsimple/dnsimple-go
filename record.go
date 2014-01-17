@@ -30,12 +30,20 @@ type recordWrapper struct {
 	Record Record `json:"record"`
 }
 
-func recordPath(domain interface{}, record *Record) string {
-	str := fmt.Sprintf("domains/%s/records", domainIdentifier(domain))
-	if record != nil {
-		str += fmt.Sprintf("/%d", record.Id)
+// recordPath generates the resource path for given record that belongs to a domain.
+func recordPath(domain interface{}, record interface {}) string {
+	path := fmt.Sprintf("domains/%s/records", domainIdentifier(domain))
+
+	switch record := record.(type) {
+	case string:
+		path += fmt.Sprintf("/%s", record)
+	case int:
+		path += fmt.Sprintf("/%d", record)
+	case Record:
+		path += fmt.Sprintf("/%d", record.Id)
 	}
-	return str
+
+	return path
 }
 
 func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Record, error) {
@@ -83,6 +91,19 @@ func (s *RecordsService) Create(domain interface{}, record Record) (Record, erro
 	return returnedRecord.Record, nil
 }
 
+// Get fetches a record.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#get-a-record
+func (s *RecordsService) Get(domain interface {}, record interface {}) (Record, error) {
+	wrappedRecord := recordWrapper{}
+
+	if err := s.client.get(recordPath(domain, record), &wrappedRecord); err != nil {
+		return Record{}, err
+	}
+
+	return wrappedRecord.Record, nil
+}
+
 func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (Record, error) {
 	// pre-validate the Record?
 	// name, content, ttl, prio - only things allowed
@@ -94,7 +115,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 
 	returnedRecord := recordWrapper{}
 
-	status, err := client.put(recordPath(record.DomainId, record), wrappedRecord, &returnedRecord)
+	status, err := client.put(recordPath(record.DomainId, *record), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
@@ -107,7 +128,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	_, status, err := client.sendRequest("DELETE", recordPath(record.DomainId, record), nil)
+	_, status, err := client.sendRequest("DELETE", recordPath(record.DomainId, *record), nil)
 	if err != nil {
 		return err
 	}
