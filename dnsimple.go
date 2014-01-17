@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -55,29 +54,16 @@ func NewClient(apiToken, email string) *DNSimpleClient {
 }
 
 func (client *DNSimpleClient) get(path string, val interface{}) error {
-	body, _, err := client.sendRequest("GET", path, nil)
-	if err != nil {
-		return err
-	}
-
-	if err = json.Unmarshal([]byte(body), &val); err != nil {
-		return err
-	}
-
-	return nil
+	_, err := client.sendRequest("GET", path, nil, val)
+	return err
 }
 
 func (client *DNSimpleClient) postOrPut(method, path string, payload, val interface{}) (int, error) {
-	body, status, err := client.sendRequest(method, path, payload)
+	response, err := client.sendRequest(method, path, payload, val)
 	if err != nil {
 		return 0, err
 	}
-
-	if err = json.Unmarshal([]byte(body), &val); err != nil {
-		return 0, err
-	}
-
-	return status, nil
+	return response.StatusCode, err
 }
 
 func (client *DNSimpleClient) put(path string, payload, val interface{}) (int, error) {
@@ -115,22 +101,21 @@ func (client *DNSimpleClient) NewRequest(method, path string, payload interface{
 	return req, nil
 }
 
-func (client *DNSimpleClient) sendRequest(method, path string, payload interface{}) (string, int, error) {
+func (client *DNSimpleClient) sendRequest(method, path string, payload, value interface{}) (*http.Response, error) {
 	req, err := client.NewRequest(method, path, payload)
 	if err != nil {
-		return "", 0, err
+		return nil, err
 	}
 
 	resp, err := client.HttpClient.Do(req)
 	if err != nil {
-		return "", 0, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	responseBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", 0, err
+	if value != nil {
+		err = json.NewDecoder(resp.Body).Decode(value)
 	}
 
-	return string(responseBytes), resp.StatusCode, nil
+	return resp, err
 }

@@ -129,14 +129,15 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	_, status, err := client.sendRequest("DELETE", recordPath(record.DomainId, record.Id), nil)
+	response, err := client.sendRequest("DELETE", recordPath(record.DomainId, record.Id), nil, nil)
 	if err != nil {
 		return err
 	}
 
-	if status == 200 {
+	if response.StatusCode == 200 {
 		return nil
 	}
+
 	return errors.New("Failed to delete domain")
 }
 

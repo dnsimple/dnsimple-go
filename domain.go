@@ -107,32 +107,30 @@ func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 }
 
 func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) error {
-	reqStr := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
-
+	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 	method := ""
 	if autorenew {
 		method = "POST"
 	} else {
 		method = "DELETE"
 	}
-	_, _, err := s.client.sendRequest(method, reqStr, nil)
 
-	if err != nil {
+	if _, err := s.client.sendRequest(method, path, nil, nil); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
-	reqStr := fmt.Sprintf("%s/check", domainPath(domain))
+	path := fmt.Sprintf("%s/check", domainPath(domain))
 
-	_, status, err := s.client.sendRequest("GET", reqStr, nil)
-
+	response, err := s.client.sendRequest("GET", path, nil, nil)
 	if err != nil {
 		return false, err
 	}
 
-	return status == 404, nil
+	return response.StatusCode == 404, nil
 }
 
 func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
