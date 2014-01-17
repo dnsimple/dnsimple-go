@@ -4,11 +4,11 @@
 package dnsimple
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 )
 
 const (
@@ -94,13 +94,12 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 func (client *DNSimpleClient) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
 
-	body := strings.NewReader("")
+	body := new(bytes.Buffer)
 	if payload != nil {
-		jsonPayload, err := json.Marshal(payload)
+		err := json.NewEncoder(body).Encode(payload)
 		if err != nil {
 			return nil, err
 		}
-		body = strings.NewReader(string(jsonPayload))
 	}
 
 	req, err := http.NewRequest(method, url, body)
