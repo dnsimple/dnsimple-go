@@ -44,10 +44,6 @@ func domainIdentifier(value interface{}) string {
 		return value
 	case int:
 		return fmt.Sprintf("%d", value)
-	case Domain:
-		return fmt.Sprintf("%d", value.Id)
-	case Record:
-		return fmt.Sprintf("%d", value.DomainId)
 	}
 	return ""
 }

@@ -15,13 +15,8 @@ func TestRecord_recordPath(t *testing.T) {
 	}{
 		{"example.com", nil, "domains/example.com/records"},
 		{"example.com", 2, "domains/example.com/records/2"},
-		{"example.com", Record{Id: 2}, "domains/example.com/records/2"},
 		{23, nil, "domains/23/records"},
 		{23, 2, "domains/23/records/2"},
-		{23, Record{Id: 2}, "domains/23/records/2"},
-		{Domain{Id: 23}, nil, "domains/23/records"},
-		{Domain{Id: 23}, 2, "domains/23/records/2"},
-		{Domain{Id: 23}, Record{Id: 2}, "domains/23/records/2"},
 	}
 
 	for _, pt := range pathTest {
