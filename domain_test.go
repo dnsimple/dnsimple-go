@@ -48,6 +48,33 @@ func TestDomainsService_List(t *testing.T) {
 	}
 }
 
+func TestDomainsService_Create(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
+		want := make(map[string]interface{})
+		want["domain"] = map[string]interface{}{"name": "example.com"}
+
+		testMethod(t, r, "POST")
+		testRequestJSON(t, r, want)
+
+		fmt.Fprintf(w, `{"domain":{"id":1, "name":"example.com"}}`)
+	})
+
+	domainValues := Domain{Name: "example.com"}
+	domain, err := client.Domains.Create(domainValues)
+
+	if err != nil {
+		t.Errorf("Domains.Create returned error: %v", err)
+	}
+
+	want := Domain{Id: 1, Name: "example.com"}
+	if !reflect.DeepEqual(domain, want) {
+		t.Errorf("Domains.Create returned %+v, want %+v", domain, want)
+	}
+}
+
 func TestDomainsService_Get(t *testing.T) {
 	setup()
 	defer teardown()

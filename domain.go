@@ -78,6 +78,25 @@ func (s *DomainsService) List() ([]Domain, error) {
 	return domains, nil
 }
 
+// Create a new domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/#create-a-domain
+func (s *DomainsService) Create(domain Domain) (Domain, error) {
+	wrappedDomain := domainWrapper{Domain: domain}
+	returnedDomain := domainWrapper{}
+
+	status, err := s.client.post(domainPath(nil), wrappedDomain, &returnedDomain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	if status == 400 {
+		return Domain{}, errors.New("Invalid Domain")
+	}
+
+	return returnedDomain.Domain, nil
+}
+
 // Get fetches a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get-a-domain
