@@ -111,7 +111,7 @@ func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 	}
 }
 
-func TestDomainsService_SetAutoRenew_enable(t *testing.T) {
+func TestDomainsService_SetAutoRenewal_enable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -119,14 +119,14 @@ func TestDomainsService_SetAutoRenew_enable(t *testing.T) {
 		testMethod(t, r, "POST")
 	})
 
-	err := client.Domains.SetAutorenew("example.com", true)
+	err := client.Domains.SetAutoRenewal("example.com", true)
 
 	if err != nil {
-		t.Errorf("Domains.SetAutorenew (enable) returned %v", err)
+		t.Errorf("Domains.SetAutoRenewal (enable) returned %v", err)
 	}
 }
 
-func TestDomainsService_SetAutoRenew_disable(t *testing.T) {
+func TestDomainsService_SetAutoRenewal_disable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -134,10 +134,10 @@ func TestDomainsService_SetAutoRenew_disable(t *testing.T) {
 		testMethod(t, r, "DELETE")
 	})
 
-	err := client.Domains.SetAutorenew("example.com", false)
+	err := client.Domains.SetAutoRenewal("example.com", false)
 
 	if err != nil {
-		t.Errorf("Domains.SetAutorenew (disable) returned %v", err)
+		t.Errorf("Domains.SetAutoRenewal (disable) returned %v", err)
 	}
 }
 

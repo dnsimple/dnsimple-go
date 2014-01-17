@@ -91,7 +91,7 @@ func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	return wrappedDomain.Domain, nil
 }
 
-func (s *DomainsService) SetAutorenew(domain interface{}, autorenew bool) error {
+func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) error {
 	reqStr := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
 	method := ""
