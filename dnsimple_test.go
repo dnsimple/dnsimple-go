@@ -88,7 +88,7 @@ func TestNewRequest(t *testing.T) {
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, outURL := "foo", "https://go.example.com/v1/foo"
-	req, _ := c.newRequest("GET", inURL, nil)
+	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL
 	if req.URL.String() != outURL {

@@ -97,7 +97,7 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 // newRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
-func (client *DNSimpleClient) newRequest(method, path string, body io.Reader) (*http.Request, error) {
+func (client *DNSimpleClient) NewRequest(method, path string, body io.Reader) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
 
 	req, err := http.NewRequest(method, url, body)
@@ -114,7 +114,7 @@ func (client *DNSimpleClient) newRequest(method, path string, body io.Reader) (*
 }
 
 func (client *DNSimpleClient) sendRequest(method, path string, body io.Reader) (string, int, error) {
-	req, err := client.newRequest(method, path, body)
+	req, err := client.NewRequest(method, path, body)
 	if err != nil {
 		return "", 0, err
 	}
