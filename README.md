@@ -36,14 +36,14 @@ func main() {
   }
 
   // Create a new Record
-  newRec := Record{Name: "www", Content: "127.0.0.1", RecordType: "A"}
-  rec, _ := client.Records.Create("example.com")
+  newRecord := Record{Name: "www", Content: "127.0.0.1", RecordType: "A"}
+  record, _ := client.Records.Create("example.com", newRecord)
 
   // Update a Record
-  rec, _ = rec.Update(client, Record{Content: "192.168.0.1"})
+  record, _ = record.Update(client, Record{Content: "192.168.0.1"})
 
   // Convenience method for updating a Record's IP
-  rec.UpdateIP(client, "10.0.0.1")
+  record.UpdateIP(client, "10.0.0.1")
 }
 ```
 
