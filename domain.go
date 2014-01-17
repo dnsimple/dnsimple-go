@@ -10,7 +10,7 @@ import (
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/
 type DomainsService struct {
-	client *DNSimpleClient
+	client *Client
 }
 
 type Domain struct {

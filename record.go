@@ -11,7 +11,7 @@ import (
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/
 type RecordsService struct {
-	client *DNSimpleClient
+	client *Client
 }
 
 type Record struct {
@@ -105,7 +105,7 @@ func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 	return wrappedRecord.Record, nil
 }
 
-func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (Record, error) {
+func (record *Record) Update(client *Client, recordAttributes Record) (Record, error) {
 	// pre-validate the Record?
 	// name, content, ttl, prio - only things allowed
 	wrappedRecord := recordWrapper{Record: Record{
@@ -128,7 +128,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 	return returnedRecord.Record, nil
 }
 
-func (record *Record) Delete(client *DNSimpleClient) error {
+func (record *Record) Delete(client *Client) error {
 	response, err := client.delete(recordPath(record.DomainId, record.Id), nil)
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (record *Record) Delete(client *DNSimpleClient) error {
 	return errors.New("Failed to delete domain")
 }
 
-func (record *Record) UpdateIP(client *DNSimpleClient, IP string) error {
+func (record *Record) UpdateIP(client *Client, IP string) error {
 	newRecord := Record{Content: IP, Name: record.Name}
 	_, err := record.Update(client, newRecord)
 	return err

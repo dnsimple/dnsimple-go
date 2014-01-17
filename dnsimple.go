@@ -18,7 +18,7 @@ const (
 	apiVersion = "v1"
 )
 
-type DNSimpleClient struct {
+type Client struct {
 	// HTTP client used to communicate with the API.
 	HttpClient *http.Client
 
@@ -46,8 +46,8 @@ type DNSimpleClient struct {
 }
 
 // NewClient returns a new GitHub API client.
-func NewClient(apiToken, email string) *DNSimpleClient {
-	c := &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
+func NewClient(apiToken, email string) *Client {
+	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
 	c.Domains = &DomainsService{client: c}
 	c.Records = &RecordsService{client: c}
 	return c
@@ -56,7 +56,7 @@ func NewClient(apiToken, email string) *DNSimpleClient {
 // newRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
-func (client *DNSimpleClient) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
+func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
 
 	body := new(bytes.Buffer)
@@ -80,23 +80,23 @@ func (client *DNSimpleClient) NewRequest(method, path string, payload interface{
 	return req, nil
 }
 
-func (client *DNSimpleClient) get(path string, val interface{}) (*http.Response, error) {
+func (client *Client) get(path string, val interface{}) (*http.Response, error) {
 	return client.sendRequest("GET", path, nil, val)
 }
 
-func (client *DNSimpleClient) post(path string, payload, val interface{}) (*http.Response, error) {
+func (client *Client) post(path string, payload, val interface{}) (*http.Response, error) {
 	return client.sendRequest("POST", path, payload, val)
 }
 
-func (client *DNSimpleClient) put(path string, payload, val interface{}) (*http.Response, error) {
+func (client *Client) put(path string, payload, val interface{}) (*http.Response, error) {
 	return client.sendRequest("PUT", path, payload, val)
 }
 
-func (client *DNSimpleClient) delete(path string, payload interface{}) (*http.Response, error) {
+func (client *Client) delete(path string, payload interface{}) (*http.Response, error) {
 	return client.sendRequest("DELETE", path, payload, nil)
 }
 
-func (client *DNSimpleClient) sendRequest(method, path string, payload, value interface{}) (*http.Response, error) {
+func (client *Client) sendRequest(method, path string, payload, value interface{}) (*http.Response, error) {
 	req, err := client.NewRequest(method, path, payload)
 	if err != nil {
 		return nil, err
