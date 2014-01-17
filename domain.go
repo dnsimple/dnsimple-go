@@ -74,14 +74,15 @@ func (s *DomainsService) List() ([]Domain, error) {
 	return domains, nil
 }
 
-// Create a new domain.
+// Create a new domain in the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#create-a-domain
 func (s *DomainsService) Create(domain Domain) (Domain, error) {
+	path := domainPath(nil)
 	wrappedDomain := domainWrapper{Domain: domain}
 	returnedDomain := domainWrapper{}
 
-	response, err := s.client.post(domainPath(nil), wrappedDomain, &returnedDomain)
+	response, err := s.client.post(path, wrappedDomain, &returnedDomain)
 	if err != nil {
 		return Domain{}, err
 	}
@@ -93,17 +94,28 @@ func (s *DomainsService) Create(domain Domain) (Domain, error) {
 	return returnedDomain.Domain, nil
 }
 
-// Get fetches a domain.
+// Get fetches a domain from the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get-a-domain
 func (s *DomainsService) Get(domain interface{}) (Domain, error) {
+	path := domainPath(domain)
 	wrappedDomain := domainWrapper{}
 
-	if _, err := s.client.get(domainPath(domain), &wrappedDomain); err != nil {
+	if _, err := s.client.get(path, &wrappedDomain); err != nil {
 		return Domain{}, err
 	}
 
 	return wrappedDomain.Domain, nil
+}
+
+// Delete a domain from the authenticated account.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/#delete-a-domain
+func (s *DomainsService) Delete(domain interface{}) (error) {
+	path := domainPath(domain)
+
+	_, err := s.client.delete(path, nil)
+	return err
 }
 
 func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {

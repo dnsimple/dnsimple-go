@@ -94,6 +94,22 @@ func TestDomainsService_Get(t *testing.T) {
 	}
 }
 
+func TestDomainsService_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		// fmt.Fprint(w, `{}`)
+	})
+
+	err := client.Domains.Delete("example.com")
+
+	if err != nil {
+		t.Errorf("Domains.Delete returned error: %v", err)
+	}
+}
+
 func TestDomainsService_CheckAvailability_available(t *testing.T) {
 	setup()
 	defer teardown()
