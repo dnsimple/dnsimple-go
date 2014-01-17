@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -180,8 +181,8 @@ func TestRecordsService_Delete_failed(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		http.Error(w, "Bad Request", 400)
-		fmt.Fprint(w, `{"message":{"Invalid request"}`)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
 	err := client.Records.Delete("example.com", 2)
@@ -189,8 +190,8 @@ func TestRecordsService_Delete_failed(t *testing.T) {
 		t.Errorf("Records.Delete expected error to be returned")
 	}
 
-	if want := "Failed to delete Record 2"; err.Error() != want {
-		t.Errorf("Records.Delete returned %+v, want %+v", err, want)
+	if match := "400 Invalid request"; !strings.Contains(err.Error(), match) {
+		t.Errorf("Records.Delete returned %+v, should match %+v", err, match)
 	}
 }
 
@@ -263,8 +264,8 @@ func TestRecord_Delete_failed(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains/1/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		http.Error(w, "Bad Request", 400)
-		fmt.Fprint(w, `{"message":{"Invalid request"}`)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
 	record := Record{Id: 2, DomainId: 1}
@@ -273,7 +274,7 @@ func TestRecord_Delete_failed(t *testing.T) {
 		t.Errorf("Record.Delete expected error to be returned")
 	}
 
-	if want := "Failed to delete Record 2"; err.Error() != want {
-		t.Errorf("Record.Delete returned %+v, want %+v", err, want)
+	if match := "400 Invalid request"; !strings.Contains(err.Error(), match) {
+		t.Errorf("Record.Delete returned %+v, should match %+v", err, match)
 	}
 }

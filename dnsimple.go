@@ -96,7 +96,7 @@ func (client *Client) delete(path string, payload interface{}) (*http.Response, 
 	return client.sendRequest("DELETE", path, payload, nil)
 }
 
-func (client *Client) sendRequest(method, path string, payload, value interface{}) (*http.Response, error) {
+func (client *Client) sendRequest(method, path string, payload, v interface{}) (*http.Response, error) {
 	req, err := client.NewRequest(method, path, payload)
 	if err != nil {
 		return nil, err
@@ -108,9 +108,52 @@ func (client *Client) sendRequest(method, path string, payload, value interface{
 	}
 	defer resp.Body.Close()
 
-	if value != nil {
-		err = json.NewDecoder(resp.Body).Decode(value)
+	err = CheckResponse(resp)
+	if err != nil {
+		return resp, err
+	}
+
+	if v != nil {
+		err = json.NewDecoder(resp.Body).Decode(v)
 	}
 
 	return resp, err
+}
+
+// ErrorResponse represents an error caused by an API request.
+type ErrorResponse struct {
+	Response *http.Response // HTTP response that caused this error
+	Message  string         `json:"message"` // error message
+}
+
+// Error implements the error interface.
+func (r *ErrorResponse) Error() string {
+	return fmt.Sprintf("%v %v: %d %v",
+		r.Response.Request.Method, r.Response.Request.URL,
+		r.Response.StatusCode, r.Message)
+}
+
+// newErrorResponse creates a new ErrorResponse parsing the message from the response body.
+// This is useful if you want to inspect the response message
+// and customize the error handling for a request.
+func NewErrorResponse(r *http.Response) (*ErrorResponse, error) {
+	errorResponse := &ErrorResponse{Response: r}
+	err := json.NewDecoder(r.Body).Decode(errorResponse)
+	return errorResponse, err
+}
+
+// CheckResponse checks the API response for errors, and returns them if present.
+// A response is considered an error if the status code is different than 2xx. Specific requests
+// may have additional requirements, but this is sufficient in most of the cases.
+func CheckResponse(r *http.Response) error {
+	if code := r.StatusCode; 200 <= code && code <= 299 {
+		return nil
+	}
+
+	errorResponse, err := NewErrorResponse(r)
+	if err != nil {
+		return err
+	}
+
+	return errorResponse
 }

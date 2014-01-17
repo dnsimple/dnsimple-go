@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -149,6 +150,27 @@ func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 
 	if available {
 		t.Errorf("Domains.CheckAvailability returned true, want false")
+	}
+}
+
+func TestDomainsService_CheckAvailability_failed400(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, `{"message":"Invalid request"}`)
+	})
+
+	_, err := client.Domains.CheckAvailability("example.com")
+
+	if err == nil {
+		t.Errorf("Domains.CheckAvailability expected error to be returned")
+	}
+
+	if match := "400 Invalid request"; !strings.Contains(err.Error(), match) {
+		t.Errorf("Domains.CheckAvailability returned %+v, should match %+v", err, match)
 	}
 }
 

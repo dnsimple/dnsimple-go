@@ -60,9 +60,10 @@ func domainPath(domain interface{}) string {
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list-domains
 func (s *DomainsService) List() ([]Domain, error) {
+	path := domainPath(nil)
 	wrappedDomains := []domainWrapper{}
 
-	if _, err := s.client.get(domainPath(nil), &wrappedDomains); err != nil {
+	if _, err := s.client.get(path, &wrappedDomains); err != nil {
 		return []Domain{}, err
 	}
 
@@ -122,7 +123,7 @@ func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
 	response, err := s.client.get(path, nil)
-	if err != nil {
+	if err != nil && response != nil && response.StatusCode != 404 {
 		return false, err
 	}
 

@@ -111,13 +111,9 @@ func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 func (s *RecordsService) Delete(domain interface{}, recordID int) error {
 	path := recordPath(domain, recordID)
 
-	response, err := s.client.delete(path, nil)
+	_, err := s.client.delete(path, nil)
 	if err != nil {
 		return err
-	}
-
-	if response.StatusCode != 204 && response.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("Failed to delete Record %v", recordID))
 	}
 
 	return err
