@@ -60,7 +60,7 @@ func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Re
 
 	wrappedRecords := []recordWrapper{}
 
-	if err := s.client.get(reqStr, &wrappedRecords); err != nil {
+	if _, err := s.client.get(reqStr, &wrappedRecords); err != nil {
 		return []Record{}, err
 	}
 
@@ -80,12 +80,12 @@ func (s *RecordsService) Create(domain interface{}, record Record) (Record, erro
 	wrappedRecord := recordWrapper{Record: record}
 	returnedRecord := recordWrapper{}
 
-	status, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
+	response, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
 
-	if status == 400 {
+	if response.StatusCode == 400 {
 		return Record{}, errors.New("Invalid Record")
 	}
 
@@ -98,7 +98,7 @@ func (s *RecordsService) Create(domain interface{}, record Record) (Record, erro
 func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 	wrappedRecord := recordWrapper{}
 
-	if err := s.client.get(recordPath(domain, recordID), &wrappedRecord); err != nil {
+	if _, err := s.client.get(recordPath(domain, recordID), &wrappedRecord); err != nil {
 		return Record{}, err
 	}
 
@@ -116,12 +116,12 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 
 	returnedRecord := recordWrapper{}
 
-	status, err := client.put(recordPath(record.DomainId, record.Id), wrappedRecord, &returnedRecord)
+	response, err := client.put(recordPath(record.DomainId, record.Id), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
 
-	if status == 400 {
+	if response.StatusCode == 400 {
 		return Record{}, errors.New("Invalid Record")
 	}
 
@@ -129,7 +129,7 @@ func (record *Record) Update(client *DNSimpleClient, recordAttributes Record) (R
 }
 
 func (record *Record) Delete(client *DNSimpleClient) error {
-	response, err := client.sendRequest("DELETE", recordPath(record.DomainId, record.Id), nil, nil)
+	response, err := client.delete(recordPath(record.DomainId, record.Id), nil)
 	if err != nil {
 		return err
 	}

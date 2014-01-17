@@ -62,7 +62,7 @@ func domainPath(domain interface{}) string {
 func (s *DomainsService) List() ([]Domain, error) {
 	wrappedDomains := []domainWrapper{}
 
-	if err := s.client.get(domainPath(nil), &wrappedDomains); err != nil {
+	if _, err := s.client.get(domainPath(nil), &wrappedDomains); err != nil {
 		return []Domain{}, err
 	}
 
@@ -81,12 +81,12 @@ func (s *DomainsService) Create(domain Domain) (Domain, error) {
 	wrappedDomain := domainWrapper{Domain: domain}
 	returnedDomain := domainWrapper{}
 
-	status, err := s.client.post(domainPath(nil), wrappedDomain, &returnedDomain)
+	response, err := s.client.post(domainPath(nil), wrappedDomain, &returnedDomain)
 	if err != nil {
 		return Domain{}, err
 	}
 
-	if status == 400 {
+	if response.StatusCode == 400 {
 		return Domain{}, errors.New("Invalid Domain")
 	}
 
@@ -99,7 +99,7 @@ func (s *DomainsService) Create(domain Domain) (Domain, error) {
 func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	wrappedDomain := domainWrapper{}
 
-	if err := s.client.get(domainPath(domain), &wrappedDomain); err != nil {
+	if _, err := s.client.get(domainPath(domain), &wrappedDomain); err != nil {
 		return Domain{}, err
 	}
 
@@ -125,7 +125,7 @@ func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) erro
 func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
-	response, err := s.client.sendRequest("GET", path, nil, nil)
+	response, err := s.client.get(path, nil)
 	if err != nil {
 		return false, err
 	}
@@ -138,12 +138,12 @@ func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
 
-	status, err := s.client.post("domain_renewals", wrappedDomain, nil)
+	response, err := s.client.post("domain_renewals", wrappedDomain, nil)
 	if err != nil {
 		return err
 	}
 
-	if status == 400 {
+	if response.StatusCode == 400 {
 		return errors.New("Failed to Renew")
 	}
 

@@ -53,27 +53,6 @@ func NewClient(apiToken, email string) *DNSimpleClient {
 	return c
 }
 
-func (client *DNSimpleClient) get(path string, val interface{}) error {
-	_, err := client.sendRequest("GET", path, nil, val)
-	return err
-}
-
-func (client *DNSimpleClient) postOrPut(method, path string, payload, val interface{}) (int, error) {
-	response, err := client.sendRequest(method, path, payload, val)
-	if err != nil {
-		return 0, err
-	}
-	return response.StatusCode, err
-}
-
-func (client *DNSimpleClient) put(path string, payload, val interface{}) (int, error) {
-	return client.postOrPut("PUT", path, payload, val)
-}
-
-func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, error) {
-	return client.postOrPut("POST", path, payload, val)
-}
-
 // newRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
@@ -99,6 +78,22 @@ func (client *DNSimpleClient) NewRequest(method, path string, payload interface{
 	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
 
 	return req, nil
+}
+
+func (client *DNSimpleClient) get(path string, val interface{}) (*http.Response, error) {
+	return client.sendRequest("GET", path, nil, val)
+}
+
+func (client *DNSimpleClient) post(path string, payload, val interface{}) (*http.Response, error) {
+	return client.sendRequest("POST", path, payload, val)
+}
+
+func (client *DNSimpleClient) put(path string, payload, val interface{}) (*http.Response, error) {
+	return client.sendRequest("PUT", path, payload, val)
+}
+
+func (client *DNSimpleClient) delete(path string, payload interface{}) (*http.Response, error) {
+	return client.sendRequest("DELETE", path, payload, nil)
 }
 
 func (client *DNSimpleClient) sendRequest(method, path string, payload, value interface{}) (*http.Response, error) {
