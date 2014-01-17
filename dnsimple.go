@@ -6,7 +6,6 @@ package dnsimple
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -69,12 +68,7 @@ func (client *DNSimpleClient) get(path string, val interface{}) error {
 }
 
 func (client *DNSimpleClient) postOrPut(method, path string, payload, val interface{}) (int, error) {
-	jsonPayload, err := json.Marshal(payload)
-	if err != nil {
-		return 0, err
-	}
-
-	body, status, err := client.sendRequest(method, path, strings.NewReader(string(jsonPayload)))
+	body, status, err := client.sendRequest(method, path, payload)
 	if err != nil {
 		return 0, err
 	}
@@ -97,8 +91,17 @@ func (client *DNSimpleClient) post(path string, payload, val interface{}) (int, 
 // newRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
-func (client *DNSimpleClient) NewRequest(method, path string, body io.Reader) (*http.Request, error) {
+func (client *DNSimpleClient) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
+
+	body := strings.NewReader("")
+	if payload != nil {
+		jsonPayload, err := json.Marshal(payload)
+		if err != nil {
+			return nil, err
+		}
+		body = strings.NewReader(string(jsonPayload))
+	}
 
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
@@ -113,8 +116,8 @@ func (client *DNSimpleClient) NewRequest(method, path string, body io.Reader) (*
 	return req, nil
 }
 
-func (client *DNSimpleClient) sendRequest(method, path string, body io.Reader) (string, int, error) {
-	req, err := client.NewRequest(method, path, body)
+func (client *DNSimpleClient) sendRequest(method, path string, payload interface{}) (string, int, error) {
+	req, err := client.NewRequest(method, path, payload)
 	if err != nil {
 		return "", 0, err
 	}
