@@ -106,22 +106,6 @@ func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	return wrappedDomain.Domain, nil
 }
 
-func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) error {
-	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
-	method := ""
-	if autorenew {
-		method = "POST"
-	} else {
-		method = "DELETE"
-	}
-
-	if _, err := s.client.sendRequest(method, path, nil, nil); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
@@ -148,4 +132,42 @@ func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
 	}
 
 	return nil
+}
+
+// EnableAutoRenewal enables the auto-renewal feature for the domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable-domain-auto-renewal
+func (s *DomainsService) EnableAutoRenewal(domain interface{}) error {
+	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
+
+	if _, err := s.client.post(path, nil, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// DisableAutoRenewal disables the auto-renewal feature for the domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable-domain-auto-renewal
+func (s *DomainsService) DisableAutoRenewal(domain interface{}) error {
+	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
+
+	if _, err := s.client.delete(path, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SetAutoRenewal is a convenient helper to enable/disable the auto-renewal feature for the domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable-domain-auto-renewal
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable-domain-auto-renewal
+func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) error {
+	if autorenew {
+		return s.EnableAutoRenewal(domain)
+	} else {
+		return s.DisableAutoRenewal(domain)
+	}
 }

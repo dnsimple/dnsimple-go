@@ -136,6 +136,57 @@ func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 	}
 }
 
+func TestDomainsService_Renew(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
+		want := make(map[string]interface{})
+		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
+
+		testMethod(t, r, "POST")
+		testRequestJSON(t, r, want)
+
+		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
+	})
+
+	err := client.Domains.Renew("example.com", true)
+
+	if err != nil {
+		t.Errorf("Domains.Renew returned %v", err)
+	}
+}
+
+func TestDomainsService_EnableAutoRenewal(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+	})
+
+	err := client.Domains.EnableAutoRenewal("example.com")
+
+	if err != nil {
+		t.Errorf("Domains.EnableAutoRenewal returned %v", err)
+	}
+}
+
+func TestDomainsService_DisableAutoRenewal(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+	})
+
+	err := client.Domains.DisableAutoRenewal("example.com")
+
+	if err != nil {
+		t.Errorf("Domains.DisableAutoRenewal returned %v", err)
+	}
+}
+
 func TestDomainsService_SetAutoRenewal_enable(t *testing.T) {
 	setup()
 	defer teardown()
@@ -163,26 +214,5 @@ func TestDomainsService_SetAutoRenewal_disable(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("Domains.SetAutoRenewal (disable) returned %v", err)
-	}
-}
-
-func TestDomainsService_Renew(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
-		want := make(map[string]interface{})
-		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
-
-		testMethod(t, r, "POST")
-		testRequestJSON(t, r, want)
-
-		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
-	})
-
-	err := client.Domains.Renew("example.com", true)
-
-	if err != nil {
-		t.Errorf("Domains.Renew returned %v", err)
 	}
 }
