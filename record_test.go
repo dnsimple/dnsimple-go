@@ -90,12 +90,12 @@ func TestRecordsService_List_type(t *testing.T) {
 	records, err := client.Records.List("example.com", "foo", "CNAME")
 
 	if err != nil {
-		t.Errorf("Records returned error: %v", err)
+		t.Errorf("Records.List returned error: %v", err)
 	}
 
 	want := []Record{{Id: 1, Name: "foo.example.com"}}
 	if !reflect.DeepEqual(records, want) {
-		t.Errorf("Records returned %+v, want %+v", records, want)
+		t.Errorf("Records.List returned %+v, want %+v", records, want)
 	}
 }
 
@@ -117,12 +117,12 @@ func TestRecordsService_Create(t *testing.T) {
 	record, err := client.Records.Create("example.com", recordValues)
 
 	if err != nil {
-		t.Errorf("CreateRecord returned error: %v", err)
+		t.Errorf("Records.Create returned error: %v", err)
 	}
 
 	want := Record{Id: 42, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
-		t.Errorf("CreateRecord returned %+v, want %+v", record, want)
+		t.Errorf("Records.Create returned %+v, want %+v", record, want)
 	}
 }
 
@@ -138,12 +138,12 @@ func TestRecordsService_Get(t *testing.T) {
 	record, err := client.Records.Get("example.com", 1539)
 
 	if err != nil {
-		t.Errorf("Record returned error: %v", err)
+		t.Errorf("Records.Get returned error: %v", err)
 	}
 
 	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, RecordType: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
 	if !reflect.DeepEqual(record, want) {
-		t.Errorf("Record returned %+v, want %+v", record, want)
+		t.Errorf("Records.Get returned %+v, want %+v", record, want)
 	}
 }
 

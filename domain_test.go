@@ -39,12 +39,12 @@ func TestDomainsService_List(t *testing.T) {
 	domains, err := client.Domains.List()
 
 	if err != nil {
-		t.Errorf("Domains returned error: %v", err)
+		t.Errorf("Domains.List returned error: %v", err)
 	}
 
 	want := []Domain{{Id: 1, Name: "foo.com"}}
 	if !reflect.DeepEqual(domains, want) {
-		t.Errorf("Domains returned %+v, want %+v", domains, want)
+		t.Errorf("Domains.List returned %+v, want %+v", domains, want)
 	}
 }
 
@@ -60,12 +60,12 @@ func TestDomainsService_Get(t *testing.T) {
 	domain, err := client.Domains.Get("example.com")
 
 	if err != nil {
-		t.Errorf("Domain returned error: %v", err)
+		t.Errorf("Domains.Get returned error: %v", err)
 	}
 
 	want := Domain{Id: 1, Name: "example.com"}
 	if !reflect.DeepEqual(domain, want) {
-		t.Errorf("Domains returned %+v, want %+v", domain, want)
+		t.Errorf("Domains.Get returned %+v, want %+v", domain, want)
 	}
 }
 
@@ -82,11 +82,11 @@ func TestDomainsService_CheckAvailability_available(t *testing.T) {
 	available, err := client.Domains.CheckAvailability("example.com")
 
 	if err != nil {
-		t.Errorf("Availability check returned %v", err)
+		t.Errorf("Domains.CheckAvailability check returned %v", err)
 	}
 
 	if !available {
-		t.Errorf("Availability returned false, want true")
+		t.Errorf("Domains.CheckAvailability returned false, want true")
 	}
 }
 
@@ -103,11 +103,11 @@ func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 	available, err := client.Domains.CheckAvailability("example.com")
 
 	if err != nil {
-		t.Errorf("Availability check returned %v", err)
+		t.Errorf("Domains.CheckAvailability check returned %v", err)
 	}
 
 	if available {
-		t.Errorf("Availability returned true, want false")
+		t.Errorf("Domains.CheckAvailability returned true, want false")
 	}
 }
 
@@ -122,7 +122,7 @@ func TestDomainsService_SetAutoRenew_enable(t *testing.T) {
 	err := client.Domains.SetAutorenew("example.com", true)
 
 	if err != nil {
-		t.Errorf("Autorenew (enable) returned %v", err)
+		t.Errorf("Domains.SetAutorenew (enable) returned %v", err)
 	}
 }
 
@@ -137,7 +137,7 @@ func TestDomainsService_SetAutoRenew_disable(t *testing.T) {
 	err := client.Domains.SetAutorenew("example.com", false)
 
 	if err != nil {
-		t.Errorf("Autorenew (disable) returned %v", err)
+		t.Errorf("Domains.SetAutorenew (disable) returned %v", err)
 	}
 }
 
@@ -158,6 +158,6 @@ func TestDomainsService_Renew(t *testing.T) {
 	err := client.Domains.Renew("example.com", true)
 
 	if err != nil {
-		t.Errorf("Renew returned %v", err)
+		t.Errorf("Domains.Renew returned %v", err)
 	}
 }

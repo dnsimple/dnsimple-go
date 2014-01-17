@@ -77,6 +77,9 @@ func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Re
 	return records, nil
 }
 
+// Create a new record for the specified domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#create-a-record
 func (s *RecordsService) Create(domain interface{}, record Record) (Record, error) {
 	// pre-validate the Record?
 	wrappedRecord := recordWrapper{Record: record}
