@@ -111,7 +111,7 @@ func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 // Delete a domain from the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#delete-a-domain
-func (s *DomainsService) Delete(domain interface{}) (error) {
+func (s *DomainsService) Delete(domain interface{}) error {
 	path := domainPath(domain)
 
 	_, err := s.client.delete(path, nil)

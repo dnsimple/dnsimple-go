@@ -105,6 +105,24 @@ func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 	return wrappedRecord.Record, nil
 }
 
+// Delete a record.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete-a-record
+func (s *RecordsService) Delete(domain interface{}, recordID int) error {
+	path := recordPath(domain, recordID)
+
+	response, err := s.client.delete(path, nil)
+	if err != nil {
+		return err
+	}
+
+	if response.StatusCode != 204 && response.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("Failed to delete Record %v", recordID))
+	}
+
+	return err
+}
+
 func (record *Record) Update(client *Client, recordAttributes Record) (Record, error) {
 	// pre-validate the Record?
 	// name, content, ttl, prio - only things allowed
@@ -128,17 +146,11 @@ func (record *Record) Update(client *Client, recordAttributes Record) (Record, e
 	return returnedRecord.Record, nil
 }
 
+// Delete this record instance.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete-a-record
 func (record *Record) Delete(client *Client) error {
-	response, err := client.delete(recordPath(record.DomainId, record.Id), nil)
-	if err != nil {
-		return err
-	}
-
-	if response.StatusCode == 200 {
-		return nil
-	}
-
-	return errors.New("Failed to delete domain")
+	return client.Records.Delete(record.DomainId, record.Id)
 }
 
 func (record *Record) UpdateIP(client *Client, IP string) error {

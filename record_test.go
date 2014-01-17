@@ -127,7 +127,23 @@ func TestRecordsService_Get(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{"record":{"id":1539,"domain_id":227,"parent_id":null,"name":"","content":"mail.example.com","ttl":3600,"prio":1,"record_type":"MX","system_record":null,"created_at":"2014-01-15T22:03:03Z","updated_at":"2014-01-15T22:03:04Z"}}`)
+		fmt.Fprint(w, `
+			{
+			  "record": {
+				"id": 1539,
+				"domain_id": 227,
+				"parent_id": null,
+				"name": "",
+				"content": "mail.example.com",
+				"ttl": 3600,
+				"prio": 1,
+				"record_type": "MX",
+				"system_record": null,
+				"created_at": "2014-01-15T22:03:03Z",
+				"updated_at": "2014-01-15T22:03:04Z"
+			  }
+			}
+		`)
 	})
 
 	record, err := client.Records.Get("example.com", 1539)
@@ -139,6 +155,42 @@ func TestRecordsService_Get(t *testing.T) {
 	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, RecordType: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("Records.Get returned %+v, want %+v", record, want)
+	}
+}
+
+func TestRecordsService_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		// fmt.Fprint(w, `{}`)
+	})
+
+	err := client.Records.Delete("example.com", 2)
+
+	if err != nil {
+		t.Errorf("Records.Delete returned error: %v", err)
+	}
+}
+
+func TestRecordsService_Delete_failed(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		http.Error(w, "Bad Request", 400)
+		fmt.Fprint(w, `{"message":{"Invalid request"}`)
+	})
+
+	err := client.Records.Delete("example.com", 2)
+	if err == nil {
+		t.Errorf("Records.Delete expected error to be returned")
+	}
+
+	if want := "Failed to delete Record 2"; err.Error() != want {
+		t.Errorf("Records.Delete returned %+v, want %+v", err, want)
 	}
 }
 
@@ -193,14 +245,35 @@ func TestRecord_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/domains/1/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 	})
 
-	record := Record{Id: 42, DomainId: 24}
+	record := Record{Id: 2, DomainId: 1}
 	err := record.Delete(client)
 
 	if err != nil {
-		t.Errorf("Delete returned error: %v", err)
+		t.Errorf("Record.Delete returned error: %v", err)
+	}
+}
+
+func TestRecord_Delete_failed(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/1/records/2", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		http.Error(w, "Bad Request", 400)
+		fmt.Fprint(w, `{"message":{"Invalid request"}`)
+	})
+
+	record := Record{Id: 2, DomainId: 1}
+	err := record.Delete(client)
+	if err == nil {
+		t.Errorf("Record.Delete expected error to be returned")
+	}
+
+	if want := "Failed to delete Record 2"; err.Error() != want {
+		t.Errorf("Record.Delete returned %+v, want %+v", err, want)
 	}
 }
