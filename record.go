@@ -31,7 +31,7 @@ type recordWrapper struct {
 }
 
 // recordPath generates the resource path for given record that belongs to a domain.
-func recordPath(domain interface{}, record interface {}) string {
+func recordPath(domain interface{}, record interface{}) string {
 	path := fmt.Sprintf("domains/%s/records", domainIdentifier(domain))
 
 	switch record := record.(type) {
@@ -46,6 +46,9 @@ func recordPath(domain interface{}, record interface {}) string {
 	return path
 }
 
+// List the records for a domain that belongs to the authenticated user.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#list-records-for-a-domain
 func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Record, error) {
 	reqStr := recordPath(domain, nil)
 	v := url.Values{}
@@ -94,7 +97,7 @@ func (s *RecordsService) Create(domain interface{}, record Record) (Record, erro
 // Get fetches a record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#get-a-record
-func (s *RecordsService) Get(domain interface {}, record interface {}) (Record, error) {
+func (s *RecordsService) Get(domain interface{}, record interface{}) (Record, error) {
 	wrappedRecord := recordWrapper{}
 
 	if err := s.client.get(recordPath(domain, record), &wrappedRecord); err != nil {

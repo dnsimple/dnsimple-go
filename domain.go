@@ -60,6 +60,9 @@ func domainPath(domain interface{}) string {
 	return "domains"
 }
 
+// List the domains for the authenticated user.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/#list-domains
 func (s *DomainsService) List() ([]Domain, error) {
 	wrappedDomains := []domainWrapper{}
 
@@ -75,6 +78,9 @@ func (s *DomainsService) List() ([]Domain, error) {
 	return domains, nil
 }
 
+// Get fetches a domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/#get-a-domain
 func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	wrappedDomain := domainWrapper{}
 

@@ -10,7 +10,7 @@ import (
 func TestRecord_recordPath(t *testing.T) {
 	var pathTest = []struct {
 		domainInput interface{}
-		recordInput interface {}
+		recordInput interface{}
 		expected    string
 	}{
 		{"example.com", nil, "domains/example.com/records"},
@@ -131,9 +131,9 @@ func TestRecordsService_Get(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/v1/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
-			testMethod(t, r, "GET")
-			fmt.Fprint(w, `{"record":{"id":1539,"domain_id":227,"parent_id":null,"name":"","content":"mail.example.com","ttl":3600,"prio":1,"record_type":"MX","system_record":null,"created_at":"2014-01-15T22:03:03Z","updated_at":"2014-01-15T22:03:04Z"}}`)
-		})
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{"record":{"id":1539,"domain_id":227,"parent_id":null,"name":"","content":"mail.example.com","ttl":3600,"prio":1,"record_type":"MX","system_record":null,"created_at":"2014-01-15T22:03:03Z","updated_at":"2014-01-15T22:03:04Z"}}`)
+	})
 
 	record, err := client.Records.Get("example.com", 1539)
 
