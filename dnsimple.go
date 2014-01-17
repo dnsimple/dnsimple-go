@@ -53,7 +53,7 @@ func NewClient(apiToken, email string) *Client {
 	return c
 }
 
-// newRequest creates an API request.
+// NewRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
