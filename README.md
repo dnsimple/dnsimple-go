@@ -25,6 +25,10 @@ func main() {
     fmt.Printf("Domain: %s\n", domain.Name)
   }
 
+  // Create a new Domain
+  newDomain := Domain{Name: "example.com"}
+  domain, _ := client.Domains.Create(newDomain)
+
   // Get a list of records for a domain
   records, _ := client.Records.List("example.com")
   for _, record := range records {
@@ -38,7 +42,7 @@ func main() {
   // Update a Record
   rec, _ = rec.Update(client, Record{Content: "192.168.0.1"})
 
-  // Convnience method for updating a record's IP
+  // Convenience method for updating a Record's IP
   rec.UpdateIP(client, "10.0.0.1")
 }
 ```
