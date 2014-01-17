@@ -6,6 +6,14 @@ import (
 	"net/url"
 )
 
+// RecordsService handles communication with the record related
+// methods of the DNSimple API.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/
+type RecordsService struct {
+	client *DNSimpleClient
+}
+
 type Record struct {
 	Id         int    `json:"id,omitempty"`
 	DomainId   int    `json:"domain_id,omitempty"`
@@ -30,7 +38,7 @@ func recordPath(domain interface{}, record *Record) string {
 	return str
 }
 
-func (client *DNSimpleClient) Records(domain interface{}, name, recordType string) ([]Record, error) {
+func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Record, error) {
 	reqStr := recordPath(domain, nil)
 	v := url.Values{}
 
@@ -46,7 +54,7 @@ func (client *DNSimpleClient) Records(domain interface{}, name, recordType strin
 
 	wrappedRecords := []recordWrapper{}
 
-	if err := client.get(reqStr, &wrappedRecords); err != nil {
+	if err := s.client.get(reqStr, &wrappedRecords); err != nil {
 		return []Record{}, err
 	}
 
@@ -58,12 +66,12 @@ func (client *DNSimpleClient) Records(domain interface{}, name, recordType strin
 	return records, nil
 }
 
-func (client *DNSimpleClient) CreateRecord(domain interface{}, record Record) (Record, error) {
+func (s *RecordsService) Create(domain interface{}, record Record) (Record, error) {
 	// pre-validate the Record?
 	wrappedRecord := recordWrapper{Record: record}
 	returnedRecord := recordWrapper{}
 
-	status, err := client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
+	status, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}

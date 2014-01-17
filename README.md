@@ -20,20 +20,20 @@ func main() {
   client := dnsimple.NewClient(apiToken, email)
 
   // Get a list of your domains
-  domains, _ := client.Domains()
+  domains, _ := client.Domains.List()
   for _, domain := range domains {
     fmt.Printf("Domain: %s\n", domain.Name)
   }
 
   // Get a list of records for a domain
-  records, _ := client.Records("example.com")
+  records, _ := client.Records.List("example.com")
   for _, record := range records {
     fmt.Printf("Record: %s -> %s\n", record.Name, record.Content)
   }
 
   // Create a new Record
   newRec := Record{Name: "www", Content: "127.0.0.1", RecordType: "A"}
-  rec, _ := client.CreateRecord("example.com")
+  rec, _ := client.Records.Create("example.com")
 
   // Update a Record
   rec, _ = rec.Update(client, Record{Content: "192.168.0.1"})

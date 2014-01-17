@@ -41,10 +41,18 @@ type DNSimpleClient struct {
 
 	// User agent used when communicating with the DNSimple API.
 	UserAgent string
+
+	// Services used for talking to different parts of the GitHub API.
+	Domains *DomainsService
+	Records *RecordsService
 }
 
+// NewClient returns a new GitHub API client.
 func NewClient(apiToken, email string) *DNSimpleClient {
-	return &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
+	c := &DNSimpleClient{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
+	c.Domains = &DomainsService{client: c}
+	c.Records = &RecordsService{client: c}
+	return c
 }
 
 func (client *DNSimpleClient) get(path string, val interface{}) error {

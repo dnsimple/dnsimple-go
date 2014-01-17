@@ -11,8 +11,13 @@ import (
 )
 
 var (
-	mux    *http.ServeMux
+	// mux is the HTTP request multiplexer used with the test server.
+	mux *http.ServeMux
+
+	// client is the DNSimple client being tested.
 	client *DNSimpleClient
+
+	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
 )
 

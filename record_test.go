@@ -29,7 +29,7 @@ func TestRecord_recordPath(t *testing.T) {
 	}
 }
 
-func TestRecord_Records_All(t *testing.T) {
+func TestRecordsService_List_all(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -38,7 +38,7 @@ func TestRecord_Records_All(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records("example.com", "", "")
+	records, err := client.Records.List("example.com", "", "")
 
 	if err != nil {
 		t.Errorf("Records returned error: %v", err)
@@ -50,7 +50,7 @@ func TestRecord_Records_All(t *testing.T) {
 	}
 }
 
-func TestRecord_Records_Subdomain(t *testing.T) {
+func TestRecordsService_List_subdomain(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -61,7 +61,7 @@ func TestRecord_Records_Subdomain(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records("example.com", "foo", "")
+	records, err := client.Records.List("example.com", "foo", "")
 
 	if err != nil {
 		t.Errorf("Records returned error: %v", err)
@@ -73,7 +73,7 @@ func TestRecord_Records_Subdomain(t *testing.T) {
 	}
 }
 
-func TestRecord_Records_RecordType(t *testing.T) {
+func TestRecordsService_List_type(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -84,7 +84,7 @@ func TestRecord_Records_RecordType(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records("example.com", "foo", "CNAME")
+	records, err := client.Records.List("example.com", "foo", "CNAME")
 
 	if err != nil {
 		t.Errorf("Records returned error: %v", err)
@@ -96,7 +96,7 @@ func TestRecord_Records_RecordType(t *testing.T) {
 	}
 }
 
-func TestRecord_CreateRecord(t *testing.T) {
+func TestRecordsService_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -111,7 +111,7 @@ func TestRecord_CreateRecord(t *testing.T) {
 	})
 
 	recordValues := Record{Name: "foo", Content: "192.168.0.10", RecordType: "A"}
-	record, err := client.CreateRecord("example.com", recordValues)
+	record, err := client.Records.Create("example.com", recordValues)
 
 	if err != nil {
 		t.Errorf("CreateRecord returned error: %v", err)
@@ -120,22 +120,6 @@ func TestRecord_CreateRecord(t *testing.T) {
 	want := Record{Id: 42, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("CreateRecord returned %+v, want %+v", record, want)
-	}
-}
-
-func TestRecord_Delete(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "DELETE")
-	})
-
-	record := Record{Id: 42, DomainId: 24}
-	err := record.Delete(client)
-
-	if err != nil {
-		t.Errorf("Delete returned error: %v", err)
 	}
 }
 
@@ -183,5 +167,21 @@ func TestRecord_UpdateIP(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("UpdateIP returned error: %v", err)
+	}
+}
+
+func TestRecord_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+	})
+
+	record := Record{Id: 42, DomainId: 24}
+	err := record.Delete(client)
+
+	if err != nil {
+		t.Errorf("Delete returned error: %v", err)
 	}
 }

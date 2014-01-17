@@ -27,7 +27,7 @@ func TestDomain_domainPath(t *testing.T) {
 	}
 }
 
-func TestDomain_Domains(t *testing.T) {
+func TestDomainsService_List(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -36,7 +36,7 @@ func TestDomain_Domains(t *testing.T) {
 		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"foo.com"}}]`)
 	})
 
-	domains, err := client.Domains()
+	domains, err := client.Domains.List()
 
 	if err != nil {
 		t.Errorf("Domains returned error: %v", err)
@@ -48,7 +48,7 @@ func TestDomain_Domains(t *testing.T) {
 	}
 }
 
-func TestDomain_Domain(t *testing.T) {
+func TestDomainsService_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -57,7 +57,7 @@ func TestDomain_Domain(t *testing.T) {
 		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, err := client.Domain("example.com")
+	domain, err := client.Domains.Get("example.com")
 
 	if err != nil {
 		t.Errorf("Domain returned error: %v", err)
@@ -69,7 +69,7 @@ func TestDomain_Domain(t *testing.T) {
 	}
 }
 
-func TestDomain_DomainAvailable_available(t *testing.T) {
+func TestDomainsService_CheckAvailability_available(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -79,7 +79,7 @@ func TestDomain_DomainAvailable_available(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
 	})
 
-	available, err := client.DomainAvailable("example.com")
+	available, err := client.Domains.CheckAvailability("example.com")
 
 	if err != nil {
 		t.Errorf("Availability check returned %v", err)
@@ -90,7 +90,7 @@ func TestDomain_DomainAvailable_available(t *testing.T) {
 	}
 }
 
-func TestDomain_DomainAavailable_unavailable(t *testing.T) {
+func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -100,7 +100,7 @@ func TestDomain_DomainAavailable_unavailable(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
 	})
 
-	available, err := client.DomainAvailable("example.com")
+	available, err := client.Domains.CheckAvailability("example.com")
 
 	if err != nil {
 		t.Errorf("Availability check returned %v", err)
@@ -111,7 +111,7 @@ func TestDomain_DomainAavailable_unavailable(t *testing.T) {
 	}
 }
 
-func TestDomain_SetAutoRenew_enable(t *testing.T) {
+func TestDomainsService_SetAutoRenew_enable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -119,14 +119,14 @@ func TestDomain_SetAutoRenew_enable(t *testing.T) {
 		testMethod(t, r, "POST")
 	})
 
-	err := client.SetAutorenew("example.com", true)
+	err := client.Domains.SetAutorenew("example.com", true)
 
 	if err != nil {
 		t.Errorf("Autorenew (enable) returned %v", err)
 	}
 }
 
-func TestDomain_SetAutoRenew_disable(t *testing.T) {
+func TestDomainsService_SetAutoRenew_disable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -134,14 +134,14 @@ func TestDomain_SetAutoRenew_disable(t *testing.T) {
 		testMethod(t, r, "DELETE")
 	})
 
-	err := client.SetAutorenew("example.com", false)
+	err := client.Domains.SetAutorenew("example.com", false)
 
 	if err != nil {
 		t.Errorf("Autorenew (disable) returned %v", err)
 	}
 }
 
-func TestDomain_Renew(t *testing.T) {
+func TestDomainsService_Renew(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -155,7 +155,7 @@ func TestDomain_Renew(t *testing.T) {
 		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
 	})
 
-	err := client.Renew("example.com", true)
+	err := client.Domains.Renew("example.com", true)
 
 	if err != nil {
 		t.Errorf("Renew returned %v", err)

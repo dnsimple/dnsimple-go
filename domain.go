@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+// DomainsService handles communication with the domain related
+// methods of the DNSimple API.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/
+type DomainsService struct {
+	client *DNSimpleClient
+}
+
 type Domain struct {
 	Id             int    `json:"id,omitempty"`
 	UserId         int    `json:"user_id,omitempty"`
@@ -51,10 +59,10 @@ func domainPath(domain interface{}) string {
 	return "domains"
 }
 
-func (client *DNSimpleClient) Domains() ([]Domain, error) {
+func (s *DomainsService) List() ([]Domain, error) {
 	wrappedDomains := []domainWrapper{}
 
-	if err := client.get(domainPath(nil), &wrappedDomains); err != nil {
+	if err := s.client.get(domainPath(nil), &wrappedDomains); err != nil {
 		return []Domain{}, err
 	}
 
@@ -66,29 +74,17 @@ func (client *DNSimpleClient) Domains() ([]Domain, error) {
 	return domains, nil
 }
 
-func (client *DNSimpleClient) Domain(domain interface{}) (Domain, error) {
+func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	wrappedDomain := domainWrapper{}
 
-	if err := client.get(domainPath(domain), &wrappedDomain); err != nil {
+	if err := s.client.get(domainPath(domain), &wrappedDomain); err != nil {
 		return Domain{}, err
 	}
 
 	return wrappedDomain.Domain, nil
 }
 
-func (client *DNSimpleClient) DomainAvailable(domain interface{}) (bool, error) {
-	reqStr := fmt.Sprintf("%s/check", domainPath(domain))
-
-	_, status, err := client.sendRequest("GET", reqStr, nil)
-
-	if err != nil {
-		return false, err
-	}
-
-	return status == 404, nil
-}
-
-func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) error {
+func (s *DomainsService) SetAutorenew(domain interface{}, autorenew bool) error {
 	reqStr := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
 	method := ""
@@ -97,7 +93,7 @@ func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) e
 	} else {
 		method = "DELETE"
 	}
-	_, _, err := client.sendRequest(method, reqStr, nil)
+	_, _, err := s.client.sendRequest(method, reqStr, nil)
 
 	if err != nil {
 		return err
@@ -105,12 +101,24 @@ func (client *DNSimpleClient) SetAutorenew(domain interface{}, autorenew bool) e
 	return nil
 }
 
-func (client *DNSimpleClient) Renew(domain string, renewWhoisPrivacy bool) error {
+func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
+	reqStr := fmt.Sprintf("%s/check", domainPath(domain))
+
+	_, status, err := s.client.sendRequest("GET", reqStr, nil)
+
+	if err != nil {
+		return false, err
+	}
+
+	return status == 404, nil
+}
+
+func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
 	wrappedDomain := domainWrapper{Domain: Domain{
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
 
-	status, err := client.post("domain_renewals", wrappedDomain, nil)
+	status, err := s.client.post("domain_renewals", wrappedDomain, nil)
 	if err != nil {
 		return err
 	}
