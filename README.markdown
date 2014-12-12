@@ -2,15 +2,17 @@
 
 A Go library for using the DNSimple API.
 
-**Build Status:** [![Build Status](https://travis-ci.org/rubyist/go-dnsimple.png?branch=master)](https://travis-ci.org/rubyist/go-dnsimple)  
-**Test Coverage:** [![Coverage Status](https://coveralls.io/repos/rubyist/go-dnsimple/badge.png)](https://coveralls.io/r/rubyist/go-dnsimple)
+[![Build Status](https://travis-ci.org/weppos/go-dnsimple.svg)](https://travis-ci.org/weppos/go-dnsimple)
+[![Coverage Status](https://img.shields.io/coveralls/weppos/go-dnsimple.svg)](https://coveralls.io/r/weppos/go-dnsimple?branch=master)
+
+
 ## Examples
 
 ```go
 package main
 import (
   "fmt"
-  dnsimple "github.com/rubyist/go-dnsimple"
+  dnsimple "github.com/weppos/go-dnsimple"
 )
 
 func main() {
