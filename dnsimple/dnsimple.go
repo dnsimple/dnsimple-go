@@ -40,12 +40,12 @@ type Client struct {
 	// User agent used when communicating with the DNSimple API.
 	UserAgent string
 
-	// Services used for talking to different parts of the GitHub API.
+	// Services used for talking to different parts of the DNSimple API.
 	Domains *DomainsService
 	Records *RecordsService
 }
 
-// NewClient returns a new GitHub API client.
+// NewClient returns a new DNSimple API client.
 func NewClient(apiToken, email string) *Client {
 	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
 	c.Domains = &DomainsService{client: c}
@@ -123,7 +123,7 @@ func (client *Client) sendRequest(method, path string, payload, v interface{}) (
 // ErrorResponse represents an error caused by an API request.
 type ErrorResponse struct {
 	Response *http.Response // HTTP response that caused this error
-	Message  string         `json:"message"` // error message
+	Message  string         `json:"message"` // human-readable message
 }
 
 // Error implements the error interface.

@@ -58,7 +58,7 @@ func domainPath(domain interface{}) string {
 
 // List the domains for the authenticated user.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#list-domains
+// DNSimple API docs: http://developer.dnsimple.com/domains/#list
 func (s *DomainsService) List() ([]Domain, error) {
 	path := domainPath(nil)
 	wrappedDomains := []domainWrapper{}
@@ -77,7 +77,7 @@ func (s *DomainsService) List() ([]Domain, error) {
 
 // Create a new domain in the authenticated account.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#create-a-domain
+// DNSimple API docs: http://developer.dnsimple.com/domains/#create
 func (s *DomainsService) Create(domain Domain) (Domain, error) {
 	path := domainPath(nil)
 	wrappedDomain := domainWrapper{Domain: domain}
@@ -97,7 +97,7 @@ func (s *DomainsService) Create(domain Domain) (Domain, error) {
 
 // Get fetches a domain from the authenticated account.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#get-a-domain
+// DNSimple API docs: http://developer.dnsimple.com/domains/#get
 func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 	path := domainPath(domain)
 	wrappedDomain := domainWrapper{}
@@ -111,7 +111,7 @@ func (s *DomainsService) Get(domain interface{}) (Domain, error) {
 
 // Delete a domain from the authenticated account.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#delete-a-domain
+// DNSimple API docs: http://developer.dnsimple.com/domains/#delete
 func (s *DomainsService) Delete(domain interface{}) error {
 	path := domainPath(domain)
 
@@ -149,7 +149,7 @@ func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
 
 // EnableAutoRenewal enables the auto-renewal feature for the domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable-domain-auto-renewal
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable
 func (s *DomainsService) EnableAutoRenewal(domain interface{}) error {
 	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
@@ -162,7 +162,7 @@ func (s *DomainsService) EnableAutoRenewal(domain interface{}) error {
 
 // DisableAutoRenewal disables the auto-renewal feature for the domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable-domain-auto-renewal
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable
 func (s *DomainsService) DisableAutoRenewal(domain interface{}) error {
 	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
@@ -175,10 +175,10 @@ func (s *DomainsService) DisableAutoRenewal(domain interface{}) error {
 
 // SetAutoRenewal is a convenient helper to enable/disable the auto-renewal feature for the domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable-domain-auto-renewal
-// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable-domain-auto-renewal
-func (s *DomainsService) SetAutoRenewal(domain interface{}, autorenew bool) error {
-	if autorenew {
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable
+// DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable
+func (s *DomainsService) SetAutoRenewal(domain interface{}, autoRenew bool) error {
+	if autoRenew {
 		return s.EnableAutoRenewal(domain)
 	} else {
 		return s.DisableAutoRenewal(domain)

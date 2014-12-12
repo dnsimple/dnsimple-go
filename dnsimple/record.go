@@ -43,7 +43,7 @@ func recordPath(domain interface{}, record interface{}) string {
 
 // List the records for a domain that belongs to the authenticated user.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#list-records-for-a-domain
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
 func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Record, error) {
 	reqStr := recordPath(domain, nil)
 	v := url.Values{}
@@ -74,7 +74,7 @@ func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Re
 
 // Create a new record for the specified domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#create-a-record
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#create
 func (s *RecordsService) Create(domain interface{}, record Record) (Record, error) {
 	// pre-validate the Record?
 	wrappedRecord := recordWrapper{Record: record}
@@ -94,7 +94,7 @@ func (s *RecordsService) Create(domain interface{}, record Record) (Record, erro
 
 // Get fetches a record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#get-a-record
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
 func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 	wrappedRecord := recordWrapper{}
 
@@ -107,7 +107,7 @@ func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
 
 // Delete a record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete-a-record
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
 func (s *RecordsService) Delete(domain interface{}, recordID int) error {
 	path := recordPath(domain, recordID)
 
@@ -144,7 +144,7 @@ func (record *Record) Update(client *Client, recordAttributes Record) (Record, e
 
 // Delete this record instance.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete-a-record
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
 func (record *Record) Delete(client *Client) error {
 	return client.Records.Delete(record.DomainId, record.Id)
 }
