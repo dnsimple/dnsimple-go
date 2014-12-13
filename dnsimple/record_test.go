@@ -109,7 +109,7 @@ func TestRecordsService_Create(t *testing.T) {
 		fmt.Fprintf(w, `{"record":{"id":42, "name":"foo"}}`)
 	})
 
-	recordValues := Record{Name: "foo", Content: "192.168.0.10", RecordType: "A"}
+	recordValues := Record{Name: "foo", Content: "192.168.0.10", Type: "A"}
 	record, err := client.Records.Create("example.com", recordValues)
 
 	if err != nil {
@@ -153,7 +153,7 @@ func TestRecordsService_Get(t *testing.T) {
 		t.Errorf("Records.Get returned error: %v", err)
 	}
 
-	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, RecordType: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
+	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, Type: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("Records.Get returned %+v, want %+v", record, want)
 	}

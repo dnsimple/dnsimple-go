@@ -15,15 +15,15 @@ type RecordsService struct {
 }
 
 type Record struct {
-	Id         int    `json:"id,omitempty"`
-	DomainId   int    `json:"domain_id,omitempty"`
-	Name       string `json:"name,omitempty"`
-	Content    string `json:"content,omitempty"`
-	TTL        int    `json:"ttl,omitempty"`
-	Priority   int    `json:"prio,omitempty"`
-	RecordType string `json:"record_type,omitempty"`
-	CreatedAt  string `json:"created_at,omitempty"`
-	UpdatedAt  string `json:"updated_at,omitempty"`
+	Id        int    `json:"id,omitempty"`
+	DomainId  int    `json:"domain_id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Content   string `json:"content,omitempty"`
+	TTL       int    `json:"ttl,omitempty"`
+	Priority  int    `json:"prio,omitempty"`
+	Type      string `json:"record_type,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 type recordWrapper struct {
@@ -44,12 +44,12 @@ func recordPath(domain interface{}, record interface{}) string {
 // List the records for a domain that belongs to the authenticated user.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
-func (s *RecordsService) List(domain interface{}, name, recordType string) ([]Record, error) {
+func (s *RecordsService) List(domain interface{}, recordName, recordType string) ([]Record, error) {
 	reqStr := recordPath(domain, nil)
 	v := url.Values{}
 
-	if name != "" {
-		v.Add("name", name)
+	if recordName != "" {
+		v.Add("name", recordName)
 	}
 
 	if recordType != "" {
