@@ -51,12 +51,6 @@ func main() {
 
 For more complete documentation, load up godoc and find the package.
 
-## Development
-
-- Source hosted at [GitHub](https://github.com/rubyist/go-dnsimple)
-- Report issues and feature requests to [GitHub Issues](https://github.com/rubyist/go-dnsimple/issues)
-
-Pull requests welcome!
 
 ## License
 
