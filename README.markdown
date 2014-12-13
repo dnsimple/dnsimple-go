@@ -36,13 +36,13 @@ func main() {
   client := dnsimple.NewClient(apiToken, email)
 
   // Get a list of your domains
-  domains, error := client.Domains.List()
+  domains, _, _ := client.Domains.List()
   for _, domain := range domains {
       fmt.Printf("Domain: %s (id: %d)\n", domain.Name, domain.Id)
   }
 
   // Get a list of your domains (with error management)
-  domains, error := client.Domains.List()
+  domains, _, error := client.Domains.List()
   if error != nil {
       log.Fatalln(error)
   }
@@ -52,7 +52,7 @@ func main() {
 
   // Create a new Domain
   newDomain := Domain{Name: "example.com"}
-  domain, _ := client.Domains.Create(newDomain)
+  domain, _, _ := client.Domains.Create(newDomain)
   fmt.Printf("Domain: %s\n (id: %d)", domain.Name, domain.Id)
 }
 ```
