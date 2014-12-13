@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"io"
 )
 
 const (
@@ -80,33 +81,39 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (client *Client) get(path string, val interface{}) (*Response, error) {
-	return client.sendRequest("GET", path, nil, val)
+func (c *Client) get(path string, v interface{}) (*Response, error) {
+	return c.Do("GET", path, nil, v)
 }
 
-func (client *Client) post(path string, payload, val interface{}) (*Response, error) {
-	return client.sendRequest("POST", path, payload, val)
+func (c *Client) post(path string, payload, v interface{}) (*Response, error) {
+	return c.Do("POST", path, payload, v)
 }
 
-func (client *Client) put(path string, payload, val interface{}) (*Response, error) {
-	return client.sendRequest("PUT", path, payload, val)
+func (c *Client) put(path string, payload, v interface{}) (*Response, error) {
+	return c.Do("PUT", path, payload, v)
 }
 
-func (client *Client) delete(path string, payload interface{}) (*Response, error) {
-	return client.sendRequest("DELETE", path, payload, nil)
+func (c *Client) delete(path string, payload interface{}) (*Response, error) {
+	return c.Do("DELETE", path, payload, nil)
 }
 
-func (client *Client) sendRequest(method, path string, payload, v interface{}) (*Response, error) {
-	req, err := client.NewRequest(method, path, payload)
+// Do sends an API request and returns the API response.
+// The API response is JSON decoded and stored in the value pointed by v,
+// or returned as an error if an API error has occurred.
+// If v implements the io.Writer interface, the raw response body will be written to v,
+// without attempting to decode it.
+func (c *Client) Do(method, path string, payload, v interface{}) (*Response, error) {
+	req, err := c.NewRequest(method, path, payload)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := client.HttpClient.Do(req)
+	res, err := c.HttpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	defer res.Body.Close()
 
 	response := &Response{Response: resp}
 
@@ -116,7 +123,6 @@ func (client *Client) sendRequest(method, path string, payload, v interface{}) (
 	}
 
 	if v != nil {
-		err = json.NewDecoder(response.Body).Decode(v)
 	}
 
 	return response, err
