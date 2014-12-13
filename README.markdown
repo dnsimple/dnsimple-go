@@ -1,6 +1,6 @@
 # go-dnsimple
 
-A Go library for using the DNSimple API.
+A Go client for the [DNSimple API](http://developer.dnsimple.com/).
 
 [![Build Status](https://travis-ci.org/weppos/go-dnsimple.svg)](https://travis-ci.org/weppos/go-dnsimple)
 [![Coverage Status](https://img.shields.io/coveralls/weppos/go-dnsimple.svg)](https://coveralls.io/r/weppos/go-dnsimple?branch=master)
