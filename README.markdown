@@ -12,7 +12,7 @@ A Go library for using the DNSimple API.
 package main
 import (
   "fmt"
-  dnsimple "github.com/weppos/go-dnsimple"
+  "github.com/weppos/go-dnsimple/dnsimple"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
   }
 
   // Create a new Record
-  newRecord := Record{Name: "www", Content: "127.0.0.1", RecordType: "A"}
+  newRecord := Record{Name: "www", Content: "127.0.0.1", Type: "A"}
   record, _ := client.Records.Create("example.com", newRecord)
 
   // Update a Record
