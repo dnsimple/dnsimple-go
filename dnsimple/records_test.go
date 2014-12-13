@@ -37,7 +37,7 @@ func TestRecordsService_List_all(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records.List("example.com", "", "")
+	records, _, err := client.Records.List("example.com", "", "")
 
 	if err != nil {
 		t.Errorf("Records returned error: %v", err)
@@ -60,7 +60,7 @@ func TestRecordsService_List_subdomain(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records.List("example.com", "foo", "")
+	records, _, err := client.Records.List("example.com", "foo", "")
 
 	if err != nil {
 		t.Errorf("Records returned error: %v", err)
@@ -83,7 +83,7 @@ func TestRecordsService_List_type(t *testing.T) {
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
 
-	records, err := client.Records.List("example.com", "foo", "CNAME")
+	records, _, err := client.Records.List("example.com", "foo", "CNAME")
 
 	if err != nil {
 		t.Errorf("Records.List returned error: %v", err)
@@ -110,7 +110,7 @@ func TestRecordsService_Create(t *testing.T) {
 	})
 
 	recordValues := Record{Name: "foo", Content: "192.168.0.10", Type: "A"}
-	record, err := client.Records.Create("example.com", recordValues)
+	record, _, err := client.Records.Create("example.com", recordValues)
 
 	if err != nil {
 		t.Errorf("Records.Create returned error: %v", err)
@@ -147,7 +147,7 @@ func TestRecordsService_Get(t *testing.T) {
 		`)
 	})
 
-	record, err := client.Records.Get("example.com", 1539)
+	record, _, err := client.Records.Get("example.com", 1539)
 
 	if err != nil {
 		t.Errorf("Records.Get returned error: %v", err)
@@ -168,7 +168,7 @@ func TestRecordsService_Delete(t *testing.T) {
 		// fmt.Fprint(w, `{}`)
 	})
 
-	err := client.Records.Delete("example.com", 2)
+	_, err := client.Records.Delete("example.com", 2)
 
 	if err != nil {
 		t.Errorf("Records.Delete returned error: %v", err)
@@ -185,7 +185,7 @@ func TestRecordsService_Delete_failed(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
-	err := client.Records.Delete("example.com", 2)
+	_, err := client.Records.Delete("example.com", 2)
 	if err == nil {
 		t.Errorf("Records.Delete expected error to be returned")
 	}

@@ -44,24 +44,23 @@ func recordPath(domain interface{}, record interface{}) string {
 // List the records for a domain that belongs to the authenticated user.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
-func (s *RecordsService) List(domain interface{}, recordName, recordType string) ([]Record, error) {
+func (s *RecordsService) List(domain interface{}, recordName, recordType string) ([]Record, *Response, error) {
 	reqStr := recordPath(domain, nil)
 	v := url.Values{}
 
 	if recordName != "" {
 		v.Add("name", recordName)
 	}
-
 	if recordType != "" {
 		v.Add("type", recordType)
 	}
-
 	reqStr += "?" + v.Encode()
 
 	wrappedRecords := []recordWrapper{}
 
-	if _, err := s.client.get(reqStr, &wrappedRecords); err != nil {
-		return []Record{}, err
+	res, err := s.client.get(reqStr, &wrappedRecords)
+	if err != nil {
+		return []Record{}, res, err
 	}
 
 	records := []Record{}
@@ -69,58 +68,53 @@ func (s *RecordsService) List(domain interface{}, recordName, recordType string)
 		records = append(records, record.Record)
 	}
 
-	return records, nil
+	return records, res, nil
 }
 
 // Create a new record for the specified domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#create
-func (s *RecordsService) Create(domain interface{}, record Record) (Record, error) {
-	// pre-validate the Record?
+func (s *RecordsService) Create(domain interface{}, record Record) (Record, *Response, error) {
 	wrappedRecord := recordWrapper{Record: record}
 	returnedRecord := recordWrapper{}
 
-	response, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
+	res, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
 	if err != nil {
-		return Record{}, err
+		return Record{}, res, err
 	}
 
-	if response.StatusCode == 400 {
-		return Record{}, errors.New("Invalid Record")
+	if res.StatusCode == 400 {
+		return Record{}, res, errors.New("Invalid Record")
 	}
 
-	return returnedRecord.Record, nil
+	return returnedRecord.Record, res, nil
 }
 
 // Get fetches a record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
-func (s *RecordsService) Get(domain interface{}, recordID int) (Record, error) {
+func (s *RecordsService) Get(domain interface{}, recordID int) (Record, *Response, error) {
 	wrappedRecord := recordWrapper{}
 
-	if _, err := s.client.get(recordPath(domain, recordID), &wrappedRecord); err != nil {
-		return Record{}, err
+	res, err := s.client.get(recordPath(domain, recordID), &wrappedRecord)
+	if err != nil {
+		return Record{}, res, err
 	}
 
-	return wrappedRecord.Record, nil
+	return wrappedRecord.Record, res, nil
 }
 
 // Delete a record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
-func (s *RecordsService) Delete(domain interface{}, recordID int) error {
+func (s *RecordsService) Delete(domain interface{}, recordID int) (*Response, error) {
 	path := recordPath(domain, recordID)
 
-	_, err := s.client.delete(path, nil)
-	if err != nil {
-		return err
-	}
-
-	return err
+	res, err := s.client.delete(path, nil)
+	return res, err
 }
 
 func (record *Record) Update(client *Client, recordAttributes Record) (Record, error) {
-	// pre-validate the Record?
 	// name, content, ttl, prio - only things allowed
 	wrappedRecord := recordWrapper{Record: Record{
 		Name:     recordAttributes.Name,
@@ -130,12 +124,12 @@ func (record *Record) Update(client *Client, recordAttributes Record) (Record, e
 
 	returnedRecord := recordWrapper{}
 
-	response, err := client.put(recordPath(record.DomainId, record.Id), wrappedRecord, &returnedRecord)
+	res, err := client.put(recordPath(record.DomainId, record.Id), wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, err
 	}
 
-	if response.StatusCode == 400 {
+	if res.StatusCode == 400 {
 		return Record{}, errors.New("Invalid Record")
 	}
 
@@ -146,7 +140,8 @@ func (record *Record) Update(client *Client, recordAttributes Record) (Record, e
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
 func (record *Record) Delete(client *Client) error {
-	return client.Records.Delete(record.DomainId, record.Id)
+	_, err := client.Records.Delete(record.DomainId, record.Id)
+	return err
 }
 
 func (record *Record) UpdateIP(client *Client, IP string) error {

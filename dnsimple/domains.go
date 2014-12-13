@@ -59,12 +59,13 @@ func domainPath(domain interface{}) string {
 // List the domains for the authenticated user.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list
-func (s *DomainsService) List() ([]Domain, error) {
+func (s *DomainsService) List() ([]Domain, *Response, error) {
 	path := domainPath(nil)
 	wrappedDomains := []domainWrapper{}
 
-	if _, err := s.client.get(path, &wrappedDomains); err != nil {
-		return []Domain{}, err
+	res, err := s.client.get(path, &wrappedDomains);
+	if err != nil {
+		return []Domain{}, res, err
 	}
 
 	domains := []Domain{}
@@ -72,112 +73,115 @@ func (s *DomainsService) List() ([]Domain, error) {
 		domains = append(domains, domain.Domain)
 	}
 
-	return domains, nil
+	return domains, res, nil
 }
 
 // Create a new domain in the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#create
-func (s *DomainsService) Create(domain Domain) (Domain, error) {
+func (s *DomainsService) Create(domain Domain) (Domain, *Response, error) {
 	path := domainPath(nil)
 	wrappedDomain := domainWrapper{Domain: domain}
 	returnedDomain := domainWrapper{}
 
-	response, err := s.client.post(path, wrappedDomain, &returnedDomain)
+	res, err := s.client.post(path, wrappedDomain, &returnedDomain)
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, res, err
 	}
 
-	if response.StatusCode == 400 {
-		return Domain{}, errors.New("Invalid Domain")
+	if res.StatusCode == 400 {
+		return Domain{}, res, errors.New("Invalid Domain")
 	}
 
-	return returnedDomain.Domain, nil
+	return returnedDomain.Domain, res, nil
 }
 
 // Get fetches a domain from the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get
-func (s *DomainsService) Get(domain interface{}) (Domain, error) {
+func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
 	path := domainPath(domain)
 	wrappedDomain := domainWrapper{}
 
-	if _, err := s.client.get(path, &wrappedDomain); err != nil {
-		return Domain{}, err
+	res, err := s.client.get(path, &wrappedDomain)
+	if err != nil {
+		return Domain{}, res, err
 	}
 
-	return wrappedDomain.Domain, nil
+	return wrappedDomain.Domain, res, nil
 }
 
 // Delete a domain from the authenticated account.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#delete
-func (s *DomainsService) Delete(domain interface{}) error {
+func (s *DomainsService) Delete(domain interface{}) (*Response, error) {
 	path := domainPath(domain)
 
-	_, err := s.client.delete(path, nil)
-	return err
+	res, err := s.client.delete(path, nil)
+	return res, err
 }
 
-func (s *DomainsService) CheckAvailability(domain interface{}) (bool, error) {
+func (s *DomainsService) CheckAvailability(domain interface{}) (bool, *Response, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
-	response, err := s.client.get(path, nil)
-	if err != nil && response != nil && response.StatusCode != 404 {
-		return false, err
+	res, err := s.client.get(path, nil)
+	if err != nil && res != nil && res.StatusCode != 404 {
+		return false, res, err
 	}
 
-	return response.StatusCode == 404, nil
+	return res.StatusCode == 404, res, nil
 }
 
-func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) error {
+func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {
 	wrappedDomain := domainWrapper{Domain: Domain{
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
 
-	response, err := s.client.post("domain_renewals", wrappedDomain, nil)
+	res, err := s.client.post("domain_renewals", wrappedDomain, nil)
 	if err != nil {
-		return err
+		return res, err
 	}
 
-	if response.StatusCode == 400 {
-		return errors.New("Failed to Renew")
+	if res.StatusCode == 400 {
+		return res, errors.New("Failed to Renew")
 	}
 
-	return nil
+	return res, nil
 }
 
 // EnableAutoRenewal enables the auto-renewal feature for the domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable
-func (s *DomainsService) EnableAutoRenewal(domain interface{}) error {
+func (s *DomainsService) EnableAutoRenewal(domain interface{}) (*Response, error) {
 	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
-	if _, err := s.client.post(path, nil, nil); err != nil {
-		return err
+	res, err := s.client.post(path, nil, nil)
+	if err != nil {
+		return res, err
 	}
 
-	return nil
+	return res, nil
 }
 
 // DisableAutoRenewal disables the auto-renewal feature for the domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable
-func (s *DomainsService) DisableAutoRenewal(domain interface{}) error {
+func (s *DomainsService) DisableAutoRenewal(domain interface{}) (*Response, error) {
 	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
 
-	if _, err := s.client.delete(path, nil); err != nil {
-		return err
+	res, err := s.client.delete(path, nil)
+	if err != nil {
+		return res, err
 	}
 
-	return nil
+	return res, nil
 }
 
 // SetAutoRenewal is a convenient helper to enable/disable the auto-renewal feature for the domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#enable
 // DNSimple API docs: http://developer.dnsimple.com/domains/autorenewal/#disable
-func (s *DomainsService) SetAutoRenewal(domain interface{}, autoRenew bool) error {
+func (s *DomainsService) SetAutoRenewal(domain interface{}, autoRenew bool) (*Response, error) {
 	if autoRenew {
 		return s.EnableAutoRenewal(domain)
 	} else {
