@@ -1,8 +1,8 @@
 package dnsimple
 
 import (
-	"fmt"
 	"bytes"
+	"fmt"
 )
 
 // ZonesService handles communication with the zone related
