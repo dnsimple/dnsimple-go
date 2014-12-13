@@ -6,10 +6,24 @@ A Go client for the [DNSimple API](http://developer.dnsimple.com/).
 [![Coverage Status](https://img.shields.io/coveralls/weppos/go-dnsimple.svg)](https://coveralls.io/r/weppos/go-dnsimple?branch=master)
 
 
-## Examples
+
+## Installation
+
+```
+$ go get github.com/weppos/go-dnsimple
+```
+
+
+## Getting Started
+
+This library is a Go client you can use to interact with the [DNSimple API](http://developer.dnsimple.com/).
+
+Here's a short example.
+
 
 ```go
 package main
+
 import (
   "fmt"
   "github.com/weppos/go-dnsimple/dnsimple"
@@ -22,30 +36,24 @@ func main() {
   client := dnsimple.NewClient(apiToken, email)
 
   // Get a list of your domains
-  domains, _ := client.Domains.List()
+  domains, error := client.Domains.List()
   for _, domain := range domains {
-    fmt.Printf("Domain: %s\n", domain.Name)
+      fmt.Printf("Domain: %s (id: %d)\n", domain.Name, domain.Id)
+  }
+
+  // Get a list of your domains (with error management)
+  domains, error := client.Domains.List()
+  if error != nil {
+      log.Fatalln(error)
+  }
+  for _, domain := range domains {
+      fmt.Printf("Domain: %s (id: %d)\n", domain.Name, domain.Id)
   }
 
   // Create a new Domain
   newDomain := Domain{Name: "example.com"}
   domain, _ := client.Domains.Create(newDomain)
-
-  // Get a list of records for a domain
-  records, _ := client.Records.List("example.com")
-  for _, record := range records {
-    fmt.Printf("Record: %s -> %s\n", record.Name, record.Content)
-  }
-
-  // Create a new Record
-  newRecord := Record{Name: "www", Content: "127.0.0.1", Type: "A"}
-  record, _ := client.Records.Create("example.com", newRecord)
-
-  // Update a Record
-  record, _ = record.Update(client, Record{Content: "192.168.0.1"})
-
-  // Convenience method for updating a Record's IP
-  record.UpdateIP(client, "10.0.0.1")
+  fmt.Printf("Domain: %s\n (id: %d)", domain.Name, domain.Id)
 }
 ```
 
