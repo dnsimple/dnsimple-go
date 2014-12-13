@@ -80,23 +80,23 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (client *Client) get(path string, val interface{}) (*http.Response, error) {
+func (client *Client) get(path string, val interface{}) (*Response, error) {
 	return client.sendRequest("GET", path, nil, val)
 }
 
-func (client *Client) post(path string, payload, val interface{}) (*http.Response, error) {
+func (client *Client) post(path string, payload, val interface{}) (*Response, error) {
 	return client.sendRequest("POST", path, payload, val)
 }
 
-func (client *Client) put(path string, payload, val interface{}) (*http.Response, error) {
+func (client *Client) put(path string, payload, val interface{}) (*Response, error) {
 	return client.sendRequest("PUT", path, payload, val)
 }
 
-func (client *Client) delete(path string, payload interface{}) (*http.Response, error) {
+func (client *Client) delete(path string, payload interface{}) (*Response, error) {
 	return client.sendRequest("DELETE", path, payload, nil)
 }
 
-func (client *Client) sendRequest(method, path string, payload, v interface{}) (*http.Response, error) {
+func (client *Client) sendRequest(method, path string, payload, v interface{}) (*Response, error) {
 	req, err := client.NewRequest(method, path, payload)
 	if err != nil {
 		return nil, err
@@ -108,19 +108,26 @@ func (client *Client) sendRequest(method, path string, payload, v interface{}) (
 	}
 	defer resp.Body.Close()
 
+	response := &Response{Response: resp}
+
 	err = CheckResponse(resp)
 	if err != nil {
-		return resp, err
+		return response, err
 	}
 
 	if v != nil {
-		err = json.NewDecoder(resp.Body).Decode(v)
+		err = json.NewDecoder(response.Body).Decode(v)
 	}
 
-	return resp, err
+	return response, err
 }
 
-// ErrorResponse represents an error caused by an API request.
+// A Response represents an API response.
+type Response struct {
+	*http.Response
+}
+
+// An ErrorResponse represents an error caused by an API request.
 type ErrorResponse struct {
 	Response *http.Response // HTTP response that caused this error
 	Message  string         `json:"message"` // human-readable message
@@ -133,15 +140,6 @@ func (r *ErrorResponse) Error() string {
 		r.Response.StatusCode, r.Message)
 }
 
-// newErrorResponse creates a new ErrorResponse parsing the message from the response body.
-// This is useful if you want to inspect the response message
-// and customize the error handling for a request.
-func NewErrorResponse(r *http.Response) (*ErrorResponse, error) {
-	errorResponse := &ErrorResponse{Response: r}
-	err := json.NewDecoder(r.Body).Decode(errorResponse)
-	return errorResponse, err
-}
-
 // CheckResponse checks the API response for errors, and returns them if present.
 // A response is considered an error if the status code is different than 2xx. Specific requests
 // may have additional requirements, but this is sufficient in most of the cases.
@@ -150,7 +148,8 @@ func CheckResponse(r *http.Response) error {
 		return nil
 	}
 
-	errorResponse, err := NewErrorResponse(r)
+	errorResponse := &ErrorResponse{Response: r}
+	err := json.NewDecoder(r.Body).Decode(errorResponse)
 	if err != nil {
 		return err
 	}
