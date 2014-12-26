@@ -136,14 +136,6 @@ func (record *Record) Update(client *Client, recordAttributes Record) (Record, e
 	return returnedRecord.Record, nil
 }
 
-// Delete this record instance.
-//
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
-func (record *Record) Delete(client *Client) error {
-	_, err := client.Records.Delete(record.DomainId, record.Id)
-	return err
-}
-
 func (record *Record) UpdateIP(client *Client, IP string) error {
 	newRecord := Record{Content: IP, Name: record.Name}
 	_, err := record.Update(client, newRecord)
