@@ -1,7 +1,6 @@
 package dnsimple
 
 import (
-	"bytes"
 	"fmt"
 )
 
@@ -13,17 +12,21 @@ type ZonesService struct {
 	client *Client
 }
 
+type zoneResponse struct {
+	Zone string `json:"zone,omitempty"`
+}
+
 // Get downloads the Bind-like zone file.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/zones/#export
+// DNSimple API docs: http://developer.dnsimple.com/domains/zones/#get
 func (s *ZonesService) Get(domain interface{}) (string, *Response, error) {
-	var body bytes.Buffer
 	path := fmt.Sprintf("%s/zone", domainPath(domain))
+	zoneResponse := zoneResponse{}
 
-	res, err := s.client.get(path, &body)
+	res, err := s.client.get(path, &zoneResponse)
 	if err != nil {
 		return "", res, err
 	}
 
-	return body.String(), res, nil
+	return zoneResponse.Zone, res, nil
 }
