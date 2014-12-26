@@ -44,6 +44,7 @@ type Client struct {
 	// Services used for talking to different parts of the DNSimple API.
 	Domains *DomainsService
 	Records *RecordsService
+	Users *UsersService
 }
 
 // NewClient returns a new DNSimple API client.
@@ -51,6 +52,7 @@ func NewClient(apiToken, email string) *Client {
 	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
 	c.Domains = &DomainsService{client: c}
 	c.Records = &RecordsService{client: c}
+	c.Users = &UsersService{client: c}
 	return c
 }
 
