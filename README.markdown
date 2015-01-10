@@ -13,6 +13,12 @@ A Go client for the [DNSimple API](http://developer.dnsimple.com/).
 $ go get github.com/weppos/go-dnsimple
 ```
 
+To run the tests:
+
+```
+$ go test -v ./...
+```
+
 
 ## Getting Started
 
