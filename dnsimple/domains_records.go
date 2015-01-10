@@ -1,7 +1,6 @@
 package dnsimple
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 )
@@ -33,7 +32,7 @@ func recordPath(domain interface{}, record interface{}) string {
 	return path
 }
 
-// List the records for a domain.
+// List the domain records.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
 func (s *DomainsService) ListRecords(domain interface{}, recordName, recordType string) ([]Record, *Response, error) {
@@ -63,7 +62,7 @@ func (s *DomainsService) ListRecords(domain interface{}, recordName, recordType 
 	return records, res, nil
 }
 
-// Create a new record for a domain.
+// CreateRecord creates a domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#create
 func (s *DomainsService) CreateRecord(domain interface{}, record Record) (Record, *Response, error) {
@@ -75,20 +74,16 @@ func (s *DomainsService) CreateRecord(domain interface{}, record Record) (Record
 		return Record{}, res, err
 	}
 
-	if res.StatusCode == 400 {
-		return Record{}, res, errors.New("Invalid Record")
-	}
-
 	return returnedRecord.Record, res, nil
 }
 
-// Get fetches a record for a domain.
+// GetRecord fetches the domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
-func (s *DomainsService) GetRecord(domain interface{}, recordID int) (Record, *Response, error) {
+func (s *DomainsService) GetRecord(domain interface{}, recordId int) (Record, *Response, error) {
 	wrappedRecord := recordWrapper{}
 
-	res, err := s.client.get(recordPath(domain, recordID), &wrappedRecord)
+	res, err := s.client.get(recordPath(domain, recordId), &wrappedRecord)
 	if err != nil {
 		return Record{}, res, err
 	}
@@ -96,40 +91,44 @@ func (s *DomainsService) GetRecord(domain interface{}, recordID int) (Record, *R
 	return wrappedRecord.Record, res, nil
 }
 
-// Delete a record for a domain.
+// UpdateRecord updates a domain record.
+//
+// DNSimple API docs: http://developer.dnsimple.com/domains/records/#update
+func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAttributes Record) (Record, *Response, error) {
+	// name, content, ttl, priority
+	wrappedRecord := recordWrapper{
+		Record: Record{
+			Name:     recordAttributes.Name,
+			Content:  recordAttributes.Content,
+			TTL:      recordAttributes.TTL,
+			Priority: recordAttributes.Priority}}
+	returnedRecord := recordWrapper{}
+
+	res, err := s.client.put(recordPath(domain, recordId), wrappedRecord, &returnedRecord)
+	if err != nil {
+		return Record{}, res, err
+	}
+
+	return returnedRecord.Record, res, nil
+}
+
+// DeleteRecord deletes a domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
-func (s *DomainsService) DeleteRecord(domain interface{}, recordID int) (*Response, error) {
-	path := recordPath(domain, recordID)
+func (s *DomainsService) DeleteRecord(domain interface{}, recordId int) (*Response, error) {
+	path := recordPath(domain, recordId)
 
 	res, err := s.client.delete(path, nil)
 	return res, err
 }
 
-func (record *Record) Update(client *Client, recordAttributes Record) (Record, error) {
-	// name, content, ttl, prio - only things allowed
-	wrappedRecord := recordWrapper{Record: Record{
-		Name:     recordAttributes.Name,
-		Content:  recordAttributes.Content,
-		TTL:      recordAttributes.TTL,
-		Priority: recordAttributes.Priority}}
 
-	returnedRecord := recordWrapper{}
-
-	res, err := client.put(recordPath(record.DomainId, record.Id), wrappedRecord, &returnedRecord)
-	if err != nil {
-		return Record{}, err
-	}
-
-	if res.StatusCode == 400 {
-		return Record{}, errors.New("Invalid Record")
-	}
-
-	return returnedRecord.Record, nil
-}
-
+// UpdateIP updates the IP of specific A record.
+//
+// This is not part of the standard API. However,
+// this is useful for Dynamic DNS (DDNS or DynDNS).
 func (record *Record) UpdateIP(client *Client, IP string) error {
 	newRecord := Record{Content: IP, Name: record.Name}
-	_, err := record.Update(client, newRecord)
+	_, _, err := client.Domains.UpdateRecord(record.DomainId, record.Id, newRecord)
 	return err
 }

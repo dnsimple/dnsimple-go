@@ -106,7 +106,7 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 		testMethod(t, r, "POST")
 		testRequestJSON(t, r, want)
 
-		fmt.Fprintf(w, `{"record":{"id":42, "name":"foo"}}`)
+		fmt.Fprintf(w, `{"record":{"id":2, "domain_id":1, "name":"foo"}}`)
 	})
 
 	recordValues := Record{Name: "foo", Content: "192.168.0.10", Type: "A"}
@@ -116,7 +116,7 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 		t.Errorf("Domains.CreateRecord returned error: %v", err)
 	}
 
-	want := Record{Id: 42, Name: "foo"}
+	want := Record{Id: 2, DomainId: 1, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("Domains.CreateRecord returned %+v, want %+v", record, want)
 	}
@@ -159,6 +159,33 @@ func TestDomainsService_GetRecord(t *testing.T) {
 	}
 }
 
+func TestDomainsService_UpdateRecord(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+		want := make(map[string]interface{})
+		want["record"] = map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
+
+		testMethod(t, r, "PUT")
+		testRequestJSON(t, r, want)
+
+		fmt.Fprint(w, `{"record":{"id":2, "domain_id":1, "name":"bar", "content": "192.168.0.10"}}`)
+	})
+
+	recordValues := Record{Name: "bar", Content: "192.168.0.10", Type: "A"}
+	record, _, err := client.Domains.UpdateRecord("example.com", 2, recordValues)
+
+	if err != nil {
+		t.Errorf("Domains.UpdateRecord returned error: %v", err)
+	}
+
+	want := Record{Id: 2, DomainId: 1, Name: "bar", Content: "192.168.0.10"}
+	if !reflect.DeepEqual(record, want) {
+		t.Errorf("Domains.UpdateRecord returned %+v, want %+v", record, want)
+	}
+}
+
 func TestDomainsService_DeleteRecord(t *testing.T) {
 	setup()
 	defer teardown()
@@ -192,31 +219,6 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 
 	if match := "400 Invalid request"; !strings.Contains(err.Error(), match) {
 		t.Errorf("Records.Delete returned %+v, should match %+v", err, match)
-	}
-}
-
-func TestRecord_Update(t *testing.T) {
-	setup()
-	defer teardown()
-
-	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
-		want := make(map[string]interface{})
-		// TODO: there's a problem when verifying adding prio and ttl integers. Why?
-		want["record"] = map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
-
-		testMethod(t, r, "PUT")
-		testRequestJSON(t, r, want)
-
-		fmt.Fprint(w, `{"record":{"id":24, "domain_id":42}}`)
-	})
-
-	record := Record{Id: 42, DomainId: 24, Name: "foo"}
-	recordAttributes := Record{Name: "bar", Content: "192.168.0.10"}
-
-	_, err := record.Update(client, recordAttributes)
-
-	if err != nil {
-		t.Errorf("Update returned error: %v", err)
 	}
 }
 
