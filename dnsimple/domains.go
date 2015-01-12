@@ -63,7 +63,7 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 	path := domainPath(nil)
 	wrappedDomains := []domainWrapper{}
 
-	res, err := s.client.get(path, &wrappedDomains);
+	res, err := s.client.get(path, &wrappedDomains)
 	if err != nil {
 		return []Domain{}, res, err
 	}

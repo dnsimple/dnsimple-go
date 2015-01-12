@@ -7,8 +7,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"io"
+	"net/http"
 )
 
 const (
@@ -43,7 +43,7 @@ type Client struct {
 
 	// Services used for talking to different parts of the DNSimple API.
 	Domains *DomainsService
-	Users *UsersService
+	Users   *UsersService
 }
 
 // NewClient returns a new DNSimple API client.

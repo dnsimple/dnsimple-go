@@ -122,7 +122,6 @@ func (s *DomainsService) DeleteRecord(domain interface{}, recordId int) (*Respon
 	return res, err
 }
 
-
 // UpdateIP updates the IP of specific A record.
 //
 // This is not part of the standard API. However,
