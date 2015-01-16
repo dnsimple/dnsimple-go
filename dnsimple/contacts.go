@@ -47,50 +47,51 @@ func contactPath(contact interface{}) string {
 // List the contacts.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#list
-func (s *ContactsService) List() ([]Contact, *Response, error) {
+func (s *ContactsService) List() (contacts []Contact, res *Response, err error) {
 	path := contactPath(nil)
 	wrappedContacts := []contactWrapper{}
 
-	res, err := s.client.get(path, &wrappedContacts)
+	res, err = s.client.get(path, &wrappedContacts)
 	if err != nil {
-		return []Contact{}, res, err
+		return
 	}
 
-	contacts := []Contact{}
 	for _, contact := range wrappedContacts {
 		contacts = append(contacts, contact.Contact)
 	}
 
-	return contacts, res, nil
+	return
 }
 
 // Create a new contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#create
-func (s *ContactsService) Create(contact Contact) (Contact, *Response, error) {
+func (s *ContactsService) Create(c Contact) (contact Contact, res *Response, err error) {
 	path := contactPath(nil)
-	wrappedContact := contactWrapper{Contact: contact}
+	wrappedContact := contactWrapper{Contact: c}
 	returnedContact := contactWrapper{}
 
-	res, err := s.client.post(path, wrappedContact, &returnedContact)
+	res, err = s.client.post(path, wrappedContact, &returnedContact)
 	if err != nil {
-		return Contact{}, res, err
+		return
 	}
 
-	return returnedContact.Contact, res, nil
+	contact = returnedContact.Contact
+	return
 }
 
 // Get fetches a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#get
-func (s *ContactsService) Get(contactId int) (Contact, *Response, error) {
+func (s *ContactsService) Get(contactId int) (contact Contact, res *Response, err error) {
 	path := contactPath(contactId)
 	wrappedContact := contactWrapper{}
 
-	res, err := s.client.get(path, &wrappedContact)
+	res, err = s.client.get(path, &wrappedContact)
 	if err != nil {
-		return Contact{}, res, err
+		return
 	}
 
-	return wrappedContact.Contact, res, nil
+	contact = wrappedContact.Contact
+	return
 }
