@@ -1,7 +1,6 @@
 package dnsimple
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -56,7 +55,7 @@ func domainPath(domain interface{}) string {
 	return "domains"
 }
 
-// List the domains for the authenticated user.
+// List the domains.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list
 func (s *DomainsService) List() ([]Domain, *Response, error) {
@@ -76,7 +75,7 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 	return domains, res, nil
 }
 
-// Create a new domain in the authenticated account.
+// Create a new domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#create
 func (s *DomainsService) Create(domain Domain) (Domain, *Response, error) {
@@ -89,14 +88,10 @@ func (s *DomainsService) Create(domain Domain) (Domain, *Response, error) {
 		return Domain{}, res, err
 	}
 
-	if res.StatusCode == 400 {
-		return Domain{}, res, errors.New("Invalid Domain")
-	}
-
 	return returnedDomain.Domain, res, nil
 }
 
-// Get fetches a domain from the authenticated account.
+// Get fetches a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get
 func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
@@ -111,7 +106,7 @@ func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
 	return wrappedDomain.Domain, res, nil
 }
 
-// Delete a domain from the authenticated account.
+// Delete a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#delete
 func (s *DomainsService) Delete(domain interface{}) (*Response, error) {

@@ -7,14 +7,14 @@ import (
 	"testing"
 )
 
-func TestDomain_domainPath(t *testing.T) {
+func TestDomains_domainPath(t *testing.T) {
 	var pathTests = []struct {
 		input    interface{}
 		expected string
 	}{
 		{nil, "domains"},
 		{"example.com", "domains/example.com"},
-		{42, "domains/42"},
+		{1, "domains/1"},
 	}
 
 	for _, pt := range pathTests {

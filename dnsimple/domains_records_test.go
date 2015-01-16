@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRecord_recordPath(t *testing.T) {
+func TestRecords_recordPath(t *testing.T) {
 	var pathTest = []struct {
 		domainInput interface{}
 		recordInput interface{}
@@ -16,8 +16,8 @@ func TestRecord_recordPath(t *testing.T) {
 	}{
 		{"example.com", nil, "domains/example.com/records"},
 		{"example.com", 2, "domains/example.com/records/2"},
-		{23, nil, "domains/23/records"},
-		{23, 2, "domains/23/records/2"},
+		{1, nil, "domains/1/records"},
+		{1, 2, "domains/1/records/2"},
 	}
 
 	for _, pt := range pathTest {
