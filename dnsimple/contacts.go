@@ -64,6 +64,22 @@ func (s *ContactsService) List() ([]Contact, *Response, error) {
 	return contacts, res, nil
 }
 
+// Create a new contact.
+//
+// DNSimple API docs: http://developer.dnsimple.com/contacts/#create
+func (s *ContactsService) Create(contact Contact) (Contact, *Response, error) {
+	path := contactPath(nil)
+	wrappedContact := contactWrapper{Contact: contact}
+	returnedContact := contactWrapper{}
+
+	res, err := s.client.post(path, wrappedContact, &returnedContact)
+	if err != nil {
+		return Contact{}, res, err
+	}
+
+	return returnedContact.Contact, res, nil
+}
+
 // Get fetches a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#get
