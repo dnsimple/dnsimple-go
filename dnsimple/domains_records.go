@@ -3,18 +3,19 @@ package dnsimple
 import (
 	"fmt"
 	"net/url"
+	"time"
 )
 
 type Record struct {
-	Id        int    `json:"id,omitempty"`
-	DomainId  int    `json:"domain_id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	Content   string `json:"content,omitempty"`
-	TTL       int    `json:"ttl,omitempty"`
-	Priority  int    `json:"prio,omitempty"`
-	Type      string `json:"record_type,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
+	Id        int        `json:"id,omitempty"`
+	DomainId  int        `json:"domain_id,omitempty"`
+	Name      string     `json:"name,omitempty"`
+	Content   string     `json:"content,omitempty"`
+	TTL       int        `json:"ttl,omitempty"`
+	Priority  int        `json:"prio,omitempty"`
+	Type      string     `json:"record_type,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 type recordWrapper struct {

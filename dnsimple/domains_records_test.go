@@ -139,9 +139,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 				"ttl": 3600,
 				"prio": 1,
 				"record_type": "MX",
-				"system_record": null,
-				"created_at": "2014-01-15T22:03:03Z",
-				"updated_at": "2014-01-15T22:03:04Z"
+				"system_record": null
 			  }
 			}
 		`)
@@ -153,7 +151,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 		t.Errorf("Domains.GetRecord returned error: %v", err)
 	}
 
-	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, Type: "MX", CreatedAt: "2014-01-15T22:03:03Z", UpdatedAt: "2014-01-15T22:03:04Z"}
+	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, Type: "MX"}
 	if !reflect.DeepEqual(record, want) {
 		t.Errorf("Domains.GetRecord returned %+v, want %+v", record, want)
 	}

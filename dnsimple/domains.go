@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"fmt"
+	"time"
 )
 
 // DomainsService handles communication with the domain related
@@ -13,22 +14,22 @@ type DomainsService struct {
 }
 
 type Domain struct {
-	Id             int    `json:"id,omitempty"`
-	UserId         int    `json:"user_id,omitempty"`
-	RegistrantId   int    `json:"registrant_id,omitempty"`
-	Name           string `json:"name,omitempty"`
-	UnicodeName    string `json:"unicode_name,omitempty"`
-	Token          string `json:"token,omitempty"`
-	State          string `json:"state,omitempty"`
-	Language       string `json:"language,omitempty"`
-	Lockable       bool   `json:"lockable,omitempty"`
-	AutoRenew      bool   `json:"auto_renew,omitempty"`
-	WhoisProtected bool   `json:"whois_protected,omitempty"`
-	RecordCount    int    `json:"record_count,omitempty"`
-	ServiceCount   int    `json:"service_count,omitempty"`
-	ExpiresOn      string `json:"expires_on,omitempty"`
-	CreatedAt      string `json:"created_at,omitempty"`
-	UpdatedAt      string `json:"updated_at,omitempty"`
+	Id             int        `json:"id,omitempty"`
+	UserId         int        `json:"user_id,omitempty"`
+	RegistrantId   int        `json:"registrant_id,omitempty"`
+	Name           string     `json:"name,omitempty"`
+	UnicodeName    string     `json:"unicode_name,omitempty"`
+	Token          string     `json:"token,omitempty"`
+	State          string     `json:"state,omitempty"`
+	Language       string     `json:"language,omitempty"`
+	Lockable       bool       `json:"lockable,omitempty"`
+	AutoRenew      bool       `json:"auto_renew,omitempty"`
+	WhoisProtected bool       `json:"whois_protected,omitempty"`
+	RecordCount    int        `json:"record_count,omitempty"`
+	ServiceCount   int        `json:"service_count,omitempty"`
+	ExpiresOn      *time.Time `json:"expires_on,omitempty"`
+	CreatedAt      *time.Time `json:"created_at,omitempty"`
+	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
 
 	RenewWhoisPrivacy bool `json:"renew_whois_privacy,omitempty"`
 }
