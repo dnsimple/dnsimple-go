@@ -95,6 +95,22 @@ func (s *ContactsService) Get(contactId int) (Contact, *Response, error) {
 	return wrappedContact.Contact, res, nil
 }
 
+// Update a contact.
+//
+// DNSimple API docs: http://developer.dnsimple.com/contacts/#update
+func (s *ContactsService) Update(contactId int, contactAttributes Contact) (Contact, *Response, error) {
+	path := contactPath(contactId)
+	wrappedContact := contactWrapper{Contact: contactAttributes}
+	returnedContact := contactWrapper{}
+
+	res, err := s.client.put(path, wrappedContact, &returnedContact)
+	if err != nil {
+		return Contact{}, res, err
+	}
+
+	return returnedContact.Contact, res, nil
+}
+
 // Delete a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#delete

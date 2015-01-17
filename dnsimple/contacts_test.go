@@ -112,6 +112,33 @@ func TestContactsService_Get(t *testing.T) {
 	}
 }
 
+func TestContactsService_Update(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+		want := make(map[string]interface{})
+		want["contact"] = map[string]interface{}{"label": "Default"}
+
+		testMethod(t, r, "PUT")
+		testRequestJSON(t, r, want)
+
+		fmt.Fprint(w, `{"contact":{"id":1, "label": "Default"}}`)
+	})
+
+	contactValues := Contact{Label: "Default"}
+	contact, _, err := client.Contacts.Update(1, contactValues)
+
+	if err != nil {
+		t.Errorf("Contacts.Update returned error: %v", err)
+	}
+
+	want := Contact{Id: 1, Label: "Default"}
+	if !reflect.DeepEqual(contact, want) {
+		t.Fatalf("Contacts.Update returned %+v, want %+v", contact, want)
+	}
+}
+
 func TestContactsService_Delete(t *testing.T) {
 	setup()
 	defer teardown()
