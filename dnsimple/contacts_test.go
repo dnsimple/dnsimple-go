@@ -111,3 +111,19 @@ func TestContactsService_Get(t *testing.T) {
 		t.Fatalf("Contacts.Get returned %+v, want %+v", contact, want)
 	}
 }
+
+func TestContactsService_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	_, err := client.Contacts.Delete(1)
+
+	if err != nil {
+		t.Errorf("Contacts.Delete returned error: %v", err)
+	}
+}

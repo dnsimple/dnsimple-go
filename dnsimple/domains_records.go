@@ -65,11 +65,12 @@ func (s *DomainsService) ListRecords(domain interface{}, recordName, recordType 
 // CreateRecord creates a domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#create
-func (s *DomainsService) CreateRecord(domain interface{}, record Record) (Record, *Response, error) {
-	wrappedRecord := recordWrapper{Record: record}
+func (s *DomainsService) CreateRecord(domain interface{}, recordAttributes Record) (Record, *Response, error) {
+	path := recordPath(domain, nil)
+	wrappedRecord := recordWrapper{Record: recordAttributes}
 	returnedRecord := recordWrapper{}
 
-	res, err := s.client.post(recordPath(domain, nil), wrappedRecord, &returnedRecord)
+	res, err := s.client.post(path, wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, res, err
 	}
@@ -81,9 +82,10 @@ func (s *DomainsService) CreateRecord(domain interface{}, record Record) (Record
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
 func (s *DomainsService) GetRecord(domain interface{}, recordId int) (Record, *Response, error) {
+	path := recordPath(domain, recordId)
 	wrappedRecord := recordWrapper{}
 
-	res, err := s.client.get(recordPath(domain, recordId), &wrappedRecord)
+	res, err := s.client.get(path, &wrappedRecord)
 	if err != nil {
 		return Record{}, res, err
 	}
@@ -95,6 +97,7 @@ func (s *DomainsService) GetRecord(domain interface{}, recordId int) (Record, *R
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#update
 func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAttributes Record) (Record, *Response, error) {
+	path := recordPath(domain, recordId)
 	// name, content, ttl, priority
 	wrappedRecord := recordWrapper{
 		Record: Record{
@@ -104,7 +107,7 @@ func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAt
 			Priority: recordAttributes.Priority}}
 	returnedRecord := recordWrapper{}
 
-	res, err := s.client.put(recordPath(domain, recordId), wrappedRecord, &returnedRecord)
+	res, err := s.client.put(path, wrappedRecord, &returnedRecord)
 	if err != nil {
 		return Record{}, res, err
 	}
@@ -118,8 +121,7 @@ func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAt
 func (s *DomainsService) DeleteRecord(domain interface{}, recordId int) (*Response, error) {
 	path := recordPath(domain, recordId)
 
-	res, err := s.client.delete(path, nil)
-	return res, err
+	return s.client.delete(path, nil)
 }
 
 // UpdateIP updates the IP of specific A record.

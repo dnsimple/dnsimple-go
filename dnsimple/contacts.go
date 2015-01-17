@@ -67,9 +67,9 @@ func (s *ContactsService) List() ([]Contact, *Response, error) {
 // Create a new contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#create
-func (s *ContactsService) Create(contact Contact) (Contact, *Response, error) {
+func (s *ContactsService) Create(contactAttributes Contact) (Contact, *Response, error) {
 	path := contactPath(nil)
-	wrappedContact := contactWrapper{Contact: contact}
+	wrappedContact := contactWrapper{Contact: contactAttributes}
 	returnedContact := contactWrapper{}
 
 	res, err := s.client.post(path, wrappedContact, &returnedContact)
@@ -93,4 +93,13 @@ func (s *ContactsService) Get(contactId int) (Contact, *Response, error) {
 	}
 
 	return wrappedContact.Contact, res, nil
+}
+
+// Delete a contact.
+//
+// DNSimple API docs: http://developer.dnsimple.com/contacts/#delete
+func (s *ContactsService) Delete(contactId int) (*Response, error) {
+	path := contactPath(contactId)
+
+	return s.client.delete(path, nil)
 }
