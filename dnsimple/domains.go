@@ -79,9 +79,9 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 // Create a new domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#create
-func (s *DomainsService) Create(domain Domain) (Domain, *Response, error) {
+func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, error) {
 	path := domainPath(nil)
-	wrappedDomain := domainWrapper{Domain: domain}
+	wrappedDomain := domainWrapper{Domain: domainAttributes}
 	returnedDomain := domainWrapper{}
 
 	res, err := s.client.post(path, wrappedDomain, &returnedDomain)
@@ -113,6 +113,5 @@ func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
 func (s *DomainsService) Delete(domain interface{}) (*Response, error) {
 	path := domainPath(domain)
 
-	res, err := s.client.delete(path, nil)
-	return res, err
+	return s.client.delete(path, nil)
 }

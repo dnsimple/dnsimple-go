@@ -118,7 +118,7 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 
 	want := Record{Id: 2, DomainId: 1, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
-		t.Errorf("Domains.CreateRecord returned %+v, want %+v", record, want)
+		t.Fatalf("Domains.CreateRecord returned %+v, want %+v", record, want)
 	}
 }
 
@@ -153,7 +153,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 
 	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, Type: "MX"}
 	if !reflect.DeepEqual(record, want) {
-		t.Errorf("Domains.GetRecord returned %+v, want %+v", record, want)
+		t.Fatalf("Domains.GetRecord returned %+v, want %+v", record, want)
 	}
 }
 
@@ -180,7 +180,7 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 
 	want := Record{Id: 2, DomainId: 1, Name: "bar", Content: "192.168.0.10"}
 	if !reflect.DeepEqual(record, want) {
-		t.Errorf("Domains.UpdateRecord returned %+v, want %+v", record, want)
+		t.Fatalf("Domains.UpdateRecord returned %+v, want %+v", record, want)
 	}
 }
 
