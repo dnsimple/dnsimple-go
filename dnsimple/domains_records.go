@@ -82,8 +82,8 @@ func (s *DomainsService) CreateRecord(domain interface{}, recordAttributes Recor
 // GetRecord fetches the domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
-func (s *DomainsService) GetRecord(domain interface{}, recordId int) (Record, *Response, error) {
-	path := recordPath(domain, recordId)
+func (s *DomainsService) GetRecord(domain interface{}, recordID int) (Record, *Response, error) {
+	path := recordPath(domain, recordID)
 	wrappedRecord := recordWrapper{}
 
 	res, err := s.client.get(path, &wrappedRecord)
@@ -97,8 +97,8 @@ func (s *DomainsService) GetRecord(domain interface{}, recordId int) (Record, *R
 // UpdateRecord updates a domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#update
-func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAttributes Record) (Record, *Response, error) {
-	path := recordPath(domain, recordId)
+func (s *DomainsService) UpdateRecord(domain interface{}, recordID int, recordAttributes Record) (Record, *Response, error) {
+	path := recordPath(domain, recordID)
 	// name, content, ttl, priority
 	wrappedRecord := recordWrapper{
 		Record: Record{
@@ -119,8 +119,8 @@ func (s *DomainsService) UpdateRecord(domain interface{}, recordId int, recordAt
 // DeleteRecord deletes a domain record.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
-func (s *DomainsService) DeleteRecord(domain interface{}, recordId int) (*Response, error) {
-	path := recordPath(domain, recordId)
+func (s *DomainsService) DeleteRecord(domain interface{}, recordID int) (*Response, error) {
+	path := recordPath(domain, recordID)
 
 	return s.client.delete(path, nil)
 }

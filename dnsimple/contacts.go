@@ -83,8 +83,8 @@ func (s *ContactsService) Create(contactAttributes Contact) (Contact, *Response,
 // Get fetches a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#get
-func (s *ContactsService) Get(contactId int) (Contact, *Response, error) {
-	path := contactPath(contactId)
+func (s *ContactsService) Get(contactID int) (Contact, *Response, error) {
+	path := contactPath(contactID)
 	wrappedContact := contactWrapper{}
 
 	res, err := s.client.get(path, &wrappedContact)
@@ -98,8 +98,8 @@ func (s *ContactsService) Get(contactId int) (Contact, *Response, error) {
 // Update a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#update
-func (s *ContactsService) Update(contactId int, contactAttributes Contact) (Contact, *Response, error) {
-	path := contactPath(contactId)
+func (s *ContactsService) Update(contactID int, contactAttributes Contact) (Contact, *Response, error) {
+	path := contactPath(contactID)
 	wrappedContact := contactWrapper{Contact: contactAttributes}
 	returnedContact := contactWrapper{}
 
@@ -114,8 +114,8 @@ func (s *ContactsService) Update(contactId int, contactAttributes Contact) (Cont
 // Delete a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#delete
-func (s *ContactsService) Delete(contactId int) (*Response, error) {
-	path := contactPath(contactId)
+func (s *ContactsService) Delete(contactID int) (*Response, error) {
+	path := contactPath(contactID)
 
 	return s.client.delete(path, nil)
 }
