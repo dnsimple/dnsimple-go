@@ -4,15 +4,16 @@ import (
 	"fmt"
 )
 
-func (s *DomainsService) CheckAvailability(domain interface{}) (bool, *Response, error) {
+// IsAvailable checks if the domain is available or registered.
+func (s *DomainsService) IsAvailable(domain string) (bool, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
 	res, err := s.client.get(path, nil)
 	if err != nil && res != nil && res.StatusCode != 404 {
-		return false, res, err
+		return false, err
 	}
 
-	return res.StatusCode == 404, res, nil
+	return res.StatusCode == 404, nil
 }
 
 func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestDomainsService_CheckAvailability_available(t *testing.T) {
+func TestDomainsService_IsAvailable_available(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -17,18 +17,18 @@ func TestDomainsService_CheckAvailability_available(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
 	})
 
-	available, _, err := client.Domains.CheckAvailability("example.com")
+	available, err := client.Domains.IsAvailable("example.com")
 
 	if err != nil {
-		t.Errorf("Domains.CheckAvailability check returned %v", err)
+		t.Errorf("Domains.IsAvailable check returned %v", err)
 	}
 
 	if !available {
-		t.Errorf("Domains.CheckAvailability returned false, want true")
+		t.Errorf("Domains.IsAvailable returned false, want true")
 	}
 }
 
-func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
+func TestDomainsService_IsAvailable_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -38,18 +38,18 @@ func TestDomainsService_CheckAvailability_unavailable(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
 	})
 
-	available, _, err := client.Domains.CheckAvailability("example.com")
+	available, err := client.Domains.IsAvailable("example.com")
 
 	if err != nil {
-		t.Errorf("Domains.CheckAvailability check returned %v", err)
+		t.Errorf("Domains.IsAvailable check returned %v", err)
 	}
 
 	if available {
-		t.Errorf("Domains.CheckAvailability returned true, want false")
+		t.Errorf("Domains.IsAvailable returned true, want false")
 	}
 }
 
-func TestDomainsService_CheckAvailability_failed400(t *testing.T) {
+func TestDomainsService_IsAvailable_failed400(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -59,14 +59,14 @@ func TestDomainsService_CheckAvailability_failed400(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
-	_, _, err := client.Domains.CheckAvailability("example.com")
+	_, err := client.Domains.IsAvailable("example.com")
 
 	if err == nil {
-		t.Errorf("Domains.CheckAvailability expected error to be returned")
+		t.Errorf("Domains.IsAvailable expected error to be returned")
 	}
 
 	if match := "400 Invalid request"; !strings.Contains(err.Error(), match) {
-		t.Errorf("Domains.CheckAvailability returned %+v, should match %+v", err, match)
+		t.Errorf("Domains.IsAvailable returned %+v, should match %+v", err, match)
 	}
 }
 
