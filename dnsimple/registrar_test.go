@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestDomainsService_IsAvailable_available(t *testing.T) {
+func TestRegistrarService_IsAvailable_available(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -17,18 +17,18 @@ func TestDomainsService_IsAvailable_available(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
 	})
 
-	available, err := client.Domains.IsAvailable("example.com")
+	available, err := client.Registrar.IsAvailable("example.com")
 
 	if err != nil {
-		t.Errorf("Domains.IsAvailable check returned %v", err)
+		t.Errorf("Registrar.IsAvailable check returned %v", err)
 	}
 
 	if !available {
-		t.Errorf("Domains.IsAvailable returned false, want true")
+		t.Errorf("Registrar.IsAvailable returned false, want true")
 	}
 }
 
-func TestDomainsService_IsAvailable_unavailable(t *testing.T) {
+func TestRegistrarService_IsAvailable_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -38,7 +38,7 @@ func TestDomainsService_IsAvailable_unavailable(t *testing.T) {
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
 	})
 
-	available, err := client.Domains.IsAvailable("example.com")
+	available, err := client.Registrar.IsAvailable("example.com")
 
 	if err != nil {
 		t.Errorf("Domains.IsAvailable check returned %v", err)
@@ -49,7 +49,7 @@ func TestDomainsService_IsAvailable_unavailable(t *testing.T) {
 	}
 }
 
-func TestDomainsService_IsAvailable_failed400(t *testing.T) {
+func TestRegistrarService_IsAvailable_failed400(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -59,7 +59,7 @@ func TestDomainsService_IsAvailable_failed400(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
-	_, err := client.Domains.IsAvailable("example.com")
+	_, err := client.Registrar.IsAvailable("example.com")
 
 	if err == nil {
 		t.Errorf("Domains.IsAvailable expected error to be returned")
@@ -70,7 +70,7 @@ func TestDomainsService_IsAvailable_failed400(t *testing.T) {
 	}
 }
 
-func TestDomainsService_Renew(t *testing.T) {
+func TestRegistrarService_Renew(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -84,7 +84,7 @@ func TestDomainsService_Renew(t *testing.T) {
 		fmt.Fprint(w, `{"domain":{"name":"example.com"}}`)
 	})
 
-	_, err := client.Domains.Renew("example.com", true)
+	_, err := client.Registrar.Renew("example.com", true)
 
 	if err != nil {
 		t.Errorf("Domains.Renew returned %v", err)

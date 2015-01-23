@@ -4,8 +4,16 @@ import (
 	"fmt"
 )
 
+// RegistrarService handles communication with the registrar related
+// methods of the DNSimple API.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/
+type RegistrarService struct {
+	client *Client
+}
+
 // IsAvailable checks if the domain is available or registered.
-func (s *DomainsService) IsAvailable(domain string) (bool, error) {
+func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 	path := fmt.Sprintf("%s/check", domainPath(domain))
 
 	res, err := s.client.get(path, nil)
@@ -16,7 +24,7 @@ func (s *DomainsService) IsAvailable(domain string) (bool, error) {
 	return res.StatusCode == 404, nil
 }
 
-func (s *DomainsService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {
+func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {
 	wrappedDomain := domainWrapper{Domain: Domain{
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
