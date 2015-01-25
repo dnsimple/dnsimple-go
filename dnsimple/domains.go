@@ -30,12 +30,16 @@ type Domain struct {
 	ExpiresOn      *time.Time `json:"expires_on,omitempty"`
 	CreatedAt      *time.Time `json:"created_at,omitempty"`
 	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
-
-	RenewWhoisPrivacy bool `json:"renew_whois_privacy,omitempty"`
 }
 
 type domainWrapper struct {
 	Domain Domain `json:"domain"`
+}
+
+// domainRequest represents a generic wrapper for a domain request,
+// when domainWrapper cannot be used because of type constraint on Domain.
+type domainRequest struct {
+	Domain interface{} `json:"domain"`
 }
 
 func domainIdentifier(value interface{}) string {
@@ -61,7 +65,7 @@ func domainPath(domain interface{}) string {
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list
 func (s *DomainsService) List() ([]Domain, *Response, error) {
 	path := domainPath(nil)
-	wrappedDomains := []domainWrapper{&Domain}
+	wrappedDomains := []domainWrapper{}
 
 	res, err := s.client.get(path, &wrappedDomains)
 	if err != nil {
@@ -70,7 +74,7 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 
 	domains := []Domain{}
 	for _, domain := range wrappedDomains {
-		domains = append(domains, domain.Domain.(*Domain))
+		domains = append(domains, domain.Domain)
 	}
 
 	return domains, res, nil
@@ -82,14 +86,14 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, error) {
 	path := domainPath(nil)
 	wrappedDomain := domainWrapper{Domain: domainAttributes}
-	returnedDomain := dWrapper{&Domain{}}
+	returnedDomain := domainWrapper{}
 
 	res, err := s.client.post(path, wrappedDomain, &returnedDomain)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return *returnedDomain.Domain.(*Domain), res, nil
+	return returnedDomain.Domain, res, nil
 }
 
 // Get fetches a domain.
@@ -97,14 +101,14 @@ func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, err
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get
 func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
 	path := domainPath(domain)
-	wrappedDomain := dWrapper{&Domain{}}
+	wrappedDomain := domainWrapper{}
 
 	res, err := s.client.get(path, &wrappedDomain)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return *wrappedDomain.Domain.(*Domain), res, nil
+	return wrappedDomain.Domain, res, nil
 }
 
 // Delete a domain.

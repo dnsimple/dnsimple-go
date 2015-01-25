@@ -25,10 +25,6 @@ func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 }
 
 
-type dWrapper struct {
-	Domain interface{} `json:"domain"`
-}
-
 // renewDomain represents the body of a Renew request.
 type renewDomain struct {
 	Name string `json:"name,omitempty"`
@@ -36,7 +32,7 @@ type renewDomain struct {
 }
 
 func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {
-	request := dWrapper{Domain: renewDomain{
+	request := domainRequest{Domain: renewDomain{
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
 
