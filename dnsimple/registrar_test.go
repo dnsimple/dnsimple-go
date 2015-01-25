@@ -77,7 +77,7 @@ func TestRegistrarService_Register(t *testing.T) {
 
 	mux.HandleFunc("/v1/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
-		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": 21}
+		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 
 		testMethod(t, r, "POST")
 		testRequestJSON(t, r, want)
