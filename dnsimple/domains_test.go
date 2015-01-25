@@ -31,7 +31,7 @@ func TestDomainsService_List(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"foo.com"}}]`)
+		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"example.com"}}]`)
 	})
 
 	domains, _, err := client.Domains.List()
@@ -40,7 +40,7 @@ func TestDomainsService_List(t *testing.T) {
 		t.Errorf("Domains.List returned error: %v", err)
 	}
 
-	want := []Domain{{Id: 1, Name: "foo.com"}}
+	want := []Domain{{Id: 1, Name: "example.com"}}
 	if !reflect.DeepEqual(domains, want) {
 		t.Errorf("Domains.List returned %+v, want %+v", domains, want)
 	}
@@ -69,7 +69,7 @@ func TestDomainsService_Create(t *testing.T) {
 
 	want := Domain{Id: 1, Name: "example.com"}
 	if !reflect.DeepEqual(domain, want) {
-		t.Errorf("Domains.Create returned %+v, want %+v", domain, want)
+		t.Fatalf("Domains.Create returned %+v, want %+v", domain, want)
 	}
 }
 
@@ -90,7 +90,7 @@ func TestDomainsService_Get(t *testing.T) {
 
 	want := Domain{Id: 1, Name: "example.com"}
 	if !reflect.DeepEqual(domain, want) {
-		t.Errorf("Domains.Get returned %+v, want %+v", domain, want)
+		t.Fatalf("Domains.Get returned %+v, want %+v", domain, want)
 	}
 }
 

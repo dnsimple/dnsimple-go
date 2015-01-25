@@ -45,7 +45,7 @@ func TestDomainsService_ListRecords_all(t *testing.T) {
 
 	want := []Record{{Id: 1, Name: "foo.example.com"}}
 	if !reflect.DeepEqual(records, want) {
-		t.Errorf("Domains.ListRecords returned %+v, want %+v", records, want)
+		t.Fatalf("Domains.ListRecords returned %+v, want %+v", records, want)
 	}
 }
 
@@ -68,7 +68,7 @@ func TestDomainsService_ListRecords_subdomain(t *testing.T) {
 
 	want := []Record{{Id: 1, Name: "foo.example.com"}}
 	if !reflect.DeepEqual(records, want) {
-		t.Errorf("Domains.ListRecords returned %+v, want %+v", records, want)
+		t.Fatalf("Domains.ListRecords returned %+v, want %+v", records, want)
 	}
 }
 
@@ -91,7 +91,7 @@ func TestDomainsService_ListRecords_type(t *testing.T) {
 
 	want := []Record{{Id: 1, Name: "foo.example.com"}}
 	if !reflect.DeepEqual(records, want) {
-		t.Errorf("Domains.ListRecords returned %+v, want %+v", records, want)
+		t.Fatalf("Domains.ListRecords returned %+v, want %+v", records, want)
 	}
 }
 
