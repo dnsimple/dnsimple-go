@@ -61,7 +61,7 @@ func domainPath(domain interface{}) string {
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list
 func (s *DomainsService) List() ([]Domain, *Response, error) {
 	path := domainPath(nil)
-	wrappedDomains := []domainWrapper{}
+	wrappedDomains := []domainWrapper{&Domain}
 
 	res, err := s.client.get(path, &wrappedDomains)
 	if err != nil {
@@ -70,7 +70,7 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 
 	domains := []Domain{}
 	for _, domain := range wrappedDomains {
-		domains = append(domains, domain.Domain)
+		domains = append(domains, domain.Domain.(*Domain))
 	}
 
 	return domains, res, nil
@@ -82,14 +82,14 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, error) {
 	path := domainPath(nil)
 	wrappedDomain := domainWrapper{Domain: domainAttributes}
-	returnedDomain := domainWrapper{}
+	returnedDomain := dWrapper{&Domain{}}
 
 	res, err := s.client.post(path, wrappedDomain, &returnedDomain)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return returnedDomain.Domain, res, nil
+	return *returnedDomain.Domain.(*Domain), res, nil
 }
 
 // Get fetches a domain.
@@ -97,14 +97,14 @@ func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, err
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get
 func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
 	path := domainPath(domain)
-	wrappedDomain := domainWrapper{}
+	wrappedDomain := dWrapper{&Domain{}}
 
 	res, err := s.client.get(path, &wrappedDomain)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return wrappedDomain.Domain, res, nil
+	return *wrappedDomain.Domain.(*Domain), res, nil
 }
 
 // Delete a domain.
