@@ -57,6 +57,7 @@ func TestDomainsService_Create(t *testing.T) {
 		testMethod(t, r, "POST")
 		testRequestJSON(t, r, want)
 
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `{"domain":{"id":1, "name":"example.com"}}`)
 	})
 

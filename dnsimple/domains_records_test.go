@@ -106,6 +106,7 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 		testMethod(t, r, "POST")
 		testRequestJSON(t, r, want)
 
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `{"record":{"id":2, "domain_id":1, "name":"foo"}}`)
 	})
 
@@ -128,21 +129,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `
-			{
-			  "record": {
-				"id": 1539,
-				"domain_id": 227,
-				"parent_id": null,
-				"name": "",
-				"content": "mail.example.com",
-				"ttl": 3600,
-				"prio": 1,
-				"record_type": "MX",
-				"system_record": null
-			  }
-			}
-		`)
+		fmt.Fprintf(w, `{"record":{"id":2, "domain_id":1, "name":"foo"}}`)
 	})
 
 	record, _, err := client.Domains.GetRecord("example.com", 1539)
@@ -151,7 +138,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 		t.Errorf("Domains.GetRecord returned error: %v", err)
 	}
 
-	want := Record{Id: 1539, DomainId: 227, Name: "", Content: "mail.example.com", TTL: 3600, Priority: 1, Type: "MX"}
+	want := Record{Id: 2, DomainId: 1, Name: "foo"}
 	if !reflect.DeepEqual(record, want) {
 		t.Fatalf("Domains.GetRecord returned %+v, want %+v", record, want)
 	}
@@ -206,6 +193,7 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 
 	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
+
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})

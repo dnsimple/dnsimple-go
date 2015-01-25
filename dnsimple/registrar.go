@@ -12,6 +12,21 @@ type RegistrarService struct {
 	client *Client
 }
 
+// ExtendedAttributes maps the additional attributes required by some registries.
+type ExtendedAttributes map[string]string
+
+// ExtendedAttributes represents the transfer information.
+type TransferOrder struct {
+	AuthCode string `json:"authinfo,omitempty"`
+}
+
+// registrationRequest represents the body of a register or transfer request.
+type registrationRequest struct {
+	Domain             Domain              `json:"domain"`
+	ExtendedAttributes *ExtendedAttributes `json:"extended_attribute,omitempty"`
+	TransferOrder      *TransferOrder      `json:"transfer_order,omitempty"`
+}
+
 // IsAvailable checks if the domain is available or registered.
 //
 // See: http://developer.dnsimple.com/registrar/#check
@@ -26,6 +41,43 @@ func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 	return res.StatusCode == 404, nil
 }
 
+// Register a domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/#register
+func (s *RegistrarService) Register(domain string, registrantID int, extendedAttributes *ExtendedAttributes) (Domain, *Response, error) {
+	request := registrationRequest{
+		Domain:             Domain{Name: domain, RegistrantId: registrantID},
+		ExtendedAttributes: extendedAttributes,
+	}
+	returnedDomain := domainWrapper{}
+
+	res, err := s.client.post("domain_registrations", request, &returnedDomain)
+	if err != nil {
+		return Domain{}, res, err
+	}
+
+	return returnedDomain.Domain, res, nil
+}
+
+// Transfer a domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/#transfer
+func (s *RegistrarService) Transfer(domain string, registrantID int, authCode string, extendedAttributes *ExtendedAttributes) (Domain, *Response, error) {
+	request := registrationRequest{
+		Domain:             Domain{Name: domain, RegistrantId: registrantID},
+		ExtendedAttributes: extendedAttributes,
+		TransferOrder:      &TransferOrder{AuthCode: authCode},
+	}
+	returnedDomain := domainWrapper{}
+
+	res, err := s.client.post("domain_transfers", request, &returnedDomain)
+	if err != nil {
+		return Domain{}, res, err
+	}
+
+	return returnedDomain.Domain, res, nil
+}
+
 // renewDomain represents the body of a Renew request.
 type renewDomain struct {
 	Name              string `json:"name,omitempty"`
@@ -38,7 +90,8 @@ type renewDomain struct {
 func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (Domain, *Response, error) {
 	request := domainRequest{Domain: renewDomain{
 		Name:              domain,
-		RenewWhoisPrivacy: renewWhoisPrivacy}}
+		RenewWhoisPrivacy: renewWhoisPrivacy,
+	}}
 	returnedDomain := domainWrapper{}
 
 	res, err := s.client.post("domain_renewals", request, &returnedDomain)
