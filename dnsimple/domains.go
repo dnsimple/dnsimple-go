@@ -30,12 +30,16 @@ type Domain struct {
 	ExpiresOn      *time.Time `json:"expires_on,omitempty"`
 	CreatedAt      *time.Time `json:"created_at,omitempty"`
 	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
-
-	RenewWhoisPrivacy bool `json:"renew_whois_privacy,omitempty"`
 }
 
 type domainWrapper struct {
 	Domain Domain `json:"domain"`
+}
+
+// domainRequest represents a generic wrapper for a domain request,
+// when domainWrapper cannot be used because of type constraint on Domain.
+type domainRequest struct {
+	Domain interface{} `json:"domain"`
 }
 
 func domainIdentifier(value interface{}) string {

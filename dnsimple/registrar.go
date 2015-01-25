@@ -24,12 +24,19 @@ func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 	return res.StatusCode == 404, nil
 }
 
+
+// renewDomain represents the body of a Renew request.
+type renewDomain struct {
+	Name string `json:"name,omitempty"`
+	RenewWhoisPrivacy bool `json:"renew_whois_privacy,omitempty"`
+}
+
 func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (*Response, error) {
-	wrappedDomain := domainWrapper{Domain: Domain{
+	request := domainRequest{Domain: renewDomain{
 		Name:              domain,
 		RenewWhoisPrivacy: renewWhoisPrivacy}}
 
-	res, err := s.client.post("domain_renewals", wrappedDomain, nil)
+	res, err := s.client.post("domain_renewals", &request, nil)
 	if err != nil {
 		return res, err
 	}
