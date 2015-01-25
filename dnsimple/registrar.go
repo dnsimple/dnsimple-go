@@ -12,6 +12,9 @@ type RegistrarService struct {
 	client *Client
 }
 
+// ExtendedAttributes maps the additional attributes required by some registries.
+type ExtendedAttributes map[string]string
+
 // IsAvailable checks if the domain is available or registered.
 //
 // See: http://developer.dnsimple.com/registrar/#check
@@ -26,6 +29,7 @@ func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 	return res.StatusCode == 404, nil
 }
 
+// registrationRequest represents the body of a register or transfer request.
 type registrationRequest struct {
 	Domain             Domain            `json:"domain"`
 	ExtendedAttributes map[string]string `json:"extended_attribute,omitempty"`
@@ -34,7 +38,7 @@ type registrationRequest struct {
 // Register a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/registrar/#register
-func (s *RegistrarService) Register(domain string, registrantID int, extendedAttributes map[string]string) (Domain, *Response, error) {
+func (s *RegistrarService) Register(domain string, registrantID int, extendedAttributes ExtendedAttributes) (Domain, *Response, error) {
 	request := registrationRequest{
 		Domain:             Domain{Name: domain, RegistrantId: registrantID},
 		ExtendedAttributes: extendedAttributes,

@@ -114,7 +114,7 @@ func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
 		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, _, err := client.Registrar.Register("example.com", 21, map[string]string{"us_nexus": "C11", "us_purpose": "P3"})
+	domain, _, err := client.Registrar.Register("example.com", 21, ExtendedAttributes{"us_nexus": "C11", "us_purpose": "P3"})
 
 	if err != nil {
 		t.Errorf("Registrar.Register returned %v", err)
