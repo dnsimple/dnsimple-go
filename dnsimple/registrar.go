@@ -26,6 +26,29 @@ func (s *RegistrarService) IsAvailable(domain string) (bool, error) {
 	return res.StatusCode == 404, nil
 }
 
+type registrationRequest struct {
+	Domain             Domain            `json:"domain"`
+	ExtendedAttributes map[string]string `json:"extended_attribute,omitempty"`
+}
+
+// Register a domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/#register
+func (s *RegistrarService) Register(domain string, registrantID int, extendedAttributes map[string]string) (Domain, *Response, error) {
+	request := registrationRequest{
+		Domain:             Domain{Name: domain, RegistrantId: registrantID},
+		ExtendedAttributes: extendedAttributes,
+	}
+	returnedDomain := domainWrapper{}
+
+	res, err := s.client.post("domain_registrations", request, &returnedDomain)
+	if err != nil {
+		return Domain{}, res, err
+	}
+
+	return returnedDomain.Domain, res, nil
+}
+
 // renewDomain represents the body of a Renew request.
 type renewDomain struct {
 	Name              string `json:"name,omitempty"`
@@ -38,7 +61,8 @@ type renewDomain struct {
 func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (Domain, *Response, error) {
 	request := domainRequest{Domain: renewDomain{
 		Name:              domain,
-		RenewWhoisPrivacy: renewWhoisPrivacy}}
+		RenewWhoisPrivacy: renewWhoisPrivacy,
+	}}
 	returnedDomain := domainWrapper{}
 
 	res, err := s.client.post("domain_renewals", request, &returnedDomain)
