@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"fmt"
 	"time"
+	"encoding/json"
 )
 
 // DomainsService handles communication with the domain related
@@ -12,6 +13,9 @@ import (
 type DomainsService struct {
 	client *Client
 }
+
+// Date custom type
+type Date struct {time.Time}
 
 type Domain struct {
 	Id             int        `json:"id,omitempty"`
@@ -27,9 +31,24 @@ type Domain struct {
 	WhoisProtected bool       `json:"whois_protected,omitempty"`
 	RecordCount    int        `json:"record_count,omitempty"`
 	ServiceCount   int        `json:"service_count,omitempty"`
-	ExpiresOn      *time.Time `json:"expires_on,omitempty"`
+	ExpiresOn      *Date `json:"expires_on,omitempty"`
 	CreatedAt      *time.Time `json:"created_at,omitempty"`
 	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
+}
+
+
+// UnmarshalJSON handles the custom date formats
+func (d *Date) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("date should be a string, got %s", data)
+	}
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return fmt.Errorf("invalid date: %v", err)
+	}
+	d.Time = t
+	return nil
 }
 
 type domainWrapper struct {
@@ -69,6 +88,7 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 
 	res, err := s.client.get(path, &returnedDomains)
 	if err != nil {
+		fmt.Printf("get errror %v\n", err)
 		return []Domain{}, res, err
 	}
 
