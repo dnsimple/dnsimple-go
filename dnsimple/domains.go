@@ -88,7 +88,6 @@ func (s *DomainsService) List() ([]Domain, *Response, error) {
 
 	res, err := s.client.get(path, &returnedDomains)
 	if err != nil {
-		fmt.Printf("get errror %v\n", err)
 		return []Domain{}, res, err
 	}
 
