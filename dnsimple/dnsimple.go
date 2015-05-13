@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 const (
@@ -169,4 +170,23 @@ func CheckResponse(r *http.Response) error {
 	}
 
 	return errorResponse
+}
+
+// Date custom type.
+type Date struct {
+	time.Time
+}
+
+// UnmarshalJSON handles the deserialization of the custom Date type.
+func (d *Date) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("date should be a string, got %s", data)
+	}
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return fmt.Errorf("invalid date: %v", err)
+	}
+	d.Time = t
+	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestRegistrarService_IsAvailable_available(t *testing.T) {
@@ -83,7 +84,7 @@ func TestRegistrarService_Register(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com", "expires_on":"2015-01-15"}}`)
 	})
 
 	domain, _, err := client.Registrar.Register("example.com", 21, nil)
@@ -92,7 +93,7 @@ func TestRegistrarService_Register(t *testing.T) {
 		t.Errorf("Registrar.Register returned %v", err)
 	}
 
-	want := Domain{Id: 1, Name: "example.com"}
+	want := Domain{Id: 1, Name: "example.com", ExpiresOn: &Date{Time: time.Date(2015, 01, 15, 0, 0, 0, 0, time.UTC)}}
 	if !reflect.DeepEqual(domain, want) {
 		t.Fatalf("Registrar.Register returned %+v, want %+v", domain, want)
 	}
