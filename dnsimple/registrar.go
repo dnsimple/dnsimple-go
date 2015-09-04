@@ -101,3 +101,31 @@ func (s *RegistrarService) Renew(domain string, renewWhoisPrivacy bool) (Domain,
 
 	return returnedDomain.Domain, res, nil
 }
+
+// EnableAutoRenewal enables the auto-renewal feature for the domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/autorenewal/#enable
+func (s *RegistrarService) EnableAutoRenewal(domain interface{}) (*Response, error) {
+	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
+
+	res, err := s.client.post(path, nil, nil)
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
+
+// DisableAutoRenewal disables the auto-renewal feature for the domain.
+//
+// DNSimple API docs: http://developer.dnsimple.com/registrar/autorenewal/#disable
+func (s *RegistrarService) DisableAutoRenewal(domain interface{}) (*Response, error) {
+	path := fmt.Sprintf("%s/auto_renewal", domainPath(domain))
+
+	res, err := s.client.delete(path, nil)
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}

@@ -209,3 +209,34 @@ func TestRegistrarService_Renew(t *testing.T) {
 		t.Fatalf("Registrar.Renew returned %+v, want %+v", domain, want)
 	}
 }
+
+func TestRegistrarService_EnableAutoRenewal(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+	})
+
+	_, err := client.Registrar.EnableAutoRenewal("example.com")
+
+	if err != nil {
+		t.Errorf("Domains.EnableAutoRenewal returned %v", err)
+	}
+}
+
+func TestRegistrarService_DisableAutoRenewal(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+	})
+
+	_, err := client.Registrar.DisableAutoRenewal("example.com")
+
+	if err != nil {
+		t.Errorf("Domains.DisableAutoRenewal returned %v", err)
+	}
+}
+

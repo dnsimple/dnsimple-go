@@ -5,5 +5,5 @@
 To run the tests:
 
 ```
-$ go test -v ./...
+$ go test -v ./dnsimple
 ```
