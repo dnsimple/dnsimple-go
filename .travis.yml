@@ -1,4 +1,4 @@
-# sudo: false
+sudo: false
 language: go
 go:
  - 1.2
@@ -9,7 +9,7 @@ go:
 before_install:
   - sudo apt-get update && sudo apt-get install ca-certificates && sudo dpkg-reconfigure ca-certificates
   - go get github.com/axw/gocov/gocov
-  - go get github.com/mattn/goveralls
+  - go get github.com/weppos/goveralls
   - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
 script:
   - cd $TRAVIS_BUILD_DIR/dnsimple
