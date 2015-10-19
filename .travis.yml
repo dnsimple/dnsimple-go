@@ -13,3 +13,6 @@ before_install:
 script:
   - cd $TRAVIS_BUILD_DIR/dnsimple
   - $HOME/gopath/bin/goveralls -v -service=travis-ci
+matrix:
+  allow_failures:
+    - go: tip
