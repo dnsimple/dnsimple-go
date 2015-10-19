@@ -78,8 +78,8 @@ func testString(t *testing.T, test, value, want string) {
 func TestNewClient(t *testing.T) {
 	c := NewClient("mytoken", "me@example.com")
 
-	if c.BaseURL != defaultBaseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
+	if c.BaseURL != baseURL {
+		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
 	}
 }
 

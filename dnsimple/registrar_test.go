@@ -239,4 +239,3 @@ func TestRegistrarService_DisableAutoRenewal(t *testing.T) {
 		t.Errorf("Domains.DisableAutoRenewal returned %v", err)
 	}
 }
-

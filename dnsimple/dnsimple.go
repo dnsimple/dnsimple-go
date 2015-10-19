@@ -14,7 +14,7 @@ import (
 
 const (
 	libraryVersion = "0.1"
-	defaultBaseURL = "https://api.dnsimple.com/"
+	baseURL        = "https://api.dnsimple.com/"
 	userAgent      = "dnsimple-go/" + libraryVersion
 
 	apiVersion = "v1"
@@ -51,7 +51,7 @@ type Client struct {
 
 // NewClient returns a new DNSimple API client.
 func NewClient(apiToken, email string) *Client {
-	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: userAgent}
+	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Registrar = &RegistrarService{client: c}
