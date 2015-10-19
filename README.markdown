@@ -1,6 +1,6 @@
 # go-dnsimple
 
-A Go client for the [DNSimple API](http://developer.dnsimple.com/).
+A Go client for the [DNSimple API](https://developer.dnsimple.com/).
 
 [![Build Status](https://travis-ci.org/weppos/go-dnsimple.svg)](https://travis-ci.org/weppos/go-dnsimple)
 [![Coverage Status](https://img.shields.io/coveralls/weppos/go-dnsimple.svg)](https://coveralls.io/r/weppos/go-dnsimple?branch=master)
@@ -16,9 +16,7 @@ $ go get github.com/weppos/go-dnsimple
 
 ## Getting Started
 
-This library is a Go client you can use to interact with the [DNSimple API](http://developer.dnsimple.com/).
-
-Here's a short example.
+This library is a Go client you can use to interact with the [DNSimple API](https://developer.dnsimple.com/). Here are some examples.
 
 
 ```go
