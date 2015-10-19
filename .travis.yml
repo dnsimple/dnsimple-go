@@ -1,4 +1,4 @@
-sudo: false
+# sudo: false
 language: go
 go:
  - 1.2
