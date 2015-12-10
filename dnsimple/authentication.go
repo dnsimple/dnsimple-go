@@ -56,22 +56,6 @@ func basicAuth(username, password string) string {
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
-// API token authentication
-
-type apiTokenCredentials struct {
-	email    string
-	apiToken string
-}
-
-// Construct Credentials using the API Token method.
-func NewApiTokenCredentials(email, apiToken string) Credentials {
-	return &apiTokenCredentials{email: email, apiToken: apiToken}
-}
-
-func (c *apiTokenCredentials) HttpHeader() (string, string) {
-	return httpHeaderApiToken, fmt.Sprintf("%v:%v", c.email, c.apiToken)
-}
-
 // OAuth token authentication
 
 type oauthTokenCredentials struct {

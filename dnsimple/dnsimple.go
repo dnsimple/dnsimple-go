@@ -42,15 +42,9 @@ type Client struct {
 	Users     *UsersService
 }
 
-// NewClient returns a new DNSimple API client.
-func NewClient(apiToken, email string) *Client {
-	return NewAuthenticatedClient(NewApiTokenCredentials(email, apiToken))
-
-}
-
-// NewAuthenticatedClient returns a new DNSimple API client  using the given
+// NewClient returns a new DNSimple API client  using the given
 // credentials.
-func NewAuthenticatedClient(credentials Credentials) *Client {
+func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
