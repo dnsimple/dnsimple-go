@@ -83,6 +83,14 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewAuthenticatedClient(t *testing.T) {
+	c := NewAuthenticatedClient(NewApiTokenCredentials("me@example.com", "mytoken"))
+
+	if c.BaseURL != baseURL {
+		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
+	}
+}
+
 func TestNewRequest(t *testing.T) {
 	c := NewClient("mytoken", "me@example.com")
 	c.BaseURL = "https://go.example.com/"
