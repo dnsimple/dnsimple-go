@@ -24,15 +24,8 @@ type Client struct {
 	// HTTP client used to communicate with the API.
 	HttpClient *http.Client
 
-	// API Token for the DNSimple account you want to use.
-	ApiToken string
-
-	// Email associated with the provided DNSimple API Token.
-	Email string
-
-	// Domain Token to be used for authentication
-	// as an alternative to the DNSimple API Token for some domain-scoped operations.
-	DomainToken string
+	// Credentials used for accessing the DNSimple API
+	Credentials Credentials
 
 	// Base URL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
@@ -51,7 +44,19 @@ type Client struct {
 
 // NewClient returns a new DNSimple API client.
 func NewClient(apiToken, email string) *Client {
-	c := &Client{ApiToken: apiToken, Email: email, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
+	credentials := NewApiTokenCredentials(email, apiToken)
+	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
+	c.Contacts = &ContactsService{client: c}
+	c.Domains = &DomainsService{client: c}
+	c.Registrar = &RegistrarService{client: c}
+	c.Users = &UsersService{client: c}
+	return c
+}
+
+// NewAuthenticatedClient returns a new DNSimple API client  using the given
+// credentials.
+func NewAuthenticatedClient(credentials Credentials) *Client {
+	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Registrar = &RegistrarService{client: c}
@@ -81,7 +86,7 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", client.UserAgent)
-	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", client.Email, client.ApiToken))
+	req.Header.Add(client.Credentials.HttpHeader())
 
 	return req, nil
 }
