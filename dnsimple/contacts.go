@@ -37,18 +37,18 @@ type contactWrapper struct {
 }
 
 // contactPath generates the resource path for given contact.
-func contactPath(contact interface{}) string {
+func contactPath(accountId string, contact interface{}) string {
 	if contact != nil {
-		return fmt.Sprintf("contacts/%d", contact)
+		return fmt.Sprintf("%v/contacts/%d", accountId, contact)
 	}
-	return "contacts"
+	return fmt.Sprintf("%v/contacts", accountId)
 }
 
 // List the contacts.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#list
-func (s *ContactsService) List() ([]Contact, *Response, error) {
-	path := contactPath(nil)
+func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
+	path := contactPath(accountId, nil)
 	wrappedContacts := []contactWrapper{}
 
 	res, err := s.client.get(path, &wrappedContacts)
@@ -67,8 +67,8 @@ func (s *ContactsService) List() ([]Contact, *Response, error) {
 // Create a new contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#create
-func (s *ContactsService) Create(contactAttributes Contact) (Contact, *Response, error) {
-	path := contactPath(nil)
+func (s *ContactsService) Create(accountId string, contactAttributes Contact) (Contact, *Response, error) {
+	path := contactPath(accountId, nil)
 	wrappedContact := contactWrapper{Contact: contactAttributes}
 	returnedContact := contactWrapper{}
 
@@ -83,8 +83,8 @@ func (s *ContactsService) Create(contactAttributes Contact) (Contact, *Response,
 // Get fetches a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#get
-func (s *ContactsService) Get(contactID int) (Contact, *Response, error) {
-	path := contactPath(contactID)
+func (s *ContactsService) Get(accountId string, contactId int) (Contact, *Response, error) {
+	path := contactPath(accountId, contactId)
 	wrappedContact := contactWrapper{}
 
 	res, err := s.client.get(path, &wrappedContact)
@@ -98,8 +98,8 @@ func (s *ContactsService) Get(contactID int) (Contact, *Response, error) {
 // Update a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#update
-func (s *ContactsService) Update(contactID int, contactAttributes Contact) (Contact, *Response, error) {
-	path := contactPath(contactID)
+func (s *ContactsService) Update(accountId string, contactId int, contactAttributes Contact) (Contact, *Response, error) {
+	path := contactPath(accountId, contactId)
 	wrappedContact := contactWrapper{Contact: contactAttributes}
 	returnedContact := contactWrapper{}
 
@@ -114,8 +114,8 @@ func (s *ContactsService) Update(contactID int, contactAttributes Contact) (Cont
 // Delete a contact.
 //
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#delete
-func (s *ContactsService) Delete(contactID int) (*Response, error) {
-	path := contactPath(contactID)
+func (s *ContactsService) Delete(accountId string, contactId int) (*Response, error) {
+	path := contactPath(accountId, contactId)
 
 	return s.client.delete(path, nil)
 }
