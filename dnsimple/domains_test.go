@@ -29,7 +29,7 @@ func TestDomainsService_List(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"example.com"}}]`)
 	})
@@ -50,7 +50,7 @@ func TestDomainsService_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com"}
 
@@ -78,7 +78,7 @@ func TestDomainsService_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
 	})
@@ -99,7 +99,7 @@ func TestDomainsService_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		// fmt.Fprint(w, `{}`)
 	})

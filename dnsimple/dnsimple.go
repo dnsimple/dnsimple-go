@@ -17,7 +17,7 @@ const (
 	baseURL        = "https://api.dnsimple.com/"
 	userAgent      = "dnsimple-go/" + libraryVersion
 
-	apiVersion = "v1"
+	apiVersion = "v2"
 )
 
 type Client struct {

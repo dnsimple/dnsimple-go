@@ -28,7 +28,7 @@ func TestContactsService_List(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `[{"contact":{"id":1,"label":"Default"}},{"contact":{"id":2,"label":"Simone"}}]`)
 	})
@@ -54,7 +54,7 @@ func TestContactsService_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/contacts", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["contact"] = map[string]interface{}{"label": "Default"}
 
@@ -81,7 +81,7 @@ func TestContactsService_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{"contact":{"id":1,"user_id":21,"label":"Default","first_name":"Simone","last_name":"Carletti","job_title":"Underwater Programmer","organization_name":"DNSimple","email_address":"simone.carletti@dnsimple.com","phone":"+1 111 4567890","fax":"+1 222 4567890","address1":"Awesome Street","address2":"c/o Someone","city":"Rome","state_province":"RM","postal_code":"00171","country":"IT"}}`)
 	})
@@ -116,7 +116,7 @@ func TestContactsService_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["contact"] = map[string]interface{}{"label": "Default"}
 
@@ -143,7 +143,7 @@ func TestContactsService_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		w.WriteHeader(http.StatusNoContent)
 	})

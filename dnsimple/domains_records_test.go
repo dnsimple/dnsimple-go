@@ -32,7 +32,7 @@ func TestDomainsService_ListRecords_all(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `[{"record":{"id":1, "name":"foo.example.com"}}]`)
 	})
@@ -53,7 +53,7 @@ func TestDomainsService_ListRecords_subdomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{"name": "foo"})
 
@@ -76,7 +76,7 @@ func TestDomainsService_ListRecords_type(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{"name": "foo", "type": "CNAME"})
 
@@ -99,7 +99,7 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["record"] = map[string]interface{}{"name": "foo", "content": "192.168.0.10", "record_type": "A"}
 
@@ -127,7 +127,7 @@ func TestDomainsService_GetRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprintf(w, `{"record":{"id":2, "domain_id":1, "name":"foo"}}`)
 	})
@@ -148,7 +148,7 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["record"] = map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
 
@@ -175,7 +175,7 @@ func TestDomainsService_DeleteRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		// fmt.Fprint(w, `{}`)
 	})
@@ -191,7 +191,7 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 
 		w.WriteHeader(http.StatusBadRequest)
@@ -212,7 +212,7 @@ func TestRecord_UpdateIP(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/24/records/42", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["record"] = map[string]interface{}{"name": "foo", "content": "192.168.0.1"}
 

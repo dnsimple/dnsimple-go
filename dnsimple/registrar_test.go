@@ -13,7 +13,7 @@ func TestRegistrarService_IsAvailable_available(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
@@ -34,7 +34,7 @@ func TestRegistrarService_IsAvailable_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
@@ -55,7 +55,7 @@ func TestRegistrarService_IsAvailable_failed400(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
@@ -76,7 +76,7 @@ func TestRegistrarService_Register(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 
@@ -103,7 +103,7 @@ func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["extended_attribute"] = map[string]interface{}{"us_nexus": "C11", "us_purpose": "P3"}
@@ -131,7 +131,7 @@ func TestRegistrarService_Transfer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["transfer_order"] = map[string]interface{}{"authinfo": "xjfjfjvhc293"}
@@ -159,7 +159,7 @@ func TestRegistrarService_Transfer_withExtendedAttributes(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["transfer_order"] = map[string]interface{}{"authinfo": "xjfjfjvhc293"}
@@ -188,7 +188,7 @@ func TestRegistrarService_Renew(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
 
@@ -214,7 +214,7 @@ func TestRegistrarService_EnableAutoRenewal(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 	})
 
@@ -229,7 +229,7 @@ func TestRegistrarService_DisableAutoRenewal(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 	})
 

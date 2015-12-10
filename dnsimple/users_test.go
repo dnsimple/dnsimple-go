@@ -11,7 +11,7 @@ func TestUsersService_User(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/user", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/user", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `
 			{

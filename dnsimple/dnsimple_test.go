@@ -95,7 +95,7 @@ func TestNewRequest(t *testing.T) {
 	c := NewClient("mytoken", "me@example.com")
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, outURL := "foo", "https://go.example.com/v1/foo"
+	inURL, outURL := "foo", "https://go.example.com/v2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL
