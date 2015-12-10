@@ -27,10 +27,10 @@ import (
 )
 
 func main() {
-  apiToken := "xxxxxxx"
+  oauthToken := "xxxxxxx"
   email := "foo@example.com"
 
-  client := dnsimple.NewClient(apiToken, email)
+  client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
 
   // Get a list of your domains
   domains, _, _ := client.Domains.List()
