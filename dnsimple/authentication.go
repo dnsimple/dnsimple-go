@@ -71,3 +71,17 @@ func NewApiTokenCredentials(email, apiToken string) Credentials {
 func (c *apiTokenCredentials) HttpHeader() (string, string) {
 	return httpHeaderApiToken, fmt.Sprintf("%v:%v", c.email, c.apiToken)
 }
+
+// OAuth token authentication
+
+type oauthTokenCredentials struct {
+	oauthToken string
+}
+
+func NewOauthTokenCredentials(oauthToken string) Credentials {
+	return &oauthTokenCredentials{oauthToken: oauthToken}
+}
+
+func (c *oauthTokenCredentials) HttpHeader() (string, string) {
+	return httpHeaderAuthorization, fmt.Sprintf("Bearer %v", c.oauthToken)
+}
