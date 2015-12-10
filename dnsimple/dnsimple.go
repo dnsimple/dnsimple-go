@@ -44,13 +44,8 @@ type Client struct {
 
 // NewClient returns a new DNSimple API client.
 func NewClient(apiToken, email string) *Client {
-	credentials := NewApiTokenCredentials(email, apiToken)
-	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
-	c.Contacts = &ContactsService{client: c}
-	c.Domains = &DomainsService{client: c}
-	c.Registrar = &RegistrarService{client: c}
-	c.Users = &UsersService{client: c}
-	return c
+	return NewAuthenticatedClient(NewApiTokenCredentials(email, apiToken))
+
 }
 
 // NewAuthenticatedClient returns a new DNSimple API client  using the given
