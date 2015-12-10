@@ -35,10 +35,3 @@ func TestApiTokenCredentialsHttpHeader(t *testing.T) {
 	expectedHeaderValue := fmt.Sprintf("%v:%v", email, apiToken)
 	testCredentials(t, credentials, httpHeaderApiToken, expectedHeaderValue)
 }
-
-func TestOauthTokenCredentialsHttpHeader(t *testing.T) {
-	oauthToken := "oauth-token"
-	credentials := NewOauthTokenCredentials(oauthToken)
-	expectedHeaderValue := fmt.Sprintf("Bearer %v", oauthToken)
-	testCredentials(t, credentials, httpHeaderAuthorization, expectedHeaderValue)
-}

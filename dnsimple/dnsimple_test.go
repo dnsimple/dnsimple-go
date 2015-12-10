@@ -84,7 +84,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestNewAuthenticatedClient(t *testing.T) {
-	c := NewAuthenticatedClient(NewOauthTokenCredentials("oauth-token"))
+	c := NewAuthenticatedClient(NewApiTokenCredentials("me@example.com", "mytoken"))
 
 	if c.BaseURL != baseURL {
 		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
