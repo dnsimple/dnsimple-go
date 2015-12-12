@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -40,6 +41,9 @@ type Client struct {
 	Domains   *DomainsService
 	Registrar *RegistrarService
 	Users     *UsersService
+
+	// Set to true to output debugging logs during API calls
+	Debug bool
 }
 
 // NewClient returns a new DNSimple API client  using the given
@@ -58,6 +62,8 @@ func NewClient(credentials Credentials) *Client {
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
+
+	//log.Printf("%v %v", method, url)
 
 	body := new(bytes.Buffer)
 	if payload != nil {
@@ -103,6 +109,11 @@ func (c *Client) delete(path string, payload interface{}) (*Response, error) {
 // without attempting to decode it.
 func (c *Client) Do(method, path string, payload, v interface{}) (*Response, error) {
 	req, err := c.NewRequest(method, path, payload)
+
+	if c.Debug {
+		log.Printf("Executing request: %#v", req)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +123,10 @@ func (c *Client) Do(method, path string, payload, v interface{}) (*Response, err
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if c.Debug {
+		log.Printf("Response received: %#v", res)
+	}
 
 	response := &Response{Response: res}
 
