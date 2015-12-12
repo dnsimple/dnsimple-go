@@ -114,7 +114,7 @@ func TestNewRequestWithBody(t *testing.T) {
 	c := NewClient(NewOauthTokenCredentials("mytoken"))
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, _ := "foo", "https://go.example.com/v1/foo"
+	inURL, _ := "foo", "https://go.example.com/v2/foo"
 	badObject := badObject{}
 	_, err := c.NewRequest("GET", inURL, &badObject)
 
