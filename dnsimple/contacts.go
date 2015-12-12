@@ -32,8 +32,12 @@ type Contact struct {
 	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
 }
 
+type contactsWrapper struct {
+	Contacts []Contact `json:"data"`
+}
+
 type contactWrapper struct {
-	Contact Contact `json:"contact"`
+	Contact Contact `json:"data"`
 }
 
 // contactPath generates the resource path for given contact.
@@ -49,19 +53,14 @@ func contactPath(accountId string, contact interface{}) string {
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#list
 func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
 	path := contactPath(accountId, nil)
-	wrappedContacts := []contactWrapper{}
+	data := contactsWrapper{}
 
-	res, err := s.client.get(path, &wrappedContacts)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return []Contact{}, res, err
 	}
 
-	contacts := []Contact{}
-	for _, contact := range wrappedContacts {
-		contacts = append(contacts, contact.Contact)
-	}
-
-	return contacts, res, nil
+	return data.Contacts, res, nil
 }
 
 // Create a new contact.
@@ -69,15 +68,14 @@ func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#create
 func (s *ContactsService) Create(accountId string, contactAttributes Contact) (Contact, *Response, error) {
 	path := contactPath(accountId, nil)
-	wrappedContact := contactWrapper{Contact: contactAttributes}
-	returnedContact := contactWrapper{}
+	data := contactWrapper{}
 
-	res, err := s.client.post(path, wrappedContact, &returnedContact)
+	res, err := s.client.post(path, contactAttributes, &data)
 	if err != nil {
 		return Contact{}, res, err
 	}
 
-	return returnedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
 // Get fetches a contact.
@@ -85,14 +83,14 @@ func (s *ContactsService) Create(accountId string, contactAttributes Contact) (C
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#get
 func (s *ContactsService) Get(accountId string, contactId int) (Contact, *Response, error) {
 	path := contactPath(accountId, contactId)
-	wrappedContact := contactWrapper{}
+	data := contactWrapper{}
 
-	res, err := s.client.get(path, &wrappedContact)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return Contact{}, res, err
 	}
 
-	return wrappedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
 // Update a contact.
@@ -100,15 +98,14 @@ func (s *ContactsService) Get(accountId string, contactId int) (Contact, *Respon
 // DNSimple API docs: http://developer.dnsimple.com/contacts/#update
 func (s *ContactsService) Update(accountId string, contactId int, contactAttributes Contact) (Contact, *Response, error) {
 	path := contactPath(accountId, contactId)
-	wrappedContact := contactWrapper{Contact: contactAttributes}
-	returnedContact := contactWrapper{}
+	data := contactWrapper{}
 
-	res, err := s.client.put(path, wrappedContact, &returnedContact)
+	res, err := s.client.put(path, contactAttributes, &data)
 	if err != nil {
 		return Contact{}, res, err
 	}
 
-	return returnedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
 // Delete a contact.
