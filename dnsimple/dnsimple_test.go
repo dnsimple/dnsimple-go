@@ -111,7 +111,7 @@ func (o *badObject) MarshalJSON() ([]byte, error) {
 }
 
 func TestNewRequestWithBody(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+	c := NewClient(NewOauthTokenCredentials("mytoken"))
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, _ := "foo", "https://go.example.com/v1/foo"
