@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -99,5 +100,25 @@ func TestNewRequest(t *testing.T) {
 	userAgent := req.Header.Get("User-Agent")
 	if c.UserAgent != userAgent {
 		t.Errorf("makeRequest() User-Agent = %v, want %v", userAgent, c.UserAgent)
+	}
+}
+
+type badObject struct {
+}
+
+func (o *badObject) MarshalJSON() ([]byte, error) {
+	return nil, errors.New("Bad object is bad")
+}
+
+func TestNewRequestWithBody(t *testing.T) {
+	c := NewClient("mytoken", "me@example.com")
+	c.BaseURL = "https://go.example.com/"
+
+	inURL, _ := "foo", "https://go.example.com/v1/foo"
+	badObject := badObject{}
+	_, err := c.NewRequest("GET", inURL, &badObject)
+
+	if err == nil {
+		t.Errorf("NewRequest with body expected error with blank string")
 	}
 }
