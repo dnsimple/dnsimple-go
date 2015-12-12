@@ -96,20 +96,21 @@ func TestContactsService_Get(t *testing.T) {
 	}
 
 	want := Contact{
-		Id:           contactId,
-		Label:        "Default",
-		FirstName:    "Simone",
-		LastName:     "Carletti",
-		JobTitle:     "Underwater Programmer",
-		Organization: "DNSimple",
-		Email:        "simone.carletti@dnsimple.com",
-		Phone:        "+1 111 4567890",
-		Fax:          "+1 222 4567890",
-		Address1:     "Awesome Street",
-		Address2:     "c/o Someone",
-		City:         "Rome",
-		Zip:          "00171",
-		Country:      "IT"}
+		Id:            contactId,
+		Label:         "Default",
+		FirstName:     "Simone",
+		LastName:      "Carletti",
+		JobTitle:      "Underwater Programmer",
+		Organization:  "DNSimple",
+		Email:         "simone.carletti@dnsimple.com",
+		Phone:         "+1 111 4567890",
+		Fax:           "+1 222 4567890",
+		Address1:      "Awesome Street",
+		Address2:      "c/o Someone",
+		City:          "Rome",
+		StateProvince: "RM",
+		PostalCode:    "00171",
+		Country:       "IT"}
 	if !reflect.DeepEqual(contact, want) {
 		t.Fatalf("Contacts.Get returned %+v, want %+v", contact, want)
 	}

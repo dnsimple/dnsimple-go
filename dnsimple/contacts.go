@@ -14,22 +14,23 @@ type ContactsService struct {
 }
 
 type Contact struct {
-	Id           int        `json:"id,omitempty"`
-	Label        string     `json:"label,omitempty"`
-	FirstName    string     `json:"first_name,omitempty"`
-	LastName     string     `json:"last_name,omitempty"`
-	JobTitle     string     `json:"job_title,omitempty"`
-	Organization string     `json:"organization_name,omitempty"`
-	Email        string     `json:"email_address,omitempty"`
-	Phone        string     `json:"phone,omitempty"`
-	Fax          string     `json:"fax,omitempty"`
-	Address1     string     `json:"address1,omitempty"`
-	Address2     string     `json:"address2,omitempty"`
-	City         string     `json:"city,omitempty"`
-	Zip          string     `json:"postal_code,omitempty"`
-	Country      string     `json:"country,omitempty"`
-	CreatedAt    *time.Time `json:"created_at,omitempty"`
-	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	Id            int        `json:"id,omitempty"`
+	Label         string     `json:"label,omitempty"`
+	FirstName     string     `json:"first_name,omitempty"`
+	LastName      string     `json:"last_name,omitempty"`
+	JobTitle      string     `json:"job_title,omitempty"`
+	Organization  string     `json:"organization_name,omitempty"`
+	Email         string     `json:"email_address,omitempty"`
+	Phone         string     `json:"phone,omitempty"`
+	Fax           string     `json:"fax,omitempty"`
+	Address1      string     `json:"address1,omitempty"`
+	Address2      string     `json:"address2,omitempty"`
+	City          string     `json:"city,omitempty"`
+	StateProvince string     `json:"state_province,omitempty"`
+	PostalCode    string     `json:"postal_code,omitempty"`
+	Country       string     `json:"country,omitempty"`
+	CreatedAt     *time.Time `json:"created_at,omitempty"`
+	UpdatedAt     *time.Time `json:"updated_at,omitempty"`
 }
 
 type contactsWrapper struct {
