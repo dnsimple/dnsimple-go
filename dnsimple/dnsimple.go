@@ -111,7 +111,7 @@ func (c *Client) Do(method, path string, payload, v interface{}) (*Response, err
 	req, err := c.NewRequest(method, path, payload)
 
 	if c.Debug {
-		log.Printf("Executing request: %#v", req)
+		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
 
 	if err != nil {
