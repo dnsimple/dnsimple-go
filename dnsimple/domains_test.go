@@ -15,10 +15,19 @@ func TestDomains_domainPath(t *testing.T) {
 		t.Errorf("domainPath(\"1\", nil): actual %s, expected %s", actual, expected)
 	}
 
-	/* {nil, "domains"},*/
-	//{"example.com", "domains/example.com"},
-	/*{1, "domains/1"},*/
+	actual = domainPath("1", "example.com")
+	expected = "1/domains/example.com"
 
+	if actual != expected {
+		t.Errorf("domainPath(\"1\", \"example.com\", nil): actual %s, expected %s", actual, expected)
+	}
+
+	actual = domainPath("1", 1)
+	expected = "1/domains/1"
+
+	if actual != expected {
+		t.Errorf("domainPath(\"1\", 1, nil): actual %s, expected %s", actual, expected)
+	}
 }
 
 func TestDomainsService_List(t *testing.T) {
