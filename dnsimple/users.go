@@ -17,16 +17,16 @@ type User struct {
 }
 
 type userWrapper struct {
-	User User `json:"user"`
+	User User `json:"data"`
 }
 
 // User gets the logged in user.
 //
-// DNSimple API docs: http://developer.dnsimple.com/users/
-func (s *UsersService) User() (User, *Response, error) {
+// DNSimple API docs: http://developer.dnsimple.com/v2/whoami/
+func (s *UsersService) Whoami() (User, *Response, error) {
 	wrappedUser := userWrapper{}
 
-	res, err := s.client.get("user", &wrappedUser)
+	res, err := s.client.get("whoami", &wrappedUser)
 	if err != nil {
 		return User{}, res, err
 	}
