@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	libraryVersion = "0.1"
+	libraryVersion = "1.0.0.dev"
 	baseURL        = "https://api.dnsimple.com/"
 	userAgent      = "dnsimple-go/" + libraryVersion
 
