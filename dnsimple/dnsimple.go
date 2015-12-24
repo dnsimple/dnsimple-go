@@ -40,7 +40,7 @@ type Client struct {
 	Contacts  *ContactsService
 	Domains   *DomainsService
 	Registrar *RegistrarService
-	Users     *UsersService
+	Misc      *MiscService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -53,7 +53,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Registrar = &RegistrarService{client: c}
-	c.Users = &UsersService{client: c}
+	c.Misc = &MiscService{client: c}
 	return c
 }
 

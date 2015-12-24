@@ -2,8 +2,8 @@ package dnsimple
 
 import ()
 
-// User represents a DNSimple user.
-type User struct {
+// Account represents a DNSimple account.
+type Account struct {
 	Id    int    `json:"id,omitempty"`
 	Email string `json:"email,omitempty"`
 }
