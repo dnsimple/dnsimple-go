@@ -8,16 +8,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
 
 const (
-	libraryVersion = "0.1"
+	libraryVersion = "1.0.0.dev"
 	baseURL        = "https://api.dnsimple.com/"
 	userAgent      = "dnsimple-go/" + libraryVersion
 
-	apiVersion = "v1"
+	apiVersion = "v2"
 )
 
 type Client struct {
@@ -39,23 +40,20 @@ type Client struct {
 	Contacts  *ContactsService
 	Domains   *DomainsService
 	Registrar *RegistrarService
-	Users     *UsersService
+	Misc      *MiscService
+
+	// Set to true to output debugging logs during API calls
+	Debug bool
 }
 
-// NewClient returns a new DNSimple API client.
-func NewClient(apiToken, email string) *Client {
-	return NewAuthenticatedClient(NewApiTokenCredentials(email, apiToken))
-
-}
-
-// NewAuthenticatedClient returns a new DNSimple API client  using the given
+// NewClient returns a new DNSimple API client  using the given
 // credentials.
-func NewAuthenticatedClient(credentials Credentials) *Client {
+func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Registrar = &RegistrarService{client: c}
-	c.Users = &UsersService{client: c}
+	c.Misc = &MiscService{client: c}
 	return c
 }
 
@@ -64,6 +62,8 @@ func NewAuthenticatedClient(credentials Credentials) *Client {
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
+
+	//log.Printf("%v %v", method, url)
 
 	body := new(bytes.Buffer)
 	if payload != nil {
@@ -109,6 +109,11 @@ func (c *Client) delete(path string, payload interface{}) (*Response, error) {
 // without attempting to decode it.
 func (c *Client) Do(method, path string, payload, v interface{}) (*Response, error) {
 	req, err := c.NewRequest(method, path, payload)
+
+	if c.Debug {
+		log.Printf("Executing request (%v): %#v", req.URL, req)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -118,6 +123,10 @@ func (c *Client) Do(method, path string, payload, v interface{}) (*Response, err
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if c.Debug {
+		log.Printf("Response received: %#v", res)
+	}
 
 	response := &Response{Response: res}
 

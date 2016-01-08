@@ -11,8 +11,8 @@ type zoneResponse struct {
 // GetZone downloads the Bind-like zone file.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/zones/#get
-func (s *DomainsService) GetZone(domain interface{}) (string, *Response, error) {
-	path := fmt.Sprintf("%s/zone", domainPath(domain))
+func (s *DomainsService) GetZone(accountId string, domain interface{}) (string, *Response, error) {
+	path := fmt.Sprintf("%s/zone", domainPath(accountId, domain))
 	zoneResponse := zoneResponse{}
 
 	res, err := s.client.get(path, &zoneResponse)

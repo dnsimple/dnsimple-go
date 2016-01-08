@@ -32,8 +32,12 @@ type Domain struct {
 	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
 }
 
+type domainsWrapper struct {
+	Domains []Domain `json:"data"`
+}
+
 type domainWrapper struct {
-	Domain Domain `json:"domain"`
+	Domain Domain `json:"data"`
 }
 
 // domainRequest represents a generic wrapper for a domain request,
@@ -53,69 +57,63 @@ func domainIdentifier(value interface{}) string {
 }
 
 // domainPath generates the resource path for given domain.
-func domainPath(domain interface{}) string {
+func domainPath(accountId string, domain interface{}) string {
 	if domain != nil {
-		return fmt.Sprintf("domains/%s", domainIdentifier(domain))
+		return fmt.Sprintf("%s/domains/%s", accountId, domainIdentifier(domain))
 	}
-	return "domains"
+	return fmt.Sprintf("%s/domains", accountId)
 }
 
 // List the domains.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#list
-func (s *DomainsService) List() ([]Domain, *Response, error) {
-	path := domainPath(nil)
-	returnedDomains := []domainWrapper{}
+func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
+	path := domainPath(accountId, nil)
+	data := domainsWrapper{}
 
-	res, err := s.client.get(path, &returnedDomains)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return []Domain{}, res, err
 	}
 
-	domains := []Domain{}
-	for _, domain := range returnedDomains {
-		domains = append(domains, domain.Domain)
-	}
-
-	return domains, res, nil
+	return data.Domains, res, nil
 }
 
 // Create a new domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#create
-func (s *DomainsService) Create(domainAttributes Domain) (Domain, *Response, error) {
-	path := domainPath(nil)
-	wrappedDomain := domainWrapper{Domain: domainAttributes}
-	returnedDomain := domainWrapper{}
+func (s *DomainsService) Create(accountId string, domainAttributes Domain) (Domain, *Response, error) {
+	path := domainPath(accountId, nil)
+	data := domainWrapper{}
 
-	res, err := s.client.post(path, wrappedDomain, &returnedDomain)
+	res, err := s.client.post(path, domainAttributes, &data)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return returnedDomain.Domain, res, nil
+	return data.Domain, res, nil
 }
 
 // Get fetches a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#get
-func (s *DomainsService) Get(domain interface{}) (Domain, *Response, error) {
-	path := domainPath(domain)
-	returnedDomain := domainWrapper{}
+func (s *DomainsService) Get(accountId string, domain interface{}) (Domain, *Response, error) {
+	path := domainPath(accountId, domain)
+	data := domainWrapper{}
 
-	res, err := s.client.get(path, &returnedDomain)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return Domain{}, res, err
 	}
 
-	return returnedDomain.Domain, res, nil
+	return data.Domain, res, nil
 }
 
 // Delete a domain.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/#delete
-func (s *DomainsService) Delete(domain interface{}) (*Response, error) {
-	path := domainPath(domain)
+func (s *DomainsService) Delete(accountId string, domain interface{}) (*Response, error) {
+	path := domainPath(accountId, domain)
 
 	return s.client.delete(path, nil)
 }

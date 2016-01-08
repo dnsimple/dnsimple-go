@@ -13,13 +13,14 @@ func TestRegistrarService_IsAvailable_available(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, `{"name":"example.com", "status":"available"}`)
 	})
 
-	available, err := client.Registrar.IsAvailable("example.com")
+	accountId := "1"
+	available, err := client.Registrar.IsAvailable(accountId, "example.com")
 
 	if err != nil {
 		t.Errorf("Registrar.IsAvailable check returned %v", err)
@@ -34,13 +35,14 @@ func TestRegistrarService_IsAvailable_unavailable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, `{"name":"example.com", "status":"unavailable"}`)
 	})
 
-	available, err := client.Registrar.IsAvailable("example.com")
+	accountId := "1"
+	available, err := client.Registrar.IsAvailable(accountId, "example.com")
 
 	if err != nil {
 		t.Errorf("Registrar.IsAvailable check returned %v", err)
@@ -55,13 +57,14 @@ func TestRegistrarService_IsAvailable_failed400(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, `{"message":"Invalid request"}`)
 	})
 
-	_, err := client.Registrar.IsAvailable("example.com")
+	accountId := "1"
+	_, err := client.Registrar.IsAvailable(accountId, "example.com")
 
 	if err == nil {
 		t.Errorf("Registrar.IsAvailable expected error to be returned")
@@ -76,7 +79,7 @@ func TestRegistrarService_Register(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 
@@ -84,10 +87,11 @@ func TestRegistrarService_Register(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com", "expires_on":"2015-01-15"}}`)
+		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com", "expires_on":"2015-01-15"}}`)
 	})
 
-	domain, _, err := client.Registrar.Register("example.com", 21, nil)
+	accountId := "1"
+	domain, _, err := client.Registrar.Register(accountId, "example.com", 21, nil)
 
 	if err != nil {
 		t.Errorf("Registrar.Register returned %v", err)
@@ -103,7 +107,7 @@ func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_registrations", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["extended_attribute"] = map[string]interface{}{"us_nexus": "C11", "us_purpose": "P3"}
@@ -112,10 +116,11 @@ func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, _, err := client.Registrar.Register("example.com", 21, &ExtendedAttributes{"us_nexus": "C11", "us_purpose": "P3"})
+	accountId := "1"
+	domain, _, err := client.Registrar.Register(accountId, "example.com", 21, &ExtendedAttributes{"us_nexus": "C11", "us_purpose": "P3"})
 
 	if err != nil {
 		t.Errorf("Registrar.Register returned %v", err)
@@ -131,7 +136,7 @@ func TestRegistrarService_Transfer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["transfer_order"] = map[string]interface{}{"authinfo": "xjfjfjvhc293"}
@@ -140,10 +145,11 @@ func TestRegistrarService_Transfer(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, _, err := client.Registrar.Transfer("example.com", 21, "xjfjfjvhc293", nil)
+	accountId := "1"
+	domain, _, err := client.Registrar.Transfer(accountId, "example.com", 21, "xjfjfjvhc293", nil)
 
 	if err != nil {
 		t.Errorf("Registrar.Transfer returned %v", err)
@@ -159,7 +165,7 @@ func TestRegistrarService_Transfer_withExtendedAttributes(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_transfers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "registrant_id": float64(21)}
 		want["transfer_order"] = map[string]interface{}{"authinfo": "xjfjfjvhc293"}
@@ -169,10 +175,11 @@ func TestRegistrarService_Transfer_withExtendedAttributes(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, _, err := client.Registrar.Transfer("example.com", 21, "xjfjfjvhc293", &ExtendedAttributes{"us_nexus": "C11", "us_purpose": "P3"})
+	accountId := "1"
+	domain, _, err := client.Registrar.Transfer(accountId, "example.com", 21, "xjfjfjvhc293", &ExtendedAttributes{"us_nexus": "C11", "us_purpose": "P3"})
 
 	if err != nil {
 		t.Errorf("Registrar.Transfer returned %v", err)
@@ -188,17 +195,18 @@ func TestRegistrarService_Renew(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domain_renewals", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/registrar/example.com/renew", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
 		want["domain"] = map[string]interface{}{"name": "example.com", "renew_whois_privacy": true}
 
 		testMethod(t, r, "POST")
 		testRequestJSON(t, r, want)
 
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com"}}`)
 	})
 
-	domain, _, err := client.Registrar.Renew("example.com", true)
+	accountId := "1"
+	domain, _, err := client.Registrar.Renew(accountId, "example.com", true)
 
 	if err != nil {
 		t.Errorf("Registrar.Renew returned %v", err)
@@ -214,11 +222,12 @@ func TestRegistrarService_EnableAutoRenewal(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 	})
 
-	_, err := client.Registrar.EnableAutoRenewal("example.com")
+	accountId := "1"
+	_, err := client.Registrar.EnableAutoRenewal(accountId, "example.com")
 
 	if err != nil {
 		t.Errorf("Domains.EnableAutoRenewal returned %v", err)
@@ -229,11 +238,12 @@ func TestRegistrarService_DisableAutoRenewal(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/v1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 	})
 
-	_, err := client.Registrar.DisableAutoRenewal("example.com")
+	accountId := "1"
+	_, err := client.Registrar.DisableAutoRenewal(accountId, "example.com")
 
 	if err != nil {
 		t.Errorf("Domains.DisableAutoRenewal returned %v", err)

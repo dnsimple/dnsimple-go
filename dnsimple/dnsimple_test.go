@@ -28,7 +28,7 @@ func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	client = NewClient("mytoken", "me@example.com")
+	client = NewClient(NewOauthTokenCredentials("mytoken"))
 	client.BaseURL = server.URL + "/"
 }
 
@@ -77,15 +77,7 @@ func testString(t *testing.T, test, value, want string) {
 }
 
 func TestNewClient(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
-
-	if c.BaseURL != baseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
-	}
-}
-
-func TestNewAuthenticatedClient(t *testing.T) {
-	c := NewAuthenticatedClient(NewApiTokenCredentials("me@example.com", "mytoken"))
+	c := NewClient(NewOauthTokenCredentials("mytoken"))
 
 	if c.BaseURL != baseURL {
 		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
@@ -93,10 +85,10 @@ func TestNewAuthenticatedClient(t *testing.T) {
 }
 
 func TestNewRequest(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+	c := NewClient(NewOauthTokenCredentials("mytoken"))
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, outURL := "foo", "https://go.example.com/v1/foo"
+	inURL, outURL := "foo", "https://go.example.com/v2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL
@@ -119,10 +111,10 @@ func (o *badObject) MarshalJSON() ([]byte, error) {
 }
 
 func TestNewRequestWithBody(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+	c := NewClient(NewOauthTokenCredentials("mytoken"))
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, _ := "foo", "https://go.example.com/v1/foo"
+	inURL, _ := "foo", "https://go.example.com/v2/foo"
 	badObject := badObject{}
 	_, err := c.NewRequest("GET", inURL, &badObject)
 
