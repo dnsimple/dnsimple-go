@@ -6,6 +6,7 @@ go:
 - 1.4
 - 1.5
 - tip
+
 before_install:
 - go get github.com/axw/gocov/gocov
 - go get github.com/mattn/goveralls
@@ -13,9 +14,11 @@ before_install:
 script:
 - cd $TRAVIS_BUILD_DIR/dnsimple
 - "$HOME/gopath/bin/goveralls -v -service=travis-ci"
+
 matrix:
   allow_failures:
   - go: tip
+
 notifications:
   slack:
     secure: Dtb0Bf3AlAxeycfJuli46P8kG4B1at89vtMKbLKKGMwgimAWAKayNjJyuM+CaXtSiqeXOZqypKo9ScAjitQk/UTiE/NkScEZgT9wY+E0Cr+OZKBbIOLfKmFBi6+sjJUdJlVpA8aLqINOoeRH0sc6P5NE+g4StXl0C/M4PLBBfkI=
