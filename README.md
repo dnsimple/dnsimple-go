@@ -1,4 +1,4 @@
-## :exclamation::exclamation::exclamation: Development Warning :exclamation::exclamation::exclamation:
+## :warning: Development Warning
 
 This project targets the development of the API client for the [DNSimple API v2](https://developer.dnsimple.com/v2/). If you are looking for the initial version of the client for [DNSimple API v1](https://developer.dnsimple.com/v1/) then use the [`weppos/go-dnsimple`](https://github.com/weppos/go-dnsimple) project.
 
