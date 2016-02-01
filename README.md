@@ -2,14 +2,14 @@
 
 A Go client for the [DNSimple API](https://developer.dnsimple.com/).
 
-[![Build Status](https://travis-ci.org/weppos/go-dnsimple.svg)](https://travis-ci.org/weppos/go-dnsimple)
-[![Coverage Status](https://img.shields.io/coveralls/weppos/go-dnsimple.svg)](https://coveralls.io/r/weppos/go-dnsimple?branch=master)
-[![GoDoc](https://godoc.org/github.com/weppos/go-dnsimple/dnsimple?status.svg)](https://godoc.org/github.com/weppos/go-dnsimple/dnsimple)
+[![Build Status](https://travis-ci.org/weppos/dnsimple-go.svg)](https://travis-ci.org/weppos/dnsimple-go)
+[![Coverage Status](https://img.shields.io/coveralls/weppos/dnsimple-go.svg)](https://coveralls.io/r/weppos/dnsimple-go?branch=master)
+[![GoDoc](https://godoc.org/github.com/weppos/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/weppos/dnsimple-go/dnsimple)
 
 ## Installation
 
 ```
-$ go get github.com/weppos/go-dnsimple/dnsimple
+$ go get github.com/weppos/dnsimple-go/dnsimple
 ```
 
 
@@ -23,7 +23,7 @@ package main
 
 import (
   "fmt"
-  "github.com/weppos/go-dnsimple/dnsimple"
+  "github.com/weppos/dnsimple-go/dnsimple"
 )
 
 func main() {
@@ -54,4 +54,4 @@ func main() {
 }
 ```
 
-For more complete documentation, see [godoc](https://godoc.org/github.com/weppos/go-dnsimple/dnsimple).
+For more complete documentation, see [godoc](https://godoc.org/github.com/weppos/dnsimple-go/dnsimple).
