@@ -79,8 +79,8 @@ func testString(t *testing.T, test, value, want string) {
 func TestNewClient(t *testing.T) {
 	c := NewClient(NewOauthTokenCredentials("mytoken"))
 
-	if c.BaseURL != baseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
+	if c.BaseURL != defaultBaseURL {
+		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
 	}
 }
 

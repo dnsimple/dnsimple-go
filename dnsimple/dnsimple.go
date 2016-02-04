@@ -14,26 +14,36 @@ import (
 )
 
 const (
-	libraryVersion = "1.0.0.dev"
-	baseURL        = "https://api.dnsimple.com/"
-	userAgent      = "dnsimple-go/" + libraryVersion
+	// libraryVersion identifies the current library version.
+	// This is a pro-forma convention given that Go dependencies
+	// tends to be fetched directly from the repo.
+	// It is also used in the user-agent identify the client.
+	libraryVersion = "0.5.0-dev"
+
+	defaultBaseURL = "https://api.dnsimple.com/"
+
+	// userAgent represents the default user agent used
+	// when no other user agent is set.
+	defaultUserAgent = "dnsimple-go/" + libraryVersion
 
 	apiVersion = "v2"
 )
 
+// Client represents a client to the DNSimple API.
 type Client struct {
-	// HTTP client used to communicate with the API.
+	// HttpClient is the underlying HTTP client
+	// used to communicate with the API.
 	HttpClient *http.Client
 
 	// Credentials used for accessing the DNSimple API
 	Credentials Credentials
 
-	// Base URL for API requests.
+	// BaseURL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
 	// BaseURL should always be specified with a trailing slash.
 	BaseURL string
 
-	// User agent used when communicating with the DNSimple API.
+	// UserAgent used when communicating with the DNSimple API.
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
@@ -46,10 +56,9 @@ type Client struct {
 	Debug bool
 }
 
-// NewClient returns a new DNSimple API client  using the given
-// credentials.
+// NewClient returns a new DNSimple API client using the given credentials.
 func NewClient(credentials Credentials) *Client {
-	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
+	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Registrar = &RegistrarService{client: c}
@@ -62,8 +71,6 @@ func NewClient(credentials Credentials) *Client {
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
 	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
-
-	//log.Printf("%v %v", method, url)
 
 	body := new(bytes.Buffer)
 	if payload != nil {
