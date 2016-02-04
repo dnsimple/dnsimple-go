@@ -2,19 +2,18 @@ package dnsimple
 
 import (
 	"fmt"
-	"time"
 )
 
 type Record struct {
-	Id        int        `json:"id,omitempty"`
-	ZoneId    int        `json:"zone_id,omitempty"`
-	Name      string     `json:"name,omitempty"`
-	Content   string     `json:"content,omitempty"`
-	TTL       int        `json:"ttl,omitempty"`
-	Priority  int        `json:"prio,omitempty"`
-	Type      string     `json:"record_type,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	Id        int    `json:"id,omitempty"`
+	ZoneId    string `json:"zone_id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Content   string `json:"content,omitempty"`
+	TTL       int    `json:"ttl,omitempty"`
+	Priority  int    `json:"priority,omitempty"`
+	Type      string `json:"type,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 type recordsWrapper struct {
@@ -35,10 +34,10 @@ func recordPath(accountId string, domain interface{}, record interface{}) string
 	return path
 }
 
-// List the domain records.
+// List the zone records.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
-func (s *DomainsService) ListRecords(accountId string, domain interface{}) ([]Record, *Response, error) {
+// See https://developer.dnsimple.com/v2/zones/#list
+func (s *ZonesService) ListRecords(accountId string, domain interface{}) ([]Record, *Response, error) {
 	path := recordPath(accountId, domain, nil)
 	data := recordsWrapper{}
 
@@ -50,10 +49,10 @@ func (s *DomainsService) ListRecords(accountId string, domain interface{}) ([]Re
 	return data.Records, res, nil
 }
 
-// CreateRecord creates a domain record.
+// CreateRecord creates a zone record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#create
-func (s *DomainsService) CreateRecord(accountId string, domain interface{}, recordAttributes Record) (Record, *Response, error) {
+// See https://developer.dnsimple.com/v2/zones/#create
+func (s *ZonesService) CreateRecord(accountId string, domain interface{}, recordAttributes Record) (Record, *Response, error) {
 	path := recordPath(accountId, domain, nil)
 	data := recordWrapper{}
 
@@ -65,10 +64,10 @@ func (s *DomainsService) CreateRecord(accountId string, domain interface{}, reco
 	return data.Record, res, nil
 }
 
-// GetRecord fetches the domain record.
+// GetRecord gets the zone record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#get
-func (s *DomainsService) GetRecord(accountId string, domain interface{}, recordID int) (Record, *Response, error) {
+// See https://developer.dnsimple.com/v2/zones/#get
+func (s *ZonesService) GetRecord(accountId string, domain interface{}, recordID int) (Record, *Response, error) {
 	path := recordPath(accountId, domain, recordID)
 	data := recordWrapper{}
 
@@ -80,20 +79,14 @@ func (s *DomainsService) GetRecord(accountId string, domain interface{}, recordI
 	return data.Record, res, nil
 }
 
-// UpdateRecord updates a domain record.
+// UpdateRecord updates a zone record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#update
-func (s *DomainsService) UpdateRecord(accountId string, domain interface{}, recordID int, recordAttributes Record) (Record, *Response, error) {
+// See https://developer.dnsimple.com/v2/zones/#update
+func (s *ZonesService) UpdateRecord(accountId string, domain interface{}, recordID int, recordAttributes Record) (Record, *Response, error) {
 	path := recordPath(accountId, domain, recordID)
-	// name, content, ttl, priority
-	record := Record{
-		Name:     recordAttributes.Name,
-		Content:  recordAttributes.Content,
-		TTL:      recordAttributes.TTL,
-		Priority: recordAttributes.Priority}
 	data := recordWrapper{}
 
-	res, err := s.client.put(path, record, &data)
+	res, err := s.client.patch(path, recordAttributes, &data)
 	if err != nil {
 		return Record{}, res, err
 	}
@@ -101,10 +94,10 @@ func (s *DomainsService) UpdateRecord(accountId string, domain interface{}, reco
 	return data.Record, res, nil
 }
 
-// DeleteRecord deletes a domain record.
+// DeleteRecord deletes a zone record.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/records/#delete
-func (s *DomainsService) DeleteRecord(accountId string, domain interface{}, recordID int) (*Response, error) {
+// See https://developer.dnsimple.com/v2/zones/#delete
+func (s *ZonesService) DeleteRecord(accountId string, domain interface{}, recordID int) (*Response, error) {
 	path := recordPath(accountId, domain, recordID)
 
 	return s.client.delete(path, nil)
