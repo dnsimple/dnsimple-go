@@ -1,6 +1,7 @@
 package dnsimple
 
-import ()
+import (
+)
 
 // AuthService handles communication with several authentication
 // methods of the DNSimple API.
@@ -10,9 +11,14 @@ type AuthService struct {
 	client *Client
 }
 
-type whoamiWrapper struct {
-	Whoami *Whoami `json:"data"`
+type WhoamiResponse struct {
+	Response
+	Data *Whoami `json:"data"`
 }
+
+//func (r *WhoamiResponse) Data() (*Whoami) {
+//	return r.Data
+//}
 
 type Whoami struct {
 	User    *User    `json:"user,omitempty"`
@@ -22,13 +28,14 @@ type Whoami struct {
 // Whoami gets the current authenticate context.
 //
 // See https://developer.dnsimple.com/v2/whoami
-func (s *AuthService) Whoami() (*Whoami, *LegacyResponse, error) {
-	responseWrapper := whoamiWrapper{}
+func (s *AuthService) Whoami() (*WhoamiResponse, error) {
+	whoamiResponse := &WhoamiResponse{}
 
-	res, err := s.client.get("/whoami", &responseWrapper)
+	resp, err := s.client.get("/whoami", whoamiResponse)
+	whoamiResponse.HttpResponse = resp.HttpResponse
 	if err != nil {
-		return &Whoami{}, res, err
+		return whoamiResponse, err
 	}
 
-	return responseWrapper.Whoami, res, nil
+	return whoamiResponse, nil
 }

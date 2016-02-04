@@ -35,10 +35,11 @@ func TestLive_Whoami(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, _, err := dnsimpleClient.Auth.Whoami()
+	whoamiResponse, err := dnsimpleClient.Auth.Whoami()
 	if err != nil {
 		t.Fatalf("Live whoami() returned error: %v", err)
 	}
+	whoami := whoamiResponse.Data
 
 	fmt.Println(whoami.Account)
 	fmt.Println(whoami.User)
@@ -49,11 +50,12 @@ func TestLive_Domains(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, _, err := dnsimpleClient.Auth.Whoami()
+	whoamiResponse, err := dnsimpleClient.Auth.Whoami()
 	if err != nil {
 		t.Fatalf("Live whoami()/listDomains() returned error: %v", err)
 	}
 
+	whoami := whoamiResponse.Data
 	accountID := whoami.Account.ID
 
 	domains, _, err := dnsimpleClient.Domains.List(fmt.Sprintf("%v", accountID))

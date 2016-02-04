@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"time"
 	"strings"
+	//"io/ioutil"
 )
 
 const (
@@ -175,13 +176,23 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*LegacyRespons
 		}
 	}
 
-	response := &LegacyResponse{Response: resp}
+	response := &LegacyResponse{HttpResponse: resp}
 	return response, err
 }
 
 // A Response represents an API response.
 type LegacyResponse struct {
-	*http.Response
+	HttpResponse *http.Response // HTTP response
+}
+
+// A Response represents an API response.
+type Response struct {
+	HttpResponse *http.Response // HTTP response
+	Data interface{} `json:"data"`
+}
+
+type ResponseInterface interface {
+	//Data() interface{}
 }
 
 // An ErrorResponse represents an API response that generated an error.
