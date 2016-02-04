@@ -8,8 +8,8 @@ import (
 )
 
 func TestMiscService_Whoami(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/whoami", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")

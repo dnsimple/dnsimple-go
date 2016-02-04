@@ -31,8 +31,8 @@ func TestDomains_domainPath(t *testing.T) {
 }
 
 func TestDomainsService_List(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -53,8 +53,8 @@ func TestDomainsService_List(t *testing.T) {
 }
 
 func TestDomainsService_Create(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"name": "example.com"}
@@ -82,8 +82,8 @@ func TestDomainsService_Create(t *testing.T) {
 }
 
 func TestDomainsService_Get(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -104,8 +104,8 @@ func TestDomainsService_Get(t *testing.T) {
 }
 
 func TestDomainsService_Delete(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")

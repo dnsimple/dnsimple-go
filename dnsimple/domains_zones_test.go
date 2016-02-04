@@ -8,8 +8,8 @@ import (
 )
 
 func TestDomainsService_GetZone(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains/example.com/zone", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")

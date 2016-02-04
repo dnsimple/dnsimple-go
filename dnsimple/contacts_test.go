@@ -24,8 +24,8 @@ func TestContacts_contactPath(t *testing.T) {
 }
 
 func TestContactsService_List(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -51,8 +51,8 @@ func TestContactsService_List(t *testing.T) {
 }
 
 func TestContactsService_Create(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"label": "Default"}
@@ -79,8 +79,8 @@ func TestContactsService_Create(t *testing.T) {
 }
 
 func TestContactsService_Get(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -117,8 +117,8 @@ func TestContactsService_Get(t *testing.T) {
 }
 
 func TestContactsService_Update(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"label": "Default"}
@@ -145,8 +145,8 @@ func TestContactsService_Update(t *testing.T) {
 }
 
 func TestContactsService_Delete(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")

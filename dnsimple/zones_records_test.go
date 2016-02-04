@@ -35,8 +35,8 @@ func TestRecords_recordPath(t *testing.T) {
 }
 
 func TestDomainsService_ListRecords_all(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -57,8 +57,8 @@ func TestDomainsService_ListRecords_all(t *testing.T) {
 }
 
 func TestDomainsService_ListRecords_subdomain(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -81,8 +81,8 @@ func TestDomainsService_ListRecords_subdomain(t *testing.T) {
 }
 
 func TestDomainsService_ListRecords_type(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -105,8 +105,8 @@ func TestDomainsService_ListRecords_type(t *testing.T) {
 }
 
 func TestDomainsService_CreateRecord(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"name": "foo", "content": "192.168.0.10", "record_type": "A"}
@@ -133,8 +133,8 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 }
 
 func TestDomainsService_GetRecord(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -155,8 +155,8 @@ func TestDomainsService_GetRecord(t *testing.T) {
 }
 
 func TestDomainsService_UpdateRecord(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
@@ -182,8 +182,8 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 }
 
 func TestDomainsService_DeleteRecord(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
@@ -199,8 +199,8 @@ func TestDomainsService_DeleteRecord(t *testing.T) {
 }
 
 func TestDomainsService_DeleteRecord_failed(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
@@ -221,8 +221,8 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 }
 
 func TestRecord_UpdateIP(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/24/records/42", func(w http.ResponseWriter, r *http.Request) {
 		want := map[string]interface{}{"name": "foo", "content": "192.168.0.1"}

@@ -10,8 +10,8 @@ import (
 )
 
 func TestRegistrarService_IsAvailable_available(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -32,8 +32,8 @@ func TestRegistrarService_IsAvailable_available(t *testing.T) {
 }
 
 func TestRegistrarService_IsAvailable_unavailable(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -54,8 +54,8 @@ func TestRegistrarService_IsAvailable_unavailable(t *testing.T) {
 }
 
 func TestRegistrarService_IsAvailable_failed400(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/check", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -76,8 +76,8 @@ func TestRegistrarService_IsAvailable_failed400(t *testing.T) {
 }
 
 func TestRegistrarService_Register(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
@@ -104,8 +104,8 @@ func TestRegistrarService_Register(t *testing.T) {
 }
 
 func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
@@ -133,8 +133,8 @@ func TestRegistrarService_Register_withExtendedAttributes(t *testing.T) {
 }
 
 func TestRegistrarService_Transfer(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
@@ -162,8 +162,8 @@ func TestRegistrarService_Transfer(t *testing.T) {
 }
 
 func TestRegistrarService_Transfer_withExtendedAttributes(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
@@ -192,8 +192,8 @@ func TestRegistrarService_Transfer_withExtendedAttributes(t *testing.T) {
 }
 
 func TestRegistrarService_Renew(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/registrar/example.com/renew", func(w http.ResponseWriter, r *http.Request) {
 		want := make(map[string]interface{})
@@ -219,8 +219,8 @@ func TestRegistrarService_Renew(t *testing.T) {
 }
 
 func TestRegistrarService_EnableAutoRenewal(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
@@ -235,8 +235,8 @@ func TestRegistrarService_EnableAutoRenewal(t *testing.T) {
 }
 
 func TestRegistrarService_DisableAutoRenewal(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")

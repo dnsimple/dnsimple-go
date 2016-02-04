@@ -12,27 +12,20 @@ import (
 )
 
 var (
-	// mux is the HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
-
-	// client is the DNSimple client being tested.
 	client *Client
-
-	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
 )
 
-// This method of testing http client APIs is borrowed from
-// Will Norris's work in go-github @ https://github.com/google/go-github
-func setup() {
+func setupMockServer() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	client = NewClient(NewOauthTokenCredentials("mytoken"))
+	client = NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	client.BaseURL = server.URL + "/"
 }
 
-func teardown() {
+func teardownMockServer() {
 	server.Close()
 }
 
@@ -67,12 +60,6 @@ func testFormValues(t *testing.T, r *http.Request, values values) {
 	r.ParseForm()
 	if !reflect.DeepEqual(want, r.Form) {
 		t.Errorf("Request parameters = %v, want %v", r.Form, want)
-	}
-}
-
-func testString(t *testing.T, test, value, want string) {
-	if value != want {
-		t.Errorf("%s returned %+v, want %+v", test, value, want)
 	}
 }
 
