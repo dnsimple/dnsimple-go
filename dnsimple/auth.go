@@ -13,12 +13,12 @@ type AuthService struct {
 // WhoamiResponse represents a response from an API method that returns a Whoami struct.
 type WhoamiResponse struct {
 	Response
-	Data *Whoami `json:"data"`
+	Data *WhoamiData `json:"data"`
 }
 
-// Whoami represents an authenticated context
+// WhoamiData represents an authenticated context
 // that contains information about the current logged User and/or Account.
-type Whoami struct {
+type WhoamiData struct {
 	User    *User    `json:"user,omitempty"`
 	Account *Account `json:"account,omitempty"`
 }
@@ -36,4 +36,14 @@ func (s *AuthService) Whoami() (*WhoamiResponse, error) {
 
 	whoamiResponse.HttpResponse = resp
 	return whoamiResponse, nil
+}
+
+// Whoami is a state-less shortcut to client.Whoami()
+// that returns only the relevant Data.
+func Whoami(c *Client) (data *WhoamiData, err error) {
+	resp, err := c.Auth.Whoami()
+	if resp != nil {
+		data = resp.Data
+	}
+	return
 }
