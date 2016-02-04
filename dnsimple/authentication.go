@@ -11,10 +11,9 @@ const (
 	httpHeaderAuthorization = "Authorization"
 )
 
-// Provides credentials that can be used for authenticating with DNSimple
+// Provides credentials that can be used for authenticating with DNSimple.
 //
-// More information on credentials may be found here:
-//   http://developer.dnsimple.com/v2/#authentication
+// See https://developer.dnsimple.com/v2/#authentication
 type Credentials interface {
 	// Get the HTTP header key and value to use for authentication.
 	HttpHeader() (string, string)
