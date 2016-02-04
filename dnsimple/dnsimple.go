@@ -118,42 +118,42 @@ func (c *Client) delete(path string, payload interface{}) (*Response, error) {
 // or returned as an error if an API error has occurred.
 // If v implements the io.Writer interface, the raw response body will be written to v,
 // without attempting to decode it.
-func (c *Client) Do(method, path string, payload, v interface{}) (*Response, error) {
+func (c *Client) Do(method, path string, payload, obj interface{}) (*Response, error) {
 	req, err := c.NewRequest(method, path, payload)
+	if err != nil {
+		return nil, err
+	}
 
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
 
+	resp, err := c.HttpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
-	res, err := c.HttpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
+	defer resp.Body.Close()
 
 	if c.Debug {
-		log.Printf("Response received: %#v", res)
+		log.Printf("Response received: %#v", resp)
 	}
 
-	response := &Response{Response: res}
-
-	err = CheckResponse(res)
+	err = CheckResponse(resp)
 	if err != nil {
-		return response, err
+		return nil, err
 	}
 
-	if v != nil {
-		if w, ok := v.(io.Writer); ok {
-			io.Copy(w, res.Body)
+	// If obj implements the io.Writer,
+	// the response body is decoded into v.
+	if obj != nil {
+		if w, ok := obj.(io.Writer); ok {
+			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(res.Body).Decode(v)
+			err = json.NewDecoder(resp.Body).Decode(obj)
 		}
 	}
 
+	response := &Response{Response: resp}
 	return response, err
 }
 
@@ -164,15 +164,15 @@ type Response struct {
 
 // An ErrorResponse represents an error caused by an API request.
 type ErrorResponse struct {
-	Response *http.Response // HTTP response that caused this error
-	Message  string         `json:"message"` // human-readable message
+	HttpResponse *http.Response // HTTP response that caused this error
+	Message      string         `json:"message"` // human-readable message
 }
 
 // Error implements the error interface.
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
-		r.Response.Request.Method, r.Response.Request.URL,
-		r.Response.StatusCode, r.Message)
+	return fmt.Sprintf("%v %v: %v %v",
+		r.HttpResponse.Request.Method, r.HttpResponse.Request.URL,
+		r.HttpResponse.StatusCode, r.Message)
 }
 
 // CheckResponse checks the API response for errors, and returns them if present.
@@ -183,7 +183,7 @@ func CheckResponse(r *http.Response) error {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{Response: r}
+	errorResponse := &ErrorResponse{HttpResponse: r}
 	err := json.NewDecoder(r.Body).Decode(errorResponse)
 	if err != nil {
 		return err
