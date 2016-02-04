@@ -105,6 +105,10 @@ func (c *Client) put(path string, payload, v interface{}) (*Response, error) {
 	return c.Do("PUT", path, payload, v)
 }
 
+func (c *Client) patch(path string, payload, v interface{}) (*Response, error) {
+	return c.Do("PATCH", path, payload, v)
+}
+
 func (c *Client) delete(path string, payload interface{}) (*Response, error) {
 	return c.Do("DELETE", path, payload, nil)
 }
