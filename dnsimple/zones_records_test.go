@@ -47,12 +47,13 @@ func TestDomainsService_ListRecords(t *testing.T) {
 	})
 
 	accountID := "1010"
-	records, _, err := client.Zones.ListRecords(accountID, "example.com")
 
+	recordsResponse, err := client.Zones.ListRecords(accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
 
+	records := recordsResponse.Data
 	if want, got := 5, len(records); want != got {
 		t.Errorf("Zones.ListRecords() expected to return %v contacts, got %v", want, got)
 	}
@@ -85,12 +86,13 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 
 	accountID := "1010"
 	recordValues := Record{Name: "foo", Content: "192.168.0.10", Type: "A"}
-	record, _, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
 
+	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
 	if err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
 
+	record := recordResponse.Data
 	if want, got := 64784, record.ID; want != got {
 		t.Fatalf("Zones.CreateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -113,12 +115,13 @@ func TestDomainsService_GetRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	record, _, err := client.Zones.GetRecord(accountID, "example.com", 1539)
 
+	recordResponse, err := client.Zones.GetRecord(accountID, "example.com", 1539)
 	if err != nil {
 		t.Fatalf("Zones.GetRecord() returned error: %v", err)
 	}
 
+	record := recordResponse.Data
 	wantSingle := &Record{
 		ID:        64784,
 		ZoneID:    "example.com",
@@ -153,12 +156,13 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 
 	accountID := "1010"
 	recordValues := Record{Name: "bar", Content: "192.168.0.10"}
-	record, _, err := client.Zones.UpdateRecord(accountID, "example.com", 2, recordValues)
 
+	recordResponse, err := client.Zones.UpdateRecord(accountID, "example.com", 2, recordValues)
 	if err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
 
+	record := recordResponse.Data
 	if want, got := 64784, record.ID; want != got {
 		t.Fatalf("Zones.UpdateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -177,8 +181,8 @@ func TestDomainsService_DeleteRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	_, err := client.Zones.DeleteRecord(accountID, "example.com", 2)
 
+	_, err := client.Zones.DeleteRecord(accountID, "example.com", 2)
 	if err != nil {
 		t.Fatalf("Zones.DeleteRecord() returned error: %v", err)
 	}

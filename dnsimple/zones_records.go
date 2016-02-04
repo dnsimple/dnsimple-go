@@ -2,8 +2,19 @@ package dnsimple
 
 import (
 	"fmt"
-	"net/http"
 )
+
+// ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.
+type ZoneRecordResponse struct {
+	Response
+	Data *Record `json:"data"`
+}
+
+// ZoneRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
+type ZoneRecordsResponse struct {
+	Response
+	Data []Record `json:"data"`
+}
 
 type Record struct {
 	ID        int    `json:"id,omitempty"`
@@ -15,13 +26,6 @@ type Record struct {
 	Type      string `json:"type,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	UpdatedAt string `json:"updated_at,omitempty"`
-}
-
-type recordsWrapper struct {
-	Records []Record `json:"data"`
-}
-type recordWrapper struct {
-	Record *Record `json:"data"`
 }
 
 // recordPath generates the resource path for given record that belongs to a domain.
@@ -38,68 +42,79 @@ func recordPath(accountID string, domain interface{}, record interface{}) string
 // List the zone records.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListRecords(accountID string, domain interface{}) ([]Record, *http.Response, error) {
+func (s *ZonesService) ListRecords(accountID string, domain interface{}) (*ZoneRecordsResponse, error) {
 	path := recordPath(accountID, domain, nil)
-	data := recordsWrapper{}
+	recordsResponse := &ZoneRecordsResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, recordsResponse)
 	if err != nil {
-		return []Record{}, res, err
+		return nil, err
 	}
 
-	return data.Records, res, nil
+	recordsResponse.HttpResponse = resp
+	return recordsResponse, nil
 }
 
 // CreateRecord creates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#create
-func (s *ZonesService) CreateRecord(accountID string, domain interface{}, recordAttributes Record) (*Record, *http.Response, error) {
+func (s *ZonesService) CreateRecord(accountID string, domain interface{}, recordAttributes Record) (*ZoneRecordResponse, error) {
 	path := recordPath(accountID, domain, nil)
-	data := recordWrapper{}
+	recordResponse := &ZoneRecordResponse{}
 
-	res, err := s.client.post(path, recordAttributes, &data)
+	resp, err := s.client.post(path, recordAttributes, recordResponse)
 	if err != nil {
-		return &Record{}, res, err
+		return nil, err
 	}
 
-	return data.Record, res, nil
+	recordResponse.HttpResponse = resp
+	return recordResponse, nil
 }
 
 // GetRecord gets the zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#get
-func (s *ZonesService) GetRecord(accountID string, domain interface{}, recordID int) (*Record, *http.Response, error) {
+func (s *ZonesService) GetRecord(accountID string, domain interface{}, recordID int) (*ZoneRecordResponse, error) {
 	path := recordPath(accountID, domain, recordID)
-	data := recordWrapper{}
+	recordResponse := &ZoneRecordResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, recordResponse)
 	if err != nil {
-		return &Record{}, res, err
+		return nil, err
 	}
 
-	return data.Record, res, nil
+	recordResponse.HttpResponse = resp
+	return recordResponse, nil
 }
 
 // UpdateRecord updates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#update
-func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, recordID int, recordAttributes Record) (*Record, *http.Response, error) {
+func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, recordID int, recordAttributes Record) (*ZoneRecordResponse, error) {
 	path := recordPath(accountID, domain, recordID)
-	data := recordWrapper{}
+	recordResponse := &ZoneRecordResponse{}
 
-	res, err := s.client.patch(path, recordAttributes, &data)
+	resp, err := s.client.patch(path, recordAttributes, recordResponse)
 	if err != nil {
-		return &Record{}, res, err
+		return nil, err
 	}
 
-	return data.Record, res, nil
+	recordResponse.HttpResponse = resp
+	return recordResponse, nil
 }
 
 // DeleteRecord deletes a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#delete
-func (s *ZonesService) DeleteRecord(accountID string, domain interface{}, recordID int) (*http.Response, error) {
+func (s *ZonesService) DeleteRecord(accountID string, domain interface{}, recordID int) (*ZoneRecordResponse, error) {
 	path := recordPath(accountID, domain, recordID)
+	recordResponse := &ZoneRecordResponse{}
 
-	return s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	recordResponse.HttpResponse = resp
+	return recordResponse, nil
 }

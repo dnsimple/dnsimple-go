@@ -61,11 +61,11 @@ func (s *ContactsService) List(accountID string) (*ContactsResponse, error) {
 	contactsResponse := &ContactsResponse{}
 
 	resp, err := s.client.get(path, contactsResponse)
-	contactsResponse.HttpResponse = resp
 	if err != nil {
 		return contactsResponse, err
 	}
 
+	contactsResponse.HttpResponse = resp
 	return contactsResponse, nil
 }
 
@@ -77,11 +77,11 @@ func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.post(path, contactAttributes, contactResponse)
-	contactResponse.HttpResponse = resp
 	if err != nil {
-		return contactResponse, err
+		return nil, err
 	}
 
+	contactResponse.HttpResponse = resp
 	return contactResponse, nil
 }
 
@@ -93,11 +93,11 @@ func (s *ContactsService) Get(accountID string, contactID int) (*ContactResponse
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.get(path, contactResponse)
-	contactResponse.HttpResponse = resp
 	if err != nil {
-		return contactResponse, err
+		return nil, err
 	}
 
+	contactResponse.HttpResponse = resp
 	return contactResponse, nil
 }
 
@@ -109,11 +109,11 @@ func (s *ContactsService) Update(accountID string, contactID int, contactAttribu
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.patch(path, contactAttributes, contactResponse)
-	contactResponse.HttpResponse = resp
 	if err != nil {
-		return contactResponse, err
+		return nil, err
 	}
 
+	contactResponse.HttpResponse = resp
 	return contactResponse, nil
 }
 
@@ -125,10 +125,10 @@ func (s *ContactsService) Delete(accountID string, contactID int) (*ContactRespo
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)
-	contactResponse.HttpResponse = resp
 	if err != nil {
-		return contactResponse, err
+		return nil, err
 	}
 
+	contactResponse.HttpResponse = resp
 	return contactResponse, nil
 }
