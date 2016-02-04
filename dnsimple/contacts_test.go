@@ -43,7 +43,7 @@ func TestContactsService_List(t *testing.T) {
 		t.Fatalf("Contacts.List() returned error: %v", err)
 	}
 
-	contacts := contactsResponse.Data()
+	contacts := contactsResponse.Data
 	if want, got := 2, len(contacts); want != got {
 		t.Errorf("Contacts.List() expected to return %v contacts, got %v", want, got)
 	}
@@ -81,7 +81,7 @@ func TestContactsService_Create(t *testing.T) {
 		t.Fatalf("Contacts.Create() returned error: %v", err)
 	}
 
-	contact := contactResponse.Data()
+	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
 		t.Fatalf("Contacts.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -111,7 +111,7 @@ func TestContactsService_Get(t *testing.T) {
 		t.Fatalf("Contacts.Get() returned error: %v", err)
 	}
 
-	contact := contactResponse.Data()
+	contact := contactResponse.Data
 	wantSingle := &Contact{
 		ID:            1,
 		Label:         "Default",
@@ -160,7 +160,7 @@ func TestContactsService_Update(t *testing.T) {
 		t.Fatalf("Contacts.Update() returned error: %v", err)
 	}
 
-	contact := contactResponse.Data()
+	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
 		t.Fatalf("Contacts.Update() returned ID expected to be `%v`, got `%v`", want, got)
 	}

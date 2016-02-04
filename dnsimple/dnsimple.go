@@ -188,10 +188,7 @@ type LegacyResponse struct {
 // A Response represents an API response.
 type Response struct {
 	HttpResponse *http.Response // HTTP response
-}
-
-type ResponseInterface interface {
-	RawData() interface{}
+	Data interface{} `json:"data"`
 }
 
 // An ErrorResponse represents an API response that generated an error.

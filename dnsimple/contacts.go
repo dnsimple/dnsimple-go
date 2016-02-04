@@ -15,23 +15,13 @@ type ContactsService struct {
 // ContactResponse represents a response from an API method that returns a Contact struct.
 type ContactResponse struct {
 	Response
-	RawData *Contact `json:"data"`
-}
-
-// Data returns the ContactResponse wrapped data.
-func (r *ContactResponse) Data() (*Contact) {
-	return r.RawData
+	Data *Contact `json:"data"`
 }
 
 // ContactsResponse represents a response from an API method that returns a collection of Contact struct.
 type ContactsResponse struct {
 	Response
-	RawData []Contact `json:"data"`
-}
-
-// Data returns the ContactsResponse wrapped data.
-func (r *ContactsResponse) Data() ([]Contact) {
-	return r.RawData
+	Data []Contact `json:"data"`
 }
 
 type Contact struct {

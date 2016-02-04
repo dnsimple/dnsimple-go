@@ -39,7 +39,7 @@ func TestLive_Whoami(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Live whoami() returned error: %v", err)
 	}
-	whoami := whoamiResponse.Data()
+	whoami := whoamiResponse.Data
 
 	fmt.Println(whoami.Account)
 	fmt.Println(whoami.User)
@@ -55,7 +55,7 @@ func TestLive_Domains(t *testing.T) {
 		t.Fatalf("Live whoami()/listDomains() returned error: %v", err)
 	}
 
-	whoami := whoamiResponse.Data()
+	whoami := whoamiResponse.Data
 	accountID := whoami.Account.ID
 
 	domains, _, err := dnsimpleClient.Domains.List(fmt.Sprintf("%v", accountID))
