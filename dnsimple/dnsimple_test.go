@@ -6,13 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"reflect"
 	"testing"
 )
 
 var (
-	mux *http.ServeMux
+	mux    *http.ServeMux
 	client *Client
 	server *httptest.Server
 )
@@ -46,20 +45,6 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 
 	if !reflect.DeepEqual(values, dat) {
 		t.Errorf("Request parameters = %v, want %v", dat, values)
-	}
-}
-
-type values map[string]string
-
-func testFormValues(t *testing.T, r *http.Request, values values) {
-	want := url.Values{}
-	for k, v := range values {
-		want.Add(k, v)
-	}
-
-	r.ParseForm()
-	if !reflect.DeepEqual(want, r.Form) {
-		t.Errorf("Request parameters = %v, want %v", r.Form, want)
 	}
 }
 

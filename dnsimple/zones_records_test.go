@@ -44,55 +44,7 @@ func TestDomainsService_ListRecords_all(t *testing.T) {
 	})
 
 	accountId := "1"
-	records, _, err := client.Domains.ListRecords(accountId, "example.com", "", "")
-
-	if err != nil {
-		t.Errorf("Domains.ListRecords returned error: %v", err)
-	}
-
-	want := []Record{{Id: 1, Name: "foo.example.com"}}
-	if !reflect.DeepEqual(records, want) {
-		t.Fatalf("Domains.ListRecords returned %+v, want %+v", records, want)
-	}
-}
-
-func TestDomainsService_ListRecords_subdomain(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
-		testFormValues(t, r, values{"name": "foo"})
-
-		fmt.Fprint(w, `{"data":[{"id":1, "name":"foo.example.com"}]}`)
-	})
-
-	accountId := "1"
-	records, _, err := client.Domains.ListRecords(accountId, "example.com", "foo", "")
-
-	if err != nil {
-		t.Errorf("Domains.ListRecords returned error: %v", err)
-	}
-
-	want := []Record{{Id: 1, Name: "foo.example.com"}}
-	if !reflect.DeepEqual(records, want) {
-		t.Fatalf("Domains.ListRecords returned %+v, want %+v", records, want)
-	}
-}
-
-func TestDomainsService_ListRecords_type(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
-		testFormValues(t, r, values{"name": "foo", "type": "CNAME"})
-
-		fmt.Fprint(w, `{"data":[{"id":1, "name":"foo.example.com"}]}`)
-	})
-
-	accountId := "1"
-	records, _, err := client.Domains.ListRecords(accountId, "example.com", "foo", "CNAME")
+	records, _, err := client.Domains.ListRecords(accountId, "example.com")
 
 	if err != nil {
 		t.Errorf("Domains.ListRecords returned error: %v", err)

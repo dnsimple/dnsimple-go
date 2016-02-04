@@ -2,7 +2,6 @@ package dnsimple
 
 import (
 	"fmt"
-	"net/url"
 	"time"
 )
 
@@ -39,21 +38,11 @@ func recordPath(accountId string, domain interface{}, record interface{}) string
 // List the domain records.
 //
 // DNSimple API docs: http://developer.dnsimple.com/domains/records/#list
-func (s *DomainsService) ListRecords(accountId string, domain interface{}, recordName, recordType string) ([]Record, *Response, error) {
-	reqStr := recordPath(accountId, domain, nil)
-	v := url.Values{}
-
-	if recordName != "" {
-		v.Add("name", recordName)
-	}
-	if recordType != "" {
-		v.Add("type", recordType)
-	}
-	reqStr += "?" + v.Encode()
-
+func (s *DomainsService) ListRecords(accountId string, domain interface{}) ([]Record, *Response, error) {
+	path := recordPath(accountId, domain, nil)
 	data := recordsWrapper{}
 
-	res, err := s.client.get(reqStr, &data)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return []Record{}, res, err
 	}
