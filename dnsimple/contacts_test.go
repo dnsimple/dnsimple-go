@@ -27,27 +27,31 @@ func TestContactsService_List(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
-		fmt.Fprint(w, `{"data":[{"id":1,"label":"Default"},{"id":2,"label":"Simone"}]}`)
+
+		fmt.Fprint(w, `
+			{"data":[{"id":1,"account_id":1010,"label":"Default","first_name":"First","last_name":"User","job_title":"CEO","organization_name":"Awesome Company","email_address":"first@example.com","phone":"+18001234567","fax":"+18011234567","address1":"Italian Street, 10","address2":"","city":"Roma","state_province":"RM","postal_code":"00100","country":"IT","created_at":"2013-11-08T17:23:15.884Z","updated_at":"2015-01-08T21:30:50.228Z"},{"id":2,"account_id":1010,"label":"","first_name":"Second","last_name":"User","job_title":"","organization_name":"","email_address":"second@example.com","phone":"+18881234567","fax":"","address1":"French Street","address2":"c/o Someone","city":"Paris","state_province":"XY","postal_code":"00200","country":"FR","created_at":"2014-12-06T15:46:18.014Z","updated_at":"2014-12-06T15:46:18.014Z"}],"pagination":{"current_page":1,"per_page":30,"total_entries":2,"total_pages":1}}
+		`)
 	})
 
-	accountId := "1"
+	accountId := "1010"
 	contacts, _, err := client.Contacts.List(accountId)
 
 	if err != nil {
-		t.Errorf("Contacts.List returned error: %v", err)
+		t.Fatalf("Contacts.List() returned error: %v", err)
 	}
 
-	if size, want := len(contacts), 2; size != want {
-		t.Fatalf("Contacts.List returned %+v items, want %+v", size, want)
+	if want, got := 2, len(contacts); want != got {
+		t.Errorf("Contacts.List() expected to return %v contacts, got %v", want, got)
 	}
 
-	for i, item := range contacts {
-		if kind, want := reflect.TypeOf(item).Name(), "Contact"; kind != want {
-			t.Errorf("Contacts.List expected [%d] to be %s, got %s", i, want, kind)
-		}
+	if want, got := 1, contacts[0].Id; want != got {
+		t.Fatalf("Contacts.Create() returned Id expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "Default", contacts[0].Label; want != got {
+		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -55,28 +59,31 @@ func TestContactsService_Create(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
 		want := map[string]interface{}{"label": "Default"}
 		testRequestJSON(t, r, want)
 
-		fmt.Fprintf(w, `{"data":{"id":1, "label":"Default"}}`)
+		fmt.Fprintf(w, `
+			{"data":{"id":1,"account_id":1010,"label":"Default","first_name":"First","last_name":"User","job_title":"CEO","organization_name":"Awesome Company","email_address":"first@example.com","phone":"+18001234567","fax":"+18011234567","address1":"Italian Street, 10","address2":"","city":"Roma","state_province":"RM","postal_code":"00100","country":"IT","created_at":"2016-01-19T20:50:26.066Z","updated_at":"2016-01-19T20:50:26.066Z"}}
+		`)
 	})
 
-	accountId := "1"
-	contactId := 1
-	contactValues := Contact{Label: "Default"}
-	contact, _, err := client.Contacts.Create(accountId, contactValues)
+	accountId := "1010"
+	contactAttributes := Contact{Label: "Default"}
+	contact, _, err := client.Contacts.Create(accountId, contactAttributes)
 
 	if err != nil {
-		t.Errorf("Contacts.Create returned error: %v", err)
+		t.Fatalf("Contacts.Create() returned error: %v", err)
 	}
 
-	want := Contact{Id: contactId, Label: "Default"}
-	if !reflect.DeepEqual(contact, want) {
-		t.Fatalf("Contacts.Create returned %+v, want %+v", contact, want)
+	if want, got := 1, contact.Id; want != got {
+		t.Fatalf("Contacts.Create() returned Id expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "Default", contact.Label; want != got {
+		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -84,39 +91,43 @@ func TestContactsService_Get(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 
-		fmt.Fprint(w, `{"data":{"id":1,"user_id":21,"label":"Default","first_name":"Simone","last_name":"Carletti","job_title":"Underwater Programmer","organization_name":"DNSimple","email_address":"simone.carletti@dnsimple.com","phone":"+1 111 4567890","fax":"+1 222 4567890","address1":"Awesome Street","address2":"c/o Someone","city":"Rome","state_province":"RM","postal_code":"00171","country":"IT"}}`)
+		fmt.Fprint(w, `
+			{"data":{"id":1,"account_id":1010,"label":"Default","first_name":"First","last_name":"User","job_title":"CEO","organization_name":"Awesome Company","email_address":"first@example.com","phone":"+18001234567","fax":"+18011234567","address1":"Italian Street, 10","address2":"","city":"Roma","state_province":"RM","postal_code":"00100","country":"IT","created_at":"2016-01-19T20:50:26.066Z","updated_at":"2016-01-19T20:50:26.066Z"}}
+		`)
 	})
 
-	accountId := "1"
+	accountId := "1010"
 	contactId := 1
 	contact, _, err := client.Contacts.Get(accountId, contactId)
 
 	if err != nil {
-		t.Errorf("Contacts.Get returned error: %v", err)
+		t.Fatalf("Contacts.Get() returned error: %v", err)
 	}
 
-	want := Contact{
-		Id:            contactId,
+	wantSingle := &Contact{
+		Id:            1,
 		Label:         "Default",
-		FirstName:     "Simone",
-		LastName:      "Carletti",
-		JobTitle:      "Underwater Programmer",
-		Organization:  "DNSimple",
-		Email:         "simone.carletti@dnsimple.com",
-		Phone:         "+1 111 4567890",
-		Fax:           "+1 222 4567890",
-		Address1:      "Awesome Street",
-		Address2:      "c/o Someone",
-		City:          "Rome",
+		FirstName:     "First",
+		LastName:      "User",
+		JobTitle:      "CEO",
+		Organization:  "Awesome Company",
+		Email:         "first@example.com",
+		Phone:         "+18001234567",
+		Fax:           "+18011234567",
+		Address1:      "Italian Street, 10",
+		City:          "Roma",
 		StateProvince: "RM",
-		PostalCode:    "00171",
-		Country:       "IT"}
-	if !reflect.DeepEqual(contact, want) {
-		t.Fatalf("Contacts.Get returned %+v, want %+v", contact, want)
+		PostalCode:    "00100",
+		Country:       "IT",
+		CreatedAt:     "2016-01-19T20:50:26.066Z",
+		UpdatedAt:     "2016-01-19T20:50:26.066Z"}
+
+	if !reflect.DeepEqual(&contact, wantSingle) {
+		t.Fatalf("Contacts.Get() returned %+v, want %+v", &contact, wantSingle)
 	}
 }
 
@@ -124,28 +135,32 @@ func TestContactsService_Update(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "PUT")
+	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
 
 		want := map[string]interface{}{"label": "Default"}
 		testRequestJSON(t, r, want)
 
-		fmt.Fprint(w, `{"data":{"id":1, "label": "Default"}}`)
+		fmt.Fprint(w, `
+			{"data":{"id":1,"account_id":1010,"label":"Default","first_name":"First","last_name":"User","job_title":"CEO","organization_name":"Awesome Company","email_address":"first@example.com","phone":"+18001234567","fax":"+18011234567","address1":"Italian Street, 10","address2":"","city":"Roma","state_province":"RM","postal_code":"00100","country":"IT","created_at":"2016-01-19T20:50:26.066Z","updated_at":"2016-01-19T20:50:26.066Z"}}
+		`)
 	})
 
-	contactValues := Contact{Label: "Default"}
-	accountId := "1"
+	contactAttributes := Contact{Label: "Default"}
+	accountId := "1010"
 	contactId := 1
-	contact, _, err := client.Contacts.Update(accountId, contactId, contactValues)
+	contact, _, err := client.Contacts.Update(accountId, contactId, contactAttributes)
 
 	if err != nil {
-		t.Errorf("Contacts.Update returned error: %v", err)
+		t.Fatalf("Contacts.Update() returned error: %v", err)
 	}
 
-	want := Contact{Id: contactId, Label: "Default"}
-	if !reflect.DeepEqual(contact, want) {
-		t.Fatalf("Contacts.Update returned %+v, want %+v", contact, want)
+	if want, got := 1, contact.Id; want != got {
+		t.Fatalf("Contacts.Create() returned Id expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "Default", contact.Label; want != got {
+		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -153,18 +168,18 @@ func TestContactsService_Delete(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
 
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	accountId := "1"
+	accountId := "1010"
 	contactId := 1
 	_, err := client.Contacts.Delete(accountId, contactId)
 
 	if err != nil {
-		t.Errorf("Contacts.Delete returned error: %v", err)
+		t.Fatalf("Contacts.Delete() returned error: %v", err)
 	}
 }

@@ -47,9 +47,9 @@ type Client struct {
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
-	Auth      *AuthService
-	Contacts  *ContactsService
-	Domains   *DomainsService
+	Auth     *AuthService
+	Contacts *ContactsService
+	Domains  *DomainsService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
