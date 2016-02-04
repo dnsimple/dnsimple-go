@@ -30,10 +30,10 @@ func (s *AuthService) Whoami() (*WhoamiResponse, error) {
 	whoamiResponse := &WhoamiResponse{}
 
 	resp, err := s.client.get("/whoami", whoamiResponse)
-	whoamiResponse.HttpResponse = resp
 	if err != nil {
-		return whoamiResponse, err
+		return nil, err
 	}
 
+	whoamiResponse.HttpResponse = resp
 	return whoamiResponse, nil
 }

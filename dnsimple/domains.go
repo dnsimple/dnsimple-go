@@ -72,11 +72,11 @@ func (s *DomainsService) List(accountID string) (*DomainsResponse, error) {
 	domainsResponse := &DomainsResponse{}
 
 	resp, err := s.client.get(path, domainsResponse)
-	domainsResponse.HttpResponse = resp
 	if err != nil {
-		return domainsResponse, err
+		return nil, err
 	}
 
+	domainsResponse.HttpResponse = resp
 	return domainsResponse, nil
 }
 
@@ -88,11 +88,11 @@ func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*Dom
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.post(path, domainAttributes, domainResponse)
-	domainResponse.HttpResponse = resp
 	if err != nil {
-		return domainResponse, err
+		return nil, err
 	}
 
+	domainResponse.HttpResponse = resp
 	return domainResponse, nil
 }
 
@@ -104,11 +104,11 @@ func (s *DomainsService) Get(accountID string, domain interface{}) (*DomainRespo
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.get(path, domainResponse)
-	domainResponse.HttpResponse = resp
 	if err != nil {
-		return domainResponse, err
+		return nil, err
 	}
 
+	domainResponse.HttpResponse = resp
 	return domainResponse, nil
 }
 
@@ -120,10 +120,10 @@ func (s *DomainsService) Delete(accountID string, domain interface{}) (*DomainRe
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)
-	domainResponse.HttpResponse = resp
 	if err != nil {
-		return domainResponse, err
+		return nil, err
 	}
 
+	domainResponse.HttpResponse = resp
 	return domainResponse, nil
 }
