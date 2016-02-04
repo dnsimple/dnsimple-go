@@ -40,6 +40,8 @@ func TestDomainsService_ListRecords_all(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprint(w, `{"data":[{"id":1, "name":"foo.example.com"}]}`)
 	})
 
@@ -61,9 +63,11 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"name": "foo", "content": "192.168.0.10", "record_type": "A"}
 
 		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "foo", "content": "192.168.0.10", "record_type": "A"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
@@ -90,6 +94,8 @@ func TestDomainsService_GetRecord(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprintf(w, `{"data":{"id":2, "zone_id":1, "name":"foo"}}`)
 	})
 
@@ -111,9 +117,10 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
-
 		testMethod(t, r, "PUT")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
 		testRequestJSON(t, r, want)
 
 		fmt.Fprint(w, `{"data":{"id":2, "zone_id":1, "name":"bar", "content": "192.168.0.10"}}`)
@@ -139,7 +146,7 @@ func TestDomainsService_DeleteRecord(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		// fmt.Fprint(w, `{}`)
+		testHeaders(t, r)
 	})
 
 	accountId := "1"
@@ -156,6 +163,7 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
 
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprint(w, `{"message":"Invalid request"}`)

@@ -29,9 +29,20 @@ func teardownMockServer() {
 }
 
 func testMethod(t *testing.T, r *http.Request, want string) {
-	if want != r.Method {
-		t.Errorf("Request method = %v, want %v", r.Method, want)
+	if got := r.Method; want != got {
+		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
 	}
+}
+
+func testHeader(t *testing.T, r *http.Request, name, want string) {
+	if got := r.Header.Get(name); want != got {
+		t.Errorf("Request() %v expected to be `%v`, got `%v`", name, want, got)
+	}
+}
+
+func testHeaders(t *testing.T, r *http.Request) {
+	testHeader(t, r, "Accept", "application/json")
+	testHeader(t, r, "User-Agent", defaultUserAgent)
 }
 
 func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
@@ -49,15 +60,15 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 }
 
 func TestNewClient(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("mytoken"))
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 
 	if c.BaseURL != defaultBaseURL {
 		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
 	}
 }
 
-func TestNewRequest(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("mytoken"))
+func TestClient_NewRequest(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, outURL := "foo", "https://go.example.com/v2/foo"
@@ -65,13 +76,13 @@ func TestNewRequest(t *testing.T) {
 
 	// test that relative URL was expanded with the proper BaseURL
 	if req.URL.String() != outURL {
-		t.Errorf("makeRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
 	}
 
 	// test that default user-agent is attached to the request
-	userAgent := req.Header.Get("User-Agent")
-	if c.UserAgent != userAgent {
-		t.Errorf("makeRequest() User-Agent = %v, want %v", userAgent, c.UserAgent)
+	ua := req.Header.Get("User-Agent")
+	if ua != c.UserAgent {
+		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, c.UserAgent)
 	}
 }
 
@@ -82,8 +93,8 @@ func (o *badObject) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("Bad object is bad")
 }
 
-func TestNewRequestWithBody(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("mytoken"))
+func TestClient_NewRequest_WithBody(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, _ := "foo", "https://go.example.com/v2/foo"

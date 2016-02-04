@@ -13,14 +13,16 @@ func TestMiscService_Whoami(t *testing.T) {
 
 	mux.HandleFunc("/v2/whoami", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprint(w, `
 			{
 			  "data": {
-				"user": null,
-				"account": {
-				  "id": 24,
-				  "email": "example-account@example.com"
-				}
+			    "user": null,
+			    "account": {
+			      "id": 24,
+			      "email": "example-account@example.com"
+			    }
 			  }
 			}
 		`)

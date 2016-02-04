@@ -29,6 +29,7 @@ func TestContactsService_List(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
 		fmt.Fprint(w, `{"data":[{"id":1,"label":"Default"},{"id":2,"label":"Simone"}]}`)
 	})
 
@@ -55,9 +56,10 @@ func TestContactsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"label": "Default"}
-
 		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"label": "Default"}
 		testRequestJSON(t, r, want)
 
 		fmt.Fprintf(w, `{"data":{"id":1, "label":"Default"}}`)
@@ -84,6 +86,8 @@ func TestContactsService_Get(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprint(w, `{"data":{"id":1,"user_id":21,"label":"Default","first_name":"Simone","last_name":"Carletti","job_title":"Underwater Programmer","organization_name":"DNSimple","email_address":"simone.carletti@dnsimple.com","phone":"+1 111 4567890","fax":"+1 222 4567890","address1":"Awesome Street","address2":"c/o Someone","city":"Rome","state_province":"RM","postal_code":"00171","country":"IT"}}`)
 	})
 
@@ -121,9 +125,10 @@ func TestContactsService_Update(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"label": "Default"}
-
 		testMethod(t, r, "PUT")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"label": "Default"}
 		testRequestJSON(t, r, want)
 
 		fmt.Fprint(w, `{"data":{"id":1, "label": "Default"}}`)
@@ -150,6 +155,8 @@ func TestContactsService_Delete(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/contacts/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
 		w.WriteHeader(http.StatusNoContent)
 	})
 

@@ -36,6 +36,8 @@ func TestDomainsService_List(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprint(w, `{"data":[{"id": 1, "name":"example.com"}]}`)
 	})
 
@@ -57,9 +59,10 @@ func TestDomainsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"name": "example.com"}
-
 		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "example.com"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
@@ -87,6 +90,8 @@ func TestDomainsService_Get(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
 		fmt.Fprint(w, `{"data": {"id":1, "name":"example.com"}}`)
 	})
 
@@ -109,7 +114,7 @@ func TestDomainsService_Delete(t *testing.T) {
 
 	mux.HandleFunc("/v2/1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		// fmt.Fprint(w, `{}`)
+		testHeaders(t, r)
 	})
 
 	accountId := "1"
