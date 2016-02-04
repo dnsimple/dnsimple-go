@@ -11,15 +11,19 @@ type AuthService struct {
 	client *Client
 }
 
+// WhoamiResponse represents a response from an API method that returns a Whoami struct.
 type WhoamiResponse struct {
 	Response
-	Data *Whoami `json:"data"`
+	RawData *Whoami `json:"data"`
 }
 
-//func (r *WhoamiResponse) Data() (*Whoami) {
-//	return r.Data
-//}
+// Data returns the WhoamiResponse wrapped data.
+func (r *WhoamiResponse) Data() (*Whoami) {
+	return r.RawData
+}
 
+// Whoami represents an authenticated context
+// that contains information about the current logged User and/or Account.
 type Whoami struct {
 	User    *User    `json:"user,omitempty"`
 	Account *Account `json:"account,omitempty"`
