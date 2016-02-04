@@ -13,7 +13,7 @@ type ContactsService struct {
 }
 
 type Contact struct {
-	Id            int    `json:"id,omitempty"`
+	ID            int    `json:"id,omitempty"`
 	Label         string `json:"label,omitempty"`
 	FirstName     string `json:"first_name,omitempty"`
 	LastName      string `json:"last_name,omitempty"`
@@ -41,18 +41,18 @@ type contactWrapper struct {
 }
 
 // contactPath generates the resource path for given contact.
-func contactPath(accountId string, contact interface{}) string {
+func contactPath(accountID string, contact interface{}) string {
 	if contact != nil {
-		return fmt.Sprintf("%v/contacts/%d", accountId, contact)
+		return fmt.Sprintf("%v/contacts/%d", accountID, contact)
 	}
-	return fmt.Sprintf("%v/contacts", accountId)
+	return fmt.Sprintf("%v/contacts", accountID)
 }
 
 // List the contacts.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
-func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
-	path := contactPath(accountId, nil)
+func (s *ContactsService) List(accountID string) ([]Contact, *Response, error) {
+	path := contactPath(accountID, nil)
 	data := contactsWrapper{}
 
 	res, err := s.client.get(path, &data)
@@ -66,8 +66,8 @@ func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
 // Create a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
-func (s *ContactsService) Create(accountId string, contactAttributes Contact) (*Contact, *Response, error) {
-	path := contactPath(accountId, nil)
+func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*Contact, *Response, error) {
+	path := contactPath(accountID, nil)
 	data := contactWrapper{}
 
 	res, err := s.client.post(path, contactAttributes, &data)
@@ -81,8 +81,8 @@ func (s *ContactsService) Create(accountId string, contactAttributes Contact) (*
 // Get a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
-func (s *ContactsService) Get(accountId string, contactId int) (*Contact, *Response, error) {
-	path := contactPath(accountId, contactId)
+func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *Response, error) {
+	path := contactPath(accountID, contactID)
 	data := contactWrapper{}
 
 	res, err := s.client.get(path, &data)
@@ -96,8 +96,8 @@ func (s *ContactsService) Get(accountId string, contactId int) (*Contact, *Respo
 // Update a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
-func (s *ContactsService) Update(accountId string, contactId int, contactAttributes Contact) (*Contact, *Response, error) {
-	path := contactPath(accountId, contactId)
+func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*Contact, *Response, error) {
+	path := contactPath(accountID, contactID)
 	data := contactWrapper{}
 
 	res, err := s.client.patch(path, contactAttributes, &data)
@@ -111,8 +111,8 @@ func (s *ContactsService) Update(accountId string, contactId int, contactAttribu
 // Delete a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
-func (s *ContactsService) Delete(accountId string, contactId int) (*Response, error) {
-	path := contactPath(accountId, contactId)
+func (s *ContactsService) Delete(accountID string, contactID int) (*Response, error) {
+	path := contactPath(accountID, contactID)
 
 	return s.client.delete(path, nil)
 }

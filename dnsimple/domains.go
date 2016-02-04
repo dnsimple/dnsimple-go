@@ -13,9 +13,9 @@ type DomainsService struct {
 }
 
 type Domain struct {
-	Id           int    `json:"id,omitempty"`
-	AccountId    int    `json:"account_id,omitempty"`
-	RegistrantId int    `json:"registrant_id,omitempty"`
+	ID           int    `json:"id,omitempty"`
+	AccountID    int    `json:"account_id,omitempty"`
+	RegistrantID int    `json:"registrant_id,omitempty"`
 	Name         string `json:"name,omitempty"`
 	UnicodeName  string `json:"unicode_name,omitempty"`
 	Token        string `json:"token,omitempty"`
@@ -41,7 +41,7 @@ type domainRequest struct {
 	Domain interface{} `json:"domain"`
 }
 
-func domainIdentifier(value interface{}) string {
+func domainIDentifier(value interface{}) string {
 	switch value := value.(type) {
 	case string:
 		return value
@@ -52,18 +52,18 @@ func domainIdentifier(value interface{}) string {
 }
 
 // domainPath generates the resource path for given domain.
-func domainPath(accountId string, domain interface{}) string {
+func domainPath(accountID string, domain interface{}) string {
 	if domain != nil {
-		return fmt.Sprintf("%s/domains/%s", accountId, domainIdentifier(domain))
+		return fmt.Sprintf("%s/domains/%s", accountID, domainIDentifier(domain))
 	}
-	return fmt.Sprintf("%s/domains", accountId)
+	return fmt.Sprintf("%s/domains", accountID)
 }
 
 // List the domains.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
-	path := domainPath(accountId, nil)
+func (s *DomainsService) List(accountID string) ([]Domain, *Response, error) {
+	path := domainPath(accountID, nil)
 	data := domainsWrapper{}
 
 	res, err := s.client.get(path, &data)
@@ -77,8 +77,8 @@ func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
 // Create a new domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
-func (s *DomainsService) Create(accountId string, domainAttributes Domain) (*Domain, *Response, error) {
-	path := domainPath(accountId, nil)
+func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*Domain, *Response, error) {
+	path := domainPath(accountID, nil)
 	data := domainWrapper{}
 
 	res, err := s.client.post(path, domainAttributes, &data)
@@ -92,8 +92,8 @@ func (s *DomainsService) Create(accountId string, domainAttributes Domain) (*Dom
 // Get a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
-func (s *DomainsService) Get(accountId string, domain interface{}) (*Domain, *Response, error) {
-	path := domainPath(accountId, domain)
+func (s *DomainsService) Get(accountID string, domain interface{}) (*Domain, *Response, error) {
+	path := domainPath(accountID, domain)
 	data := domainWrapper{}
 
 	res, err := s.client.get(path, &data)
@@ -107,8 +107,8 @@ func (s *DomainsService) Get(accountId string, domain interface{}) (*Domain, *Re
 // Delete a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
-func (s *DomainsService) Delete(accountId string, domain interface{}) (*Response, error) {
-	path := domainPath(accountId, domain)
+func (s *DomainsService) Delete(accountID string, domain interface{}) (*Response, error) {
+	path := domainPath(accountID, domain)
 
 	return s.client.delete(path, nil)
 }

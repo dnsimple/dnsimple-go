@@ -26,7 +26,7 @@ func TestAuthService_Whoami(t *testing.T) {
 		t.Fatalf("Auth.Whoami() returned error: %v", err)
 	}
 
-	want := &Whoami{Account: &Account{Id: 1, Email: "example-account@example.com"}}
+	want := &Whoami{Account: &Account{ID: 1, Email: "example-account@example.com"}}
 	if !reflect.DeepEqual(whoami, want) {
 		t.Errorf("Auth.Whoami() returned %+v, want %+v", whoami, want)
 	}

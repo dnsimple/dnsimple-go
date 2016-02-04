@@ -43,8 +43,8 @@ func TestDomainsService_List(t *testing.T) {
 		`)
 	})
 
-	accountId := "1010"
-	domains, _, err := client.Domains.List(accountId)
+	accountID := "1010"
+	domains, _, err := client.Domains.List(accountID)
 
 	if err != nil {
 		t.Fatalf("Domains.List() returned error: %v", err)
@@ -54,8 +54,8 @@ func TestDomainsService_List(t *testing.T) {
 		t.Errorf("Domains.List() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 1, domains[0].Id; want != got {
-		t.Fatalf("Domains.List() returned Id expected to be `%v`, got `%v`", want, got)
+	if want, got := 1, domains[0].ID; want != got {
+		t.Fatalf("Domains.List() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example-alpha.com", domains[0].Name; want != got {
 		t.Fatalf("Domains.List() returned Name expected to be `%v`, got `%v`", want, got)
@@ -79,16 +79,16 @@ func TestDomainsService_Create(t *testing.T) {
 		`)
 	})
 
-	accountId := "1"
+	accountID := "1"
 	domainAttributes := Domain{Name: "example.com"}
-	domain, _, err := client.Domains.Create(accountId, domainAttributes)
+	domain, _, err := client.Domains.Create(accountID, domainAttributes)
 
 	if err != nil {
 		t.Fatalf("Domains.Create() returned error: %v", err)
 	}
 
-	if want, got := 1, domain.Id; want != got {
-		t.Fatalf("Domains.Create() returned Id expected to be `%v`, got `%v`", want, got)
+	if want, got := 1, domain.ID; want != got {
+		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example-alpha.com", domain.Name; want != got {
 		t.Fatalf("Domains.Create() returned Name expected to be `%v`, got `%v`", want, got)
@@ -108,17 +108,17 @@ func TestDomainsService_Get(t *testing.T) {
 		`)
 	})
 
-	accountId := "1010"
-	domain, _, err := client.Domains.Get(accountId, "example.com")
+	accountID := "1010"
+	domain, _, err := client.Domains.Get(accountID, "example.com")
 
 	if err != nil {
 		t.Errorf("Domains.Get() returned error: %v", err)
 	}
 
 	wantSingle := &Domain{
-		Id:           1,
-		AccountId:    1010,
-		RegistrantId: 0,
+		ID:           1,
+		AccountID:    1010,
+		RegistrantID: 0,
 		Name:         "example-alpha.com",
 		UnicodeName:  "example-alpha.com",
 		Token:        "domain-token",
@@ -142,8 +142,8 @@ func TestDomainsService_Delete(t *testing.T) {
 		testHeaders(t, r)
 	})
 
-	accountId := "1010"
-	_, err := client.Domains.Delete(accountId, "example.com")
+	accountID := "1010"
+	_, err := client.Domains.Delete(accountID, "example.com")
 
 	if err != nil {
 		t.Fatalf("Domains.Delete() returned error: %v", err)
