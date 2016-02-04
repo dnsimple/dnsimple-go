@@ -2,34 +2,29 @@ package dnsimple
 
 import (
 	"fmt"
-	"time"
 )
 
 // DomainsService handles communication with the domain related
 // methods of the DNSimple API.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/
+// See https://developer.dnsimple.com/v2/domains/
 type DomainsService struct {
 	client *Client
 }
 
 type Domain struct {
-	Id             int        `json:"id,omitempty"`
-	UserId         int        `json:"user_id,omitempty"`
-	RegistrantId   int        `json:"registrant_id,omitempty"`
-	Name           string     `json:"name,omitempty"`
-	UnicodeName    string     `json:"unicode_name,omitempty"`
-	Token          string     `json:"token,omitempty"`
-	State          string     `json:"state,omitempty"`
-	Language       string     `json:"language,omitempty"`
-	Lockable       bool       `json:"lockable,omitempty"`
-	AutoRenew      bool       `json:"auto_renew,omitempty"`
-	WhoisProtected bool       `json:"whois_protected,omitempty"`
-	RecordCount    int        `json:"record_count,omitempty"`
-	ServiceCount   int        `json:"service_count,omitempty"`
-	ExpiresOn      *Date      `json:"expires_on,omitempty"`
-	CreatedAt      *time.Time `json:"created_at,omitempty"`
-	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
+	Id           int    `json:"id,omitempty"`
+	AccountId    int    `json:"account_id,omitempty"`
+	RegistrantId int    `json:"registrant_id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	UnicodeName  string `json:"unicode_name,omitempty"`
+	Token        string `json:"token,omitempty"`
+	State        string `json:"state,omitempty"`
+	AutoRenew    bool   `json:"auto_renew,omitempty"`
+	PrivateWhois bool   `json:"private_whois,omitempty"`
+	ExpiresOn    string `json:"expires_on,omitempty"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 type domainsWrapper struct {
@@ -66,7 +61,7 @@ func domainPath(accountId string, domain interface{}) string {
 
 // List the domains.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#list
+// See https://developer.dnsimple.com/v2/domains/#list
 func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
 	path := domainPath(accountId, nil)
 	data := domainsWrapper{}
@@ -81,7 +76,7 @@ func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
 
 // Create a new domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#create
+// See https://developer.dnsimple.com/v2/domains/#create
 func (s *DomainsService) Create(accountId string, domainAttributes Domain) (Domain, *Response, error) {
 	path := domainPath(accountId, nil)
 	data := domainWrapper{}
@@ -94,9 +89,9 @@ func (s *DomainsService) Create(accountId string, domainAttributes Domain) (Doma
 	return data.Domain, res, nil
 }
 
-// Get fetches a domain.
+// Get a domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#get
+// See https://developer.dnsimple.com/v2/domains/#get
 func (s *DomainsService) Get(accountId string, domain interface{}) (Domain, *Response, error) {
 	path := domainPath(accountId, domain)
 	data := domainWrapper{}
@@ -111,7 +106,7 @@ func (s *DomainsService) Get(accountId string, domain interface{}) (Domain, *Res
 
 // Delete a domain.
 //
-// DNSimple API docs: http://developer.dnsimple.com/domains/#delete
+// See https://developer.dnsimple.com/v2/domains/#delete
 func (s *DomainsService) Delete(accountId string, domain interface{}) (*Response, error) {
 	path := domainPath(accountId, domain)
 

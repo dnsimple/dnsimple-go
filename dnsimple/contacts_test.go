@@ -48,10 +48,10 @@ func TestContactsService_List(t *testing.T) {
 	}
 
 	if want, got := 1, contacts[0].Id; want != got {
-		t.Fatalf("Contacts.Create() returned Id expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.List() returned Id expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contacts[0].Label; want != got {
-		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.List() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -66,6 +66,7 @@ func TestContactsService_Create(t *testing.T) {
 		want := map[string]interface{}{"label": "Default"}
 		testRequestJSON(t, r, want)
 
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `
 			{"data":{"id":1,"account_id":1010,"label":"Default","first_name":"First","last_name":"User","job_title":"CEO","organization_name":"Awesome Company","email_address":"first@example.com","phone":"+18001234567","fax":"+18011234567","address1":"Italian Street, 10","address2":"","city":"Roma","state_province":"RM","postal_code":"00100","country":"IT","created_at":"2016-01-19T20:50:26.066Z","updated_at":"2016-01-19T20:50:26.066Z"}}
 		`)
@@ -157,10 +158,10 @@ func TestContactsService_Update(t *testing.T) {
 	}
 
 	if want, got := 1, contact.Id; want != got {
-		t.Fatalf("Contacts.Create() returned Id expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.Update() returned Id expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contact.Label; want != got {
-		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.Update() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
