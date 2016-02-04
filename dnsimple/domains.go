@@ -54,9 +54,9 @@ func domainIDentifier(value interface{}) string {
 // domainPath generates the resource path for given domain.
 func domainPath(accountID string, domain interface{}) string {
 	if domain != nil {
-		return fmt.Sprintf("%s/domains/%s", accountID, domainIDentifier(domain))
+		return fmt.Sprintf("/%v/domains/%v", accountID, domainIDentifier(domain))
 	}
-	return fmt.Sprintf("%s/domains", accountID)
+	return fmt.Sprintf("/%v/domains", accountID)
 }
 
 // List the domains.

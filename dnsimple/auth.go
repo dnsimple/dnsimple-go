@@ -25,7 +25,7 @@ type Whoami struct {
 func (s *AuthService) Whoami() (*Whoami, *Response, error) {
 	responseWrapper := whoamiWrapper{}
 
-	res, err := s.client.get("whoami", &responseWrapper)
+	res, err := s.client.get("/whoami", &responseWrapper)
 	if err != nil {
 		return &Whoami{}, res, err
 	}

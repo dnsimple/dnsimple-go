@@ -25,10 +25,10 @@ type recordWrapper struct {
 
 // recordPath generates the resource path for given record that belongs to a domain.
 func recordPath(accountID string, domain interface{}, record interface{}) string {
-	path := fmt.Sprintf("%s/zones/%s/records", accountID, domainIDentifier(domain))
+	path := fmt.Sprintf("/%v/zones/%v/records", accountID, domainIDentifier(domain))
 
 	if record != nil {
-		path += fmt.Sprintf("/%d", record)
+		path += fmt.Sprintf("/%v", record)
 	}
 
 	return path

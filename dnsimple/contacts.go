@@ -43,9 +43,9 @@ type contactWrapper struct {
 // contactPath generates the resource path for given contact.
 func contactPath(accountID string, contact interface{}) string {
 	if contact != nil {
-		return fmt.Sprintf("%v/contacts/%d", accountID, contact)
+		return fmt.Sprintf("/%v/contacts/%v", accountID, contact)
 	}
-	return fmt.Sprintf("%v/contacts", accountID)
+	return fmt.Sprintf("/%v/contacts", accountID)
 }
 
 // List the contacts.

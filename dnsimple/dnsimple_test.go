@@ -21,7 +21,7 @@ func setupMockServer() {
 	server = httptest.NewServer(mux)
 
 	client = NewClient(NewOauthTokenCredentials("dnsimple-token"))
-	client.BaseURL = server.URL + "/"
+	client.BaseURL = server.URL
 }
 
 func teardownMockServer() {
@@ -69,9 +69,9 @@ func TestNewClient(t *testing.T) {
 
 func TestClient_NewRequest(t *testing.T) {
 	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
-	c.BaseURL = "https://go.example.com/"
+	c.BaseURL = "https://go.example.com"
 
-	inURL, outURL := "foo", "https://go.example.com/v2/foo"
+	inURL, outURL := "/foo", "https://go.example.com/v2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL

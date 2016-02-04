@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"strings"
 )
 
 const (
@@ -20,7 +21,8 @@ const (
 	// It is also used in the user-agent identify the client.
 	libraryVersion = "0.5.0-dev"
 
-	defaultBaseURL = "https://api.dnsimple.com/"
+	// defaultBaseURL to the DNSimple production API.
+	defaultBaseURL = "https://api.dnsimple.com"
 
 	// userAgent represents the default user agent used
 	// when no other user agent is set.
@@ -40,7 +42,6 @@ type Client struct {
 
 	// BaseURL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
-	// BaseURL should always be specified with a trailing slash.
 	BaseURL string
 
 	// UserAgent used when communicating with the DNSimple API.
@@ -70,7 +71,7 @@ func NewClient(credentials Credentials) *Client {
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
-	url := client.BaseURL + fmt.Sprintf("%s/%s", apiVersion, path)
+	url := client.BaseURL + fmt.Sprintf("/%s/%s", apiVersion, strings.Trim(path, "/"))
 
 	body := new(bytes.Buffer)
 	if payload != nil {

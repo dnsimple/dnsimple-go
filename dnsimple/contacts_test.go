@@ -9,14 +9,14 @@ import (
 
 func TestContacts_contactPath(t *testing.T) {
 	actual := contactPath("1", nil)
-	expected := "1/contacts"
+	expected := "/1/contacts"
 
 	if actual != expected {
 		t.Errorf("contactPath(\"1\", nil): actual %s, expected %s", actual, expected)
 	}
 
 	actual = contactPath("1", 1)
-	expected = "1/contacts/1"
+	expected = "/1/contacts/1"
 
 	if actual != expected {
 		t.Errorf("contactPath(\"1\", 1): actual %s, expected %s", actual, expected)

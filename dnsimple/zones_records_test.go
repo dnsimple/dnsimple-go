@@ -9,25 +9,25 @@ import (
 
 func TestRecords_recordPath(t *testing.T) {
 	actual := recordPath("1", "example.com", nil)
-	expected := "1/zones/example.com/records"
+	expected := "/1/zones/example.com/records"
 	if actual != expected {
 		t.Errorf("recordPath(\"1\", \"example.com\", nil): actual %s, expected %s", actual, expected)
 	}
 
 	actual = recordPath("1", "example.com", 2)
-	expected = "1/zones/example.com/records/2"
+	expected = "/1/zones/example.com/records/2"
 	if actual != expected {
 		t.Errorf("recordPath(\"1\", \"example.com\", 2): actual %s, expected %s", actual, expected)
 	}
 
 	actual = recordPath("1", 1, nil)
-	expected = "1/zones/1/records"
+	expected = "/1/zones/1/records"
 	if actual != expected {
 		t.Errorf("recordPath(\"1\", 1, nil): actual %s, expected %s", actual, expected)
 	}
 
 	actual = recordPath("1", 1, 2)
-	expected = "1/zones/1/records/2"
+	expected = "/1/zones/1/records/2"
 	if actual != expected {
 		t.Errorf("recordPath(\"1\", 1, 2): actual %s, expected %s", actual, expected)
 	}
