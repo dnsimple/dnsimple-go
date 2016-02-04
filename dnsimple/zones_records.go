@@ -20,7 +20,7 @@ type recordsWrapper struct {
 	Records []Record `json:"data"`
 }
 type recordWrapper struct {
-	Record Record `json:"data"`
+	Record *Record `json:"data"`
 }
 
 // recordPath generates the resource path for given record that belongs to a domain.
@@ -52,13 +52,13 @@ func (s *ZonesService) ListRecords(accountId string, domain interface{}) ([]Reco
 // CreateRecord creates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#create
-func (s *ZonesService) CreateRecord(accountId string, domain interface{}, recordAttributes Record) (Record, *Response, error) {
+func (s *ZonesService) CreateRecord(accountId string, domain interface{}, recordAttributes Record) (*Record, *Response, error) {
 	path := recordPath(accountId, domain, nil)
 	data := recordWrapper{}
 
 	res, err := s.client.post(path, recordAttributes, &data)
 	if err != nil {
-		return Record{}, res, err
+		return &Record{}, res, err
 	}
 
 	return data.Record, res, nil
@@ -67,13 +67,13 @@ func (s *ZonesService) CreateRecord(accountId string, domain interface{}, record
 // GetRecord gets the zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#get
-func (s *ZonesService) GetRecord(accountId string, domain interface{}, recordID int) (Record, *Response, error) {
+func (s *ZonesService) GetRecord(accountId string, domain interface{}, recordID int) (*Record, *Response, error) {
 	path := recordPath(accountId, domain, recordID)
 	data := recordWrapper{}
 
 	res, err := s.client.get(path, &data)
 	if err != nil {
-		return Record{}, res, err
+		return &Record{}, res, err
 	}
 
 	return data.Record, res, nil
@@ -82,13 +82,13 @@ func (s *ZonesService) GetRecord(accountId string, domain interface{}, recordID 
 // UpdateRecord updates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#update
-func (s *ZonesService) UpdateRecord(accountId string, domain interface{}, recordID int, recordAttributes Record) (Record, *Response, error) {
+func (s *ZonesService) UpdateRecord(accountId string, domain interface{}, recordID int, recordAttributes Record) (*Record, *Response, error) {
 	path := recordPath(accountId, domain, recordID)
 	data := recordWrapper{}
 
 	res, err := s.client.patch(path, recordAttributes, &data)
 	if err != nil {
-		return Record{}, res, err
+		return &Record{}, res, err
 	}
 
 	return data.Record, res, nil

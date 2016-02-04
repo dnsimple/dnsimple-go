@@ -32,7 +32,7 @@ type domainsWrapper struct {
 }
 
 type domainWrapper struct {
-	Domain Domain `json:"data"`
+	Domain *Domain `json:"data"`
 }
 
 // domainRequest represents a generic wrapper for a domain request,
@@ -77,13 +77,13 @@ func (s *DomainsService) List(accountId string) ([]Domain, *Response, error) {
 // Create a new domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
-func (s *DomainsService) Create(accountId string, domainAttributes Domain) (Domain, *Response, error) {
+func (s *DomainsService) Create(accountId string, domainAttributes Domain) (*Domain, *Response, error) {
 	path := domainPath(accountId, nil)
 	data := domainWrapper{}
 
 	res, err := s.client.post(path, domainAttributes, &data)
 	if err != nil {
-		return Domain{}, res, err
+		return &Domain{}, res, err
 	}
 
 	return data.Domain, res, nil
@@ -92,13 +92,13 @@ func (s *DomainsService) Create(accountId string, domainAttributes Domain) (Doma
 // Get a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
-func (s *DomainsService) Get(accountId string, domain interface{}) (Domain, *Response, error) {
+func (s *DomainsService) Get(accountId string, domain interface{}) (*Domain, *Response, error) {
 	path := domainPath(accountId, domain)
 	data := domainWrapper{}
 
 	res, err := s.client.get(path, &data)
 	if err != nil {
-		return Domain{}, res, err
+		return &Domain{}, res, err
 	}
 
 	return data.Domain, res, nil

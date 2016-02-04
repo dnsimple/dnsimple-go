@@ -127,8 +127,8 @@ func TestContactsService_Get(t *testing.T) {
 		CreatedAt:     "2016-01-19T20:50:26.066Z",
 		UpdatedAt:     "2016-01-19T20:50:26.066Z"}
 
-	if !reflect.DeepEqual(&contact, wantSingle) {
-		t.Fatalf("Contacts.Get() returned %+v, want %+v", &contact, wantSingle)
+	if !reflect.DeepEqual(contact, wantSingle) {
+		t.Fatalf("Contacts.Get() returned %+v, want %+v", contact, wantSingle)
 	}
 }
 

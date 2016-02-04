@@ -128,8 +128,8 @@ func TestDomainsService_Get(t *testing.T) {
 		CreatedAt:    "2014-12-06T15:56:55.573Z",
 		UpdatedAt:    "2015-12-09T00:20:56.056Z"}
 
-	if !reflect.DeepEqual(&domain, wantSingle) {
-		t.Fatalf("Domains.Get() returned %+v, want %+v", &domain, wantSingle)
+	if !reflect.DeepEqual(domain, wantSingle) {
+		t.Fatalf("Domains.Get() returned %+v, want %+v", domain, wantSingle)
 	}
 }
 

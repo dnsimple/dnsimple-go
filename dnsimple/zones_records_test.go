@@ -130,8 +130,8 @@ func TestDomainsService_GetRecord(t *testing.T) {
 		CreatedAt: "2016-01-07T17:45:13.653Z",
 		UpdatedAt: "2016-01-07T17:45:13.653Z"}
 
-	if !reflect.DeepEqual(&record, wantSingle) {
-		t.Fatalf("Zones.GetRecord() returned %+v, want %+v", &record, wantSingle)
+	if !reflect.DeepEqual(record, wantSingle) {
+		t.Fatalf("Zones.GetRecord() returned %+v, want %+v", record, wantSingle)
 	}
 }
 

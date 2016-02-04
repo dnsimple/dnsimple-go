@@ -37,7 +37,7 @@ type contactsWrapper struct {
 }
 
 type contactWrapper struct {
-	Contact Contact `json:"data"`
+	Contact *Contact `json:"data"`
 }
 
 // contactPath generates the resource path for given contact.
@@ -66,13 +66,13 @@ func (s *ContactsService) List(accountId string) ([]Contact, *Response, error) {
 // Create a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
-func (s *ContactsService) Create(accountId string, contactAttributes Contact) (Contact, *Response, error) {
+func (s *ContactsService) Create(accountId string, contactAttributes Contact) (*Contact, *Response, error) {
 	path := contactPath(accountId, nil)
 	data := contactWrapper{}
 
 	res, err := s.client.post(path, contactAttributes, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
 	return data.Contact, res, nil
@@ -81,13 +81,13 @@ func (s *ContactsService) Create(accountId string, contactAttributes Contact) (C
 // Get a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
-func (s *ContactsService) Get(accountId string, contactId int) (Contact, *Response, error) {
+func (s *ContactsService) Get(accountId string, contactId int) (*Contact, *Response, error) {
 	path := contactPath(accountId, contactId)
 	data := contactWrapper{}
 
 	res, err := s.client.get(path, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
 	return data.Contact, res, nil
@@ -96,13 +96,13 @@ func (s *ContactsService) Get(accountId string, contactId int) (Contact, *Respon
 // Update a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
-func (s *ContactsService) Update(accountId string, contactId int, contactAttributes Contact) (Contact, *Response, error) {
+func (s *ContactsService) Update(accountId string, contactId int, contactAttributes Contact) (*Contact, *Response, error) {
 	path := contactPath(accountId, contactId)
 	data := contactWrapper{}
 
 	res, err := s.client.patch(path, contactAttributes, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
 	return data.Contact, res, nil
