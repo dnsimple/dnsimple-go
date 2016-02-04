@@ -12,6 +12,19 @@ type DomainsService struct {
 	client *Client
 }
 
+// DomainResponse represents a response from an API method that returns a Domain struct.
+type DomainResponse struct {
+	Response
+	Data *Domain `json:"data"`
+}
+
+// DomainsResponse represents a response from an API method that returns a collection of Domain struct.
+type DomainsResponse struct {
+	Response
+	Data []Domain `json:"data"`
+}
+
+// Domain represents a Domain in DNSimple.
 type Domain struct {
 	ID           int    `json:"id,omitempty"`
 	AccountID    int    `json:"account_id,omitempty"`
@@ -25,14 +38,6 @@ type Domain struct {
 	ExpiresOn    string `json:"expires_on,omitempty"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
-}
-
-type domainsWrapper struct {
-	Domains []Domain `json:"data"`
-}
-
-type domainWrapper struct {
-	Domain *Domain `json:"data"`
 }
 
 // domainRequest represents a generic wrapper for a domain request,
@@ -62,53 +67,63 @@ func domainPath(accountID string, domain interface{}) string {
 // List the domains.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) List(accountID string) ([]Domain, *LegacyResponse, error) {
+func (s *DomainsService) List(accountID string) (*DomainsResponse, error) {
 	path := domainPath(accountID, nil)
-	data := domainsWrapper{}
+	domainsResponse := &DomainsResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, domainsResponse)
+	domainsResponse.HttpResponse = resp.HttpResponse
 	if err != nil {
-		return []Domain{}, res, err
+		return domainsResponse, err
 	}
 
-	return data.Domains, res, nil
+	return domainsResponse, nil
 }
 
 // Create a new domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
-func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*Domain, *LegacyResponse, error) {
+func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*DomainResponse, error) {
 	path := domainPath(accountID, nil)
-	data := domainWrapper{}
+	domainResponse := &DomainResponse{}
 
-	res, err := s.client.post(path, domainAttributes, &data)
+	resp, err := s.client.post(path, domainAttributes, domainResponse)
+	domainResponse.HttpResponse = resp.HttpResponse
 	if err != nil {
-		return &Domain{}, res, err
+		return domainResponse, err
 	}
 
-	return data.Domain, res, nil
+	return domainResponse, nil
 }
 
 // Get a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
-func (s *DomainsService) Get(accountID string, domain interface{}) (*Domain, *LegacyResponse, error) {
+func (s *DomainsService) Get(accountID string, domain interface{}) (*DomainResponse, error) {
 	path := domainPath(accountID, domain)
-	data := domainWrapper{}
+	domainResponse := &DomainResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, domainResponse)
+	domainResponse.HttpResponse = resp.HttpResponse
 	if err != nil {
-		return &Domain{}, res, err
+		return domainResponse, err
 	}
 
-	return data.Domain, res, nil
+	return domainResponse, nil
 }
 
 // Delete a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
-func (s *DomainsService) Delete(accountID string, domain interface{}) (*LegacyResponse, error) {
+func (s *DomainsService) Delete(accountID string, domain interface{}) (*DomainResponse, error) {
 	path := domainPath(accountID, domain)
+	domainResponse := &DomainResponse{}
 
-	return s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(path, nil, nil)
+	domainResponse.HttpResponse = resp.HttpResponse
+	if err != nil {
+		return domainResponse, err
+	}
+
+	return domainResponse, nil
 }

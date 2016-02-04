@@ -44,12 +44,13 @@ func TestDomainsService_List(t *testing.T) {
 	})
 
 	accountID := "1010"
-	domains, _, err := client.Domains.List(accountID)
 
+	domainsResponse, err := client.Domains.List(accountID)
 	if err != nil {
 		t.Fatalf("Domains.List() returned error: %v", err)
 	}
 
+	domains := domainsResponse.Data
 	if want, got := 2, len(domains); want != got {
 		t.Errorf("Domains.List() expected to return %v contacts, got %v", want, got)
 	}
@@ -81,12 +82,13 @@ func TestDomainsService_Create(t *testing.T) {
 
 	accountID := "1"
 	domainAttributes := Domain{Name: "example.com"}
-	domain, _, err := client.Domains.Create(accountID, domainAttributes)
 
+	domainResponse, err := client.Domains.Create(accountID, domainAttributes)
 	if err != nil {
 		t.Fatalf("Domains.Create() returned error: %v", err)
 	}
 
+	domain := domainResponse.Data
 	if want, got := 1, domain.ID; want != got {
 		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -109,12 +111,13 @@ func TestDomainsService_Get(t *testing.T) {
 	})
 
 	accountID := "1010"
-	domain, _, err := client.Domains.Get(accountID, "example.com")
 
+	domainResponse, err := client.Domains.Get(accountID, "example.com")
 	if err != nil {
 		t.Errorf("Domains.Get() returned error: %v", err)
 	}
 
+	domain := domainResponse.Data
 	wantSingle := &Domain{
 		ID:           1,
 		AccountID:    1010,
@@ -143,8 +146,8 @@ func TestDomainsService_Delete(t *testing.T) {
 	})
 
 	accountID := "1010"
-	_, err := client.Domains.Delete(accountID, "example.com")
 
+	_, err := client.Domains.Delete(accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Domains.Delete() returned error: %v", err)
 	}

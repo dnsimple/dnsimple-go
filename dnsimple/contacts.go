@@ -24,6 +24,7 @@ type ContactsResponse struct {
 	Data []Contact `json:"data"`
 }
 
+// Contact represents a Contact in DNSimple.
 type Contact struct {
 	ID            int    `json:"id,omitempty"`
 	Label         string `json:"label,omitempty"`
@@ -42,14 +43,6 @@ type Contact struct {
 	Country       string `json:"country,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
-}
-
-type contactsWrapper struct {
-	Contacts []Contact `json:"data"`
-}
-
-type contactWrapper struct {
-	Contact *Contact `json:"data"`
 }
 
 // contactPath generates the resource path for given contact.
