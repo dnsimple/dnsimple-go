@@ -44,23 +44,23 @@ func main() {
     client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
 
     // get the current authenticated account (if you don't know who you are)
-    whoami, err := client.Auth.Whoami()
+    whoamiResponse, err := client.Auth.Whoami()
     if err != nil {
         fmt.Printf("Whoami() returned error: %v\n", err)
         os.Exit(1)
     }
 
-    fmt.Println(whoami.Account)
-    fmt.Println(whoami.User)
+    fmt.Println(whoamiResponse.Data.Account)
+    fmt.Println(whoamiResponse.Data.User)
 
     // get the list of domains
-    domains, _, err := client.Domains.List(whoami.Account.Id)
+    domainsResponse, _, err := client.Domains.List(whoami.Account.Id)
     if err != nil {
         fmt.Printf("Domains.List() returned error: %v\n", err)
         os.Exit(1)
     }
 
-    for _, domain := range domains {
+    for _, domain := range domainsResponse.Data {
         fmt.Println(domain)
     }
 }
