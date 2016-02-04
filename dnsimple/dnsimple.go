@@ -47,9 +47,9 @@ type Client struct {
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
+	Auth      *AuthService
 	Contacts  *ContactsService
 	Domains   *DomainsService
-	Misc      *MiscService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -58,9 +58,9 @@ type Client struct {
 // NewClient returns a new DNSimple API client using the given credentials.
 func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
+	c.Auth = &AuthService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
-	c.Misc = &MiscService{client: c}
 	return c
 }
 

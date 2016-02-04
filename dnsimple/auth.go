@@ -2,11 +2,11 @@ package dnsimple
 
 import ()
 
-// MiscService handles communication with several miscellaneous
+// AuthService handles communication with several authentication
 // methods of the DNSimple API.
 //
-// DNSimple API docs: https://developer.dnsimple.com/
-type MiscService struct {
+// See https://developer.dnsimple.com/v2/
+type AuthService struct {
 	client *Client
 }
 
@@ -19,10 +19,10 @@ type Whoami struct {
 	Account Account `json:"account,omitempty"`
 }
 
-// User gets the logged in user.
+// Whoami gets the current authenticate context.
 //
-// DNSimple API docs: http://developer.dnsimple.com/v2/whoami/
-func (s *MiscService) Whoami() (Whoami, *Response, error) {
+// See https://developer.dnsimple.com/v2/whoami
+func (s *AuthService) Whoami() (Whoami, *Response, error) {
 	responseWrapper := whoamiWrapper{}
 
 	res, err := s.client.get("whoami", &responseWrapper)
