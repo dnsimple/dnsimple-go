@@ -40,16 +40,30 @@ import (
 func main() {
     oauthToken := "xxxxxxx"
 
+    // new client
     client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
+
+    // get the current authenticated account (if you don't know who you are)
     whoami, _, err := client.Auth.Whoami()
     if err != nil {
-        fmt.Printf("whoami() returned error: %v\n", err)
+        fmt.Printf("Whoami() returned error: %v\n", err)
         os.Exit(1)
     }
 
     fmt.Println(whoami.Account)
     fmt.Println(whoami.User)
+
+    // get the list of domains
+    domains, _, err := client.Domains.List(whoami.Account.Id)
+    if err != nil {
+        fmt.Printf("Domains.List() returned error: %v\n", err)
+        os.Exit(1)
     }
+
+    for _, domain := range domains {
+        fmt.Println(domain)
+    }
+}
 ```
 
 For more complete documentation, see [godoc](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple).
