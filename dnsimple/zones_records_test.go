@@ -123,15 +123,17 @@ func TestDomainsService_GetRecord(t *testing.T) {
 
 	record := recordResponse.Data
 	wantSingle := &Record{
-		ID:        64784,
-		ZoneID:    "example.com",
-		Name:      "www",
-		Content:   "127.0.0.1",
-		TTL:       600,
-		Priority:  0,
-		Type:      "A",
-		CreatedAt: "2016-01-07T17:45:13.653Z",
-		UpdatedAt: "2016-01-07T17:45:13.653Z"}
+		ID:           64784,
+		ZoneID:       "example.com",
+		ParentID:     0,
+		Type:         "A",
+		Name:         "www",
+		Content:      "127.0.0.1",
+		TTL:          600,
+		Priority:     0,
+		SystemRecord: false,
+		CreatedAt:    "2016-01-07T17:45:13.653Z",
+		UpdatedAt:    "2016-01-07T17:45:13.653Z"}
 
 	if !reflect.DeepEqual(record, wantSingle) {
 		t.Fatalf("Zones.GetRecord() returned %+v, want %+v", record, wantSingle)

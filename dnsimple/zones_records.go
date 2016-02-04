@@ -17,15 +17,17 @@ type ZoneRecordsResponse struct {
 }
 
 type Record struct {
-	ID        int    `json:"id,omitempty"`
-	ZoneID    string `json:"zone_id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	Content   string `json:"content,omitempty"`
-	TTL       int    `json:"ttl,omitempty"`
-	Priority  int    `json:"priority,omitempty"`
-	Type      string `json:"type,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
+	ID           int    `json:"id,omitempty"`
+	ZoneID       string `json:"zone_id,omitempty"`
+	ParentID     int    `json:"parent_id,omitempty"`
+	Type         string `json:"type,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Content      string `json:"content,omitempty"`
+	TTL          int    `json:"ttl,omitempty"`
+	Priority     int    `json:"priority,omitempty"`
+	SystemRecord bool   `json:"system_record,omitempty"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 // recordPath generates the resource path for given record that belongs to a domain.

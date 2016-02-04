@@ -114,19 +114,20 @@ func TestContactsService_Get(t *testing.T) {
 	contact := contactResponse.Data
 	wantSingle := &Contact{
 		ID:            1,
+		AccountID:     1010,
 		Label:         "Default",
 		FirstName:     "First",
 		LastName:      "User",
 		JobTitle:      "CEO",
 		Organization:  "Awesome Company",
-		Email:         "first@example.com",
-		Phone:         "+18001234567",
-		Fax:           "+18011234567",
 		Address1:      "Italian Street, 10",
 		City:          "Roma",
 		StateProvince: "RM",
 		PostalCode:    "00100",
 		Country:       "IT",
+		Phone:         "+18001234567",
+		Fax:           "+18011234567",
+		Email:         "first@example.com",
 		CreatedAt:     "2016-01-19T20:50:26.066Z",
 		UpdatedAt:     "2016-01-19T20:50:26.066Z"}
 
