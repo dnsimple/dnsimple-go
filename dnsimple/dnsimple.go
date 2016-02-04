@@ -10,8 +10,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"time"
+	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -94,7 +95,7 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (c *Client) get(path string, obj interface{}) (*Response, error) {
+func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, err
@@ -103,7 +104,7 @@ func (c *Client) get(path string, obj interface{}) (*Response, error) {
 	return c.Do(req, nil, obj)
 }
 
-func (c *Client) post(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) post(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("POST", path, payload)
 	if err != nil {
 		return nil, err
@@ -112,7 +113,7 @@ func (c *Client) post(path string, payload, obj interface{}) (*Response, error) 
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) put(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("PUT", path, payload)
 	if err != nil {
 		return nil, err
@@ -121,7 +122,7 @@ func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) patch(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("PATCH", path, payload)
 	if err != nil {
 		return nil, err
@@ -130,7 +131,7 @@ func (c *Client) patch(path string, payload, obj interface{}) (*Response, error)
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Response, error) {
+func (c *Client) delete(path string, payload interface{}, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("DELETE", path, payload)
 	if err != nil {
 		return nil, err
@@ -145,7 +146,7 @@ func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Res
 // or returned as an error if an API error has occurred.
 // If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, error) {
+func (c *Client) Do(req *http.Request, payload, obj interface{}) (*http.Response, error) {
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
@@ -162,7 +163,7 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, err
 
 	err = CheckResponse(resp)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	// If obj implements the io.Writer,
@@ -175,19 +176,36 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, err
 		}
 	}
 
-	response := &Response{Response: resp}
-	return response, err
+	return resp, err
 }
 
 // A Response represents an API response.
 type Response struct {
-	*http.Response
+	HttpResponse *http.Response // HTTP response
 }
 
-// An ErrorResponse represents an error caused by an API request.
+// RateLimit returns the maximum amount of requests this account can send in an hour.
+func (r *Response) RateLimit() int {
+	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Limit"))
+	return value
+}
+
+// RateLimitRemaining returns the remaining amount of requests this account can send within this hour window.
+func (r *Response) RateLimitRemaining() int {
+	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Remaining"))
+	return value
+}
+
+// RateLimitReset returns when the throttling window will be reset for this account.
+func (r *Response) RateLimitReset() time.Time {
+	value, _ := strconv.ParseInt(r.HttpResponse.Header.Get("X-RateLimit-Reset"), 10, 64)
+	return time.Unix(value, 0)
+}
+
+// An ErrorResponse represents an API response that generated an error.
 type ErrorResponse struct {
-	HttpResponse *http.Response // HTTP response that caused this error
-	Message      string         `json:"message"` // human-readable message
+	Response
+	Message string `json:"message"` // human-readable message
 }
 
 // Error implements the error interface.
@@ -200,13 +218,15 @@ func (r *ErrorResponse) Error() string {
 // CheckResponse checks the API response for errors, and returns them if present.
 // A response is considered an error if the status code is different than 2xx. Specific requests
 // may have additional requirements, but this is sufficient in most of the cases.
-func CheckResponse(r *http.Response) error {
-	if code := r.StatusCode; 200 <= code && code <= 299 {
+func CheckResponse(resp *http.Response) error {
+	if code := resp.StatusCode; 200 <= code && code <= 299 {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{HttpResponse: r}
-	err := json.NewDecoder(r.Body).Decode(errorResponse)
+	errorResponse := &ErrorResponse{}
+	errorResponse.HttpResponse = resp
+
+	err := json.NewDecoder(resp.Body).Decode(errorResponse)
 	if err != nil {
 		return err
 	}

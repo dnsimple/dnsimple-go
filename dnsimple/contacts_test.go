@@ -37,12 +37,13 @@ func TestContactsService_List(t *testing.T) {
 	})
 
 	accountID := "1010"
-	contacts, _, err := client.Contacts.List(accountID)
 
+	contactsResponse, err := client.Contacts.List(accountID)
 	if err != nil {
 		t.Fatalf("Contacts.List() returned error: %v", err)
 	}
 
+	contacts := contactsResponse.Data
 	if want, got := 2, len(contacts); want != got {
 		t.Errorf("Contacts.List() expected to return %v contacts, got %v", want, got)
 	}
@@ -74,12 +75,13 @@ func TestContactsService_Create(t *testing.T) {
 
 	accountID := "1010"
 	contactAttributes := Contact{Label: "Default"}
-	contact, _, err := client.Contacts.Create(accountID, contactAttributes)
 
+	contactResponse, err := client.Contacts.Create(accountID, contactAttributes)
 	if err != nil {
 		t.Fatalf("Contacts.Create() returned error: %v", err)
 	}
 
+	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
 		t.Fatalf("Contacts.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -103,12 +105,13 @@ func TestContactsService_Get(t *testing.T) {
 
 	accountID := "1010"
 	contactID := 1
-	contact, _, err := client.Contacts.Get(accountID, contactID)
 
+	contactResponse, err := client.Contacts.Get(accountID, contactID)
 	if err != nil {
 		t.Fatalf("Contacts.Get() returned error: %v", err)
 	}
 
+	contact := contactResponse.Data
 	wantSingle := &Contact{
 		ID:            1,
 		Label:         "Default",
@@ -151,12 +154,13 @@ func TestContactsService_Update(t *testing.T) {
 	contactAttributes := Contact{Label: "Default"}
 	accountID := "1010"
 	contactID := 1
-	contact, _, err := client.Contacts.Update(accountID, contactID, contactAttributes)
 
+	contactResponse, err := client.Contacts.Update(accountID, contactID, contactAttributes)
 	if err != nil {
 		t.Fatalf("Contacts.Update() returned error: %v", err)
 	}
 
+	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
 		t.Fatalf("Contacts.Update() returned ID expected to be `%v`, got `%v`", want, got)
 	}
@@ -178,8 +182,8 @@ func TestContactsService_Delete(t *testing.T) {
 
 	accountID := "1010"
 	contactID := 1
-	_, err := client.Contacts.Delete(accountID, contactID)
 
+	_, err := client.Contacts.Delete(accountID, contactID)
 	if err != nil {
 		t.Fatalf("Contacts.Delete() returned error: %v", err)
 	}

@@ -12,6 +12,19 @@ type ContactsService struct {
 	client *Client
 }
 
+// ContactResponse represents a response from an API method that returns a Contact struct.
+type ContactResponse struct {
+	Response
+	Data *Contact `json:"data"`
+}
+
+// ContactsResponse represents a response from an API method that returns a collection of Contact struct.
+type ContactsResponse struct {
+	Response
+	Data []Contact `json:"data"`
+}
+
+// Contact represents a Contact in DNSimple.
 type Contact struct {
 	ID            int    `json:"id,omitempty"`
 	Label         string `json:"label,omitempty"`
@@ -32,14 +45,6 @@ type Contact struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 }
 
-type contactsWrapper struct {
-	Contacts []Contact `json:"data"`
-}
-
-type contactWrapper struct {
-	Contact *Contact `json:"data"`
-}
-
 // contactPath generates the resource path for given contact.
 func contactPath(accountID string, contact interface{}) string {
 	if contact != nil {
@@ -51,68 +56,79 @@ func contactPath(accountID string, contact interface{}) string {
 // List the contacts.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
-func (s *ContactsService) List(accountID string) ([]Contact, *Response, error) {
+func (s *ContactsService) List(accountID string) (*ContactsResponse, error) {
 	path := contactPath(accountID, nil)
-	data := contactsWrapper{}
+	contactsResponse := &ContactsResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, contactsResponse)
 	if err != nil {
-		return []Contact{}, res, err
+		return contactsResponse, err
 	}
 
-	return data.Contacts, res, nil
+	contactsResponse.HttpResponse = resp
+	return contactsResponse, nil
 }
 
 // Create a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
-func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*Contact, *Response, error) {
+func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*ContactResponse, error) {
 	path := contactPath(accountID, nil)
-	data := contactWrapper{}
+	contactResponse := &ContactResponse{}
 
-	res, err := s.client.post(path, contactAttributes, &data)
+	resp, err := s.client.post(path, contactAttributes, contactResponse)
 	if err != nil {
-		return &Contact{}, res, err
+		return nil, err
 	}
 
-	return data.Contact, res, nil
+	contactResponse.HttpResponse = resp
+	return contactResponse, nil
 }
 
 // Get a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
-func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *Response, error) {
+func (s *ContactsService) Get(accountID string, contactID int) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
-	data := contactWrapper{}
+	contactResponse := &ContactResponse{}
 
-	res, err := s.client.get(path, &data)
+	resp, err := s.client.get(path, contactResponse)
 	if err != nil {
-		return &Contact{}, res, err
+		return nil, err
 	}
 
-	return data.Contact, res, nil
+	contactResponse.HttpResponse = resp
+	return contactResponse, nil
 }
 
 // Update a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
-func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*Contact, *Response, error) {
+func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
-	data := contactWrapper{}
+	contactResponse := &ContactResponse{}
 
-	res, err := s.client.patch(path, contactAttributes, &data)
+	resp, err := s.client.patch(path, contactAttributes, contactResponse)
 	if err != nil {
-		return &Contact{}, res, err
+		return nil, err
 	}
 
-	return data.Contact, res, nil
+	contactResponse.HttpResponse = resp
+	return contactResponse, nil
 }
 
 // Delete a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
-func (s *ContactsService) Delete(accountID string, contactID int) (*Response, error) {
+func (s *ContactsService) Delete(accountID string, contactID int) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
+	contactResponse := &ContactResponse{}
 
-	return s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	contactResponse.HttpResponse = resp
+	return contactResponse, nil
 }

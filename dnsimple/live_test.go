@@ -1,9 +1,9 @@
 package dnsimple
 
 import (
+	"fmt"
 	"os"
 	"testing"
-	"fmt"
 )
 
 var (
@@ -35,31 +35,50 @@ func TestLive_Whoami(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, _, err := dnsimpleClient.Auth.Whoami()
+	whoami, err := Whoami(dnsimpleClient)
 	if err != nil {
-		t.Fatalf("Live whoami() returned error: %v", err)
+		t.Fatalf("Live Whoami() returned error: %v", err)
 	}
 
-	fmt.Println(whoami.Account)
-	fmt.Println(whoami.User)
+	fmt.Printf("Account: %+v\n", whoami.Account)
+	fmt.Printf("User: %+v\n", whoami.User)
 }
 
-func TestLive_Domains(t *testing.T) {
+func TestLive_AuthService_Whoami(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")
 	}
 
-	whoami, _, err := dnsimpleClient.Auth.Whoami()
+	whoamiResponse, err := dnsimpleClient.Auth.Whoami()
 	if err != nil {
-		t.Fatalf("Live whoami()/listDomains() returned error: %v", err)
+		t.Fatalf("Live Auth.Whoami() returned error: %v", err)
 	}
 
+	fmt.Printf("RateLimit: %v/%v until %v\n", whoamiResponse.RateLimitRemaining(), whoamiResponse.RateLimit(), whoamiResponse.RateLimitReset())
+	whoami := whoamiResponse.Data
+	fmt.Printf("Account: %+v\n", whoami.Account)
+	fmt.Printf("User: %+v\n", whoami.User)
+}
+
+func TestLive_DomainsService_Domains(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoamiResponse, err := dnsimpleClient.Auth.Whoami()
+	if err != nil {
+		t.Fatalf("Live Auth.Whoami()/Domains.List() returned error: %v", err)
+	}
+
+	fmt.Printf("RateLimit: %v/%v until %v\n", whoamiResponse.RateLimitRemaining(), whoamiResponse.RateLimit(), whoamiResponse.RateLimitReset())
+	whoami := whoamiResponse.Data
 	accountID := whoami.Account.ID
 
-	domains, _, err := dnsimpleClient.Domains.List(fmt.Sprintf("%v", accountID))
+	domainsResponse, err := dnsimpleClient.Domains.List(fmt.Sprintf("%v", accountID))
 	if err != nil {
-		t.Fatalf("Live listDomains() returned error: %v", err)
+		t.Fatalf("Live Domains.List() returned error: %v", err)
 	}
 
-	fmt.Println(domains)
+	fmt.Printf("RateLimit: %v/%v until %v\n", domainsResponse.RateLimitRemaining(), domainsResponse.RateLimit(), domainsResponse.RateLimitReset())
+	fmt.Printf("Domains: %+v\n", domainsResponse.Data)
 }
