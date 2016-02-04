@@ -109,13 +109,3 @@ func (s *DomainsService) DeleteRecord(accountId string, domain interface{}, reco
 
 	return s.client.delete(path, nil)
 }
-
-// UpdateIP updates the IP of specific A record.
-//
-// This is not part of the standard API. However,
-// this is useful for Dynamic DNS (DDNS or DynDNS).
-func (record *Record) UpdateIP(client *Client, IP, accountId string) error {
-	newRecord := Record{Content: IP, Name: record.Name}
-	_, _, err := client.Domains.UpdateRecord(accountId, record.ZoneId, record.Id, newRecord)
-	return err
-}

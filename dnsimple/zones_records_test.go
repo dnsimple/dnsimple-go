@@ -171,25 +171,3 @@ func TestDomainsService_DeleteRecord_failed(t *testing.T) {
 		t.Errorf("Records.Delete returned %+v, should match %+v", err, match)
 	}
 }
-
-func TestRecord_UpdateIP(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1/zones/24/records/42", func(w http.ResponseWriter, r *http.Request) {
-		want := map[string]interface{}{"name": "foo", "content": "192.168.0.1"}
-
-		testMethod(t, r, "PUT")
-		testRequestJSON(t, r, want)
-
-		fmt.Fprint(w, `{"data":{"id":24, "domain_id":42}}`)
-	})
-
-	accountId := "1"
-	record := Record{Id: 42, ZoneId: 24, Name: "foo"}
-	err := record.UpdateIP(client, "192.168.0.1", accountId)
-
-	if err != nil {
-		t.Errorf("UpdateIP returned error: %v", err)
-	}
-}
