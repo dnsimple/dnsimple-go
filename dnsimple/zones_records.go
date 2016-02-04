@@ -100,5 +100,5 @@ func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, record
 func (s *ZonesService) DeleteRecord(accountID string, domain interface{}, recordID int) (*Response, error) {
 	path := recordPath(accountID, domain, recordID)
 
-	return s.client.delete(path, nil)
+	return s.client.delete(path, nil, nil)
 }

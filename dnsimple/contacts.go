@@ -114,5 +114,5 @@ func (s *ContactsService) Update(accountID string, contactID int, contactAttribu
 func (s *ContactsService) Delete(accountID string, contactID int) (*Response, error) {
 	path := contactPath(accountID, contactID)
 
-	return s.client.delete(path, nil)
+	return s.client.delete(path, nil, nil)
 }

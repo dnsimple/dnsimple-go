@@ -93,37 +93,58 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (c *Client) get(path string, v interface{}) (*Response, error) {
-	return c.Do("GET", path, nil, v)
-}
-
-func (c *Client) post(path string, payload, v interface{}) (*Response, error) {
-	return c.Do("POST", path, payload, v)
-}
-
-func (c *Client) put(path string, payload, v interface{}) (*Response, error) {
-	return c.Do("PUT", path, payload, v)
-}
-
-func (c *Client) patch(path string, payload, v interface{}) (*Response, error) {
-	return c.Do("PATCH", path, payload, v)
-}
-
-func (c *Client) delete(path string, payload interface{}) (*Response, error) {
-	return c.Do("DELETE", path, payload, nil)
-}
-
-// Do sends an API request and returns the API response.
-// The API response is JSON decoded and stored in the value pointed by v,
-// or returned as an error if an API error has occurred.
-// If v implements the io.Writer interface, the raw response body will be written to v,
-// without attempting to decode it.
-func (c *Client) Do(method, path string, payload, obj interface{}) (*Response, error) {
-	req, err := c.NewRequest(method, path, payload)
+func (c *Client) get(path string, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, err
 	}
 
+	return c.Do(req, nil, obj)
+}
+
+func (c *Client) post(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("POST", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
+}
+
+func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("PUT", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
+}
+
+func (c *Client) patch(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("PATCH", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
+}
+
+func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("DELETE", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
+}
+
+// Do sends an API request and returns the API response.
+//
+// The API response is JSON decoded and stored in the value pointed by obj,
+// or returned as an error if an API error has occurred.
+// If obj implements the io.Writer interface, the raw response body will be written to obj,
+// without attempting to decode it.
+func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, error) {
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}

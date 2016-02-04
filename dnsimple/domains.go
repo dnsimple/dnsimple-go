@@ -110,5 +110,5 @@ func (s *DomainsService) Get(accountID string, domain interface{}) (*Domain, *Re
 func (s *DomainsService) Delete(accountID string, domain interface{}) (*Response, error) {
 	path := domainPath(accountID, domain)
 
-	return s.client.delete(path, nil)
+	return s.client.delete(path, nil, nil)
 }
