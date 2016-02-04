@@ -95,7 +95,7 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (c *Client) get(path string, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func (c *Client) get(path string, obj interface{}) (*LegacyResponse, error) {
 	return c.Do(req, nil, obj)
 }
 
-func (c *Client) post(path string, payload, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) post(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("POST", path, payload)
 	if err != nil {
 		return nil, err
@@ -113,7 +113,7 @@ func (c *Client) post(path string, payload, obj interface{}) (*LegacyResponse, e
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) put(path string, payload, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) put(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("PUT", path, payload)
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (c *Client) put(path string, payload, obj interface{}) (*LegacyResponse, er
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) patch(path string, payload, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("PATCH", path, payload)
 	if err != nil {
 		return nil, err
@@ -131,7 +131,7 @@ func (c *Client) patch(path string, payload, obj interface{}) (*LegacyResponse, 
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) delete(path string, payload interface{}, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) delete(path string, payload interface{}, obj interface{}) (*http.Response, error) {
 	req, err := c.NewRequest("DELETE", path, payload)
 	if err != nil {
 		return nil, err
@@ -146,7 +146,7 @@ func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Leg
 // or returned as an error if an API error has occurred.
 // If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(req *http.Request, payload, obj interface{}) (*LegacyResponse, error) {
+func (c *Client) Do(req *http.Request, payload, obj interface{}) (*http.Response, error) {
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
@@ -163,7 +163,7 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*LegacyRespons
 
 	err = CheckResponse(resp)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	// If obj implements the io.Writer,
@@ -176,13 +176,7 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*LegacyRespons
 		}
 	}
 
-	response := &LegacyResponse{HttpResponse: resp}
-	return response, err
-}
-
-// A Response represents an API response.
-type LegacyResponse struct {
-	HttpResponse *http.Response // HTTP response
+	return resp, err
 }
 
 // A Response represents an API response.
@@ -210,8 +204,8 @@ func (r *Response) RateLimitReset() time.Time {
 
 // An ErrorResponse represents an API response that generated an error.
 type ErrorResponse struct {
-	HttpResponse *http.Response // HTTP response that caused this error
-	Message      string         `json:"message"` // human-readable message
+	Response
+	Message string `json:"message"` // human-readable message
 }
 
 // Error implements the error interface.
@@ -224,13 +218,15 @@ func (r *ErrorResponse) Error() string {
 // CheckResponse checks the API response for errors, and returns them if present.
 // A response is considered an error if the status code is different than 2xx. Specific requests
 // may have additional requirements, but this is sufficient in most of the cases.
-func CheckResponse(r *http.Response) error {
-	if code := r.StatusCode; 200 <= code && code <= 299 {
+func CheckResponse(resp *http.Response) error {
+	if code := resp.StatusCode; 200 <= code && code <= 299 {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{HttpResponse: r}
-	err := json.NewDecoder(r.Body).Decode(errorResponse)
+	errorResponse := &ErrorResponse{}
+	errorResponse.HttpResponse = resp
+
+	err := json.NewDecoder(resp.Body).Decode(errorResponse)
 	if err != nil {
 		return err
 	}
