@@ -1,9 +1,9 @@
 package dnsimple
 
 import (
+	"fmt"
 	"os"
 	"testing"
-	"fmt"
 )
 
 var (
@@ -39,10 +39,11 @@ func TestLive_Whoami(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Live whoami() returned error: %v", err)
 	}
-	whoami := whoamiResponse.Data
 
-	fmt.Println(whoami.Account)
-	fmt.Println(whoami.User)
+	fmt.Printf("RateLimit: %v/%v until %v\n", whoamiResponse.RateLimitRemaining(), whoamiResponse.RateLimit(), whoamiResponse.RateLimitReset())
+	whoami := whoamiResponse.Data
+	fmt.Printf("Account: %+v\n", whoami.Account)
+	fmt.Printf("User: %+v\n", whoami.User)
 }
 
 func TestLive_Domains(t *testing.T) {
@@ -55,6 +56,7 @@ func TestLive_Domains(t *testing.T) {
 		t.Fatalf("Live whoami()/listDomains() returned error: %v", err)
 	}
 
+	fmt.Printf("RateLimit: %v/%v until %v\n", whoamiResponse.RateLimitRemaining(), whoamiResponse.RateLimit(), whoamiResponse.RateLimitReset())
 	whoami := whoamiResponse.Data
 	accountID := whoami.Account.ID
 
@@ -63,5 +65,6 @@ func TestLive_Domains(t *testing.T) {
 		t.Fatalf("Live listDomains() returned error: %v", err)
 	}
 
-	fmt.Println(domainsResponse.Data)
+	fmt.Printf("RateLimit: %v/%v until %v\n", domainsResponse.RateLimitRemaining(), domainsResponse.RateLimit(), domainsResponse.RateLimitReset())
+	fmt.Printf("Domains: %+v\n", domainsResponse.Data)
 }

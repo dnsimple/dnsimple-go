@@ -10,9 +10,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"time"
+	"strconv"
 	"strings"
-	//"io/ioutil"
+	"time"
 )
 
 const (
@@ -188,7 +188,24 @@ type LegacyResponse struct {
 // A Response represents an API response.
 type Response struct {
 	HttpResponse *http.Response // HTTP response
-	Data interface{} `json:"data"`
+}
+
+// RateLimit returns the maximum amount of requests this account can send in an hour.
+func (r *Response) RateLimit() int {
+	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Limit"))
+	return value
+}
+
+// RateLimitRemaining returns the remaining amount of requests this account can send within this hour window.
+func (r *Response) RateLimitRemaining() int {
+	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Remaining"))
+	return value
+}
+
+// RateLimitReset returns when the throttling window will be reset for this account.
+func (r *Response) RateLimitReset() time.Time {
+	value, _ := strconv.ParseInt(r.HttpResponse.Header.Get("X-RateLimit-Reset"), 10, 64)
+	return time.Unix(value, 0)
 }
 
 // An ErrorResponse represents an API response that generated an error.
