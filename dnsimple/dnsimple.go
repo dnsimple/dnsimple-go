@@ -94,7 +94,7 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (c *Client) get(path string, obj interface{}) (*Response, error) {
+func (c *Client) get(path string, obj interface{}) (*LegacyResponse, error) {
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func (c *Client) get(path string, obj interface{}) (*Response, error) {
 	return c.Do(req, nil, obj)
 }
 
-func (c *Client) post(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) post(path string, payload, obj interface{}) (*LegacyResponse, error) {
 	req, err := c.NewRequest("POST", path, payload)
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (c *Client) post(path string, payload, obj interface{}) (*Response, error) 
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) put(path string, payload, obj interface{}) (*LegacyResponse, error) {
 	req, err := c.NewRequest("PUT", path, payload)
 	if err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) patch(path string, payload, obj interface{}) (*Response, error) {
+func (c *Client) patch(path string, payload, obj interface{}) (*LegacyResponse, error) {
 	req, err := c.NewRequest("PATCH", path, payload)
 	if err != nil {
 		return nil, err
@@ -130,7 +130,7 @@ func (c *Client) patch(path string, payload, obj interface{}) (*Response, error)
 	return c.Do(req, payload, obj)
 }
 
-func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Response, error) {
+func (c *Client) delete(path string, payload interface{}, obj interface{}) (*LegacyResponse, error) {
 	req, err := c.NewRequest("DELETE", path, payload)
 	if err != nil {
 		return nil, err
@@ -145,7 +145,7 @@ func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Res
 // or returned as an error if an API error has occurred.
 // If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, error) {
+func (c *Client) Do(req *http.Request, payload, obj interface{}) (*LegacyResponse, error) {
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
@@ -175,16 +175,16 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, err
 		}
 	}
 
-	response := &Response{Response: resp}
+	response := &LegacyResponse{Response: resp}
 	return response, err
 }
 
 // A Response represents an API response.
-type Response struct {
+type LegacyResponse struct {
 	*http.Response
 }
 
-// An ErrorResponse represents an error caused by an API request.
+// An ErrorResponse represents an API response that generated an error.
 type ErrorResponse struct {
 	HttpResponse *http.Response // HTTP response that caused this error
 	Message      string         `json:"message"` // human-readable message

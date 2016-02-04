@@ -22,7 +22,7 @@ type Whoami struct {
 // Whoami gets the current authenticate context.
 //
 // See https://developer.dnsimple.com/v2/whoami
-func (s *AuthService) Whoami() (*Whoami, *Response, error) {
+func (s *AuthService) Whoami() (*Whoami, *LegacyResponse, error) {
 	responseWrapper := whoamiWrapper{}
 
 	res, err := s.client.get("/whoami", &responseWrapper)

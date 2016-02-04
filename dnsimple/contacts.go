@@ -51,7 +51,7 @@ func contactPath(accountID string, contact interface{}) string {
 // List the contacts.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
-func (s *ContactsService) List(accountID string) ([]Contact, *Response, error) {
+func (s *ContactsService) List(accountID string) ([]Contact, *LegacyResponse, error) {
 	path := contactPath(accountID, nil)
 	data := contactsWrapper{}
 
@@ -66,7 +66,7 @@ func (s *ContactsService) List(accountID string) ([]Contact, *Response, error) {
 // Create a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
-func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*Contact, *Response, error) {
+func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*Contact, *LegacyResponse, error) {
 	path := contactPath(accountID, nil)
 	data := contactWrapper{}
 
@@ -81,7 +81,7 @@ func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*
 // Get a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
-func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *Response, error) {
+func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *LegacyResponse, error) {
 	path := contactPath(accountID, contactID)
 	data := contactWrapper{}
 
@@ -96,7 +96,7 @@ func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *Respo
 // Update a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
-func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*Contact, *Response, error) {
+func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*Contact, *LegacyResponse, error) {
 	path := contactPath(accountID, contactID)
 	data := contactWrapper{}
 
@@ -111,7 +111,7 @@ func (s *ContactsService) Update(accountID string, contactID int, contactAttribu
 // Delete a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
-func (s *ContactsService) Delete(accountID string, contactID int) (*Response, error) {
+func (s *ContactsService) Delete(accountID string, contactID int) (*LegacyResponse, error) {
 	path := contactPath(accountID, contactID)
 
 	return s.client.delete(path, nil, nil)

@@ -37,7 +37,7 @@ func recordPath(accountID string, domain interface{}, record interface{}) string
 // List the zone records.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListRecords(accountID string, domain interface{}) ([]Record, *Response, error) {
+func (s *ZonesService) ListRecords(accountID string, domain interface{}) ([]Record, *LegacyResponse, error) {
 	path := recordPath(accountID, domain, nil)
 	data := recordsWrapper{}
 
@@ -52,7 +52,7 @@ func (s *ZonesService) ListRecords(accountID string, domain interface{}) ([]Reco
 // CreateRecord creates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#create
-func (s *ZonesService) CreateRecord(accountID string, domain interface{}, recordAttributes Record) (*Record, *Response, error) {
+func (s *ZonesService) CreateRecord(accountID string, domain interface{}, recordAttributes Record) (*Record, *LegacyResponse, error) {
 	path := recordPath(accountID, domain, nil)
 	data := recordWrapper{}
 
@@ -67,7 +67,7 @@ func (s *ZonesService) CreateRecord(accountID string, domain interface{}, record
 // GetRecord gets the zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#get
-func (s *ZonesService) GetRecord(accountID string, domain interface{}, recordID int) (*Record, *Response, error) {
+func (s *ZonesService) GetRecord(accountID string, domain interface{}, recordID int) (*Record, *LegacyResponse, error) {
 	path := recordPath(accountID, domain, recordID)
 	data := recordWrapper{}
 
@@ -82,7 +82,7 @@ func (s *ZonesService) GetRecord(accountID string, domain interface{}, recordID 
 // UpdateRecord updates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#update
-func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, recordID int, recordAttributes Record) (*Record, *Response, error) {
+func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, recordID int, recordAttributes Record) (*Record, *LegacyResponse, error) {
 	path := recordPath(accountID, domain, recordID)
 	data := recordWrapper{}
 
@@ -97,7 +97,7 @@ func (s *ZonesService) UpdateRecord(accountID string, domain interface{}, record
 // DeleteRecord deletes a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#delete
-func (s *ZonesService) DeleteRecord(accountID string, domain interface{}, recordID int) (*Response, error) {
+func (s *ZonesService) DeleteRecord(accountID string, domain interface{}, recordID int) (*LegacyResponse, error) {
 	path := recordPath(accountID, domain, recordID)
 
 	return s.client.delete(path, nil, nil)
