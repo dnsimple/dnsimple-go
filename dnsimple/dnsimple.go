@@ -49,7 +49,6 @@ type Client struct {
 	// Services used for talking to different parts of the DNSimple API.
 	Contacts  *ContactsService
 	Domains   *DomainsService
-	Registrar *RegistrarService
 	Misc      *MiscService
 
 	// Set to true to output debugging logs during API calls
@@ -61,7 +60,6 @@ func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
-	c.Registrar = &RegistrarService{client: c}
 	c.Misc = &MiscService{client: c}
 	return c
 }
