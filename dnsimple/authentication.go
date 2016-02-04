@@ -25,7 +25,7 @@ type domainTokenCredentials struct {
 	domainToken string
 }
 
-// Construct Credentials using the DNSimple Domain Token method
+// NewDomainTokenCredentials construct Credentials using the DNSimple Domain Token method.
 func NewDomainTokenCredentials(domainToken string) Credentials {
 	return &domainTokenCredentials{domainToken: domainToken}
 }
@@ -41,7 +41,7 @@ type httpBasicCredentials struct {
 	password string
 }
 
-// Construct Credentials using HTTP Basic Auth
+// NewHttpBasicCredentials construct Credentials using HTTP Basic Auth.
 func NewHttpBasicCredentials(email, password string) Credentials {
 	return &httpBasicCredentials{email, password}
 }
@@ -61,6 +61,7 @@ type oauthTokenCredentials struct {
 	oauthToken string
 }
 
+// NewOauthTokenCredentials construct Credentials using the OAuth access token.
 func NewOauthTokenCredentials(oauthToken string) Credentials {
 	return &oauthTokenCredentials{oauthToken: oauthToken}
 }
