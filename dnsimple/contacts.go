@@ -2,120 +2,117 @@ package dnsimple
 
 import (
 	"fmt"
-	"time"
 )
 
 // ContactsService handles communication with the contact related
 // methods of the DNSimple API.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/
+// See https://developer.dnsimple.com/v2/contacts/
 type ContactsService struct {
 	client *Client
 }
 
 type Contact struct {
-	Id           int        `json:"id,omitempty"`
-	Label        string     `json:"label,omitempty"`
-	FirstName    string     `json:"first_name,omitempty"`
-	LastName     string     `json:"last_name,omitempty"`
-	JobTitle     string     `json:"job_title,omitempty"`
-	Organization string     `json:"organization_name,omitempty"`
-	Email        string     `json:"email_address,omitempty"`
-	Phone        string     `json:"phone,omitempty"`
-	Fax          string     `json:"fax,omitempty"`
-	Address1     string     `json:"address1,omitempty"`
-	Address2     string     `json:"address2,omitempty"`
-	City         string     `json:"city,omitempty"`
-	Zip          string     `json:"postal_code,omitempty"`
-	Country      string     `json:"country,omitempty"`
-	CreatedAt    *time.Time `json:"created_at,omitempty"`
-	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	ID            int    `json:"id,omitempty"`
+	Label         string `json:"label,omitempty"`
+	FirstName     string `json:"first_name,omitempty"`
+	LastName      string `json:"last_name,omitempty"`
+	JobTitle      string `json:"job_title,omitempty"`
+	Organization  string `json:"organization_name,omitempty"`
+	Email         string `json:"email_address,omitempty"`
+	Phone         string `json:"phone,omitempty"`
+	Fax           string `json:"fax,omitempty"`
+	Address1      string `json:"address1,omitempty"`
+	Address2      string `json:"address2,omitempty"`
+	City          string `json:"city,omitempty"`
+	StateProvince string `json:"state_province,omitempty"`
+	PostalCode    string `json:"postal_code,omitempty"`
+	Country       string `json:"country,omitempty"`
+	CreatedAt     string `json:"created_at,omitempty"`
+	UpdatedAt     string `json:"updated_at,omitempty"`
+}
+
+type contactsWrapper struct {
+	Contacts []Contact `json:"data"`
 }
 
 type contactWrapper struct {
-	Contact Contact `json:"contact"`
+	Contact *Contact `json:"data"`
 }
 
 // contactPath generates the resource path for given contact.
-func contactPath(contact interface{}) string {
+func contactPath(accountID string, contact interface{}) string {
 	if contact != nil {
-		return fmt.Sprintf("contacts/%d", contact)
+		return fmt.Sprintf("%v/contacts/%d", accountID, contact)
 	}
-	return "contacts"
+	return fmt.Sprintf("%v/contacts", accountID)
 }
 
 // List the contacts.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/#list
-func (s *ContactsService) List() ([]Contact, *Response, error) {
-	path := contactPath(nil)
-	wrappedContacts := []contactWrapper{}
+// See https://developer.dnsimple.com/v2/contacts/#list
+func (s *ContactsService) List(accountID string) ([]Contact, *Response, error) {
+	path := contactPath(accountID, nil)
+	data := contactsWrapper{}
 
-	res, err := s.client.get(path, &wrappedContacts)
+	res, err := s.client.get(path, &data)
 	if err != nil {
 		return []Contact{}, res, err
 	}
 
-	contacts := []Contact{}
-	for _, contact := range wrappedContacts {
-		contacts = append(contacts, contact.Contact)
-	}
-
-	return contacts, res, nil
+	return data.Contacts, res, nil
 }
 
 // Create a new contact.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/#create
-func (s *ContactsService) Create(contactAttributes Contact) (Contact, *Response, error) {
-	path := contactPath(nil)
-	wrappedContact := contactWrapper{Contact: contactAttributes}
-	returnedContact := contactWrapper{}
+// See https://developer.dnsimple.com/v2/contacts/#create
+func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*Contact, *Response, error) {
+	path := contactPath(accountID, nil)
+	data := contactWrapper{}
 
-	res, err := s.client.post(path, wrappedContact, &returnedContact)
+	res, err := s.client.post(path, contactAttributes, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
-	return returnedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
-// Get fetches a contact.
+// Get a contact.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/#get
-func (s *ContactsService) Get(contactID int) (Contact, *Response, error) {
-	path := contactPath(contactID)
-	wrappedContact := contactWrapper{}
+// See https://developer.dnsimple.com/v2/contacts/#get
+func (s *ContactsService) Get(accountID string, contactID int) (*Contact, *Response, error) {
+	path := contactPath(accountID, contactID)
+	data := contactWrapper{}
 
-	res, err := s.client.get(path, &wrappedContact)
+	res, err := s.client.get(path, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
-	return wrappedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
 // Update a contact.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/#update
-func (s *ContactsService) Update(contactID int, contactAttributes Contact) (Contact, *Response, error) {
-	path := contactPath(contactID)
-	wrappedContact := contactWrapper{Contact: contactAttributes}
-	returnedContact := contactWrapper{}
+// See https://developer.dnsimple.com/v2/contacts/#update
+func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*Contact, *Response, error) {
+	path := contactPath(accountID, contactID)
+	data := contactWrapper{}
 
-	res, err := s.client.put(path, wrappedContact, &returnedContact)
+	res, err := s.client.patch(path, contactAttributes, &data)
 	if err != nil {
-		return Contact{}, res, err
+		return &Contact{}, res, err
 	}
 
-	return returnedContact.Contact, res, nil
+	return data.Contact, res, nil
 }
 
 // Delete a contact.
 //
-// DNSimple API docs: http://developer.dnsimple.com/contacts/#delete
-func (s *ContactsService) Delete(contactID int) (*Response, error) {
-	path := contactPath(contactID)
+// See https://developer.dnsimple.com/v2/contacts/#delete
+func (s *ContactsService) Delete(accountID string, contactID int) (*Response, error) {
+	path := contactPath(accountID, contactID)
 
-	return s.client.delete(path, nil)
+	return s.client.delete(path, nil, nil)
 }

@@ -8,54 +8,61 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
 
 const (
-	libraryVersion = "0.1"
-	baseURL        = "https://api.dnsimple.com/"
-	userAgent      = "dnsimple-go/" + libraryVersion
+	// libraryVersion identifies the current library version.
+	// This is a pro-forma convention given that Go dependencies
+	// tends to be fetched directly from the repo.
+	// It is also used in the user-agent identify the client.
+	libraryVersion = "0.5.0-dev"
 
-	apiVersion = "v1"
+	defaultBaseURL = "https://api.dnsimple.com/"
+
+	// userAgent represents the default user agent used
+	// when no other user agent is set.
+	defaultUserAgent = "dnsimple-go/" + libraryVersion
+
+	apiVersion = "v2"
 )
 
+// Client represents a client to the DNSimple API.
 type Client struct {
-	// HTTP client used to communicate with the API.
+	// HttpClient is the underlying HTTP client
+	// used to communicate with the API.
 	HttpClient *http.Client
 
 	// Credentials used for accessing the DNSimple API
 	Credentials Credentials
 
-	// Base URL for API requests.
+	// BaseURL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
 	// BaseURL should always be specified with a trailing slash.
 	BaseURL string
 
-	// User agent used when communicating with the DNSimple API.
+	// UserAgent used when communicating with the DNSimple API.
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
-	Contacts  *ContactsService
-	Domains   *DomainsService
-	Registrar *RegistrarService
-	Users     *UsersService
+	Auth     *AuthService
+	Contacts *ContactsService
+	Domains  *DomainsService
+	Zones    *ZonesService
+
+	// Set to true to output debugging logs during API calls
+	Debug bool
 }
 
-// NewClient returns a new DNSimple API client.
-func NewClient(apiToken, email string) *Client {
-	return NewAuthenticatedClient(NewApiTokenCredentials(email, apiToken))
-
-}
-
-// NewAuthenticatedClient returns a new DNSimple API client  using the given
-// credentials.
-func NewAuthenticatedClient(credentials Credentials) *Client {
-	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: baseURL, UserAgent: userAgent}
+// NewClient returns a new DNSimple API client using the given credentials.
+func NewClient(credentials Credentials) *Client {
+	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
+	c.Auth = &AuthService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
-	c.Registrar = &RegistrarService{client: c}
-	c.Users = &UsersService{client: c}
+	c.Zones = &ZonesService{client: c}
 	return c
 }
 
@@ -86,54 +93,88 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	return req, nil
 }
 
-func (c *Client) get(path string, v interface{}) (*Response, error) {
-	return c.Do("GET", path, nil, v)
+func (c *Client) get(path string, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, nil, obj)
 }
 
-func (c *Client) post(path string, payload, v interface{}) (*Response, error) {
-	return c.Do("POST", path, payload, v)
+func (c *Client) post(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("POST", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
 }
 
-func (c *Client) put(path string, payload, v interface{}) (*Response, error) {
-	return c.Do("PUT", path, payload, v)
+func (c *Client) put(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("PUT", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
 }
 
-func (c *Client) delete(path string, payload interface{}) (*Response, error) {
-	return c.Do("DELETE", path, payload, nil)
+func (c *Client) patch(path string, payload, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("PATCH", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
+}
+
+func (c *Client) delete(path string, payload interface{}, obj interface{}) (*Response, error) {
+	req, err := c.NewRequest("DELETE", path, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req, payload, obj)
 }
 
 // Do sends an API request and returns the API response.
-// The API response is JSON decoded and stored in the value pointed by v,
+//
+// The API response is JSON decoded and stored in the value pointed by obj,
 // or returned as an error if an API error has occurred.
-// If v implements the io.Writer interface, the raw response body will be written to v,
+// If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(method, path string, payload, v interface{}) (*Response, error) {
-	req, err := c.NewRequest(method, path, payload)
+func (c *Client) Do(req *http.Request, payload, obj interface{}) (*Response, error) {
+	if c.Debug {
+		log.Printf("Executing request (%v): %#v", req.URL, req)
+	}
+
+	resp, err := c.HttpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if c.Debug {
+		log.Printf("Response received: %#v", resp)
+	}
+
+	err = CheckResponse(resp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.HttpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	response := &Response{Response: res}
-
-	err = CheckResponse(res)
-	if err != nil {
-		return response, err
-	}
-
-	if v != nil {
-		if w, ok := v.(io.Writer); ok {
-			io.Copy(w, res.Body)
+	// If obj implements the io.Writer,
+	// the response body is decoded into v.
+	if obj != nil {
+		if w, ok := obj.(io.Writer); ok {
+			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(res.Body).Decode(v)
+			err = json.NewDecoder(resp.Body).Decode(obj)
 		}
 	}
 
+	response := &Response{Response: resp}
 	return response, err
 }
 
@@ -144,15 +185,15 @@ type Response struct {
 
 // An ErrorResponse represents an error caused by an API request.
 type ErrorResponse struct {
-	Response *http.Response // HTTP response that caused this error
-	Message  string         `json:"message"` // human-readable message
+	HttpResponse *http.Response // HTTP response that caused this error
+	Message      string         `json:"message"` // human-readable message
 }
 
 // Error implements the error interface.
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
-		r.Response.Request.Method, r.Response.Request.URL,
-		r.Response.StatusCode, r.Message)
+	return fmt.Sprintf("%v %v: %v %v",
+		r.HttpResponse.Request.Method, r.HttpResponse.Request.URL,
+		r.HttpResponse.StatusCode, r.Message)
 }
 
 // CheckResponse checks the API response for errors, and returns them if present.
@@ -163,7 +204,7 @@ func CheckResponse(r *http.Response) error {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{Response: r}
+	errorResponse := &ErrorResponse{HttpResponse: r}
 	err := json.NewDecoder(r.Body).Decode(errorResponse)
 	if err != nil {
 		return err

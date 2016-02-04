@@ -29,9 +29,9 @@ func TestHttpBasicCredentialsHttpHeader(t *testing.T) {
 	testCredentials(t, credentials, httpHeaderAuthorization, expectedHeaderValue)
 }
 
-func TestApiTokenCredentialsHttpHeader(t *testing.T) {
-	email, apiToken := "email", "api-token"
-	credentials := NewApiTokenCredentials(email, apiToken)
-	expectedHeaderValue := fmt.Sprintf("%v:%v", email, apiToken)
-	testCredentials(t, credentials, httpHeaderApiToken, expectedHeaderValue)
+func TestOauthTokenCredentialsHttpHeader(t *testing.T) {
+	oauthToken := "oauth-token"
+	credentials := NewOauthTokenCredentials(oauthToken)
+	expectedHeaderValue := fmt.Sprintf("Bearer %v", oauthToken)
+	testCredentials(t, credentials, httpHeaderAuthorization, expectedHeaderValue)
 }

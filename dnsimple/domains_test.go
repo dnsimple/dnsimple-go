@@ -8,105 +8,144 @@ import (
 )
 
 func TestDomains_domainPath(t *testing.T) {
-	var pathTests = []struct {
-		input    interface{}
-		expected string
-	}{
-		{nil, "domains"},
-		{"example.com", "domains/example.com"},
-		{1, "domains/1"},
+	actual := domainPath("1", nil)
+	expected := "1/domains"
+
+	if actual != expected {
+		t.Errorf("domainPath(\"1\", nil): actual %s, expected %s", actual, expected)
 	}
 
-	for _, pt := range pathTests {
-		actual := domainPath(pt.input)
-		if actual != pt.expected {
-			t.Errorf("domainPath(%+v): expected %s, actual %s", pt.input, pt.expected)
-		}
+	actual = domainPath("1", "example.com")
+	expected = "1/domains/example.com"
+
+	if actual != expected {
+		t.Errorf("domainPath(\"1\", \"example.com\", nil): actual %s, expected %s", actual, expected)
+	}
+
+	actual = domainPath("1", 1)
+	expected = "1/domains/1"
+
+	if actual != expected {
+		t.Errorf("domainPath(\"1\", 1, nil): actual %s, expected %s", actual, expected)
 	}
 }
 
 func TestDomainsService_List(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
-	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `[{"domain":{"id": 1, "name":"example.com"}}]`)
+		testHeaders(t, r)
+
+		fmt.Fprint(w, `
+			{"data":[{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"},{"id":2,"account_id":1010,"registrant_id":21,"name":"example-beta.com","unicode_name":"example-beta.com","token":"domain-token","state":"registered","auto_renew":false,"private_whois":false,"expires_on":"2015-12-06","created_at":"2014-12-06T15:46:52.411Z","updated_at":"2015-12-09T00:20:53.572Z"}],"pagination":{"current_page":1,"per_page":30,"total_entries":2,"total_pages":1}}
+		`)
 	})
 
-	domains, _, err := client.Domains.List()
+	accountID := "1010"
+	domains, _, err := client.Domains.List(accountID)
 
 	if err != nil {
-		t.Errorf("Domains.List returned error: %v", err)
+		t.Fatalf("Domains.List() returned error: %v", err)
 	}
 
-	want := []Domain{{Id: 1, Name: "example.com"}}
-	if !reflect.DeepEqual(domains, want) {
-		t.Errorf("Domains.List returned %+v, want %+v", domains, want)
+	if want, got := 2, len(domains); want != got {
+		t.Errorf("Domains.List() expected to return %v contacts, got %v", want, got)
+	}
+
+	if want, got := 1, domains[0].ID; want != got {
+		t.Fatalf("Domains.List() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "example-alpha.com", domains[0].Name; want != got {
+		t.Fatalf("Domains.List() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }
 
 func TestDomainsService_Create(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
-	mux.HandleFunc("/v1/domains", func(w http.ResponseWriter, r *http.Request) {
-		want := make(map[string]interface{})
-		want["domain"] = map[string]interface{}{"name": "example.com"}
-
+	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "example.com"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(http.StatusCreated)
-		fmt.Fprintf(w, `{"domain":{"id":1, "name":"example.com"}}`)
+		fmt.Fprintf(w, `
+			{"data":{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"}}
+		`)
 	})
 
-	domainValues := Domain{Name: "example.com"}
-	domain, _, err := client.Domains.Create(domainValues)
+	accountID := "1"
+	domainAttributes := Domain{Name: "example.com"}
+	domain, _, err := client.Domains.Create(accountID, domainAttributes)
 
 	if err != nil {
-		t.Errorf("Domains.Create returned error: %v", err)
+		t.Fatalf("Domains.Create() returned error: %v", err)
 	}
 
-	want := Domain{Id: 1, Name: "example.com"}
-	if !reflect.DeepEqual(domain, want) {
-		t.Fatalf("Domains.Create returned %+v, want %+v", domain, want)
+	if want, got := 1, domain.ID; want != got {
+		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "example-alpha.com", domain.Name; want != got {
+		t.Fatalf("Domains.Create() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }
 
 func TestDomainsService_Get(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
-	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{"domain": {"id":1, "name":"example.com"}}`)
+		testHeaders(t, r)
+
+		fmt.Fprint(w, `
+			{"data":{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"}}
+		`)
 	})
 
-	domain, _, err := client.Domains.Get("example.com")
+	accountID := "1010"
+	domain, _, err := client.Domains.Get(accountID, "example.com")
 
 	if err != nil {
-		t.Errorf("Domains.Get returned error: %v", err)
+		t.Errorf("Domains.Get() returned error: %v", err)
 	}
 
-	want := Domain{Id: 1, Name: "example.com"}
-	if !reflect.DeepEqual(domain, want) {
-		t.Fatalf("Domains.Get returned %+v, want %+v", domain, want)
+	wantSingle := &Domain{
+		ID:           1,
+		AccountID:    1010,
+		RegistrantID: 0,
+		Name:         "example-alpha.com",
+		UnicodeName:  "example-alpha.com",
+		Token:        "domain-token",
+		State:        "hosted",
+		PrivateWhois: false,
+		ExpiresOn:    "",
+		CreatedAt:    "2014-12-06T15:56:55.573Z",
+		UpdatedAt:    "2015-12-09T00:20:56.056Z"}
+
+	if !reflect.DeepEqual(domain, wantSingle) {
+		t.Fatalf("Domains.Get() returned %+v, want %+v", domain, wantSingle)
 	}
 }
 
 func TestDomainsService_Delete(t *testing.T) {
-	setup()
-	defer teardown()
+	setupMockServer()
+	defer teardownMockServer()
 
-	mux.HandleFunc("/v1/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		// fmt.Fprint(w, `{}`)
+		testHeaders(t, r)
 	})
 
-	_, err := client.Domains.Delete("example.com")
+	accountID := "1010"
+	_, err := client.Domains.Delete(accountID, "example.com")
 
 	if err != nil {
-		t.Errorf("Domains.Delete returned error: %v", err)
+		t.Fatalf("Domains.Delete() returned error: %v", err)
 	}
 }

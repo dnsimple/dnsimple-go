@@ -6,40 +6,43 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"reflect"
 	"testing"
 )
 
 var (
-	// mux is the HTTP request multiplexer used with the test server.
-	mux *http.ServeMux
-
-	// client is the DNSimple client being tested.
+	mux    *http.ServeMux
 	client *Client
-
-	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
 )
 
-// This method of testing http client APIs is borrowed from
-// Will Norris's work in go-github @ https://github.com/google/go-github
-func setup() {
+func setupMockServer() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	client = NewClient("mytoken", "me@example.com")
+	client = NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	client.BaseURL = server.URL + "/"
 }
 
-func teardown() {
+func teardownMockServer() {
 	server.Close()
 }
 
 func testMethod(t *testing.T, r *http.Request, want string) {
-	if want != r.Method {
-		t.Errorf("Request method = %v, want %v", r.Method, want)
+	if got := r.Method; want != got {
+		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
 	}
+}
+
+func testHeader(t *testing.T, r *http.Request, name, want string) {
+	if got := r.Header.Get(name); want != got {
+		t.Errorf("Request() %v expected to be `%v`, got `%v`", name, want, got)
+	}
+}
+
+func testHeaders(t *testing.T, r *http.Request) {
+	testHeader(t, r, "Accept", "application/json")
+	testHeader(t, r, "User-Agent", defaultUserAgent)
 }
 
 func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
@@ -56,58 +59,30 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 	}
 }
 
-type values map[string]string
-
-func testFormValues(t *testing.T, r *http.Request, values values) {
-	want := url.Values{}
-	for k, v := range values {
-		want.Add(k, v)
-	}
-
-	r.ParseForm()
-	if !reflect.DeepEqual(want, r.Form) {
-		t.Errorf("Request parameters = %v, want %v", r.Form, want)
-	}
-}
-
-func testString(t *testing.T, test, value, want string) {
-	if value != want {
-		t.Errorf("%s returned %+v, want %+v", test, value, want)
-	}
-}
-
 func TestNewClient(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 
-	if c.BaseURL != baseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
+	if c.BaseURL != defaultBaseURL {
+		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
 	}
 }
 
-func TestNewAuthenticatedClient(t *testing.T) {
-	c := NewAuthenticatedClient(NewApiTokenCredentials("me@example.com", "mytoken"))
-
-	if c.BaseURL != baseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, baseURL)
-	}
-}
-
-func TestNewRequest(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+func TestClient_NewRequest(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, outURL := "foo", "https://go.example.com/v1/foo"
+	inURL, outURL := "foo", "https://go.example.com/v2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL
 	if req.URL.String() != outURL {
-		t.Errorf("makeRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
 	}
 
 	// test that default user-agent is attached to the request
-	userAgent := req.Header.Get("User-Agent")
-	if c.UserAgent != userAgent {
-		t.Errorf("makeRequest() User-Agent = %v, want %v", userAgent, c.UserAgent)
+	ua := req.Header.Get("User-Agent")
+	if ua != c.UserAgent {
+		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, c.UserAgent)
 	}
 }
 
@@ -118,11 +93,11 @@ func (o *badObject) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("Bad object is bad")
 }
 
-func TestNewRequestWithBody(t *testing.T) {
-	c := NewClient("mytoken", "me@example.com")
+func TestClient_NewRequest_WithBody(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	c.BaseURL = "https://go.example.com/"
 
-	inURL, _ := "foo", "https://go.example.com/v1/foo"
+	inURL, _ := "foo", "https://go.example.com/v2/foo"
 	badObject := badObject{}
 	_, err := c.NewRequest("GET", inURL, &badObject)
 
