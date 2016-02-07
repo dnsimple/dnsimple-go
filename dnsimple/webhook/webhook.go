@@ -51,18 +51,10 @@ func Parse(data []byte) (Event, error) {
 	action := &Action{}
 	json.Unmarshal(data, &action)
 
-	//var event Event
-	//common := eventCore{Payload:data}
-
 	switch action.Action {
 	case "domain.create":
-		//event = &DomainCreateEvent{eventCore:common}
 		return ParseDomainCreateEvent(data)
 	}
 
 	return nil, nil
-	//if err := event.Parse(data); err != nil {
-	//	return nil, err
-	//}
-	//return event, nil
 }
