@@ -53,6 +53,7 @@ type Client struct {
 	Contacts *ContactsService
 	Domains  *DomainsService
 	Zones    *ZonesService
+	Webhooks *WebhooksService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -65,6 +66,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Zones = &ZonesService{client: c}
+	c.Webhooks = &WebhooksService{client: c}
 	return c
 }
 
