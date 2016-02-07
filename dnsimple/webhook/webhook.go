@@ -19,15 +19,15 @@ type Actor struct {
 }
 
 type eventCore struct {
-	APIVersion string `json:"api_version"`
-	RequestID  string `json:"request_identifier"`
-	Actor      Actor  `json:"actor"`
-	Action     string `json:"action"`
-	Payload   []byte             `json:"-"`
+	APIVersion string  `json:"api_version"`
+	RequestID  string  `json:"request_identifier"`
+	Actor      *Actor  `json:"actor"`
+	Action     *Action `json:"action"`
+	Payload    []byte  `json:"-"`
 }
 
 type Event interface {
-	parse([]byte) (error)
+	parse([]byte) error
 }
 
 type DomainCreateEvent struct {
@@ -42,7 +42,7 @@ func ParseDomainCreateEvent(data []byte) (*DomainCreateEvent, error) {
 	return event, event.parse(data)
 }
 
-func (e *DomainCreateEvent) parse(data []byte) (error) {
+func (e *DomainCreateEvent) parse(data []byte) error {
 	e.Payload, e.Data = data, e
 	return json.Unmarshal(data, e)
 }
