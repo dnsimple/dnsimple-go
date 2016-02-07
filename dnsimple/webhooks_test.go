@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"fmt"
 	"net/http"
+	"reflect"
 	"testing"
 )
 
@@ -80,5 +81,36 @@ func TestWebhooksService_Create(t *testing.T) {
 	}
 	if want, got := "https://webhook.test", webhook.URL; want != got {
 		t.Fatalf("Webhooks.Create() returned URL expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestWebhooksService_Get(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/webhooks/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		fmt.Fprint(w, `
+			{"data":{"id":1,"url":"https://webhook.test"}}
+		`)
+	})
+
+	accountID := "1010"
+	webhookID := 1
+
+	webhookResponse, err := client.Webhooks.Get(accountID, webhookID)
+	if err != nil {
+		t.Fatalf("Webhooks.Get() returned error: %v", err)
+	}
+
+	webhook := webhookResponse.Data
+	wantSingle := &Webhook{
+		ID:  1,
+		URL: "https://webhook.test"}
+
+	if !reflect.DeepEqual(webhook, wantSingle) {
+		t.Fatalf("Webhooks.Get() returned %+v, want %+v", webhook, wantSingle)
 	}
 }

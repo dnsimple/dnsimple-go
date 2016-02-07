@@ -26,7 +26,7 @@ type WebhooksResponse struct {
 
 // Webhook represents a DNSimple webhook.
 type Webhook struct {
-	ID  int `json:"id,omitempty"`
+	ID  int    `json:"id,omitempty"`
 	URL string `json:"url,omitempty"`
 }
 
@@ -63,6 +63,22 @@ func (s *WebhooksService) Create(accountID string, webhookAttributes Webhook) (*
 	webhookResponse := &WebhookResponse{}
 
 	resp, err := s.client.post(path, webhookAttributes, webhookResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	webhookResponse.HttpResponse = resp
+	return webhookResponse, nil
+}
+
+// Get a webhook.
+//
+// See PRIVATE
+func (s *WebhooksService) Get(accountID string, webhookID int) (*WebhookResponse, error) {
+	path := webhookPath(accountID, webhookID)
+	webhookResponse := &WebhookResponse{}
+
+	resp, err := s.client.get(path, webhookResponse)
 	if err != nil {
 		return nil, err
 	}
