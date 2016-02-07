@@ -86,3 +86,19 @@ func (s *WebhooksService) Get(accountID string, webhookID int) (*WebhookResponse
 	webhookResponse.HttpResponse = resp
 	return webhookResponse, nil
 }
+
+// Delete a webhook.
+//
+// See PRIVATE
+func (s *WebhooksService) Delete(accountID string, webhookID int) (*WebhookResponse, error) {
+	path := webhookPath(accountID, webhookID)
+	webhookResponse := &WebhookResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	webhookResponse.HttpResponse = resp
+	return webhookResponse, nil
+}

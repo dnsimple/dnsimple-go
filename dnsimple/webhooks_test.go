@@ -114,3 +114,23 @@ func TestWebhooksService_Get(t *testing.T) {
 		t.Fatalf("Webhooks.Get() returned %+v, want %+v", webhook, wantSingle)
 	}
 }
+
+func TestWebhooksService_Delete(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/webhooks/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	accountID := "1010"
+	webhookID := 1
+
+	_, err := client.Webhooks.Delete(accountID, webhookID)
+	if err != nil {
+		t.Fatalf("Webhooks.Delete() returned error: %v", err)
+	}
+}
