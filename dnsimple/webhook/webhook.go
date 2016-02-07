@@ -6,55 +6,63 @@ import (
 	"encoding/json"
 )
 
-type Action struct {
-	Action string `json:"action"`
-}
-
-func ParseAction(data []byte) (action *Action, err error) {
-	action = &Action{}
-	err = json.Unmarshal(data, action)
-	return
-}
-
+// Actor represents the entity that triggered the event. It can be either an user,
+// a DNSimple support representative or the DNSimple system.
 type Actor struct {
 	ID     int    `json:"id"`
 	Entity string `json:"entity"`
 	Pretty string `json:"pretty"`
 }
 
+// Event is an event generated in the DNSimple application.
 type Event interface {
+	Name() string
 	Payload() []byte
 	parse([]byte) error
 }
 
 type eventCore struct {
-	APIVersion string  `json:"api_version"`
-	RequestID  string  `json:"request_identifier"`
-	Actor      *Actor  `json:"actor"`
-	Action     *Action `json:"action"`
+	APIVersion string `json:"api_version"`
+	RequestID  string `json:"request_identifier"`
+	Actor      *Actor `json:"actor"`
+	Event      string `json:"action"`
 	payload    []byte
 }
 
+type eventName struct {
+	Name string `json:"action"`
+}
+
+// Payload returns the binary payload the event was deserialized from.
 func (e *eventCore) Payload() []byte {
 	return e.payload
 }
 
-func Parse(data []byte) (Event, error) {
-	action, err := ParseAction(data)
+// Name returns the event name as defined in the event field of the payload.
+func (e *eventCore) Name() string {
+	return e.Event
+}
+
+// Parse takes a payload and attempts to deserialize the payload into an event type
+// that matches the event action in the payload. If no direct match is found, then a DefaultEvent is returned.
+//
+// Parse returns type is an Event interface. Therefore, you must perform typecasting
+// to access any event-specific field.
+func Parse(payload []byte) (Event, error) {
+	action, err := ParseName(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	switch action.Action {
-	case "domain.create":
-		return ParseDomainCreateEvent(data)
-	default:
-		return ParseGenericEvent(data)
-	}
-
-	return nil, nil
+	return switchEvent(action, payload)
 }
 
-func jsonUnmarshalEvent(data []byte, v interface{}) error {
+func ParseName(data []byte) (string, error) {
+	eventName := &eventName{}
+	err := json.Unmarshal(data, eventName)
+	return eventName.Name, err
+}
+
+func unmashalEvent(data []byte, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
