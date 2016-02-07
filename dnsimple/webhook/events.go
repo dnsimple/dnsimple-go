@@ -5,17 +5,18 @@ import (
 )
 
 func switchEvent(name string, payload []byte) (Event, error) {
+	var event Event
+
 	switch name {
 	case "domain.create":
-		e := &DomainCreateEvent{}
-		return e, ParseDomainCreateEvent(e, payload)
+		event = &DomainCreateEvent{}
 	case "domain.delete":
-		e := &DomainDeleteEvent{}
-		return e, ParseDomainDeleteEvent(e, payload)
+		event = &DomainDeleteEvent{}
 	default:
-		e := &GenericEvent{}
-		return e, ParseGenericEvent(e, payload)
+		event = &GenericEvent{}
 	}
+
+	return event, event.parse(payload)
 }
 
 //
