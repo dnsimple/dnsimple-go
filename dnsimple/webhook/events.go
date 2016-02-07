@@ -43,19 +43,15 @@ type DomainEvent struct {
 	Data   *DomainEvent     `json:"data"`
 	Domain *dnsimple.Domain `json:"domain"`
 }
+type DomainCreateEvent struct{ DomainEvent }
+type DomainDeleteEvent struct{ DomainEvent }
 
 // ParseDomainEvent unpacks the payload into a DomainEvent.
-func ParseDomainEvent(e *DomainEvent, payload []byte) error { return e.parse(payload) }
+func ParseDomainEvent(e *DomainEvent, payload []byte) error       { return e.parse(payload) }
+func ParseDomainCreateEvent(e *DomainCreateEvent, p []byte) error { return e.DomainEvent.parse(p) }
+func ParseDomainDeleteEvent(e *DomainDeleteEvent, p []byte) error { return e.DomainEvent.parse(p) }
 
 func (e *DomainEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
-
-type DomainCreateEvent struct{ DomainEvent }
-
-func ParseDomainCreateEvent(e *DomainCreateEvent, p []byte) error { return e.DomainEvent.parse(p) }
-
-type DomainDeleteEvent struct{ DomainEvent }
-
-func ParseDomainDeleteEvent(e *DomainDeleteEvent, p []byte) error { return e.DomainEvent.parse(p) }
