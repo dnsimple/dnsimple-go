@@ -12,6 +12,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		event = &DomainCreateEvent{}
 	case "domain.delete":
 		event = &DomainDeleteEvent{}
+	case "domain.token_reset":
+		event = &DomainTokenResetEvent{}
 	default:
 		event = &GenericEvent{}
 	}
@@ -43,6 +45,7 @@ type DomainEvent struct {
 	Data   *DomainEvent     `json:"data"`
 	Domain *dnsimple.Domain `json:"domain"`
 }
+type DomainTokenResetEvent struct{ DomainEvent }
 type DomainCreateEvent struct{ DomainEvent }
 type DomainDeleteEvent struct{ DomainEvent }
 
@@ -53,6 +56,9 @@ func ParseDomainCreateEvent(e *DomainCreateEvent, p []byte) error {
 	return e.DomainEvent.parse(p)
 }
 func ParseDomainDeleteEvent(e *DomainDeleteEvent, p []byte) error {
+	return e.DomainEvent.parse(p)
+}
+func ParseDomainTokenResetEvent(e *DomainTokenResetEvent, p []byte) error {
 	return e.DomainEvent.parse(p)
 }
 
