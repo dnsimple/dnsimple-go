@@ -1,11 +1,13 @@
 package dnsimple
 
-import ()
+import (
+	"fmt"
+)
 
 // WebhooksService handles communication with the webhook related
 // methods of the DNSimple API.
 //
-// See #
+// See PRIVATE
 type WebhooksService struct {
 	client *Client
 }
@@ -24,5 +26,31 @@ type WebhooksResponse struct {
 
 // Webhook represents a DNSimple webhook.
 type Webhook struct {
+	ID  int `json:"id,omitempty"`
 	URL string `json:"url,omitempty"`
+}
+
+// webhookPath generates the resource path for given webhook.
+func webhookPath(accountID string, webhookID int) (path string) {
+	path = fmt.Sprintf("/%v/webhooks", accountID)
+	if webhookID != 0 {
+		path = fmt.Sprintf("%v/%v", path, webhookID)
+	}
+	return
+}
+
+// List the webhooks.
+//
+// See PRIVATE
+func (s *WebhooksService) List(accountID string) (*WebhooksResponse, error) {
+	path := webhookPath(accountID, 0)
+	webhooksResponse := &WebhooksResponse{}
+
+	resp, err := s.client.get(path, webhooksResponse)
+	if err != nil {
+		return webhooksResponse, err
+	}
+
+	webhooksResponse.HttpResponse = resp
+	return webhooksResponse, nil
 }
