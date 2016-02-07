@@ -5,7 +5,7 @@ import (
 )
 
 func TestParseGenericEvent(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 229375, "name": "example.com", "state": "hosted", "token": "Alp8OJ60i7vbhyi7MqCOhsrZTw00bFyw", "account_id": 981, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1120, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1111, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
 
 	event := &GenericEvent{}
 	err := ParseGenericEvent(event, []byte(payload))
@@ -27,7 +27,7 @@ func TestParseGenericEvent(t *testing.T) {
 }
 
 func TestParseDomainCreateEvent(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 229375, "name": "example.com", "state": "hosted", "token": "Alp8OJ60i7vbhyi7MqCOhsrZTw00bFyw", "account_id": 981, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1120, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1111, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
 
 	event := &DomainCreateEvent{}
 	err := ParseDomainCreateEvent(event, []byte(payload))
@@ -47,7 +47,7 @@ func TestParseDomainCreateEvent(t *testing.T) {
 }
 
 func TestParseDomainDeleteEvent(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 229375, "name": "example.com", "state": "hosted", "token": "Alp8OJ60i7vbhyi7MqCOhsrZTw00bFyw", "account_id": 981, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1120, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.delete", "api_version": "v2", "request_identifier": "3e625f1c-3e8b-48fc-9326-9489f4b60e52"}`
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": 1111, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.delete", "api_version": "v2", "request_identifier": "3e625f1c-3e8b-48fc-9326-9489f4b60e52"}`
 
 	event := &DomainDeleteEvent{}
 	err := ParseDomainDeleteEvent(event, []byte(payload))
