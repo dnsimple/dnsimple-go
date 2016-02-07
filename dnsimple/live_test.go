@@ -82,3 +82,46 @@ func TestLive_DomainsService_Domains(t *testing.T) {
 	fmt.Printf("RateLimit: %v/%v until %v\n", domainsResponse.RateLimitRemaining(), domainsResponse.RateLimit(), domainsResponse.RateLimitReset())
 	fmt.Printf("Domains: %+v\n", domainsResponse.Data)
 }
+
+func TestLive_Webhooks(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	var err error
+	var webhook *Webhook
+	var webhookResponse *WebhookResponse
+	var webhooksResponse *WebhooksResponse
+
+	whoami, err := Whoami(dnsimpleClient)
+	if err != nil {
+		t.Fatalf("Live Auth.Whoami()/Domains.List() returned error: %v", err)
+	}
+	accountID := whoami.Account.ID
+
+	webhooksResponse, err = dnsimpleClient.Webhooks.List(fmt.Sprintf("%v", accountID))
+	if err != nil {
+		t.Fatalf("Live Webhooks.List() returned error: %v", err)
+	}
+
+	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
+	fmt.Printf("Webhooks: %+v\n", webhooksResponse.Data)
+
+	webhookAttributes := Webhook{URL:"https://livetest.test"}
+	webhookResponse, err = dnsimpleClient.Webhooks.Create(fmt.Sprintf("%v", accountID), webhookAttributes)
+	if err != nil {
+		t.Fatalf("Live Webhooks.Create() returned error: %v", err)
+	}
+
+	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
+	fmt.Printf("Webhook: %+v\n", webhookResponse.Data)
+	webhook = webhookResponse.Data
+
+	webhookResponse, err = dnsimpleClient.Webhooks.Delete(fmt.Sprintf("%v", accountID), webhook.ID)
+	if err != nil {
+		t.Fatalf("Live Webhooks.Delete(%v) returned error: %v", webhook.ID, err)
+	}
+
+	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
+	webhook = webhookResponse.Data
+}
