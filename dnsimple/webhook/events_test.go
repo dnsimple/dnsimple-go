@@ -105,3 +105,23 @@ func TestParseDomainAutoRenewalEnableEvent(t *testing.T) {
 		t.Errorf("ParseDomainAutoRenewalDisableEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
+
+func TestParseDomainAutoRenewalDisableEvent(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-02-07T23:26:04.851Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 11549}}, "actor": {"id": 1111, "entity": "user", "pretty": "weppos@weppos.net"}, "action": "domain.auto_renew_disable", "api_version": "v2", "request_identifier": "394863e8-7669-4d92-98ab-372ce2f18dc1"}`
+
+	event := &DomainAutoRenewalDisableEvent{}
+	err := ParseDomainAutoRenewalDisableEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseDomainAutoRenewalDisableEvent returned error: %v", err)
+	}
+
+	if want, got := "domain.auto_renew_disable", event.Event; want != got {
+		t.Errorf("ParseDomainAutoRenewalDisableEvent event expected to be %v, got %v", want, got)
+	}
+	if want, got := "394863e8-7669-4d92-98ab-372ce2f18dc1", event.RequestID; want != got {
+		t.Errorf("ParseDomainAutoRenewalDisableEvent requestID expected to be %v, got %v", want, got)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseDomainAutoRenewalDisableEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+}

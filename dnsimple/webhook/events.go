@@ -16,6 +16,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		event = &DomainTokenResetEvent{}
 	case "domain.auto_renew_enable":
 		event = &DomainAutoRenewalEnableEvent{}
+	case "domain.auto_renew_disable":
+		event = &DomainAutoRenewalDisableEvent{}
 	default:
 		event = &GenericEvent{}
 	}
@@ -49,6 +51,7 @@ type DomainEvent struct {
 }
 type DomainTokenResetEvent struct{ DomainEvent }
 type DomainAutoRenewalEnableEvent struct{ DomainEvent }
+type DomainAutoRenewalDisableEvent struct{ DomainEvent }
 type DomainCreateEvent struct{ DomainEvent }
 type DomainDeleteEvent struct{ DomainEvent }
 
@@ -65,6 +68,9 @@ func ParseDomainTokenResetEvent(e *DomainTokenResetEvent, p []byte) error {
 	return e.DomainEvent.parse(p)
 }
 func ParseDomainAutoRenewalEnableEvent(e *DomainAutoRenewalEnableEvent, p []byte) error {
+	return e.DomainEvent.parse(p)
+}
+func ParseDomainAutoRenewalDisableEvent(e *DomainAutoRenewalDisableEvent, p []byte) error {
 	return e.DomainEvent.parse(p)
 }
 
