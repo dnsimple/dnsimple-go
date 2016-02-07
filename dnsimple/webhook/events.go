@@ -7,25 +7,27 @@ import (
 func switchEvent(name string, payload []byte) (Event, error) {
 	switch name {
 	case "domain.create":
-		return ParseDomainCreateEvent(payload)
+		e := &DomainCreateEvent{}
+		return e, ParseDomainCreateEvent(e, payload)
 	case "domain.delete":
-		return ParseDomainDeleteEvent(payload)
+		e := &DomainDeleteEvent{}
+		return e, ParseDomainDeleteEvent(e, payload)
 	default:
-		return ParseGenericEvent(payload)
+		e := &GenericEvent{}
+		return e, ParseGenericEvent(e, payload)
 	}
 }
 
+//
 // GenericEvent represents a generic event, where the data is a simple map of strings.
+//
 type GenericEvent struct {
 	eventCore
 	Data interface{} `json:"data"`
 }
 
 // ParseGenericEvent unpacks the data into a GenericEvent.
-func ParseGenericEvent(payload []byte) (*GenericEvent, error) {
-	event := &GenericEvent{}
-	return event, event.parse(payload)
-}
+func ParseGenericEvent(e *GenericEvent, payload []byte) error { return e.parse(payload) }
 
 func (e *GenericEvent) parse(payload []byte) error {
 	e.payload = payload
@@ -42,10 +44,7 @@ type DomainEvent struct {
 }
 
 // ParseDomainEvent unpacks the payload into a DomainEvent.
-func ParseDomainEvent(p []byte) (*DomainEvent, error) {
-	e := &DomainEvent{}
-	return e, e.parse(p)
-}
+func ParseDomainEvent(e *DomainEvent, payload []byte) error { return e.parse(payload) }
 
 func (e *DomainEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
@@ -54,14 +53,8 @@ func (e *DomainEvent) parse(payload []byte) error {
 
 type DomainCreateEvent struct{ DomainEvent }
 
-func ParseDomainCreateEvent(p []byte) (*DomainCreateEvent, error) {
-	e := &DomainCreateEvent{}
-	return e, e.parse(p)
-}
+func ParseDomainCreateEvent(e *DomainCreateEvent, p []byte) error { return e.DomainEvent.parse(p) }
 
 type DomainDeleteEvent struct{ DomainEvent }
 
-func ParseDomainDeleteEvent(p []byte) (*DomainDeleteEvent, error) {
-	e := &DomainDeleteEvent{}
-	return e, e.parse(p)
-}
+func ParseDomainDeleteEvent(e *DomainDeleteEvent, p []byte) error { return e.DomainEvent.parse(p) }
