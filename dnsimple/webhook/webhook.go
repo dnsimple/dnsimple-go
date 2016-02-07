@@ -27,7 +27,7 @@ type eventCore struct {
 }
 
 type Event interface {
-	Parse([]byte) (error)
+	parse([]byte) (error)
 }
 
 type DomainCreateEvent struct {
@@ -39,10 +39,10 @@ type DomainCreateEvent struct {
 
 func ParseDomainCreateEvent(data []byte) (*DomainCreateEvent, error) {
 	event := &DomainCreateEvent{}
-	return event, event.Parse(data)
+	return event, event.parse(data)
 }
 
-func (e *DomainCreateEvent) Parse(data []byte) (error) {
+func (e *DomainCreateEvent) parse(data []byte) (error) {
 	e.Payload, e.Data = data, e
 	return json.Unmarshal(data, e)
 }
