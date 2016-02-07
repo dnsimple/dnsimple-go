@@ -8,6 +8,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	switch name {
 	case "domain.create":
 		return ParseDomainCreateEvent(payload)
+	case "domain.delete":
+		return ParseDomainDeleteEvent(payload)
 	default:
 		return ParseGenericEvent(payload)
 	}
@@ -30,20 +32,36 @@ func (e *GenericEvent) parse(payload []byte) error {
 	return unmashalEvent(payload, e)
 }
 
-// DomainCreateEvent represents an event sent when a domain is created.
-type DomainCreateEvent struct {
+//
+// DomainEvent represents the base event sent for a domain action.
+//
+type DomainEvent struct {
 	eventCore
-	Data   *DomainCreateEvent `json:"data"`
-	Domain *dnsimple.Domain   `json:"domain"`
+	Data   *DomainEvent     `json:"data"`
+	Domain *dnsimple.Domain `json:"domain"`
 }
 
-// ParseDomainCreateEvent unpacks the data into a DomainCreateEvent.
-func ParseDomainCreateEvent(payload []byte) (*DomainCreateEvent, error) {
-	event := &DomainCreateEvent{}
-	return event, event.parse(payload)
+// ParseDomainEvent unpacks the payload into a DomainEvent.
+func ParseDomainEvent(p []byte) (*DomainEvent, error) {
+	e := &DomainEvent{}
+	return e, e.parse(p)
 }
 
-func (e *DomainCreateEvent) parse(payload []byte) error {
+func (e *DomainEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
+}
+
+type DomainCreateEvent struct{ DomainEvent }
+
+func ParseDomainCreateEvent(p []byte) (*DomainCreateEvent, error) {
+	e := &DomainCreateEvent{}
+	return e, e.parse(p)
+}
+
+type DomainDeleteEvent struct{ DomainEvent }
+
+func ParseDomainDeleteEvent(p []byte) (*DomainDeleteEvent, error) {
+	e := &DomainDeleteEvent{}
+	return e, e.parse(p)
 }
