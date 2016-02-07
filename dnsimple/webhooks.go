@@ -54,3 +54,19 @@ func (s *WebhooksService) List(accountID string) (*WebhooksResponse, error) {
 	webhooksResponse.HttpResponse = resp
 	return webhooksResponse, nil
 }
+
+// Create a new webhook.
+//
+// See PRIVATE
+func (s *WebhooksService) Create(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
+	path := webhookPath(accountID, 0)
+	webhookResponse := &WebhookResponse{}
+
+	resp, err := s.client.post(path, webhookAttributes, webhookResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	webhookResponse.HttpResponse = resp
+	return webhookResponse, nil
+}

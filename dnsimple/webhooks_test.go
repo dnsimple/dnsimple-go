@@ -48,3 +48,37 @@ func TestWebhooksService_List(t *testing.T) {
 		t.Fatalf("Webhooks.List() returned URL expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestWebhooksService_Create(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/webhooks", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"url": "https://webhook.test"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+			{"data":{"id":1,"url":"https://webhook.test"}}
+		`)
+	})
+
+	accountID := "1010"
+	webhookAttributes := Webhook{URL: "https://webhook.test"}
+
+	webhookResponse, err := client.Webhooks.Create(accountID, webhookAttributes)
+	if err != nil {
+		t.Fatalf("Webhooks.Create() returned error: %v", err)
+	}
+
+	webhook := webhookResponse.Data
+	if want, got := 1, webhook.ID; want != got {
+		t.Fatalf("Webhooks.Create() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "https://webhook.test", webhook.URL; want != got {
+		t.Fatalf("Webhooks.Create() returned URL expected to be `%v`, got `%v`", want, got)
+	}
+}
