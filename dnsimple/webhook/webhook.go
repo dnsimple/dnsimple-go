@@ -2,12 +2,12 @@
 // sent from DNSimple via webhook.
 package webhook
 
-import(
+import (
 	//"github.com/miekg/dns"
 	"encoding/json"
 
-	"github.com/aetrion/dnsimple-go/dnsimple"
 	"fmt"
+	"github.com/aetrion/dnsimple-go/dnsimple"
 )
 
 type Payload struct {
@@ -15,8 +15,8 @@ type Payload struct {
 	RequestID  string      `json:"request_identifier"`
 	Actor      Actor       `json:"actor"`
 	Action     string      `json:"action"`
-	What     interface{}      `json:"data"`
-	Data     []byte      `json:"-"`
+	What       interface{} `json:"data"`
+	Data       []byte      `json:"-"`
 }
 
 type Actor struct {
@@ -30,8 +30,22 @@ type Event interface {
 }
 
 type DomainCreateEvent struct {
-	payload *Payload        `json:"-"`
-	Domain *dnsimple.Domain `json:"domain"`
+	payload   *Payload           `json:"-"`
+	RequestID string             `json:"request_identifier"`
+	Domain    *dnsimple.Domain   `json:"domain"`
+	Data      *DomainCreateEvent `json:"data"`
+}
+
+func ParseDomainCreateEvent(data []byte) *DomainCreateEvent {
+	event := &DomainCreateEvent{}
+	json.Unmarshal(data, &struct {
+		*DomainCreateEvent
+		Data *DomainCreateEvent `json:"data"`
+	}{
+		DomainCreateEvent: event,
+		Data:              event,
+	})
+	return event
 }
 
 func (e *DomainCreateEvent) Payload() *Payload {
@@ -39,14 +53,14 @@ func (e *DomainCreateEvent) Payload() *Payload {
 }
 
 func ParsePayload(data []byte) (*Payload, error) {
-	payload := &Payload{Data:data}
+	payload := &Payload{Data: data}
 	if err := json.Unmarshal(data, &payload); err != nil {
 		return nil, err
 	}
 	return payload, nil
 }
 
-func Parse(data []byte) (Event) {
+func Parse(data []byte) Event {
 	payload, _ := ParsePayload(data)
 	var event Event
 
@@ -59,4 +73,41 @@ func Parse(data []byte) (Event) {
 	}
 
 	return event
+}
+
+func Parse2(data []byte) Event {
+	payload, _ := ParsePayload(data)
+	//var event Event
+
+	switch payload.Action {
+	case "domain.create":
+		event := &DomainCreateEvent{}
+		event.Data = event
+		//json.Unmarshal(data, &event)
+		json.Unmarshal(data, &event)
+		return event
+		//case "domain.create2":
+		//	event := &DomainCreateEvent{}
+		//	//json.Unmarshal(data, &event)
+		//	json.Unmarshal(data, &struct {
+		//		*DomainCreateEvent
+		//		Data *DomainCreateEvent `json:"data"`
+		//	}{
+		//		DomainCreateEvent: event,
+		//		Data:              event,
+		//	})
+		//	return event
+		//case "domain.create":
+		//	event := &DomainCreateEvent{}
+		//	//json.Unmarshal(data, &event)
+		//	json.Unmarshal(data, &struct {
+		//		*DomainCreateEvent
+		//		Data *DomainCreateEvent `json:"data"`
+		//	}{
+		//		DomainCreateEvent: event,
+		//		Data:              event,
+		//	})
+		//	return event
+	}
+	return nil
 }
