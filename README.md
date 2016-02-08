@@ -44,7 +44,7 @@ func main() {
     client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
 
     // get the current authenticated account (if you don't know who you are)
-    whoamiResponse, err := client.Auth.Whoami()
+    whoamiResponse, err := client.Identity.Whoami()
     if err != nil {
         fmt.Printf("Whoami() returned error: %v\n", err)
         os.Exit(1)

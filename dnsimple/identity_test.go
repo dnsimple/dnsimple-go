@@ -20,7 +20,7 @@ func TestAuthService_Whoami(t *testing.T) {
 		`)
 	})
 
-	whoamiResponse, err := client.Auth.Whoami()
+	whoamiResponse, err := client.Identity.Whoami()
 	if err != nil {
 		t.Fatalf("Auth.Whoami() returned error: %v", err)
 	}

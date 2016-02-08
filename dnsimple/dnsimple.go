@@ -36,32 +36,32 @@ const (
 type Client struct {
 	// HttpClient is the underlying HTTP client
 	// used to communicate with the API.
-	HttpClient *http.Client
+	HttpClient  *http.Client
 
 	// Credentials used for accessing the DNSimple API
 	Credentials Credentials
 
 	// BaseURL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
-	BaseURL string
+	BaseURL     string
 
 	// UserAgent used when communicating with the DNSimple API.
-	UserAgent string
+	UserAgent   string
 
 	// Services used for talking to different parts of the DNSimple API.
-	Auth     *AuthService
-	Contacts *ContactsService
-	Domains  *DomainsService
-	Zones    *ZonesService
+	Identity    *IdentityService
+	Contacts    *ContactsService
+	Domains     *DomainsService
+	Zones       *ZonesService
 
 	// Set to true to output debugging logs during API calls
-	Debug bool
+	Debug       bool
 }
 
 // NewClient returns a new DNSimple API client using the given credentials.
 func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
-	c.Auth = &AuthService{client: c}
+	c.Identity = &IdentityService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Zones = &ZonesService{client: c}
