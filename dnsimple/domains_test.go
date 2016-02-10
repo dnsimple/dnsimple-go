@@ -35,7 +35,7 @@ func TestDomainsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/listDomains/created.http")
+		httpResponse := httpResponseFixture("/listDomains/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
