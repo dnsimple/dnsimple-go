@@ -46,7 +46,7 @@ type domainRequest struct {
 	Domain interface{} `json:"domain"`
 }
 
-func domainIDentifier(value interface{}) string {
+func domainIdentifier(value interface{}) string {
 	switch value := value.(type) {
 	case string:
 		return value
@@ -56,10 +56,9 @@ func domainIDentifier(value interface{}) string {
 	return ""
 }
 
-// domainPath generates the resource path for given domain.
 func domainPath(accountID string, domain interface{}) string {
 	if domain != nil {
-		return fmt.Sprintf("/%v/domains/%v", accountID, domainIDentifier(domain))
+		return fmt.Sprintf("/%v/domains/%v", accountID, domainIdentifier(domain))
 	}
 	return fmt.Sprintf("/%v/domains", accountID)
 }
