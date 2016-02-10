@@ -66,7 +66,7 @@ func domainPath(accountID string, domain interface{}) string {
 // List the domains.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) List(accountID string) (*DomainsResponse, error) {
+func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error) {
 	path := domainPath(accountID, nil)
 	domainsResponse := &DomainsResponse{}
 
@@ -82,7 +82,7 @@ func (s *DomainsService) List(accountID string) (*DomainsResponse, error) {
 // Create a new domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
-func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*DomainResponse, error) {
+func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain) (*DomainResponse, error) {
 	path := domainPath(accountID, nil)
 	domainResponse := &DomainResponse{}
 
@@ -98,7 +98,7 @@ func (s *DomainsService) Create(accountID string, domainAttributes Domain) (*Dom
 // Get a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
-func (s *DomainsService) Get(accountID string, domain interface{}) (*DomainResponse, error) {
+func (s *DomainsService) GetDomain(accountID string, domain interface{}) (*DomainResponse, error) {
 	path := domainPath(accountID, domain)
 	domainResponse := &DomainResponse{}
 
@@ -114,7 +114,7 @@ func (s *DomainsService) Get(accountID string, domain interface{}) (*DomainRespo
 // Delete a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
-func (s *DomainsService) Delete(accountID string, domain interface{}) (*DomainResponse, error) {
+func (s *DomainsService) DeleteDomain(accountID string, domain interface{}) (*DomainResponse, error) {
 	path := domainPath(accountID, domain)
 	domainResponse := &DomainResponse{}
 

@@ -56,7 +56,7 @@ func contactPath(accountID string, contact interface{}) string {
 // List the contacts.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
-func (s *ContactsService) List(accountID string) (*ContactsResponse, error) {
+func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, error) {
 	path := contactPath(accountID, nil)
 	contactsResponse := &ContactsResponse{}
 
@@ -72,7 +72,7 @@ func (s *ContactsService) List(accountID string) (*ContactsResponse, error) {
 // Create a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
-func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*ContactResponse, error) {
+func (s *ContactsService) CreateContact(accountID string, contactAttributes Contact) (*ContactResponse, error) {
 	path := contactPath(accountID, nil)
 	contactResponse := &ContactResponse{}
 
@@ -88,7 +88,7 @@ func (s *ContactsService) Create(accountID string, contactAttributes Contact) (*
 // Get a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
-func (s *ContactsService) Get(accountID string, contactID int) (*ContactResponse, error) {
+func (s *ContactsService) GetContact(accountID string, contactID int) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
 	contactResponse := &ContactResponse{}
 
@@ -104,7 +104,7 @@ func (s *ContactsService) Get(accountID string, contactID int) (*ContactResponse
 // Update a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
-func (s *ContactsService) Update(accountID string, contactID int, contactAttributes Contact) (*ContactResponse, error) {
+func (s *ContactsService) UpdateContact(accountID string, contactID int, contactAttributes Contact) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
 	contactResponse := &ContactResponse{}
 
@@ -120,7 +120,7 @@ func (s *ContactsService) Update(accountID string, contactID int, contactAttribu
 // Delete a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
-func (s *ContactsService) Delete(accountID string, contactID int) (*ContactResponse, error) {
+func (s *ContactsService) DeleteContact(accountID string, contactID int) (*ContactResponse, error) {
 	path := contactPath(accountID, contactID)
 	contactResponse := &ContactResponse{}
 

@@ -54,9 +54,9 @@ func main() {
     fmt.Println(whoamiResponse.Data.User)
 
     // get the list of domains
-    domainsResponse, _, err := client.Domains.List(whoami.Account.Id)
+    domainsResponse, _, err := client.Domains.ListDomains(whoami.Account.Id)
     if err != nil {
-        fmt.Printf("Domains.List() returned error: %v\n", err)
+        fmt.Printf("Domains.ListDomains() returned error: %v\n", err)
         os.Exit(1)
     }
 

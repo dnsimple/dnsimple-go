@@ -9,11 +9,11 @@ import (
 
 func TestZonesService_zoneRecordPath(t *testing.T) {
 	if want, got := "/1010/zones/example.com/records", zoneRecordPath("1010", "example.com", 0); want != got {
-		t.Errorf("webhookPath(%v,  ) = %v, want %v", "1010", got, want)
+		t.Errorf("contactPath(%v,  ) = %v, want %v", "1010", got, want)
 	}
 
 	if want, got := "/1010/zones/example.com/records/1", zoneRecordPath("1010", "example.com", 1); want != got {
-		t.Errorf("webhookPath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("contactPath(%v, 1) = %v, want %v", "1010", got, want)
 	}
 }
 

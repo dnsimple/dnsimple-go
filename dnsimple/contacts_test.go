@@ -9,11 +9,11 @@ import (
 
 func TestContacts_contactPath(t *testing.T) {
 	if want, got := "/1010/contacts", contactPath("1010", nil); want != got {
-		t.Errorf("webhookPath(%v,  ) = %v, want %v", "1010", got, want)
+		t.Errorf("contactPath(%v,  ) = %v, want %v", "1010", got, want)
 	}
 
 	if want, got := "/1010/contacts/1", contactPath("1010", 1); want != got {
-		t.Errorf("webhookPath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("contactPath(%v, 1) = %v, want %v", "1010", got, want)
 	}
 }
 
@@ -33,21 +33,21 @@ func TestContactsService_List(t *testing.T) {
 
 	accountID := "1010"
 
-	contactsResponse, err := client.Contacts.List(accountID)
+	contactsResponse, err := client.Contacts.ListContacts(accountID)
 	if err != nil {
-		t.Fatalf("Contacts.List() returned error: %v", err)
+		t.Fatalf("Contacts.ListDomains() returned error: %v", err)
 	}
 
 	contacts := contactsResponse.Data
 	if want, got := 2, len(contacts); want != got {
-		t.Errorf("Contacts.List() expected to return %v contacts, got %v", want, got)
+		t.Errorf("Contacts.ListDomains() expected to return %v contacts, got %v", want, got)
 	}
 
 	if want, got := 1, contacts[0].ID; want != got {
-		t.Fatalf("Contacts.List() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.ListDomains() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contacts[0].Label; want != got {
-		t.Fatalf("Contacts.List() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.ListDomains() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -71,17 +71,17 @@ func TestContactsService_Create(t *testing.T) {
 	accountID := "1010"
 	contactAttributes := Contact{Label: "Default"}
 
-	contactResponse, err := client.Contacts.Create(accountID, contactAttributes)
+	contactResponse, err := client.Contacts.CreateContact(accountID, contactAttributes)
 	if err != nil {
-		t.Fatalf("Contacts.Create() returned error: %v", err)
+		t.Fatalf("Contacts.CreateDomain() returned error: %v", err)
 	}
 
 	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
-		t.Fatalf("Contacts.Create() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.CreateDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contact.Label; want != got {
-		t.Fatalf("Contacts.Create() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.CreateDomain() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -102,9 +102,9 @@ func TestContactsService_Get(t *testing.T) {
 	accountID := "1010"
 	contactID := 1
 
-	contactResponse, err := client.Contacts.Get(accountID, contactID)
+	contactResponse, err := client.Contacts.GetContact(accountID, contactID)
 	if err != nil {
-		t.Fatalf("Contacts.Get() returned error: %v", err)
+		t.Fatalf("Contacts.GetDomain() returned error: %v", err)
 	}
 
 	contact := contactResponse.Data
@@ -128,7 +128,7 @@ func TestContactsService_Get(t *testing.T) {
 		UpdatedAt:     "2016-01-19T20:50:26.066Z"}
 
 	if !reflect.DeepEqual(contact, wantSingle) {
-		t.Fatalf("Contacts.Get() returned %+v, want %+v", contact, wantSingle)
+		t.Fatalf("Contacts.GetDomain() returned %+v, want %+v", contact, wantSingle)
 	}
 }
 
@@ -153,17 +153,17 @@ func TestContactsService_Update(t *testing.T) {
 	accountID := "1010"
 	contactID := 1
 
-	contactResponse, err := client.Contacts.Update(accountID, contactID, contactAttributes)
+	contactResponse, err := client.Contacts.UpdateContact(accountID, contactID, contactAttributes)
 	if err != nil {
-		t.Fatalf("Contacts.Update() returned error: %v", err)
+		t.Fatalf("Contacts.UpdateDomain() returned error: %v", err)
 	}
 
 	contact := contactResponse.Data
 	if want, got := 1, contact.ID; want != got {
-		t.Fatalf("Contacts.Update() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.UpdateDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contact.Label; want != got {
-		t.Fatalf("Contacts.Update() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.UpdateDomain() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -184,8 +184,8 @@ func TestContactsService_Delete(t *testing.T) {
 	accountID := "1010"
 	contactID := 1
 
-	_, err := client.Contacts.Delete(accountID, contactID)
+	_, err := client.Contacts.DeleteContact(accountID, contactID)
 	if err != nil {
-		t.Fatalf("Contacts.Delete() returned error: %v", err)
+		t.Fatalf("Contacts.DeleteDomain() returned error: %v", err)
 	}
 }

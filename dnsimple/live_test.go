@@ -59,7 +59,7 @@ func TestLive_Domains(t *testing.T) {
 
 	accountID := whoami.Account.ID
 
-	domainsResponse, err := dnsimpleClient.Domains.List(fmt.Sprintf("%v", accountID))
+	domainsResponse, err := dnsimpleClient.Domains.ListDomains(fmt.Sprintf("%v", accountID))
 	if err != nil {
 		t.Fatalf("Live Domains.List() returned error: %v", err)
 	}
