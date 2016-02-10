@@ -15,7 +15,7 @@ type ZonesService struct {
 // ZoneResponse represents a response from an API method that returns a Zone struct.
 type ZoneResponse struct {
 	Response
-	Data *Contact `json:"data"`
+	Data *Zone `json:"data"`
 }
 
 // ZonesResponse represents a response from an API method that returns a collection of Zone struct.
@@ -48,4 +48,20 @@ func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
 
 	zonesResponse.HttpResponse = resp
 	return zonesResponse, nil
+}
+
+// Get a zone.
+//
+// See https://developer.dnsimple.com/v2/zones/#get
+func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse, error) {
+	path := fmt.Sprintf("/%v/zones/%v", accountID, zoneName)
+	zoneResponse := &ZoneResponse{}
+
+	resp, err := s.client.get(path, zoneResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	zoneResponse.HttpResponse = resp
+	return zoneResponse, nil
 }
