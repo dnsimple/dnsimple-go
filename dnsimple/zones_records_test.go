@@ -1,13 +1,13 @@
 package dnsimple
 
 import (
-	"fmt"
+	"io"
 	"net/http"
 	"reflect"
 	"testing"
 )
 
-func TestWebhooks_zoneRecordPath(t *testing.T) {
+func TestZonesService_zoneRecordPath(t *testing.T) {
 	if want, got := "/1010/zones/example.com/records", zoneRecordPath("1010", "example.com", 0); want != got {
 		t.Errorf("webhookPath(%v,  ) = %v, want %v", "1010", got, want)
 	}
@@ -17,17 +17,18 @@ func TestWebhooks_zoneRecordPath(t *testing.T) {
 	}
 }
 
-func TestDomainsService_ListRecords(t *testing.T) {
+func TestZonesService_ListRecords(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/listZoneRecords/success.http")
+
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 
-		fmt.Fprint(w, `
-			{"data":[{"id":64779,"zone_id":"example.com","parent_id":null,"name":"","content":"ns1.dnsimple.com admin.dnsimple.com 1452184205 86400 7200 604800 300","ttl":3600,"priority":null,"type":"SOA","system_record":true,"created_at":"2016-01-07T16:30:05.379Z","updated_at":"2016-01-07T16:30:05.379Z"},{"id":64780,"zone_id":"example.com","parent_id":null,"name":"","content":"ns1.dnsimple.com","ttl":3600,"priority":null,"type":"NS","system_record":true,"created_at":"2016-01-07T16:30:05.422Z","updated_at":"2016-01-07T16:30:05.422Z"},{"id":64781,"zone_id":"example.com","parent_id":null,"name":"","content":"ns2.dnsimple.com","ttl":3600,"priority":null,"type":"NS","system_record":true,"created_at":"2016-01-07T16:30:05.433Z","updated_at":"2016-01-07T16:30:05.433Z"},{"id":64782,"zone_id":"example.com","parent_id":null,"name":"","content":"ns3.dnsimple.com","ttl":3600,"priority":null,"type":"NS","system_record":true,"created_at":"2016-01-07T16:30:05.445Z","updated_at":"2016-01-07T16:30:05.445Z"},{"id":64783,"zone_id":"example.com","parent_id":null,"name":"","content":"ns4.dnsimple.com","ttl":3600,"priority":null,"type":"NS","system_record":true,"created_at":"2016-01-07T16:30:05.457Z","updated_at":"2016-01-07T16:30:05.457Z"}],"pagination":{"current_page":1,"per_page":30,"total_entries":5,"total_pages":1}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -50,11 +51,12 @@ func TestDomainsService_ListRecords(t *testing.T) {
 	}
 }
 
-func TestDomainsService_CreateRecord(t *testing.T) {
+func TestZonesService_CreateRecord(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/createZoneRecord/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -62,10 +64,8 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 		want := map[string]interface{}{"name": "foo", "content": "192.168.0.10", "type": "A"}
 		testRequestJSON(t, r, want)
 
-		w.WriteHeader(http.StatusCreated)
-		fmt.Fprintf(w, `
-			{"data":{"id":64784,"zone_id":"example.com","parent_id":null,"name":"www","content":"127.0.0.1","ttl":600,"priority":null,"type":"A","system_record":false,"created_at":"2016-01-07T17:45:13.653Z","updated_at":"2016-01-07T17:45:13.653Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -85,17 +85,18 @@ func TestDomainsService_CreateRecord(t *testing.T) {
 	}
 }
 
-func TestDomainsService_GetRecord(t *testing.T) {
+func TestZonesService_GetRecord(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/getZoneRecord/success.http")
+
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 
-		fmt.Fprintf(w, `
-			{"data":{"id":64784,"zone_id":"example.com","parent_id":null,"name":"www","content":"127.0.0.1","ttl":600,"priority":null,"type":"A","system_record":false,"created_at":"2016-01-07T17:45:13.653Z","updated_at":"2016-01-07T17:45:13.653Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -124,20 +125,21 @@ func TestDomainsService_GetRecord(t *testing.T) {
 	}
 }
 
-func TestDomainsService_UpdateRecord(t *testing.T) {
+func TestZonesService_UpdateRecord(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/updateZoneRecord/success.http")
+
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
 
 		want := map[string]interface{}{"content": "192.168.0.10", "name": "bar"}
 		testRequestJSON(t, r, want)
 
-		fmt.Fprint(w, `
-			{"data":{"id":64784,"domain_id":5841,"parent_id":null,"name":"www","content":"127.0.0.1","ttl":600,"priority":null,"type":"A","system_record":false,"created_at":"2016-01-07T17:45:13.653Z","updated_at":"2016-01-07T17:54:46.722Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -157,13 +159,18 @@ func TestDomainsService_UpdateRecord(t *testing.T) {
 	}
 }
 
-func TestDomainsService_DeleteRecord(t *testing.T) {
+func TestZonesService_DeleteRecord(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/deleteZoneRecord/success.http")
+
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

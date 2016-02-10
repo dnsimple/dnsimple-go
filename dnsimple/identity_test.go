@@ -1,7 +1,7 @@
 package dnsimple
 
 import (
-	"fmt"
+	"io"
 	"net/http"
 	"reflect"
 	"testing"
@@ -12,12 +12,13 @@ func TestAuthService_Whoami(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/whoami", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/whoami/success.http")
+
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 
-		fmt.Fprint(w, `
-			{"data":{"user":null,"account":{"id":1,"email":"example-account@example.com"}}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	whoamiResponse, err := client.Identity.Whoami()

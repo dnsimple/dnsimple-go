@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"reflect"
 	"testing"
@@ -68,16 +69,16 @@ func TestDomainsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/createDomain/created.http")
+
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
 		want := map[string]interface{}{"name": "example.com"}
 		testRequestJSON(t, r, want)
 
-		w.WriteHeader(http.StatusCreated)
-		fmt.Fprintf(w, `
-			{"data":{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1"
@@ -102,12 +103,13 @@ func TestDomainsService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/getDomain/success.http")
+
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 
-		fmt.Fprint(w, `
-			{"data":{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -141,8 +143,13 @@ func TestDomainsService_Delete(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/deleteDomain/success.http")
+
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -158,13 +165,13 @@ func TestDomainsService_ResetDomainToken(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/token", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture("/resetDomainToken/success.http")
+
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		w.WriteHeader(http.StatusCreated)
-		fmt.Fprint(w, `
-			{"data":{"id":1,"account_id":1010,"registrant_id":null,"name":"example-alpha.com","unicode_name":"example-alpha.com","token":"domain-token","state":"hosted","auto_renew":false,"private_whois":false,"expires_on":null,"created_at":"2014-12-06T15:56:55.573Z","updated_at":"2015-12-09T00:20:56.056Z"}}
-		`)
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
