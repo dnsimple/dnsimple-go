@@ -126,3 +126,19 @@ func (s *DomainsService) Delete(accountID string, domain interface{}) (*DomainRe
 	domainResponse.HttpResponse = resp
 	return domainResponse, nil
 }
+
+// Delete a domain.
+//
+// See https://developer.dnsimple.com/v2/domains/#reset-token
+func (s *DomainsService) ResetDomainToken(accountID string, domain interface{}) (*DomainResponse, error) {
+	path := domainPath(accountID, domain) + "/token"
+	domainResponse := &DomainResponse{}
+
+	resp, err := s.client.post(path, nil, domainResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	domainResponse.HttpResponse = resp
+	return domainResponse, nil
+}
