@@ -46,16 +46,16 @@ func testHeaders(t *testing.T, r *http.Request) {
 }
 
 func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
-	var dat map[string]interface{}
+	var data map[string]interface{}
 
 	body, _ := ioutil.ReadAll(r.Body)
 
-	if err := json.Unmarshal(body, &dat); err != nil {
+	if err := json.Unmarshal(body, &data); err != nil {
 		t.Errorf("Could not decode json body: %v", err)
 	}
 
-	if !reflect.DeepEqual(values, dat) {
-		t.Errorf("Request parameters = %v, want %v", dat, values)
+	if !reflect.DeepEqual(values, data) {
+		t.Errorf("Request parameters = %v, want %v", data, values)
 	}
 }
 

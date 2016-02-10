@@ -49,10 +49,11 @@ type Client struct {
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
-	Identity *IdentityService
-	Contacts *ContactsService
-	Domains  *DomainsService
-	Zones    *ZonesService
+	Identity  *IdentityService
+	Contacts  *ContactsService
+	Domains   *DomainsService
+	Registrar *RegistrarService
+	Zones     *ZonesService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -64,6 +65,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Identity = &IdentityService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
+	c.Registrar = &RegistrarService{client: c}
 	c.Zones = &ZonesService{client: c}
 	return c
 }

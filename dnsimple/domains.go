@@ -127,7 +127,7 @@ func (s *DomainsService) Delete(accountID string, domain interface{}) (*DomainRe
 	return domainResponse, nil
 }
 
-// Delete a domain.
+// ResetDomainToken resets the domain token.
 //
 // See https://developer.dnsimple.com/v2/domains/#reset-token
 func (s *DomainsService) ResetDomainToken(accountID string, domain interface{}) (*DomainResponse, error) {
