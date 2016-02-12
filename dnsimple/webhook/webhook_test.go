@@ -12,7 +12,7 @@ func TestParse(t *testing.T) {
 		t.Fatalf("Parse returned error: %v", err)
 	}
 
-	if want, got := "domain.create", event.Event(); want != got {
+	if want, got := "domain.create", event.EventName(); want != got {
 		t.Errorf("Parse event expected to be %v, got %v", want, got)
 	}
 

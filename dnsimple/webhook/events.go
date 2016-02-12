@@ -29,7 +29,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 // GenericEvent represents a generic event, where the data is a simple map of strings.
 //
 type GenericEvent struct {
-	EventCore
+	Event_Header
 	Data interface{} `json:"data"`
 }
 
@@ -45,7 +45,7 @@ func (e *GenericEvent) parse(payload []byte) error {
 // DomainEvent represents the base event sent for a domain action.
 //
 type DomainEvent struct {
-	EventCore
+	Event_Header
 	Data   *DomainEvent     `json:"data"`
 	Domain *dnsimple.Domain `json:"domain"`
 }
