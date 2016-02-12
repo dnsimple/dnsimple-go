@@ -38,3 +38,16 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 		t.Errorf("Oauth.ExchangeAuthorizationForToken() returned %+v, want %+v", token, want)
 	}
 }
+
+func TestOauthService_AuthorizeURL(t *testing.T) {
+	clientID := "a1b2c3"
+	client.BaseURL = "https://api.host.test"
+
+	if want, got := "https://host.test?client_id=a1b2c3", client.Oauth.AuthorizeURL(clientID, nil); want != got {
+		t.Errorf("AuthorizeURL = %v, want %v", got, want)
+	}
+
+	if want, got := "https://host.test?client_id=a1b2c3&state=randomstate", client.Oauth.AuthorizeURL(clientID, &AuthorizationOptions{State: "randomstate"}); want != got {
+		t.Errorf("AuthorizeURL = %v, want %v", got, want)
+	}
+}

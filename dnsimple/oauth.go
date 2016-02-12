@@ -1,5 +1,10 @@
 package dnsimple
 
+import (
+	"net/url"
+	"strings"
+)
+
 // OauthService handles communication with the authorization related
 // methods of the DNSimple API.
 //
@@ -37,4 +42,26 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 	}
 
 	return accessToken, nil
+}
+
+// AuthorizationOptions represents the option you can use to generate an authorization URL.
+type AuthorizationOptions struct {
+	RedirectURI string
+	State       string
+}
+
+func (s *OauthService) AuthorizeURL(clientID string, options *AuthorizationOptions) string {
+	uri, _ := url.Parse(strings.Replace(s.client.BaseURL, "api.", "", 1))
+	query := uri.Query()
+	query.Add("client_id", clientID)
+	if options != nil {
+		if options.RedirectURI != "" {
+			query.Add("redirect_uri", options.RedirectURI)
+		}
+		if options.State != "" {
+			query.Add("state", options.State)
+		}
+	}
+	uri.RawQuery = query.Encode()
+	return uri.String()
 }
