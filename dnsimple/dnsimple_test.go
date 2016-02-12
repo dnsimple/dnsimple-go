@@ -4,11 +4,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -63,27 +61,27 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 	}
 }
 
-func readHttpFixture(filename string) string {
+func readHttpFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../fixtures.http" + filename)
 	if err != nil {
-		fmt.Errorf("Unable to read HTTP fixture: %v", err)
-		os.Exit(1)
+		t.Fatalf("Unable to read HTTP fixture: %v", err)
 	}
 
 	// Terrible hack
-	// If I leave the Transfer-Encoding: chuncked I can't get the body properly parsed and returned
-	string := string(data[:])
-	string = strings.Replace(string, "Transfer-Encoding: chunked\r\n", "", -1)
-	string = strings.Replace(string, "Transfer-Encoding: chunked\n", "", -1)
+	// Some fixtures have \n and not \r\n
 
-	return string
+	// Terrible hack
+	s := string(data[:])
+	s = strings.Replace(s, "Transfer-Encoding: chunked\n", "", -1)
+	s = strings.Replace(s, "Transfer-Encoding: chunked\r\n", "", -1)
+
+	return s
 }
 
-func httpResponseFixture(filename string) *http.Response {
-	resp, err := http.ReadResponse(bufio.NewReader(strings.NewReader(readHttpFixture(filename))), nil)
+func httpResponseFixture(t *testing.T, filename string) *http.Response {
+	resp, err := http.ReadResponse(bufio.NewReader(strings.NewReader(readHttpFixture(t, filename))), nil)
 	if err != nil {
-		fmt.Errorf("Unable to create http.Response from fixture: %v", err)
-		os.Exit(1)
+		t.Fatalf("Unable to create http.Response from fixture: %v", err)
 	}
 	// resp.Body.Close()
 	return resp

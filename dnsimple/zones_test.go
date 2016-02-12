@@ -12,7 +12,7 @@ func TestZonesService_ListZones(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/listZones/success.http")
+		httpResponse := httpResponseFixture(t, "/listZones/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -46,7 +46,7 @@ func TestZonesService_GetZone(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/getZone/success.http")
+		httpResponse := httpResponseFixture(t, "/getZone/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

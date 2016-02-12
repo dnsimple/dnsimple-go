@@ -22,7 +22,7 @@ func TestContactsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/listContacts/success.http")
+		httpResponse := httpResponseFixture(t, "/listContacts/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -35,19 +35,19 @@ func TestContactsService_List(t *testing.T) {
 
 	contactsResponse, err := client.Contacts.ListContacts(accountID)
 	if err != nil {
-		t.Fatalf("Contacts.ListDomains() returned error: %v", err)
+		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
 
 	contacts := contactsResponse.Data
 	if want, got := 2, len(contacts); want != got {
-		t.Errorf("Contacts.ListDomains() expected to return %v contacts, got %v", want, got)
+		t.Errorf("Contacts.ListContacts() expected to return %v contacts, got %v", want, got)
 	}
 
 	if want, got := 1, contacts[0].ID; want != got {
-		t.Fatalf("Contacts.ListDomains() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.ListContacts() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contacts[0].Label; want != got {
-		t.Fatalf("Contacts.ListDomains() returned Label expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Contacts.ListContacts() returned Label expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -56,7 +56,7 @@ func TestContactsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/createContact/created.http")
+		httpResponse := httpResponseFixture(t, "/createContact/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -90,7 +90,7 @@ func TestContactsService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/getContact/success.http")
+		httpResponse := httpResponseFixture(t, "/getContact/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -137,7 +137,7 @@ func TestContactsService_Update(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/updateContact/success.http")
+		httpResponse := httpResponseFixture(t, "/updateContact/success.http")
 
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
@@ -172,7 +172,7 @@ func TestContactsService_Delete(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/deleteContact/success.http")
+		httpResponse := httpResponseFixture(t, "/deleteContact/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

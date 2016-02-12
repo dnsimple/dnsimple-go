@@ -35,7 +35,7 @@ func TestDomainsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/listDomains/success.http")
+		httpResponse := httpResponseFixture(t, "/listDomains/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -69,7 +69,7 @@ func TestDomainsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/createDomain/created.http")
+		httpResponse := httpResponseFixture(t, "/createDomain/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -103,7 +103,7 @@ func TestDomainsService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/getDomain/success.http")
+		httpResponse := httpResponseFixture(t, "/getDomain/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -143,7 +143,7 @@ func TestDomainsService_Delete(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/deleteDomain/success.http")
+		httpResponse := httpResponseFixture(t, "/deleteDomain/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
@@ -165,7 +165,7 @@ func TestDomainsService_ResetDomainToken(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/token", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture("/resetDomainToken/success.http")
+		httpResponse := httpResponseFixture(t, "/resetDomainToken/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
