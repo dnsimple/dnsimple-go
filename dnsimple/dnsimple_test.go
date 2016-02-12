@@ -99,7 +99,7 @@ func TestClient_NewRequest(t *testing.T) {
 	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
 	c.BaseURL = "https://go.example.com"
 
-	inURL, outURL := "/foo", "https://go.example.com/v2/foo"
+	inURL, outURL := "/foo", "https://go.example.com/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
 	// test that relative URL was expanded with the proper BaseURL

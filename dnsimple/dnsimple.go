@@ -76,7 +76,7 @@ func NewClient(credentials Credentials) *Client {
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
 func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
-	url := client.BaseURL + fmt.Sprintf("/%s/%s", apiVersion, strings.Trim(path, "/"))
+	url := client.BaseURL + path
 
 	body := new(bytes.Buffer)
 	if payload != nil {
@@ -97,6 +97,10 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 	req.Header.Add(client.Credentials.HttpHeader())
 
 	return req, nil
+}
+
+func versioned(path string) string {
+	return fmt.Sprintf("/%s/%s", apiVersion, strings.Trim(path, "/"))
 }
 
 func (c *Client) get(path string, obj interface{}) (*http.Response, error) {

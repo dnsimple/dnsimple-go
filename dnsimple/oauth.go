@@ -28,9 +28,10 @@ type ExchangeAuthorizationRequest struct {
 // ExchangeAuthorizationForToken exchanges the short-lived authorization code for an access token
 // you can use to authenticate your API calls.
 func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuthorizationRequest) (*AccessToken, error) {
+	path := versioned("/oauth/access_token")
 	accessToken := &AccessToken{}
 
-	_, err := s.client.post("/oauth/access_token", authorization, accessToken)
+	_, err := s.client.post(path, authorization, accessToken)
 	if err != nil {
 		return nil, err
 	}

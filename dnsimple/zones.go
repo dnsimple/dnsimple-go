@@ -38,7 +38,7 @@ type Zone struct {
 //
 // See https://developer.dnsimple.com/v2/zones/#list
 func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
-	path := fmt.Sprintf("/%v/zones", accountID)
+	path := versioned(fmt.Sprintf("/%v/zones", accountID))
 	zonesResponse := &ZonesResponse{}
 
 	resp, err := s.client.get(path, zonesResponse)
@@ -54,7 +54,7 @@ func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
 //
 // See https://developer.dnsimple.com/v2/zones/#get
 func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse, error) {
-	path := fmt.Sprintf("/%v/zones/%v", accountID, zoneName)
+	path := versioned(fmt.Sprintf("/%v/zones/%v", accountID, zoneName))
 	zoneResponse := &ZoneResponse{}
 
 	resp, err := s.client.get(path, zoneResponse)

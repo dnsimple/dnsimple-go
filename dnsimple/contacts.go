@@ -57,7 +57,7 @@ func contactPath(accountID string, contact interface{}) string {
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
 func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, error) {
-	path := contactPath(accountID, nil)
+	path := versioned(contactPath(accountID, nil))
 	contactsResponse := &ContactsResponse{}
 
 	resp, err := s.client.get(path, contactsResponse)
@@ -73,7 +73,7 @@ func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, err
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
 func (s *ContactsService) CreateContact(accountID string, contactAttributes Contact) (*ContactResponse, error) {
-	path := contactPath(accountID, nil)
+	path := versioned(contactPath(accountID, nil))
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.post(path, contactAttributes, contactResponse)
@@ -89,7 +89,7 @@ func (s *ContactsService) CreateContact(accountID string, contactAttributes Cont
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
 func (s *ContactsService) GetContact(accountID string, contactID int) (*ContactResponse, error) {
-	path := contactPath(accountID, contactID)
+	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.get(path, contactResponse)
@@ -105,7 +105,7 @@ func (s *ContactsService) GetContact(accountID string, contactID int) (*ContactR
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
 func (s *ContactsService) UpdateContact(accountID string, contactID int, contactAttributes Contact) (*ContactResponse, error) {
-	path := contactPath(accountID, contactID)
+	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.patch(path, contactAttributes, contactResponse)
@@ -121,7 +121,7 @@ func (s *ContactsService) UpdateContact(accountID string, contactID int, contact
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
 func (s *ContactsService) DeleteContact(accountID string, contactID int) (*ContactResponse, error) {
-	path := contactPath(accountID, contactID)
+	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)

@@ -67,7 +67,7 @@ func domainPath(accountID string, domain interface{}) string {
 //
 // See https://developer.dnsimple.com/v2/domains/#list
 func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error) {
-	path := domainPath(accountID, nil)
+	path := versioned(domainPath(accountID, nil))
 	domainsResponse := &DomainsResponse{}
 
 	resp, err := s.client.get(path, domainsResponse)
@@ -83,7 +83,7 @@ func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error)
 //
 // See https://developer.dnsimple.com/v2/domains/#create
 func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain) (*DomainResponse, error) {
-	path := domainPath(accountID, nil)
+	path := versioned(domainPath(accountID, nil))
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.post(path, domainAttributes, domainResponse)
@@ -99,7 +99,7 @@ func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain)
 //
 // See https://developer.dnsimple.com/v2/domains/#get
 func (s *DomainsService) GetDomain(accountID string, domain interface{}) (*DomainResponse, error) {
-	path := domainPath(accountID, domain)
+	path := versioned(domainPath(accountID, domain))
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.get(path, domainResponse)
@@ -115,7 +115,7 @@ func (s *DomainsService) GetDomain(accountID string, domain interface{}) (*Domai
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
 func (s *DomainsService) DeleteDomain(accountID string, domain interface{}) (*DomainResponse, error) {
-	path := domainPath(accountID, domain)
+	path := versioned(domainPath(accountID, domain))
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)
@@ -131,7 +131,7 @@ func (s *DomainsService) DeleteDomain(accountID string, domain interface{}) (*Do
 //
 // See https://developer.dnsimple.com/v2/domains/#reset-token
 func (s *DomainsService) ResetDomainToken(accountID string, domain interface{}) (*DomainResponse, error) {
-	path := domainPath(accountID, domain) + "/token"
+	path := versioned(domainPath(accountID, domain) + "/token")
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.post(path, nil, domainResponse)

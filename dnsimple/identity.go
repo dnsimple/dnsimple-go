@@ -27,9 +27,10 @@ type WhoamiData struct {
 //
 // See https://developer.dnsimple.com/v2/whoami
 func (s *IdentityService) Whoami() (*WhoamiResponse, error) {
+	path := versioned("/whoami")
 	whoamiResponse := &WhoamiResponse{}
 
-	resp, err := s.client.get("/whoami", whoamiResponse)
+	resp, err := s.client.get(path, whoamiResponse)
 	if err != nil {
 		return nil, err
 	}
