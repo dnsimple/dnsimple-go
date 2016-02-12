@@ -21,7 +21,7 @@ type Event interface {
 	parse([]byte) error
 }
 
-type eventCore struct {
+type EventCore struct {
 	APIVersion string `json:"api_version"`
 	RequestID  string `json:"request_identifier"`
 	Actor      *Actor `json:"actor"`
@@ -34,13 +34,17 @@ type eventName struct {
 }
 
 // Payload returns the binary payload the event was deserialized from.
-func (e *eventCore) Payload() []byte {
+func (e *EventCore) Payload() []byte {
 	return e.payload
 }
 
 // Event returns the event name as defined in the name field of the payload.
-func (e *eventCore) Event() string {
+func (e *EventCore) Event() string {
 	return e.Name
+}
+func (e *EventCore) parse(payload []byte) error {
+	e.payload = payload
+	return unmashalEvent(payload, e)
 }
 
 // Parse takes a payload and attempts to deserialize the payload into an event type
