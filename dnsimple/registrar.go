@@ -23,11 +23,11 @@ type RegistrationResponse struct {
 // TODO: ? Switch to a RegistrationOptions struct for the payload.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) Register(accountID string, domainAttributes Domain) (*RegistrationResponse, error) {
-	path := fmt.Sprintf("/%v/registrar/domains/%v/registration", accountID, domainAttributes.Name)
+func (s *RegistrarService) Register(accountID string, domainName string, domainAttributes Domain) (*RegistrationResponse, error) {
+	path := fmt.Sprintf("/%v/registrar/domains/%v/registration", accountID, domainName)
 	registrationResponse := &RegistrationResponse{}
 
-	// TODO: validate mandatory attributes Name, RegistrantID
+	// TODO: validate mandatory attributes RegistrantID
 
 	resp, err := s.client.post(path, domainAttributes, registrationResponse)
 	if err != nil {

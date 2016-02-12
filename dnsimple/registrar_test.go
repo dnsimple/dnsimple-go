@@ -16,7 +16,7 @@ func TestRegistrarService_Create(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"name": "example.com", "registrant_id": float64(2)}
+		want := map[string]interface{}{"registrant_id": float64(2)}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
@@ -24,9 +24,9 @@ func TestRegistrarService_Create(t *testing.T) {
 	})
 
 	accountID := "1010"
-	domainAttributes := Domain{Name: "example.com", RegistrantID: 2}
+	domainAttributes := Domain{RegistrantID: 2}
 
-	registrationResponse, err := client.Registrar.Register(accountID, domainAttributes)
+	registrationResponse, err := client.Registrar.Register(accountID, "example.com", domainAttributes)
 	if err != nil {
 		t.Fatalf("Registrar.Register() returned error: %v", err)
 	}
