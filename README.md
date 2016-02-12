@@ -12,7 +12,7 @@ The code is tested with an automated test suite connected to a continuous integr
 A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 
 [![Build Status](https://travis-ci.org/aetrion/dnsimple-go.svg)](https://travis-ci.org/aetrion/dnsimple-go)
-[![Coverage Status](https://img.shields.io/coveralls/aetrion/dnsimple-go.svg)](https://coveralls.io/r/aetrion/dnsimple-go?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/aetrion/dnsimple-go/badge.svg?branch=master)](https://coveralls.io/github/aetrion/dnsimple-go?branch=master)
 [![GoDoc](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple)
 
 
