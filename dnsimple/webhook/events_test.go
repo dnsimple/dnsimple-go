@@ -129,6 +129,70 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	}
 }
 
+func TestParseContactEvent_Contact_Create(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.create", event.Name; want != got {
+		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+}
+
+func TestParseContactEvent_Contact_Update(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.update", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.update", event.Name; want != got {
+		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+}
+
+
+func TestParseContactEvent_Contact_Delete(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.delete", event.Name; want != got {
+		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+}
+
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
 
