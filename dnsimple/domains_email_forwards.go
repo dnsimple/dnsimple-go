@@ -1,7 +1,7 @@
 package dnsimple
 
 import (
-//"fmt"
+	"fmt"
 )
 
 // EmailForwardResponse represents a response from an API method that returns an EmailForward struct.
@@ -26,11 +26,21 @@ type EmailForward struct {
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
+func emailForwardPath(accountID string, domain interface{}, forwardID int) string {
+	path := fmt.Sprintf("%v/email_forwards", domainPath(accountID, domain))
+
+	if forwardID != 0 {
+		path += fmt.Sprintf("/%d", forwardID)
+	}
+
+	return path
+}
+
 // ListEmailForwards lists the email forwards for a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#list
 func (s *DomainsService) ListEmailForwards(accountID string, domain interface{}) (*EmailForwardsResponse, error) {
-	path := versioned(domainPath(accountID, domain) + "/email_forwards")
+	path := versioned(emailForwardPath(accountID, domain, 0))
 	forwardsResponse := &EmailForwardsResponse{}
 
 	resp, err := s.client.get(path, forwardsResponse)
@@ -46,10 +56,26 @@ func (s *DomainsService) ListEmailForwards(accountID string, domain interface{})
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#create
 func (s *DomainsService) CreateEmailForward(accountID string, domain interface{}, forwardAttributes EmailForward) (*EmailForwardResponse, error) {
-	path := versioned(domainPath(accountID, domain) + "/email_forwards")
+	path := versioned(emailForwardPath(accountID, domain, 0))
 	forwardResponse := &EmailForwardResponse{}
 
 	resp, err := s.client.post(path, forwardAttributes, forwardResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	forwardResponse.HttpResponse = resp
+	return forwardResponse, nil
+}
+
+// GetEmailForward fetches an email forward.
+//
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#get
+func (s *DomainsService) GetEmailForward(accountID string, domain interface{}, forwardID int) (*EmailForwardResponse, error) {
+	path := versioned(emailForwardPath(accountID, domain, forwardID))
+	forwardResponse := &EmailForwardResponse{}
+
+	resp, err := s.client.get(path, forwardResponse)
 	if err != nil {
 		return nil, err
 	}

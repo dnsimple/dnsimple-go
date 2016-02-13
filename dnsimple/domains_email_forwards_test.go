@@ -3,7 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
-	//"reflect"
+	"reflect"
 	"regexp"
 	"testing"
 )
@@ -72,5 +72,38 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 	}
 	if !regexpEmail.MatchString(forward.From) {
 		t.Errorf("Domains.CreateEmailForward() From expected to be an email, got %v", forward.From)
+	}
+}
+
+func TestDomainsService_GetEmailForward(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards/2", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getEmailForward/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	forwardResponse, err := client.Domains.GetEmailForward("1010", "example.com", 2)
+	if err != nil {
+		t.Errorf("Domains.GetEmailForward() returned error: %v", err)
+	}
+
+	forward := forwardResponse.Data
+	wantSingle := &EmailForward{
+		ID:        17706,
+		DomainID:  228963,
+		From:      "jim@a-domain.com",
+		To:        "jim@another.com",
+		CreatedAt: "2016-02-04T14:26:50.282Z",
+		UpdatedAt: "2016-02-04T14:26:50.282Z"}
+
+	if !reflect.DeepEqual(forward, wantSingle) {
+		t.Fatalf("Domains.GetEmailForward() returned %+v, want %+v", forward, wantSingle)
 	}
 }

@@ -35,7 +35,7 @@ func zoneRecordPath(accountID string, zoneID string, recordID int) string {
 	path := fmt.Sprintf("/%v/zones/%v/records", accountID, zoneID)
 
 	if recordID != 0 {
-		path += fmt.Sprintf("/%v", recordID)
+		path += fmt.Sprintf("/%d", recordID)
 	}
 
 	return path
