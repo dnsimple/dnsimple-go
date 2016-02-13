@@ -8,17 +8,16 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	var event Event
 
 	switch name {
-	case "domain.create":
+	case // domain
+		"domain.auto_renewal_enable",
+		"domain.auto_renewal_disable",
+		"domain.create",
+		"domain.delete",
+		"domain.token_reset":
 		event = &DomainEvent{}
-	case "domain.delete":
-		event = &DomainEvent{}
-	case "domain.token_reset":
-		event = &DomainEvent{}
-	case "domain.auto_renew_enable":
-		event = &DomainEvent{}
-	case "domain.auto_renew_disable":
-		event = &DomainEvent{}
-	case "webhook.create":
+	case // webhook
+		"webhook.create",
+		"webhook.delete":
 		event = &WebhookEvent{}
 	default:
 		event = &GenericEvent{}
