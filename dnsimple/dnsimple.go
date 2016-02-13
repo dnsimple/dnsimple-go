@@ -75,8 +75,8 @@ func NewClient(credentials Credentials) *Client {
 // NewRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
-func (client *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
-	url := client.BaseURL + path
+func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
+	url := c.BaseURL + path
 
 	body := new(bytes.Buffer)
 	if payload != nil {
@@ -93,8 +93,8 @@ func (client *Client) NewRequest(method, path string, payload interface{}) (*htt
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("User-Agent", client.UserAgent)
-	req.Header.Add(client.Credentials.HttpHeader())
+	req.Header.Add("User-Agent", c.UserAgent)
+	req.Header.Add(c.Credentials.HttpHeader())
 
 	return req, nil
 }
