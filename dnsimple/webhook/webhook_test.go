@@ -5,7 +5,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 23, "url": "https://test.host"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": "1", "display": "Simone", "identifier": "example@example.com"}, "api_version": "v2", "request_identifier": "2f1cd735-0c02-4b1c-aa9d-20300520e62f"}`
+	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
 
 	event, err := Parse([]byte(payload))
 	if err != nil {
@@ -17,7 +17,7 @@ func TestParse(t *testing.T) {
 	}
 
 	eventAccount := event.EventHeader().Account
-	if want, got := "Simone", eventAccount.Display; want != got {
+	if want, got := "User", eventAccount.Display; want != got {
 		t.Errorf("Parse event Account.Display expected to be %v, got %v", want, got)
 	}
 
