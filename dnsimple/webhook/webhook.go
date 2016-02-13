@@ -9,7 +9,7 @@ import (
 // Actor represents the entity that triggered the event. It can be either an user,
 // a DNSimple support representative or the DNSimple system.
 type Actor struct {
-	ID     int    `json:"id"`
+	ID     string `json:"id"`
 	Entity string `json:"entity"`
 	Pretty string `json:"pretty"`
 }

@@ -5,7 +5,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 23, "url": "https://test.host"}}, "name": "webhook.create", "actor": {"id": 1120, "entity": "user", "pretty": "weppos@weppos.net"}, "api_version": "v2", "request_identifier": "2f1cd735-0c02-4b1c-aa9d-20300520e62f"}`
+	payload := `{"data": {"webhook": {"id": 23, "url": "https://test.host"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "api_version": "v2", "request_identifier": "2f1cd735-0c02-4b1c-aa9d-20300520e62f"}`
 
 	event, err := Parse([]byte(payload))
 	if err != nil {
