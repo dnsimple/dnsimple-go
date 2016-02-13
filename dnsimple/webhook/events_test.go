@@ -29,7 +29,10 @@ func TestParseGenericEvent(t *testing.T) {
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*GenericEvent)
+	if err != nil  {
+		t.Fatalf("Parse returned error when parsing: %v", err)
+	}
+	_, ok := parsedEvent.(*DomainEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
