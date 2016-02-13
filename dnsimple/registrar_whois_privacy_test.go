@@ -67,3 +67,31 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 		t.Fatalf("Registrar.EnableWhoisPrivacy() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/whois_privacy", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/disableWhoisPrivacy/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		//want := map[string]interface{}{}
+		//testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	privacyResponse, err := client.Registrar.DisableWhoisPrivacy("1010", "example.com")
+	if err != nil {
+		t.Errorf("Registrar.DisableWhoisPrivacy() returned error: %v", err)
+	}
+
+	privacy := privacyResponse.Data
+	if want, got := 153, privacy.ID; want != got {
+		t.Fatalf("Registrar.DisableWhoisPrivacy() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+}

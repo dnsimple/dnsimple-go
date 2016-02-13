@@ -36,7 +36,7 @@ func (s *RegistrarService) GetWhoisPrivacy(accountID string, domainName string) 
 	return privacyResponse, nil
 }
 
-// EnableWhoisPrivacy gets the whois privacy for the domain.
+// EnableWhoisPrivacy enables the whois privacy for the domain.
 //
 // See https://developer.dnsimple.com/v2/registrar/whois-privacy/#enable
 func (s *RegistrarService) EnableWhoisPrivacy(accountID string, domainName string) (*WhoisPrivacyResponse, error) {
@@ -44,6 +44,22 @@ func (s *RegistrarService) EnableWhoisPrivacy(accountID string, domainName strin
 	privacyResponse := &WhoisPrivacyResponse{}
 
 	resp, err := s.client.put(path, nil, privacyResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	privacyResponse.HttpResponse = resp
+	return privacyResponse, nil
+}
+
+// DisablePrivacy disables the whois privacy for the domain.
+//
+// See https://developer.dnsimple.com/v2/registrar/whois-privacy/#enable
+func (s *RegistrarService) DisableWhoisPrivacy(accountID string, domainName string) (*WhoisPrivacyResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy", accountID, domainName))
+	privacyResponse := &WhoisPrivacyResponse{}
+
+	resp, err := s.client.delete(path, nil, privacyResponse)
 	if err != nil {
 		return nil, err
 	}
