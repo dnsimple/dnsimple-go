@@ -4,6 +4,8 @@ package webhook
 
 import (
 	"encoding/json"
+
+	"github.com/aetrion/dnsimple-go/dnsimple"
 )
 
 // Actor represents the entity that triggered the event. It can be either an user,
@@ -12,6 +14,21 @@ type Actor struct {
 	ID     string `json:"id"`
 	Entity string `json:"entity"`
 	Pretty string `json:"pretty"`
+}
+
+// Actor represents the account that this event is attached to.
+type Account struct {
+	dnsimple.Account
+
+	// Display is a string that can be used as a display label
+	// and it is sent in a webhook payload.
+	// It generally represent the Name of the account.
+	Display string `json:"display,omitempty"`
+
+	// Identifier is a human-readable string identifier
+	// and it is sent in a webhook payload
+	// It generally represent the StringID or email of the account.
+	Identifier string `json:"identifier,omitempty"`
 }
 
 // Event is an event generated in the DNSimple application.
@@ -23,10 +40,11 @@ type Event interface {
 }
 
 type Event_Header struct {
-	APIVersion string `json:"api_version"`
-	RequestID  string `json:"request_identifier"`
-	Actor      *Actor `json:"actor"`
-	Name       string `json:"name"`
+	APIVersion string   `json:"api_version"`
+	RequestID  string   `json:"request_identifier"`
+	Actor      *Actor   `json:"actor"`
+	Account    *Account `json:"account"`
+	Name       string   `json:"name"`
 	payload    []byte
 }
 
