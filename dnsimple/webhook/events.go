@@ -9,17 +9,17 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case "domain.create":
-		event = &DomainCreateEvent{}
+		event = &DomainEvent{}
 	case "domain.delete":
-		event = &DomainDeleteEvent{}
+		event = &DomainEvent{}
 	case "domain.token_reset":
-		event = &DomainTokenResetEvent{}
+		event = &DomainEvent{}
 	case "domain.auto_renew_enable":
-		event = &DomainAutoRenewalEnableEvent{}
+		event = &DomainEvent{}
 	case "domain.auto_renew_disable":
-		event = &DomainAutoRenewalDisableEvent{}
+		event = &DomainEvent{}
 	case "webhook.create":
-		event = &WebhookCreateEvent{}
+		event = &WebhookEvent{}
 	default:
 		event = &GenericEvent{}
 	}
@@ -54,36 +54,14 @@ type DomainEvent struct {
 	Domain *dnsimple.Domain `json:"domain"`
 }
 
-func (e *DomainEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
-	return unmashalEvent(payload, e)
-}
-
 // ParseDomainEvent unpacks the payload into a DomainEvent.
 func ParseDomainEvent(e *DomainEvent, payload []byte) error {
 	return e.parse(payload)
 }
 
-type DomainTokenResetEvent struct{ DomainEvent }
-type DomainAutoRenewalEnableEvent struct{ DomainEvent }
-type DomainAutoRenewalDisableEvent struct{ DomainEvent }
-type DomainCreateEvent struct{ DomainEvent }
-type DomainDeleteEvent struct{ DomainEvent }
-
-func ParseDomainCreateEvent(e *DomainCreateEvent, p []byte) error {
-	return e.DomainEvent.parse(p)
-}
-func ParseDomainDeleteEvent(e *DomainDeleteEvent, p []byte) error {
-	return e.DomainEvent.parse(p)
-}
-func ParseDomainTokenResetEvent(e *DomainTokenResetEvent, p []byte) error {
-	return e.DomainEvent.parse(p)
-}
-func ParseDomainAutoRenewalEnableEvent(e *DomainAutoRenewalEnableEvent, p []byte) error {
-	return e.DomainEvent.parse(p)
-}
-func ParseDomainAutoRenewalDisableEvent(e *DomainAutoRenewalDisableEvent, p []byte) error {
-	return e.DomainEvent.parse(p)
+func (e *DomainEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
 }
 
 //
@@ -95,17 +73,11 @@ type WebhookEvent struct {
 }
 
 // ParseWebhookEvent unpacks the data into a WebhookEvent.
-func ParseWebhookEvent(e *GenericEvent, payload []byte) error {
+func ParseWebhookEvent(e *WebhookEvent, payload []byte) error {
 	return e.parse(payload)
 }
 
 func (e *WebhookEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
-}
-
-type WebhookCreateEvent struct{ WebhookEvent }
-
-func ParseWebhookCreateEvent(e *WebhookCreateEvent, p []byte) error {
-	return e.WebhookEvent.parse(p)
 }

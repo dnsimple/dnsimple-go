@@ -16,7 +16,7 @@ func TestParse(t *testing.T) {
 		t.Errorf("Parse event expected to be %v, got %v", want, got)
 	}
 
-	_, ok := event.(*WebhookCreateEvent)
+	_, ok := event.(*WebhookEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
