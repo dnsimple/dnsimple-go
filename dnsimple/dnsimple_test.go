@@ -53,7 +53,7 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 	body, _ := ioutil.ReadAll(r.Body)
 
 	if err := json.Unmarshal(body, &data); err != nil {
-		t.Errorf("Could not decode json body: %v", err)
+		t.Fatalf("Could not decode json body: %v", err)
 	}
 
 	if !reflect.DeepEqual(values, data) {

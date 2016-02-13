@@ -21,9 +21,7 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	accountID := "1010"
-
-	privacyResponse, err := client.Registrar.GetWhoisPrivacy(accountID, "example.com")
+	privacyResponse, err := client.Registrar.GetWhoisPrivacy("1010", "example.com")
 	if err != nil {
 		t.Errorf("Registrar.GetWhoisPrivacy() returned error: %v", err)
 	}
@@ -39,5 +37,33 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 
 	if !reflect.DeepEqual(privacy, wantSingle) {
 		t.Fatalf("Registrar.GetWhoisPrivacy() returned %+v, want %+v", privacy, wantSingle)
+	}
+}
+
+func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/whois_privacy", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/enableWhoisPrivacy/success.http")
+
+		testMethod(t, r, "PUT")
+		testHeaders(t, r)
+
+		//want := map[string]interface{}{}
+		//testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	privacyResponse, err := client.Registrar.EnableWhoisPrivacy("1010", "example.com")
+	if err != nil {
+		t.Errorf("Registrar.EnableWhoisPrivacy() returned error: %v", err)
+	}
+
+	privacy := privacyResponse.Data
+	if want, got := 153, privacy.ID; want != got {
+		t.Fatalf("Registrar.EnableWhoisPrivacy() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }
