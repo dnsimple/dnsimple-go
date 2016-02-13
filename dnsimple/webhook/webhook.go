@@ -1,4 +1,4 @@
-// Package dnsimple/webhook provides the support for reading and parsing the events
+// Package webhook provides the support for reading and parsing the events
 // sent from DNSimple via webhook.
 package webhook
 
