@@ -9,11 +9,19 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case // domain
+		"domain.auto_renew", // TODO
 		"domain.auto_renewal_enable",
 		"domain.auto_renewal_disable",
 		"domain.create",
 		"domain.delete",
-		"domain.token_reset":
+		"domain.register",           // TODO
+		"domain.renew",              // TODO
+		"domain.delegation_change",  // TODO
+		"domain.registrant_change",  // TODO
+		"domain.resolution_enable",  // TODO
+		"domain.resolution_disable", // TODO
+		"domain.token_reset",
+		"domain.transfer": // TODO
 		event = &DomainEvent{}
 	case // webhook
 		"webhook.create",
