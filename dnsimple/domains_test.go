@@ -30,7 +30,7 @@ func TestDomains_domainPath(t *testing.T) {
 	}
 }
 
-func TestDomainsService_List(t *testing.T) {
+func TestDomainsService_ListDomains(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -64,7 +64,7 @@ func TestDomainsService_List(t *testing.T) {
 	}
 }
 
-func TestDomainsService_Create(t *testing.T) {
+func TestDomainsService_CreateDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -98,7 +98,7 @@ func TestDomainsService_Create(t *testing.T) {
 	}
 }
 
-func TestDomainsService_Get(t *testing.T) {
+func TestDomainsService_GetDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -138,7 +138,7 @@ func TestDomainsService_Get(t *testing.T) {
 	}
 }
 
-func TestDomainsService_Delete(t *testing.T) {
+func TestDomainsService_DeleteDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 

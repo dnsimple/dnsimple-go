@@ -29,7 +29,7 @@ func TestParseGenericEvent(t *testing.T) {
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
-	if err != nil  {
+	if err != nil {
 		t.Fatalf("Parse returned error when parsing: %v", err)
 	}
 	_, ok := parsedEvent.(*DomainEvent)
@@ -221,7 +221,6 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
-
 
 func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
