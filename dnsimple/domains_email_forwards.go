@@ -41,3 +41,19 @@ func (s *DomainsService) ListEmailForwards(accountID string, domain interface{})
 	forwardsResponse.HttpResponse = resp
 	return forwardsResponse, nil
 }
+
+// CreateEmailForward creates a new email forward.
+//
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#create
+func (s *DomainsService) CreateEmailForward(accountID string, domain interface{}, forwardAttributes EmailForward) (*EmailForwardResponse, error) {
+	path := versioned(domainPath(accountID, domain) + "/email_forwards")
+	forwardResponse := &EmailForwardResponse{}
+
+	resp, err := s.client.post(path, forwardAttributes, forwardResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	forwardResponse.HttpResponse = resp
+	return forwardResponse, nil
+}
