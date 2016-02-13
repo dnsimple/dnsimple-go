@@ -27,6 +27,12 @@ func TestParseGenericEvent(t *testing.T) {
 	if want, got := "example.com", data["domain"].(map[string]interface{})["name"]; want != got {
 		t.Errorf("ParseDomainCreateEvent Domain.Name expected to be %v, got %v", want, got)
 	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*GenericEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
@@ -46,6 +52,12 @@ func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseDomainAutoRenewalEnableEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
 
@@ -67,6 +79,12 @@ func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseDomainAutoRenewalDisableEvent Domain.Name expected to be %v, got %v", want, got)
 	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseDomainEvent_Domain_Create(t *testing.T) {
@@ -86,6 +104,12 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseDomainCreateEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
 
@@ -107,6 +131,12 @@ func TestParseDomainEvent_Domain_Delete(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseDomainDeleteEvent Domain.Name expected to be %v, got %v", want, got)
 	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
@@ -126,6 +156,12 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseDomainTokenResetEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
 
@@ -148,6 +184,12 @@ func TestParseContactEvent_Contact_Create(t *testing.T) {
 	if want, got := "Webhook", event.Contact.Label; want != got {
 		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
 	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseContactEvent_Contact_Update(t *testing.T) {
@@ -168,6 +210,12 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
 		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
 
@@ -191,6 +239,12 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	if want, got := "Webhook", event.Contact.Label; want != got {
 		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
 	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
@@ -211,6 +265,12 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	//if want, got := "https://webhook.test", event.Webhook.URL; want != got {
 	//	t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
 	//}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WebhookEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
 
 func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
@@ -231,4 +291,10 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 	//if want, got := "https://webhook.test", event.Webhook.URL; want != got {
 	//	t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
 	//}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WebhookEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
 }
