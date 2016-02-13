@@ -101,7 +101,7 @@ func (s *ContactsService) GetContact(accountID string, contactID int) (*ContactR
 	return contactResponse, nil
 }
 
-// Update a contact.
+// UpdateContact updates a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#update
 func (s *ContactsService) UpdateContact(accountID string, contactID int, contactAttributes Contact) (*ContactResponse, error) {
@@ -117,7 +117,7 @@ func (s *ContactsService) UpdateContact(accountID string, contactID int, contact
 	return contactResponse, nil
 }
 
-// Delete a contact.
+// DeleteContact PERMANENTLY deletes a contact from the account.
 //
 // See https://developer.dnsimple.com/v2/contacts/#delete
 func (s *ContactsService) DeleteContact(accountID string, contactID int) (*ContactResponse, error) {

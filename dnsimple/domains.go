@@ -24,7 +24,7 @@ type DomainsResponse struct {
 	Data []Domain `json:"data"`
 }
 
-// Domain represents a Domain in DNSimple.
+// Domain represents a domain in DNSimple.
 type Domain struct {
 	ID           int    `json:"id,omitempty"`
 	AccountID    int    `json:"account_id,omitempty"`
@@ -63,7 +63,7 @@ func domainPath(accountID string, domain interface{}) string {
 	return fmt.Sprintf("/%v/domains", accountID)
 }
 
-// List the domains for an account.
+// ListDomains lists the domains for an account.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
 func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error) {

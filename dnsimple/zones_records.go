@@ -16,6 +16,7 @@ type ZoneRecordsResponse struct {
 	Data []Record `json:"data"`
 }
 
+// Record represents a DNS record in DNSimple.
 type Record struct {
 	ID           int    `json:"id,omitempty"`
 	ZoneID       string `json:"zone_id,omitempty"`
