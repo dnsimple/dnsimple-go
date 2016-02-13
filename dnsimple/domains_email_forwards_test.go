@@ -107,3 +107,23 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		t.Fatalf("Domains.GetEmailForward() returned %+v, want %+v", forward, wantSingle)
 	}
 }
+
+func TestDomainsService_DeleteEmailForward(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards/2", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/deleteEmailForward/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Domains.DeleteEmailForward("1010", "example.com", 2)
+	if err != nil {
+		t.Fatalf("Domains.DeleteEmailForward() returned error: %v", err)
+	}
+}

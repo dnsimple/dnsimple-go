@@ -83,3 +83,19 @@ func (s *DomainsService) GetEmailForward(accountID string, domain interface{}, f
 	forwardResponse.HttpResponse = resp
 	return forwardResponse, nil
 }
+
+// DeleteEmailForward PERMANENTLY deletes an email forward from the domain.
+//
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#delete
+func (s *DomainsService) DeleteEmailForward(accountID string, domain interface{}, forwardID int) (*EmailForwardResponse, error) {
+	path := versioned(emailForwardPath(accountID, domain, forwardID))
+	forwardResponse := &EmailForwardResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	forwardResponse.HttpResponse = resp
+	return forwardResponse, nil
+}
