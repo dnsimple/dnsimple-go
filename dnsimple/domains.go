@@ -63,7 +63,7 @@ func domainPath(accountID string, domain interface{}) string {
 	return fmt.Sprintf("/%v/domains", accountID)
 }
 
-// List the domains.
+// List the domains for an account.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
 func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error) {
@@ -79,7 +79,7 @@ func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error)
 	return domainsResponse, nil
 }
 
-// Create a new domain.
+// CreateDomain creates a new domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
 func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain) (*DomainResponse, error) {
@@ -95,7 +95,7 @@ func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain)
 	return domainResponse, nil
 }
 
-// Get a domain.
+// GetDomain fetches a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
 func (s *DomainsService) GetDomain(accountID string, domain interface{}) (*DomainResponse, error) {
@@ -111,7 +111,7 @@ func (s *DomainsService) GetDomain(accountID string, domain interface{}) (*Domai
 	return domainResponse, nil
 }
 
-// Delete a domain.
+// DeleteDomain PERMANENTLY deletes a domain from the account.
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
 func (s *DomainsService) DeleteDomain(accountID string, domain interface{}) (*DomainResponse, error) {

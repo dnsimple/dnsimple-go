@@ -34,7 +34,7 @@ type Zone struct {
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
-// List the zones.
+// ListZones the zones for an account.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
 func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
@@ -50,7 +50,7 @@ func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
 	return zonesResponse, nil
 }
 
-// Get a zone.
+// GetZone fetches a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#get
 func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse, error) {

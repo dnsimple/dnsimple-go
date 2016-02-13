@@ -40,7 +40,7 @@ func zoneRecordPath(accountID string, zoneID string, recordID int) string {
 	return path
 }
 
-// ListRecords lists the zone records.
+// ListRecords lists the zone records for a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
 func (s *ZonesService) ListRecords(accountID string, zoneID string) (*ZoneRecordsResponse, error) {
@@ -72,7 +72,7 @@ func (s *ZonesService) CreateRecord(accountID string, zoneID string, recordAttri
 	return recordResponse, nil
 }
 
-// GetRecord gets the zone record.
+// GetRecord fetches a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#get
 func (s *ZonesService) GetRecord(accountID string, zoneID string, recordID int) (*ZoneRecordResponse, error) {
@@ -104,7 +104,7 @@ func (s *ZonesService) UpdateRecord(accountID string, zoneID string, recordID in
 	return recordResponse, nil
 }
 
-// DeleteRecord deletes a zone record.
+// DeleteRecord PERMANENTLY deletes a zone record from the zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#delete
 func (s *ZonesService) DeleteRecord(accountID string, zoneID string, recordID int) (*ZoneRecordResponse, error) {

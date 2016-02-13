@@ -53,7 +53,7 @@ func contactPath(accountID string, contact interface{}) string {
 	return fmt.Sprintf("/%v/contacts", accountID)
 }
 
-// List the contacts.
+// ListContacts list the contacts for an account.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
 func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, error) {
@@ -69,7 +69,7 @@ func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, err
 	return contactsResponse, nil
 }
 
-// Create a new contact.
+// CreateContact creates a new contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
 func (s *ContactsService) CreateContact(accountID string, contactAttributes Contact) (*ContactResponse, error) {
@@ -85,7 +85,7 @@ func (s *ContactsService) CreateContact(accountID string, contactAttributes Cont
 	return contactResponse, nil
 }
 
-// Get a contact.
+// GetContact fetches a contact.
 //
 // See https://developer.dnsimple.com/v2/contacts/#get
 func (s *ContactsService) GetContact(accountID string, contactID int) (*ContactResponse, error) {
