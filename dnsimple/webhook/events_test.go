@@ -125,3 +125,23 @@ func TestParseDomainAutoRenewalDisableEvent(t *testing.T) {
 		t.Errorf("ParseDomainAutoRenewalDisableEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
+
+func TestParseWebhookCreateEvent(t *testing.T) {
+	payload := `{"data": {"webhook": {"id": 23, "url": "https://test.host"}}, "name": "webhook.create", "actor": {"id": 1120, "entity": "user", "pretty": "weppos@weppos.net"}, "api_version": "v2", "request_identifier": "2f1cd735-0c02-4b1c-aa9d-20300520e62f"}`
+
+	event := &WebhookCreateEvent{}
+	err := ParseWebhookCreateEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseWebhookCreateEvent returned error: %v", err)
+	}
+
+	if want, got := "webhook.create", event.Name; want != got {
+		t.Errorf("ParseWebhookCreateEvent name expected to be %v, got %v", want, got)
+	}
+	if want, got := "2f1cd735-0c02-4b1c-aa9d-20300520e62f", event.RequestID; want != got {
+		t.Errorf("ParseWebhookCreateEvent requestID expected to be %v, got %v", want, got)
+	}
+	//if want, got := "https://test.host", event.Webhook.URL; want != got {
+	//	t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+	//}
+}
