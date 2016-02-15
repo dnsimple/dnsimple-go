@@ -100,7 +100,8 @@ func (e *DomainEvent) parse(payload []byte) error {
 //
 type WebhookEvent struct {
 	Event_Header
-	Data *WebhookEvent `json:"data"`
+	Data    *WebhookEvent     `json:"data"`
+	Webhook *dnsimple.Webhook `json:"webhook"`
 }
 
 // ParseWebhookEvent unpacks the data into a WebhookEvent.

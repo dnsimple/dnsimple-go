@@ -264,9 +264,9 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseWebhookCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	//if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-	//	t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
-	//}
+	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+		t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
 
 	parsedEvent, err := Parse([]byte(payload))
 	_, ok := parsedEvent.(*WebhookEvent)
@@ -290,9 +290,9 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseWebhookDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	//if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-	//	t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
-	//}
+	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+		t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
 
 	parsedEvent, err := Parse([]byte(payload))
 	_, ok := parsedEvent.(*WebhookEvent)
