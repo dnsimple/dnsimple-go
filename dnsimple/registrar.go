@@ -37,3 +37,32 @@ func (s *RegistrarService) Register(accountID string, domainName string, domainA
 	registrationResponse.HttpResponse = resp
 	return registrationResponse, nil
 }
+
+
+// RenewOptions represents the option you can pass to a renew API request.
+type RenewOptions struct {
+	// The number of years
+	Period int `json:"period"`
+}
+
+// RenewalResponse represents a response from an API method that results in a domain renewal.
+type RenewalResponse struct {
+	Response
+	Data *Domain `json:"data"`
+}
+
+// Renew a domain name.
+//
+// See https://developer.dnsimple.com/v2/registrar/#register
+func (s *RegistrarService) Renew(accountID string, domainName string, options *RenewOptions) (*RenewalResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewal", accountID, domainName))
+	renewalResponse := &RenewalResponse{}
+
+	resp, err := s.client.post(path, options, renewalResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	renewalResponse.HttpResponse = resp
+	return renewalResponse, nil
+}
