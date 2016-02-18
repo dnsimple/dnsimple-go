@@ -12,6 +12,12 @@ type RegistrarService struct {
 	client *Client
 }
 
+// RegisterRequest represents the attributes you can pass to a register API request.
+// Some attributes are mandatory.
+type RegisterRequest struct {
+	RegistrantID int `json:"registrant_id"`
+}
+
 // RegistrationResponse represents a response from an API method that results in a domain registration.
 type RegistrationResponse struct {
 	Response
@@ -23,13 +29,13 @@ type RegistrationResponse struct {
 // TODO: ? Switch to a RegistrationOptions struct for the payload.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) Register(accountID string, domainName string, domainAttributes Domain) (*RegistrationResponse, error) {
+func (s *RegistrarService) Register(accountID string, domainName string, request *RegisterRequest) (*RegistrationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registration", accountID, domainName))
 	registrationResponse := &RegistrationResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(path, domainAttributes, registrationResponse)
+	resp, err := s.client.post(path, request, registrationResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -38,9 +44,40 @@ func (s *RegistrarService) Register(accountID string, domainName string, domainA
 	return registrationResponse, nil
 }
 
+// TransferRequest represents the attributes you can pass to a transfer API request.
+// Some attributes are mandatory.
+type TransferRequest struct {
+	RegistrantID int    `json:"registrant_id"`
+	AuthInfo     string `json:"auth_info,omitempty"`
+}
 
-// RenewOptions represents the option you can pass to a renew API request.
-type RenewOptions struct {
+// TransferResponse represents a response from an API method that results in a domain transfer.
+type TransferResponse struct {
+	Response
+	Data *Domain `json:"data"`
+}
+
+// Transfer a domain name.
+//
+// See https://developer.dnsimple.com/v2/registrar/#transfer
+func (s *RegistrarService) Transfer(accountID string, domainName string, request *TransferRequest) (*TransferResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfer", accountID, domainName))
+	transferResponse := &TransferResponse{}
+
+	// TODO: validate mandatory attributes RegistrantID
+
+	resp, err := s.client.post(path, request, transferResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	transferResponse.HttpResponse = resp
+	return transferResponse, nil
+}
+
+// RenewRequest represents the attributes you can pass to a renew API request.
+// Some attributes are mandatory.
+type RenewRequest struct {
 	// The number of years
 	Period int `json:"period"`
 }
@@ -54,11 +91,11 @@ type RenewalResponse struct {
 // Renew a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) Renew(accountID string, domainName string, options *RenewOptions) (*RenewalResponse, error) {
+func (s *RegistrarService) Renew(accountID string, domainName string, request *RenewRequest) (*RenewalResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewal", accountID, domainName))
 	renewalResponse := &RenewalResponse{}
 
-	resp, err := s.client.post(path, options, renewalResponse)
+	resp, err := s.client.post(path, request, renewalResponse)
 	if err != nil {
 		return nil, err
 	}
