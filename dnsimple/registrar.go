@@ -15,7 +15,14 @@ type RegistrarService struct {
 // RegisterRequest represents the attributes you can pass to a register API request.
 // Some attributes are mandatory.
 type RegisterRequest struct {
+	// The ID of the Contact to use as registrant for the domain
 	RegistrantID int `json:"registrant_id"`
+	// Set to true to enable the whois privacy service. An extra cost may apply.
+	// Default to false.
+	EnableWhoisPrivacy bool `json:"privacy,omitempty"`
+	// Set to true to enable the auto-renewal of the domain.
+	// Default to true.
+	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 }
 
 // RegistrationResponse represents a response from an API method that results in a domain registration.
@@ -45,8 +52,17 @@ func (s *RegistrarService) Register(accountID string, domainName string, request
 // TransferRequest represents the attributes you can pass to a transfer API request.
 // Some attributes are mandatory.
 type TransferRequest struct {
-	RegistrantID int    `json:"registrant_id"`
-	AuthInfo     string `json:"auth_info,omitempty"`
+	// The ID of the Contact to use as registrant for the domain
+	RegistrantID int `json:"registrant_id"`
+	// The Auth-Code required to transfer the domain.
+	// This is provided by the current registrar of the domain.
+	AuthInfo string `json:"auth_info,omitempty"`
+	// Set to true to enable the whois privacy service. An extra cost may apply.
+	// Default to false.
+	EnableWhoisPrivacy bool `json:"privacy,omitempty"`
+	// Set to true to enable the auto-renewal of the domain.
+	// Default to true.
+	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 }
 
 // TransferResponse represents a response from an API method that results in a domain transfer.
