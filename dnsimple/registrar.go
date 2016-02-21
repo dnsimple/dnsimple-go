@@ -19,7 +19,7 @@ type RegisterRequest struct {
 	RegistrantID int `json:"registrant_id"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
 	// Default to false.
-	EnableWhoisPrivacy bool `json:"privacy,omitempty"`
+	EnableWhoisPrivacy bool `json:"private_whois,omitempty"`
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
@@ -59,7 +59,7 @@ type TransferRequest struct {
 	AuthInfo string `json:"auth_info,omitempty"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
 	// Default to false.
-	EnableWhoisPrivacy bool `json:"privacy,omitempty"`
+	EnableWhoisPrivacy bool `json:"private_whois,omitempty"`
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
