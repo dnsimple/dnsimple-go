@@ -72,6 +72,26 @@ func TestRegistrarService_Transfer(t *testing.T) {
 	}
 }
 
+func TestRegistrarService_TransferOut(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfer_out", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/transferOut/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Registrar.TransferOut("1010", "example.com")
+	if err != nil {
+		t.Fatalf("Registrar.TransferOut() returned error: %v", err)
+	}
+}
+
 func TestRegistrarService_Renew(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

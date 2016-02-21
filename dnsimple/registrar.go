@@ -73,6 +73,28 @@ func (s *RegistrarService) Transfer(accountID string, domainName string, request
 	return transferResponse, nil
 }
 
+// TransferOutResponse represents a response from an API method that results in a domain transfer out.
+type TransferOutResponse struct {
+	Response
+	Data *Domain `json:"data"`
+}
+
+// Transfer out a domain name.
+//
+// See https://developer.dnsimple.com/v2/registrar/#transfer-out
+func (s *RegistrarService) TransferOut(accountID string, domainName string) (*TransferOutResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfer_out", accountID, domainName))
+	transferResponse := &TransferOutResponse{}
+
+	resp, err := s.client.post(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	transferResponse.HttpResponse = resp
+	return transferResponse, nil
+}
+
 // RenewRequest represents the attributes you can pass to a renew API request.
 // Some attributes are mandatory.
 type RenewRequest struct {
