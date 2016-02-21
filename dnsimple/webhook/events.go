@@ -14,7 +14,6 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"contact.delete":
 		event = &ContactEvent{}
 	case // domain
-		"domain.auto_renew", // TODO
 		"domain.auto_renewal_enable",
 		"domain.auto_renewal_disable",
 		"domain.create",
