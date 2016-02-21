@@ -26,8 +26,6 @@ type RegistrationResponse struct {
 
 // Register a domain name.
 //
-// TODO: ? Switch to a RegistrationOptions struct for the payload.
-//
 // See https://developer.dnsimple.com/v2/registrar/#register
 func (s *RegistrarService) Register(accountID string, domainName string, request *RegisterRequest) (*RegistrationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registration", accountID, domainName))

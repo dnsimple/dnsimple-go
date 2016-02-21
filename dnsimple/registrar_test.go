@@ -44,7 +44,7 @@ func TestRegistrarService_Transfer(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/transfer/success.tmp.http")
+		httpResponse := httpResponseFixture(t, "/transfer/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
