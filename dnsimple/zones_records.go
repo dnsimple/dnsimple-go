@@ -4,18 +4,6 @@ import (
 	"fmt"
 )
 
-// ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.
-type ZoneRecordResponse struct {
-	Response
-	Data *Record `json:"data"`
-}
-
-// ZoneRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
-type ZoneRecordsResponse struct {
-	Response
-	Data []Record `json:"data"`
-}
-
 // Record represents a DNS record in DNSimple.
 type Record struct {
 	ID           int    `json:"id,omitempty"`
@@ -29,6 +17,18 @@ type Record struct {
 	SystemRecord bool   `json:"system_record,omitempty"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
+}
+
+// ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.
+type ZoneRecordResponse struct {
+	Response
+	Data *Record `json:"data"`
+}
+
+// ZoneRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
+type ZoneRecordsResponse struct {
+	Response
+	Data []Record `json:"data"`
 }
 
 func zoneRecordPath(accountID string, zoneID string, recordID int) string {

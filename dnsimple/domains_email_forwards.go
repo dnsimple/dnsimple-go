@@ -4,6 +4,16 @@ import (
 	"fmt"
 )
 
+// EmailForward represents an email forward in DNSimple.
+type EmailForward struct {
+	ID        int    `json:"id,omitempty"`
+	DomainID  int    `json:"domain_id,omitempty"`
+	From      string `json:"from,omitempty"`
+	To        string `json:"to,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
+}
+
 // EmailForwardResponse represents a response from an API method that returns an EmailForward struct.
 type EmailForwardResponse struct {
 	Response
@@ -14,16 +24,6 @@ type EmailForwardResponse struct {
 type EmailForwardsResponse struct {
 	Response
 	Data []EmailForward `json:"data"`
-}
-
-// EmailForward represents an email forward in DNSimple.
-type EmailForward struct {
-	ID        int    `json:"id,omitempty"`
-	DomainID  int    `json:"domain_id,omitempty"`
-	From      string `json:"from,omitempty"`
-	To        string `json:"to,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 func emailForwardPath(accountID string, domain interface{}, forwardID int) string {

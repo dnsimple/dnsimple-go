@@ -12,6 +12,7 @@ type RegistrarService struct {
 	client *Client
 }
 
+// DomainCheck represents the result of a domain check.
 type DomainCheck struct {
 	Domain    string `json:"domain"`
 	Available bool   `json:"available"`

@@ -12,6 +12,16 @@ type ZonesService struct {
 	client *Client
 }
 
+// Zone represents a Zone in DNSimple.
+type Zone struct {
+	ID        int    `json:"id,omitempty"`
+	AccountID int    `json:"account_id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Reverse   bool   `json:"reverse,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
+}
+
 // ZoneResponse represents a response from an API method that returns a Zone struct.
 type ZoneResponse struct {
 	Response
@@ -22,16 +32,6 @@ type ZoneResponse struct {
 type ZonesResponse struct {
 	Response
 	Data []Zone `json:"data"`
-}
-
-// Zone represents a Zone in DNSimple.
-type Zone struct {
-	ID        int    `json:"id,omitempty"`
-	AccountID int    `json:"account_id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	Reverse   bool   `json:"reverse,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 // ListZones the zones for an account.

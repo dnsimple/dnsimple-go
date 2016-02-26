@@ -12,18 +12,6 @@ type ContactsService struct {
 	client *Client
 }
 
-// ContactResponse represents a response from an API method that returns a Contact struct.
-type ContactResponse struct {
-	Response
-	Data *Contact `json:"data"`
-}
-
-// ContactsResponse represents a response from an API method that returns a collection of Contact struct.
-type ContactsResponse struct {
-	Response
-	Data []Contact `json:"data"`
-}
-
 // Contact represents a Contact in DNSimple.
 type Contact struct {
 	ID            int    `json:"id,omitempty"`
@@ -51,6 +39,18 @@ func contactPath(accountID string, contact interface{}) string {
 		return fmt.Sprintf("/%v/contacts/%v", accountID, contact)
 	}
 	return fmt.Sprintf("/%v/contacts", accountID)
+}
+
+// ContactResponse represents a response from an API method that returns a Contact struct.
+type ContactResponse struct {
+	Response
+	Data *Contact `json:"data"`
+}
+
+// ContactsResponse represents a response from an API method that returns a collection of Contact struct.
+type ContactsResponse struct {
+	Response
+	Data []Contact `json:"data"`
 }
 
 // ListContacts list the contacts for an account.

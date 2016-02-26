@@ -12,6 +12,12 @@ type WebhooksService struct {
 	client *Client
 }
 
+// Webhook represents a DNSimple webhook.
+type Webhook struct {
+	ID  int    `json:"id,omitempty"`
+	URL string `json:"url,omitempty"`
+}
+
 // WebhookResponse represents a response from an API method that returns a Webhook struct.
 type WebhookResponse struct {
 	Response
@@ -22,12 +28,6 @@ type WebhookResponse struct {
 type WebhooksResponse struct {
 	Response
 	Data []Webhook `json:"data"`
-}
-
-// Webhook represents a DNSimple webhook.
-type Webhook struct {
-	ID  int    `json:"id,omitempty"`
-	URL string `json:"url,omitempty"`
 }
 
 // webhookPath generates the resource path for given webhook.

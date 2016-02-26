@@ -8,17 +8,17 @@ type IdentityService struct {
 	client *Client
 }
 
-// WhoamiResponse represents a response from an API method that returns a Whoami struct.
-type WhoamiResponse struct {
-	Response
-	Data *WhoamiData `json:"data"`
-}
-
 // WhoamiData represents an authenticated context
 // that contains information about the current logged User and/or Account.
 type WhoamiData struct {
 	User    *User    `json:"user,omitempty"`
 	Account *Account `json:"account,omitempty"`
+}
+
+// WhoamiResponse represents a response from an API method that returns a Whoami struct.
+type WhoamiResponse struct {
+	Response
+	Data *WhoamiData `json:"data"`
 }
 
 // Whoami gets the current authenticate context.
