@@ -1,7 +1,7 @@
 package dnsimple
 
 import (
-//"fmt"
+	"fmt"
 )
 
 // TldsService handles communication with the Tld related
@@ -46,4 +46,20 @@ func (s *TldsService) ListTlds() (*TldsResponse, error) {
 
 	tldsResponse.HttpResponse = resp
 	return tldsResponse, nil
+}
+
+// GetTld fetches a TLD.
+//
+// See https://developer.dnsimple.com/v2/tlds/#get
+func (s *TldsService) GetTld(tld string) (*TldResponse, error) {
+	path := versioned(fmt.Sprintf("/tlds/%s", tld))
+	tldResponse := &TldResponse{}
+
+	resp, err := s.client.get(path, tldResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	tldResponse.HttpResponse = resp
+	return tldResponse, nil
 }
