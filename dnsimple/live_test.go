@@ -81,8 +81,8 @@ func TestLive_Registration(t *testing.T) {
 	accountID := whoami.Account.ID
 
 	// TODO: fetch the registrant randomly
-	registerRequest := &RegisterRequest{RegistrantID: 2}
-	registrationResponse, err := dnsimpleClient.Registrar.Register(fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
+	registerRequest := &DomainRegisterRequest{RegistrantID: 2}
+	registrationResponse, err := dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
 	if err != nil {
 		t.Fatalf("Live Registrar.Register() returned error: %v", err)
 	}

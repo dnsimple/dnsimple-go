@@ -31,7 +31,7 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 	}
 }
 
-func TestRegistrarService_Register(t *testing.T) {
+func TestRegistrarService_RegisterDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -48,9 +48,9 @@ func TestRegistrarService_Register(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	registerRequest := &RegisterRequest{RegistrantID: 2}
+	registerRequest := &DomainRegisterRequest{RegistrantID: 2}
 
-	registrationResponse, err := client.Registrar.Register("1010", "example.com", registerRequest)
+	registrationResponse, err := client.Registrar.RegisterDomain("1010", "example.com", registerRequest)
 	if err != nil {
 		t.Fatalf("Registrar.Register() returned error: %v", err)
 	}
@@ -64,7 +64,7 @@ func TestRegistrarService_Register(t *testing.T) {
 	}
 }
 
-func TestRegistrarService_Transfer(t *testing.T) {
+func TestRegistrarService_TransferDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -81,9 +81,9 @@ func TestRegistrarService_Transfer(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	transferRequest := &TransferRequest{RegistrantID: 2, AuthInfo: "x1y2z3"}
+	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthInfo: "x1y2z3"}
 
-	transferResponse, err := client.Registrar.Transfer("1010", "example.com", transferRequest)
+	transferResponse, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest)
 	if err != nil {
 		t.Fatalf("Registrar.Transfer() returned error: %v", err)
 	}
@@ -97,7 +97,7 @@ func TestRegistrarService_Transfer(t *testing.T) {
 	}
 }
 
-func TestRegistrarService_TransferOut(t *testing.T) {
+func TestRegistrarService_TransferDomainOut(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -111,13 +111,13 @@ func TestRegistrarService_TransferOut(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Registrar.TransferOut("1010", "example.com")
+	_, err := client.Registrar.TransferDomainOut("1010", "example.com")
 	if err != nil {
 		t.Fatalf("Registrar.TransferOut() returned error: %v", err)
 	}
 }
 
-func TestRegistrarService_Renew(t *testing.T) {
+func TestRegistrarService_RenewDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -134,7 +134,7 @@ func TestRegistrarService_Renew(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	registrationResponse, err := client.Registrar.Renew("1010", "example.com", nil)
+	registrationResponse, err := client.Registrar.RenewDomain("1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Registrar.Renew() returned error: %v", err)
 	}
