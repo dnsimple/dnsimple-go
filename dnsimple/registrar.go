@@ -12,6 +12,34 @@ type RegistrarService struct {
 	client *Client
 }
 
+type DomainCheck struct {
+	Domain string `json:"domain"`
+	Available bool `json:"available"`
+	Premium bool `json:"premium"`
+}
+
+// DomainCheckResponse represents a response from the domain check.
+type DomainCheckResponse struct {
+	Response
+	Data *DomainCheck `json:"data"`
+}
+
+// Check a domain name.
+//
+// See https://developer.dnsimple.com/v2/registrar/#check
+func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*DomainCheckResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
+	checkResponse := &DomainCheckResponse{}
+
+	resp, err := s.client.get(path, checkResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	checkResponse.HttpResponse = resp
+	return checkResponse, nil
+}
+
 // RegisterRequest represents the attributes you can pass to a register API request.
 // Some attributes are mandatory.
 type RegisterRequest struct {

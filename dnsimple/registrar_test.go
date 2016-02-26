@@ -6,6 +6,31 @@ import (
 	"testing"
 )
 
+func TestRegistrarService_CheckDomain(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/check", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/checkDomain/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	checkResponse, err := client.Registrar.CheckDomain("1010", "example.com")
+	if err != nil {
+		t.Fatalf("Registrar.CheckDomain() returned error: %v", err)
+	}
+
+	check := checkResponse.Data
+	if want, got := "ruby.codes", check.Domain; want != got {
+		t.Fatalf("Registrar.CheckDomain() returned Domain expected to be `%v`, got `%v`", want, got)
+	}
+}
+
 func TestRegistrarService_Register(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
