@@ -13,9 +13,9 @@ type RegistrarService struct {
 }
 
 type DomainCheck struct {
-	Domain string `json:"domain"`
-	Available bool `json:"available"`
-	Premium bool `json:"premium"`
+	Domain    string `json:"domain"`
+	Available bool   `json:"available"`
+	Premium   bool   `json:"premium"`
 }
 
 // DomainCheckResponse represents a response from the domain check.

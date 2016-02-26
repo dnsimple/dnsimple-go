@@ -95,7 +95,9 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", c.UserAgent)
-	req.Header.Add(c.Credentials.HttpHeader())
+	for key, value := range c.Credentials.Headers() {
+		req.Header.Add(key, value)
+	}
 
 	return req, nil
 }

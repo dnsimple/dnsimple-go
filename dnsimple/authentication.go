@@ -2,7 +2,6 @@ package dnsimple
 
 import (
 	"encoding/base64"
-	"fmt"
 )
 
 const (
@@ -15,12 +14,12 @@ const (
 //
 // See https://developer.dnsimple.com/v2/#authentication
 type Credentials interface {
-	// Get the HTTP header key and value to use for authentication.
-	HttpHeader() (string, string)
+	// Returns the HTTP headers that should be set
+	// to authenticate the HTTP Request.
+	Headers() map[string]string
 }
 
 // Domain token authentication
-
 type domainTokenCredentials struct {
 	domainToken string
 }
@@ -30,27 +29,26 @@ func NewDomainTokenCredentials(domainToken string) Credentials {
 	return &domainTokenCredentials{domainToken: domainToken}
 }
 
-func (c *domainTokenCredentials) HttpHeader() (string, string) {
-	return httpHeaderDomainToken, c.domainToken
+func (c *domainTokenCredentials) Headers() map[string]string {
+	return map[string]string{httpHeaderDomainToken: c.domainToken}
 }
 
 // HTTP basic authentication
-
 type httpBasicCredentials struct {
 	email    string
 	password string
 }
 
-// NewHttpBasicCredentials construct Credentials using HTTP Basic Auth.
-func NewHttpBasicCredentials(email, password string) Credentials {
+// NewHTTPBasicCredentials construct Credentials using HTTP Basic Auth.
+func NewHTTPBasicCredentials(email, password string) Credentials {
 	return &httpBasicCredentials{email, password}
 }
 
-func (c *httpBasicCredentials) HttpHeader() (string, string) {
-	return httpHeaderAuthorization, "Basic " + basicAuth(c.email, c.password)
+func (c *httpBasicCredentials) Headers() map[string]string {
+	return map[string]string{httpHeaderAuthorization: "Basic " + c.basicAuth(c.email, c.password)}
 }
 
-func basicAuth(username, password string) string {
+func (c *httpBasicCredentials) basicAuth(username, password string) string {
 	auth := username + ":" + password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
@@ -66,6 +64,6 @@ func NewOauthTokenCredentials(oauthToken string) Credentials {
 	return &oauthTokenCredentials{oauthToken: oauthToken}
 }
 
-func (c *oauthTokenCredentials) HttpHeader() (string, string) {
-	return httpHeaderAuthorization, fmt.Sprintf("Bearer %v", c.oauthToken)
+func (c *oauthTokenCredentials) Headers() map[string]string {
+	return map[string]string{httpHeaderAuthorization: "Bearer " + c.oauthToken}
 }
