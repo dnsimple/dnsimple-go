@@ -39,9 +39,14 @@ func emailForwardPath(accountID string, domain interface{}, forwardID int) strin
 // ListEmailForwards lists the email forwards for a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#list
-func (s *DomainsService) ListEmailForwards(accountID string, domain interface{}) (*EmailForwardsResponse, error) {
+func (s *DomainsService) ListEmailForwards(accountID string, domain interface{}, options *ListOptions) (*EmailForwardsResponse, error) {
 	path := versioned(emailForwardPath(accountID, domain, 0))
 	forwardsResponse := &EmailForwardsResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, forwardsResponse)
 	if err != nil {

@@ -31,7 +31,7 @@ func TestWebhooksService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	webhooksResponse, err := client.Webhooks.List("1010")
+	webhooksResponse, err := client.Webhooks.List("1010", nil)
 	if err != nil {
 		t.Fatalf("Webhooks.List() returned error: %v", err)
 	}

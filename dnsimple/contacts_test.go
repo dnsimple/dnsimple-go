@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"reflect"
 	"testing"
 )
@@ -26,14 +27,13 @@ func TestContactsService_List(t *testing.T) {
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
+		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	accountID := "1010"
-
-	contactsResponse, err := client.Contacts.ListContacts(accountID)
+	contactsResponse, err := client.Contacts.ListContacts("1010", nil)
 	if err != nil {
 		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
@@ -48,6 +48,25 @@ func TestContactsService_List(t *testing.T) {
 	}
 	if want, got := "Default", contacts[0].Label; want != got {
 		t.Fatalf("Contacts.ListContacts() returned Label expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestContactsService_List_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listContacts/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Contacts.ListContacts("1010", &ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
 }
 

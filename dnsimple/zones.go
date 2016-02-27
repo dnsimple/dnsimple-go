@@ -37,9 +37,14 @@ type ZonesResponse struct {
 // ListZones the zones for an account.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListZones(accountID string) (*ZonesResponse, error) {
+func (s *ZonesService) ListZones(accountID string, options *ListOptions) (*ZonesResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones", accountID))
 	zonesResponse := &ZonesResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, zonesResponse)
 	if err != nil {

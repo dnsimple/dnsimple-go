@@ -56,9 +56,14 @@ type ContactsResponse struct {
 // ListContacts list the contacts for an account.
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
-func (s *ContactsService) ListContacts(accountID string) (*ContactsResponse, error) {
+func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (*ContactsResponse, error) {
 	path := versioned(contactPath(accountID, nil))
 	contactsResponse := &ContactsResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, contactsResponse)
 	if err != nil {

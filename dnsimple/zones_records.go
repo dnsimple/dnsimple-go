@@ -44,9 +44,14 @@ func zoneRecordPath(accountID string, zoneID string, recordID int) string {
 // ListRecords lists the zone records for a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListRecords(accountID string, zoneID string) (*ZoneRecordsResponse, error) {
+func (s *ZonesService) ListRecords(accountID string, zoneID string, options *ListOptions) (*ZoneRecordsResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneID, 0))
 	recordsResponse := &ZoneRecordsResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, recordsResponse)
 	if err != nil {

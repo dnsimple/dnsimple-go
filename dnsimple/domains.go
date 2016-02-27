@@ -66,9 +66,14 @@ func domainPath(accountID string, domain interface{}) string {
 // ListDomains lists the domains for an account.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) ListDomains(accountID string) (*DomainsResponse, error) {
+func (s *DomainsService) ListDomains(accountID string, options *ListOptions) (*DomainsResponse, error) {
 	path := versioned(domainPath(accountID, nil))
 	domainsResponse := &DomainsResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, domainsResponse)
 	if err != nil {

@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"reflect"
 	"testing"
 )
@@ -31,9 +32,7 @@ func TestZonesService_ListRecords(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	accountID := "1010"
-
-	recordsResponse, err := client.Zones.ListRecords(accountID, "example.com")
+	recordsResponse, err := client.Zones.ListRecords("1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
@@ -48,6 +47,25 @@ func TestZonesService_ListRecords(t *testing.T) {
 	}
 	if want, got := "", records[0].Name; want != got {
 		t.Fatalf("Zones.ListRecords() returned Name expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestZonesService_ListRecords_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listZoneRecords/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Zones.ListRecords("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
 }
 
