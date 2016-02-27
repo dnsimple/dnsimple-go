@@ -116,7 +116,7 @@ func addListOptions(path string, options interface{}) (string, error) {
 			continue
 		}
 
-		qso[name] = fmt.Sprintf("%v", sv)
+		qso[name] = fmt.Sprint(sv.Interface())
 	}
 
 	// append the options to the URL
