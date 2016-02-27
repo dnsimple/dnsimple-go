@@ -53,6 +53,7 @@ type AuthorizationOptions struct {
 // AuthorizeURL generates the URL to authorize an user for an application via the OAuth2 flow.
 func (s *OauthService) AuthorizeURL(clientID string, options *AuthorizationOptions) string {
 	uri, _ := url.Parse(strings.Replace(s.client.BaseURL, "api.", "", 1))
+	uri.Path = "/oauth/authorize"
 	query := uri.Query()
 	query.Add("client_id", clientID)
 	query.Add("response_type", "code")
