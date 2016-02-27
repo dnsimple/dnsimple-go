@@ -9,6 +9,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -59,6 +61,76 @@ type Client struct {
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
+}
+
+// ListOptions contains the common options you can pass to a List method
+// in order to control parameters such as paginations and page number.
+type ListOptions struct {
+	// The page to return
+	Page int `url:"page,omitempty"`
+
+	// The number of entries to return per page
+	PerPage int `url:"per_page,omitempty"`
+}
+
+// addOptions adds the parameters in opt as URL query parameters to s.  opt
+// must be a struct whose fields may contain "url" tags.
+func addListOptions(path string, options interface{}) (string, error) {
+	val := reflect.ValueOf(options)
+	qso := map[string]string{}
+
+	// options is a pointer
+	// return if the value of the pointer is nil,
+	// otherwise replace the pointer with the value.
+	if val.Kind() == reflect.Ptr {
+		if val.IsNil() {
+			return path, nil
+		}
+		val = val.Elem()
+	}
+
+	// extract all the options from the struct
+	typ := val.Type()
+	for i := 0; i < val.NumField(); i++ {
+		sf := typ.Field(i)
+		sv := val.Field(i)
+
+		tag := sf.Tag.Get("url")
+
+		// The field has a different tag
+		if tag == "" {
+			continue
+
+		}
+
+		// The field is ignored with `url:"-"`
+		if tag == "-" {
+			continue
+
+		}
+
+		splits := strings.Split(tag, ",")
+		name, opts := splits[0], splits[1:]
+
+		if optionsContains(opts, "omitempty") && isEmptyValue(sv) {
+			continue
+		}
+
+		qso[name] = fmt.Sprintf("%v", sv)
+	}
+
+	// append the options to the URL
+	u, err := url.Parse(path)
+	if err != nil {
+		return path, err
+	}
+	qs := u.Query()
+	for k, v := range qso {
+		qs.Add(k, v)
+	}
+	u.RawQuery = qs.Encode()
+
+	return u.String(), nil
 }
 
 // NewClient returns a new DNSimple API client using the given credentials.
@@ -247,21 +319,30 @@ func CheckResponse(resp *http.Response) error {
 	return errorResponse
 }
 
-// Date custom type.
-type Date struct {
-	time.Time
+// see encoding/json
+func isEmptyValue(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
+		return v.Len() == 0
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+	return false
 }
 
-// UnmarshalJSON handles the deserialization of the custom Date type.
-func (d *Date) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return fmt.Errorf("date should be a string, got %s", data)
+func optionsContains(options []string, option string) bool {
+	for _, s := range options {
+		if s == option {
+			return true
+		}
 	}
-	t, err := time.Parse("2006-01-02", s)
-	if err != nil {
-		return fmt.Errorf("invalid date: %v", err)
-	}
-	d.Time = t
-	return nil
+	return false
 }

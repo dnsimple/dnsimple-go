@@ -35,9 +35,14 @@ type TldsResponse struct {
 // ListTlds lists the supported TLDs.
 //
 // See https://developer.dnsimple.com/v2/tlds/#list
-func (s *TldsService) ListTlds() (*TldsResponse, error) {
+func (s *TldsService) ListTlds(options *ListOptions) (*TldsResponse, error) {
 	path := versioned("/tlds")
 	tldsResponse := &TldsResponse{}
+
+	path, err := addListOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(path, tldsResponse)
 	if err != nil {

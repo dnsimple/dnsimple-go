@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -20,7 +21,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	tldsResponse, err := client.Tlds.ListTlds()
+	tldsResponse, err := client.Tlds.ListTlds(nil)
 	if err != nil {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}
@@ -34,6 +35,26 @@ func TestTldsService_ListTlds(t *testing.T) {
 		t.Fatalf("Tlds.ListTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestTldsService_ListTlds_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/tlds", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listTlds/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Tlds.ListTlds(&ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
+	}
+}
+
 func TestTldsService_GetTld(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

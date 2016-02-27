@@ -59,7 +59,7 @@ func TestLive_Domains(t *testing.T) {
 
 	accountID := whoami.Account.ID
 
-	domainsResponse, err := dnsimpleClient.Domains.ListDomains(fmt.Sprintf("%v", accountID))
+	domainsResponse, err := dnsimpleClient.Domains.ListDomains(fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
 		t.Fatalf("Live Domains.List() returned error: %v", err)
 	}
@@ -107,7 +107,7 @@ func TestLive_Webhooks(t *testing.T) {
 	}
 	accountID := whoami.Account.ID
 
-	webhooksResponse, err = dnsimpleClient.Webhooks.List(fmt.Sprintf("%v", accountID))
+	webhooksResponse, err = dnsimpleClient.Webhooks.List(fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
 		t.Fatalf("Live Webhooks.List() returned error: %v", err)
 	}

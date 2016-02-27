@@ -42,7 +42,7 @@ func webhookPath(accountID string, webhookID int) (path string) {
 // List the webhooks.
 //
 // See PRIVATE
-func (s *WebhooksService) List(accountID string) (*WebhooksResponse, error) {
+func (s *WebhooksService) List(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhooksResponse := &WebhooksResponse{}
 

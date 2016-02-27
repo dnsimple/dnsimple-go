@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"strings"
 	"testing"
@@ -32,6 +33,12 @@ func teardownMockServer() {
 
 func testMethod(t *testing.T, r *http.Request, want string) {
 	if got := r.Method; want != got {
+		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func testQuery(t *testing.T, r *http.Request, want url.Values) {
+	if got := r.URL.Query(); !reflect.DeepEqual(want, got) {
 		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
 	}
 }

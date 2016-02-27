@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"reflect"
 	"regexp"
 	"testing"
@@ -24,7 +25,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	forwardsResponse, err := client.Domains.ListEmailForwards("1010", "example.com")
+	forwardsResponse, err := client.Domains.ListEmailForwards("1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
@@ -39,6 +40,25 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 	}
 	if !regexpEmail.MatchString(forwards[0].From) {
 		t.Errorf("Domains.ListEmailForwards() From expected to be an email, got %v", forwards[0].From)
+	}
+}
+
+func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listEmailForwards/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Domains.ListEmailForwards("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
 }
 
