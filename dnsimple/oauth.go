@@ -55,6 +55,7 @@ func (s *OauthService) AuthorizeURL(clientID string, options *AuthorizationOptio
 	uri, _ := url.Parse(strings.Replace(s.client.BaseURL, "api.", "", 1))
 	query := uri.Query()
 	query.Add("client_id", clientID)
+	query.Add("response_type", "code")
 	if options != nil {
 		if options.RedirectURI != "" {
 			query.Add("redirect_uri", options.RedirectURI)
