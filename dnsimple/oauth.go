@@ -45,6 +45,8 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 }
 
 // AuthorizationOptions represents the option you can use to generate an authorization URL.
+//
+// Currently `state` is required by the DNSimple OAuth implementation, so you must specify it.
 type AuthorizationOptions struct {
 	RedirectURI string
 	State       string
