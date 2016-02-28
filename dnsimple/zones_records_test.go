@@ -87,7 +87,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	recordValues := Record{Name: "foo", Content: "192.168.0.10", Type: "A"}
+	recordValues := ZoneRecord{Name: "foo", Content: "192.168.0.10", Type: "A"}
 
 	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
 	if err != nil {
@@ -125,7 +125,7 @@ func TestZonesService_GetRecord(t *testing.T) {
 	}
 
 	record := recordResponse.Data
-	wantSingle := &Record{
+	wantSingle := &ZoneRecord{
 		ID:           64784,
 		ZoneID:       "example.com",
 		ParentID:     0,
@@ -161,7 +161,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	recordValues := Record{Name: "bar", Content: "192.168.0.10"}
+	recordValues := ZoneRecord{Name: "bar", Content: "192.168.0.10"}
 
 	recordResponse, err := client.Zones.UpdateRecord(accountID, "example.com", 2, recordValues)
 	if err != nil {

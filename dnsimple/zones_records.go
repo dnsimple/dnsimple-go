@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-// Record represents a DNS record in DNSimple.
-type Record struct {
+// ZoneRecord represents a DNS record in DNSimple.
+type ZoneRecord struct {
 	ID           int    `json:"id,omitempty"`
 	ZoneID       string `json:"zone_id,omitempty"`
 	ParentID     int    `json:"parent_id,omitempty"`
@@ -22,13 +22,13 @@ type Record struct {
 // ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.
 type ZoneRecordResponse struct {
 	Response
-	Data *Record `json:"data"`
+	Data *ZoneRecord `json:"data"`
 }
 
 // ZoneRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
 type ZoneRecordsResponse struct {
 	Response
-	Data []Record `json:"data"`
+	Data []ZoneRecord `json:"data"`
 }
 
 func zoneRecordPath(accountID string, zoneID string, recordID int) string {
@@ -65,7 +65,7 @@ func (s *ZonesService) ListRecords(accountID string, zoneID string, options *Lis
 // CreateRecord creates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#create
-func (s *ZonesService) CreateRecord(accountID string, zoneID string, recordAttributes Record) (*ZoneRecordResponse, error) {
+func (s *ZonesService) CreateRecord(accountID string, zoneID string, recordAttributes ZoneRecord) (*ZoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneID, 0))
 	recordResponse := &ZoneRecordResponse{}
 
@@ -97,7 +97,7 @@ func (s *ZonesService) GetRecord(accountID string, zoneID string, recordID int) 
 // UpdateRecord updates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/#update
-func (s *ZonesService) UpdateRecord(accountID string, zoneID string, recordID int, recordAttributes Record) (*ZoneRecordResponse, error) {
+func (s *ZonesService) UpdateRecord(accountID string, zoneID string, recordID int, recordAttributes ZoneRecord) (*ZoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneID, recordID))
 	recordResponse := &ZoneRecordResponse{}
 
