@@ -79,3 +79,32 @@ func TestTldsService_GetTld(t *testing.T) {
 		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/tlds/com/extended_attributes", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getTldExtendedAttributes/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	tldResponse, err := client.Tlds.GetTldExtendedAttributes("com")
+	if err != nil {
+		t.Fatalf("Tlds.GetTldExtendedAttributes() returned error: %v", err)
+	}
+
+	attributes := tldResponse.Data
+	if want, got := 4, len(attributes); want != got {
+		t.Errorf("Tlds.GetTldExtendedAttributes() expected to return %v TLDs, got %v", want, got)
+	}
+
+	if want, got := "uk_legal_type", attributes[0].Name; want != got {
+		t.Fatalf("Tlds.GetTldExtendedAttributes() returned Tld expected to be `%v`, got `%v`", want, got)
+	}
+}
