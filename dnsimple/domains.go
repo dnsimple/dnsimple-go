@@ -84,6 +84,46 @@ func (s *DomainsService) ListDomains(accountID string, options *ListOptions) (*D
 	return domainsResponse, nil
 }
 
+// AllDomains lists ALL the domains for an account.
+//
+// This method is similar to ListDomains, but instead of returning the results of a specific page
+// it iterates all the pages and returns the entire collection.
+//
+// Please use this method carefully, as fetching the entire collection will increase the number of requests
+// you send to the API server and you may eventually risk to hit the throttle limit.
+//
+// See https://developer.dnsimple.com/v2/domains/#list
+func (s *DomainsService) AllDomains(accountID string, options *ListOptions) (*DomainsResponse, error) {
+	var collection []Domain
+	var response *DomainsResponse
+	var err error
+
+	totalPages := 1
+	pager := &ListOptions{}
+
+	if options != nil {
+		pager.Page = options.Page
+		pager.PerPage = options.PerPage
+	}
+	if pager.Page < 1 {
+		pager.Page = 1
+	}
+
+	for pager.Page <= totalPages {
+		response, err = s.ListDomains(accountID, pager)
+		if err != nil {
+			return response, err
+		}
+
+		collection = append(collection, response.Data...)
+		totalPages = response.Pagination.TotalPages
+		pager.Page = response.Pagination.CurrentPage + 1
+	}
+
+	response.Data = collection
+	return response, nil
+}
+
 // CreateDomain creates a new domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/#create

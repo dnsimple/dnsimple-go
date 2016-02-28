@@ -61,7 +61,28 @@ func TestLive_Domains(t *testing.T) {
 
 	domainsResponse, err := dnsimpleClient.Domains.ListDomains(fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
-		t.Fatalf("Live Domains.List() returned error: %v", err)
+		t.Fatalf("Live Domains.ListDomains() returned error: %v", err)
+	}
+
+	fmt.Printf("RateLimit: %v/%v until %v\n", domainsResponse.RateLimitRemaining(), domainsResponse.RateLimit(), domainsResponse.RateLimitReset())
+	fmt.Printf("Domains: %+v\n", domainsResponse.Data)
+}
+
+func TestLive_AllDomains(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(dnsimpleClient)
+	if err != nil {
+		t.Fatalf("Live Whoami() returned error: %v", err)
+	}
+
+	accountID := whoami.Account.ID
+
+	domainsResponse, err := dnsimpleClient.Domains.AllDomains(fmt.Sprintf("%v", accountID), &ListOptions{PerPage: 5})
+	if err != nil {
+		t.Fatalf("Live Domains.AllDomains() returned error: %v", err)
 	}
 
 	fmt.Printf("RateLimit: %v/%v until %v\n", domainsResponse.RateLimitRemaining(), domainsResponse.RateLimit(), domainsResponse.RateLimitReset())
