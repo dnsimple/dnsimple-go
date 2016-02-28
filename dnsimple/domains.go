@@ -97,20 +97,20 @@ func (s *DomainsService) AllDomains(accountID string, options *ListOptions) (*Do
 	var collection []Domain
 	var response *DomainsResponse
 	var err error
+	var pager ListOptions
 
 	totalPages := 1
-	pager := &ListOptions{}
-
 	if options != nil {
-		pager.Page = options.Page
-		pager.PerPage = options.PerPage
-	}
-	if pager.Page < 1 {
-		pager.Page = 1
+		pager = *options
+		if pager.Page < 1 {
+			pager.Page = 1
+		}
+	} else {
+		pager = ListOptions{Page: 1}
 	}
 
 	for pager.Page <= totalPages {
-		response, err = s.ListDomains(accountID, pager)
+		response, err = s.ListDomains(accountID, &pager)
 		if err != nil {
 			return response, err
 		}
