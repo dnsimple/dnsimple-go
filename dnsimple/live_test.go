@@ -20,7 +20,7 @@ func init() {
 
 	// Prevent peoeple from wiping out their entire production account by mistake
 	if dnsimpleBaseURL == "" {
-		dnsimpleBaseURL = "https://api.sandbox.dnsimple.com/"
+		dnsimpleBaseURL = "https://api.sandbox.dnsimple.com"
 	}
 
 	if len(dnsimpleToken) > 0 {

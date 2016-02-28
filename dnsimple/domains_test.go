@@ -51,6 +51,10 @@ func TestDomainsService_ListDomains(t *testing.T) {
 		t.Fatalf("Domains.ListDomains() returned error: %v", err)
 	}
 
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), domainsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Domains.ListDomains() pagination expected to be %v, got %v", want, got)
+	}
+
 	domains := domainsResponse.Data
 	if want, got := 2, len(domains); want != got {
 		t.Errorf("Domains.ListDomains() expected to return %v contacts, got %v", want, got)

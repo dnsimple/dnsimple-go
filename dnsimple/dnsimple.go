@@ -266,7 +266,11 @@ func (c *Client) Do(req *http.Request, payload, obj interface{}) (*http.Response
 
 // A Response represents an API response.
 type Response struct {
-	HttpResponse *http.Response // HTTP response
+	// HTTP response
+	HttpResponse *http.Response
+
+	// If the response is paginated, the Pagination will store them.
+	Pagination *Pagination `json:"pagination"`
 }
 
 // RateLimit returns the maximum amount of requests this account can send in an hour.
@@ -287,10 +291,20 @@ func (r *Response) RateLimitReset() time.Time {
 	return time.Unix(value, 0)
 }
 
+// If the response is paginated, Pagination represents the pagination information.
+type Pagination struct {
+	CurrentPage  int `json:"current_page"`
+	PerPage      int `json:"per_page"`
+	TotalPages   int `json:"total_pages"`
+	TotalEntries int `json:"total_entries"`
+}
+
 // An ErrorResponse represents an API response that generated an error.
 type ErrorResponse struct {
 	Response
-	Message string `json:"message"` // human-readable message
+
+	// human-readable message
+	Message string `json:"message"`
 }
 
 // Error implements the error interface.

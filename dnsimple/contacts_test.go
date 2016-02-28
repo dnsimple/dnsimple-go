@@ -38,6 +38,10 @@ func TestContactsService_List(t *testing.T) {
 		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
 
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), contactsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Contacts.ListContacts() pagination expected to be %v, got %v", want, got)
+	}
+
 	contacts := contactsResponse.Data
 	if want, got := 2, len(contacts); want != got {
 		t.Errorf("Contacts.ListContacts() expected to return %v contacts, got %v", want, got)

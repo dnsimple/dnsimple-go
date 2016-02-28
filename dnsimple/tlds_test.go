@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"testing"
+	"reflect"
 )
 
 func TestTldsService_ListTlds(t *testing.T) {
@@ -24,6 +25,10 @@ func TestTldsService_ListTlds(t *testing.T) {
 	tldsResponse, err := client.Tlds.ListTlds(nil)
 	if err != nil {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
+	}
+
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 79, TotalEntries: 158}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Tlds.ListTlds() pagination expected to be %v, got %v", want, got)
 	}
 
 	tlds := tldsResponse.Data
