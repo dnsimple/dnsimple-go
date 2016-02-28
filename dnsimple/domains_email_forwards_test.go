@@ -30,6 +30,10 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
 
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), forwardsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Domains.ListEmailForwards() pagination expected to be %v, got %v", want, got)
+	}
+
 	forwards := forwardsResponse.Data
 	if want, got := 2, len(forwards); want != got {
 		t.Errorf("Domains.ListEmailForwards() expected to return %v contacts, got %v", want, got)

@@ -27,6 +27,10 @@ func TestZonesService_ListZones(t *testing.T) {
 		t.Fatalf("Zones.ListZones() returned error: %v", err)
 	}
 
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), zonesResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Zones.ListZones() pagination expected to be %v, got %v", want, got)
+	}
+
 	zones := zonesResponse.Data
 	if want, got := 2, len(zones); want != got {
 		t.Errorf("Zones.ListZones() expected to return %v zones, got %v", want, got)

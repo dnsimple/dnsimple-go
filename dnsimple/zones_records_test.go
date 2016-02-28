@@ -37,6 +37,10 @@ func TestZonesService_ListRecords(t *testing.T) {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
 
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 5}), recordsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Zones.ListRecords() pagination expected to be %v, got %v", want, got)
+	}
+
 	records := recordsResponse.Data
 	if want, got := 5, len(records); want != got {
 		t.Errorf("Zones.ListRecords() expected to return %v contacts, got %v", want, got)
