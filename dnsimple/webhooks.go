@@ -39,10 +39,10 @@ func webhookPath(accountID string, webhookID int) (path string) {
 	return
 }
 
-// List the webhooks.
+// ListWebhooks lists the webhooks for an account.
 //
 // See PRIVATE
-func (s *WebhooksService) List(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
+func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhooksResponse := &WebhooksResponse{}
 
@@ -55,10 +55,10 @@ func (s *WebhooksService) List(accountID string, _ *ListOptions) (*WebhooksRespo
 	return webhooksResponse, nil
 }
 
-// Create a new webhook.
+// CreateWebhook creates a new webhook.
 //
 // See PRIVATE
-func (s *WebhooksService) Create(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
+func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhookResponse := &WebhookResponse{}
 
@@ -71,10 +71,10 @@ func (s *WebhooksService) Create(accountID string, webhookAttributes Webhook) (*
 	return webhookResponse, nil
 }
 
-// Get a webhook.
+// GetWebhook fetches a webhook.
 //
 // See PRIVATE
-func (s *WebhooksService) Get(accountID string, webhookID int) (*WebhookResponse, error) {
+func (s *WebhooksService) GetWebhook(accountID string, webhookID int) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
 
@@ -87,10 +87,10 @@ func (s *WebhooksService) Get(accountID string, webhookID int) (*WebhookResponse
 	return webhookResponse, nil
 }
 
-// Delete a webhook.
+// DeleteWebhook PERMANENTLY deletes a webhook from the account.
 //
 // See PRIVATE
-func (s *WebhooksService) Delete(accountID string, webhookID int) (*WebhookResponse, error) {
+func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
 

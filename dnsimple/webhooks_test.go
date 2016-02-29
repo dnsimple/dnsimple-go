@@ -17,7 +17,7 @@ func TestWebhooks_webhookPath(t *testing.T) {
 	}
 }
 
-func TestWebhooksService_List(t *testing.T) {
+func TestWebhooksService_ListWebhooks(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -31,7 +31,7 @@ func TestWebhooksService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	webhooksResponse, err := client.Webhooks.List("1010", nil)
+	webhooksResponse, err := client.Webhooks.ListWebhooks("1010", nil)
 	if err != nil {
 		t.Fatalf("Webhooks.List() returned error: %v", err)
 	}
@@ -49,7 +49,7 @@ func TestWebhooksService_List(t *testing.T) {
 	}
 }
 
-func TestWebhooksService_Create(t *testing.T) {
+func TestWebhooksService_CreateWebhook(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -68,7 +68,7 @@ func TestWebhooksService_Create(t *testing.T) {
 
 	webhookAttributes := Webhook{URL: "https://webhook.test"}
 
-	webhookResponse, err := client.Webhooks.Create("1010", webhookAttributes)
+	webhookResponse, err := client.Webhooks.CreateWebhook("1010", webhookAttributes)
 	if err != nil {
 		t.Fatalf("Webhooks.Create() returned error: %v", err)
 	}
@@ -82,7 +82,7 @@ func TestWebhooksService_Create(t *testing.T) {
 	}
 }
 
-func TestWebhooksService_Get(t *testing.T) {
+func TestWebhooksService_GetWebhook(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -96,7 +96,7 @@ func TestWebhooksService_Get(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	webhookResponse, err := client.Webhooks.Get("1010", 1)
+	webhookResponse, err := client.Webhooks.GetWebhook("1010", 1)
 	if err != nil {
 		t.Fatalf("Webhooks.Get() returned error: %v", err)
 	}
@@ -111,7 +111,7 @@ func TestWebhooksService_Get(t *testing.T) {
 	}
 }
 
-func TestWebhooksService_Delete(t *testing.T) {
+func TestWebhooksService_DeleteWebhook(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -125,7 +125,7 @@ func TestWebhooksService_Delete(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Webhooks.Delete("1010", 1)
+	_, err := client.Webhooks.DeleteWebhook("1010", 1)
 	if err != nil {
 		t.Fatalf("Webhooks.Delete() returned error: %v", err)
 	}

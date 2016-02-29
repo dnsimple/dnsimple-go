@@ -107,7 +107,7 @@ func TestLive_Webhooks(t *testing.T) {
 	}
 	accountID := whoami.Account.ID
 
-	webhooksResponse, err = dnsimpleClient.Webhooks.List(fmt.Sprintf("%v", accountID), nil)
+	webhooksResponse, err = dnsimpleClient.Webhooks.ListWebhooks(fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
 		t.Fatalf("Live Webhooks.List() returned error: %v", err)
 	}
@@ -116,7 +116,7 @@ func TestLive_Webhooks(t *testing.T) {
 	fmt.Printf("Webhooks: %+v\n", webhooksResponse.Data)
 
 	webhookAttributes := Webhook{URL: "https://livetest.test"}
-	webhookResponse, err = dnsimpleClient.Webhooks.Create(fmt.Sprintf("%v", accountID), webhookAttributes)
+	webhookResponse, err = dnsimpleClient.Webhooks.CreateWebhook(fmt.Sprintf("%v", accountID), webhookAttributes)
 	if err != nil {
 		t.Fatalf("Live Webhooks.Create() returned error: %v", err)
 	}
@@ -125,7 +125,7 @@ func TestLive_Webhooks(t *testing.T) {
 	fmt.Printf("Webhook: %+v\n", webhookResponse.Data)
 	webhook = webhookResponse.Data
 
-	webhookResponse, err = dnsimpleClient.Webhooks.Delete(fmt.Sprintf("%v", accountID), webhook.ID)
+	webhookResponse, err = dnsimpleClient.Webhooks.DeleteWebhook(fmt.Sprintf("%v", accountID), webhook.ID)
 	if err != nil {
 		t.Fatalf("Live Webhooks.Delete(%v) returned error: %v", webhook.ID, err)
 	}
