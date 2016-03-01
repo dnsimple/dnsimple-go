@@ -107,6 +107,37 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	}
 }
 
+func TestZonesService_CreateRecord_BlankName(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createZoneRecord/created_apex.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "", "content": "192.168.0.10", "type": "A"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	recordValues := ZoneRecord{Name: "", Content: "192.168.0.10", Type: "A"}
+
+	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
+	if err != nil {
+		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
+	}
+
+	record := recordResponse.Data
+	if want, got := "", record.Name; want != got {
+		t.Fatalf("Zones.CreateRecord() returned Name expected to be `%v`, got `%v`", want, got)
+	}
+}
+
 func TestZonesService_GetRecord(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
