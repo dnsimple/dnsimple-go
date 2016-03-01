@@ -133,9 +133,6 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 	}
 
 	record := recordResponse.Data
-	if want, got := 64784, record.ID; want != got {
-		t.Fatalf("Zones.CreateRecord() returned ID expected to be `%v`, got `%v`", want, got)
-	}
 	if want, got := "", record.Name; want != got {
 		t.Fatalf("Zones.CreateRecord() returned Name expected to be `%v`, got `%v`", want, got)
 	}
