@@ -133,3 +133,22 @@ func TestLive_Webhooks(t *testing.T) {
 	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
 	webhook = webhookResponse.Data
 }
+
+func TestLive_Error(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(dnsimpleClient)
+	if err != nil {
+		t.Fatalf("Live Error()/Whoami() returned error: %v", err)
+	}
+
+	_, err = dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.com", time.Now().Unix()), &DomainRegisterRequest{})
+	if err == nil {
+		t.Fatalf("Live Error()/RegisterDomain() expected to return error")
+	}
+
+	e := err.(*ErrorResponse)
+	fmt.Println(e.Message)
+}
