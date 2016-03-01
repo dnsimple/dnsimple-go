@@ -36,7 +36,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/register/success.http")
+		httpResponse := httpResponseFixture(t, "/registerDomain/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -69,7 +69,7 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfer", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/transfer/success.http")
+		httpResponse := httpResponseFixture(t, "/transferDomain/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -102,7 +102,7 @@ func TestRegistrarService_TransferDomainOut(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfer_out", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/transferOut/success.http")
+		httpResponse := httpResponseFixture(t, "/transferDomainOut/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -122,7 +122,7 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/renewal", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/renew/success.http")
+		httpResponse := httpResponseFixture(t, "/renewDomain/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
