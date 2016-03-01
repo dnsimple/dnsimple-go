@@ -10,7 +10,7 @@ type ZoneRecord struct {
 	ZoneID       string `json:"zone_id,omitempty"`
 	ParentID     int    `json:"parent_id,omitempty"`
 	Type         string `json:"type,omitempty"`
-	Name         string `json:"name,omitempty"`
+	Name         string `json:"name"`
 	Content      string `json:"content,omitempty"`
 	TTL          int    `json:"ttl,omitempty"`
 	Priority     int    `json:"priority,omitempty"`
