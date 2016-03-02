@@ -4,8 +4,8 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func TestTldsService_ListTlds(t *testing.T) {

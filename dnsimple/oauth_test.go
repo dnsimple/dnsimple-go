@@ -14,6 +14,7 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 	code := "1234567890"
 	clientID := "a1b2c3"
 	clientSecret := "thisisasecret"
+	grantType := "authorization_code"
 
 	mux.HandleFunc("/v2/oauth/access_token", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/oauthAccessToken/success.http")
@@ -21,14 +22,14 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"code": code, "client_id": clientID, "client_secret": clientSecret}
+		want := map[string]interface{}{"code": code, "client_id": clientID, "client_secret": clientSecret, "grant_type": grantType}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	token, err := client.Oauth.ExchangeAuthorizationForToken(&ExchangeAuthorizationRequest{Code: code, ClientID: clientID, ClientSecret: clientSecret})
+	token, err := client.Oauth.ExchangeAuthorizationForToken(&ExchangeAuthorizationRequest{Code: code, ClientID: clientID, ClientSecret: clientSecret, GrantType: grantType})
 	if err != nil {
 		t.Fatalf("Oauth.ExchangeAuthorizationForToken() returned error: %v", err)
 	}
