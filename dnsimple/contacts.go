@@ -60,7 +60,7 @@ func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (
 	path := versioned(contactPath(accountID, nil))
 	contactsResponse := &ContactsResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

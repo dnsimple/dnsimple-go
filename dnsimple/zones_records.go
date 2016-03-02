@@ -48,7 +48,7 @@ func (s *ZonesService) ListRecords(accountID string, zoneID string, options *Lis
 	path := versioned(zoneRecordPath(accountID, zoneID, 0))
 	recordsResponse := &ZoneRecordsResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

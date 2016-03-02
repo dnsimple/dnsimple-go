@@ -41,7 +41,7 @@ func (s *ZonesService) ListZones(accountID string, options *ListOptions) (*Zones
 	path := versioned(fmt.Sprintf("/%v/zones", accountID))
 	zonesResponse := &ZonesResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

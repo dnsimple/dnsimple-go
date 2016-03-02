@@ -43,7 +43,7 @@ func (s *DomainsService) ListEmailForwards(accountID string, domain interface{},
 	path := versioned(emailForwardPath(accountID, domain, 0))
 	forwardsResponse := &EmailForwardsResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

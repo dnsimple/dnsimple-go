@@ -70,7 +70,7 @@ func (s *DomainsService) ListDomains(accountID string, options *ListOptions) (*D
 	path := versioned(domainPath(accountID, nil))
 	domainsResponse := &DomainsResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

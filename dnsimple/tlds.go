@@ -66,7 +66,7 @@ func (s *TldsService) ListTlds(options *ListOptions) (*TldsResponse, error) {
 	path := versioned("/tlds")
 	tldsResponse := &TldsResponse{}
 
-	path, err := addListOptions(path, options)
+	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}

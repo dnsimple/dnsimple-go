@@ -48,10 +48,10 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 
 // AuthorizationOptions represents the option you can use to generate an authorization URL.
 type AuthorizationOptions struct {
-	RedirectURI string
+	RedirectURI string `url:"redirect_uri,omitempty"`
 	// Currently "state" is required by the DNSimple OAuth implementation,
 	// so you must specify it.
-	State string
+	State string `url:"state,omitempty"`
 }
 
 // AuthorizeURL generates the URL to authorize an user for an application via the OAuth2 flow.
@@ -61,14 +61,8 @@ func (s *OauthService) AuthorizeURL(clientID string, options *AuthorizationOptio
 	query := uri.Query()
 	query.Add("client_id", clientID)
 	query.Add("response_type", "code")
-	if options != nil {
-		if options.RedirectURI != "" {
-			query.Add("redirect_uri", options.RedirectURI)
-		}
-		if options.State != "" {
-			query.Add("state", options.State)
-		}
-	}
 	uri.RawQuery = query.Encode()
-	return uri.String()
+
+	path, _ := addURLQueryOptions(uri.String(), options)
+	return path
 }

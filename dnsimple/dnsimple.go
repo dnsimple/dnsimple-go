@@ -75,7 +75,7 @@ type ListOptions struct {
 
 // addOptions adds the parameters in opt as URL query parameters to s.  opt
 // must be a struct whose fields may contain "url" tags.
-func addListOptions(path string, options interface{}) (string, error) {
+func addURLQueryOptions(path string, options interface{}) (string, error) {
 	val := reflect.ValueOf(options)
 	qso := map[string]string{}
 
