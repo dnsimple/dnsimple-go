@@ -40,6 +40,32 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 	}
 }
 
+func TestOauthService_ExchangeAuthorizationForToken_Error(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/oauth/access_token", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/oauthAccessToken/error-invalid_request.http")
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Oauth.ExchangeAuthorizationForToken(&ExchangeAuthorizationRequest{Code: "1234567890", ClientID: "a1b2c3", ClientSecret: "thisisasecret", GrantType: "authorization_code"})
+	if err == nil {
+		t.Fatalf("Oauth.ExchangeAuthorizationForToken() expected to return an error")
+	}
+
+	switch v := err.(type) {
+	case *ExchangeAuthorizationError:
+		if want := `Invalid "state": value doesn't match the "state" in the authorization request`; v.ErrorDescription != want {
+			t.Errorf("Oauth.ExchangeAuthorizationForToken() error is %v, want %v", v, want)
+		}
+	default:
+		t.Fatalf("Oauth.ExchangeAuthorizationForToken() error type unknown: %v", v.Error())
+	}
+}
+
 func TestOauthService_AuthorizeURL(t *testing.T) {
 	clientID := "a1b2c3"
 	client.BaseURL = "https://api.host.test"

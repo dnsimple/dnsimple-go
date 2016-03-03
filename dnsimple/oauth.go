@@ -1,6 +1,9 @@
 package dnsimple
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 )
@@ -32,18 +35,50 @@ type ExchangeAuthorizationRequest struct {
 	GrantType string `json:"grant_type,omitempty"`
 }
 
+// ExchangeAuthorizationError represents a failed request to exchange
+// an authorization code for an access token.
+type ExchangeAuthorizationError struct {
+	// HTTP response
+	HttpResponse *http.Response
+
+	ErrorCode        string `json:"error"`
+	ErrorDescription string `json:"error_description"`
+}
+
+// Error implements the error interface.
+func (r *ExchangeAuthorizationError) Error() string {
+	return fmt.Sprintf("%v %v: %v %v",
+		r.HttpResponse.Request.Method, r.HttpResponse.Request.URL,
+		r.ErrorCode, r.ErrorDescription)
+}
+
 // ExchangeAuthorizationForToken exchanges the short-lived authorization code for an access token
 // you can use to authenticate your API calls.
 func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuthorizationRequest) (*AccessToken, error) {
 	path := versioned("/oauth/access_token")
-	accessToken := &AccessToken{}
 
-	_, err := s.client.post(path, authorization, accessToken)
+	req, err := s.client.NewRequest("POST", path, authorization)
 	if err != nil {
 		return nil, err
 	}
 
-	return accessToken, nil
+	resp, err := s.client.HttpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		errorResponse := &ExchangeAuthorizationError{}
+		errorResponse.HttpResponse = resp
+		json.NewDecoder(resp.Body).Decode(errorResponse)
+		return nil, errorResponse
+	}
+
+	accessToken := &AccessToken{}
+	err = json.NewDecoder(resp.Body).Decode(accessToken)
+
+	return accessToken, err
 }
 
 // AuthorizationOptions represents the option you can use to generate an authorization URL.
