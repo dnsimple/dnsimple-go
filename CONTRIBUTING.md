@@ -5,6 +5,7 @@
 Clone the repository and move into it:
 
 ```
+$ mkdir -p $GOPATH/src/github.com/aetrion && cd $_
 $ git clone git@github.com:aetrion/dnsimple-go.git
 $ cd dnsimple-go
 ```
