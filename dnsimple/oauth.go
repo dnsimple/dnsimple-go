@@ -31,7 +31,7 @@ type ExchangeAuthorizationRequest struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	RedirectURI  string `json:"redirect_uri,omitempty"`
-	// Currently the only supported value is "authorization_code"
+	State        string `json:"state,omitempty"`
 	GrantType string `json:"grant_type,omitempty"`
 }
 
@@ -84,8 +84,8 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 // AuthorizationOptions represents the option you can use to generate an authorization URL.
 type AuthorizationOptions struct {
 	RedirectURI string `url:"redirect_uri,omitempty"`
-	// Currently "state" is required by the DNSimple OAuth implementation,
-	// so you must specify it.
+	// A randomly generated string to verify the validity of the request.
+	// Currently "state" is required by the DNSimple OAuth implementation, so you must specify it.
 	State string `url:"state,omitempty"`
 }
 
