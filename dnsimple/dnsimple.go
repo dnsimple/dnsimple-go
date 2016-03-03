@@ -100,13 +100,11 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 		// The field has a different tag
 		if tag == "" {
 			continue
-
 		}
 
 		// The field is ignored with `url:"-"`
 		if tag == "-" {
 			continue
-
 		}
 
 		splits := strings.Split(tag, ",")
