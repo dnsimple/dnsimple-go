@@ -5,6 +5,16 @@ import (
 	"strings"
 )
 
+// GrantType is a string that identifies a particular grant type in the exchange request.
+type GrantType string
+
+const (
+	// AuthorizationCodeGrant is the type of access token request
+	// for an Authorization Code Grant flow.
+	// https://tools.ietf.org/html/rfc6749#section-4.1
+	AuthorizationCodeGrant = GrantType("authorization_code")
+)
+
 // OauthService handles communication with the authorization related
 // methods of the DNSimple API.
 //
@@ -29,7 +39,7 @@ type ExchangeAuthorizationRequest struct {
 	ClientSecret string `json:"client_secret"`
 	RedirectURI  string `json:"redirect_uri,omitempty"`
 	// Currently the only supported value is "authorization_code"
-	GrantType string `json:"grant_type,omitempty"`
+	GrantType GrantType `json:"grant_type,omitempty"`
 }
 
 // ExchangeAuthorizationForToken exchanges the short-lived authorization code for an access token
