@@ -25,7 +25,7 @@ type DomainCheckResponse struct {
 	Data *DomainCheck `json:"data"`
 }
 
-// CheckDomain check a domain name.
+// CheckDomain checks a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#check
 func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*DomainCheckResponse, error) {
