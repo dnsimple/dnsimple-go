@@ -54,12 +54,14 @@ func main() {
     fmt.Println(whoamiResponse.Data.User)
 
     // get the list of domains
-    domainsResponse, _, err := client.Domains.ListDomains(whoami.Account.Id, nil)
+    domainsResponse, err := client.Domains.ListDomains(whoami.Account.Id, nil)
     if err != nil {
         fmt.Printf("Domains.ListDomains() returned error: %v\n", err)
         os.Exit(1)
     }
 
+    // iterate over all the domains in the
+    // paginated response.
     for _, domain := range domainsResponse.Data {
         fmt.Println(domain)
     }
