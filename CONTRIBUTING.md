@@ -2,9 +2,10 @@
 
 ## Getting started
 
-Clone the repository and move into it:
+Clone the repository [in your workspace](https://golang.org/doc/code.html#Organization) and move into it:
 
 ```
+$ mkdir -p $GOPATH/src/github.com/aetrion && cd $_
 $ git clone git@github.com:aetrion/dnsimple-go.git
 $ cd dnsimple-go
 ```
