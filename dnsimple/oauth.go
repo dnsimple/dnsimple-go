@@ -37,12 +37,12 @@ type AccessToken struct {
 // an authorization code for an access token.
 // RedirectURI is optional, all the other fields are mandatory.
 type ExchangeAuthorizationRequest struct {
-	Code         string `json:"code"`
-	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
-	RedirectURI  string `json:"redirect_uri,omitempty"`
-	State        string `json:"state,omitempty"`
-	GrantType GrantType `json:"grant_type,omitempty"`
+	Code         string    `json:"code"`
+	ClientID     string    `json:"client_id"`
+	ClientSecret string    `json:"client_secret"`
+	RedirectURI  string    `json:"redirect_uri,omitempty"`
+	State        string    `json:"state,omitempty"`
+	GrantType    GrantType `json:"grant_type,omitempty"`
 }
 
 // ExchangeAuthorizationError represents a failed request to exchange
