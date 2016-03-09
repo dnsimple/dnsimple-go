@@ -1,12 +1,3 @@
-## :warning: Development Warning
-
-This project targets the development of the API client for the [DNSimple API v2](https://developer.dnsimple.com/v2/). If you are looking for the initial version of the client for [DNSimple API v1](https://developer.dnsimple.com/v1/) then use the [`weppos/dnsimple-go`](https://github.com/weppos/dnsimple-go) project.
-
-This version is currently under development, therefore the methods and the implementation should be considered a work-in-progress. Changes in the method naming, method signatures, public or internal APIs may happen at any time.
-
-The code is tested with an automated test suite connected to a continuous integration tool, therefore you should not expect :bomb: bugs to be merged into master. Regardless, use this library at your own risk. :boom:
-
-
 # DNSimple Go Client
 
 A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
@@ -14,6 +5,13 @@ A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 [![Build Status](https://travis-ci.org/aetrion/dnsimple-go.svg)](https://travis-ci.org/aetrion/dnsimple-go)
 [![Coverage Status](https://coveralls.io/repos/github/aetrion/dnsimple-go/badge.svg?branch=master)](https://coveralls.io/github/aetrion/dnsimple-go?branch=master)
 [![GoDoc](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple)
+
+
+## :warning: Beta Warning
+
+This project targets the development of the API client for the [DNSimple API v2](https://developer.dnsimple.com/v2/). If you are looking for the initial version of the client for [DNSimple API v1](https://developer.dnsimple.com/v1/) then use the [`weppos/dnsimple-go`](https://github.com/weppos/dnsimple-go) project.
+
+This library is currently in beta version, the methods and the implementation should be considered a work-in-progress. Changes in the method naming, method signatures, public or internal APIs may happen during the beta period.
 
 
 ## Installation
