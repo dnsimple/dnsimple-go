@@ -202,17 +202,17 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 	event := &ContactEvent{}
 	err := ParseContactEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+		t.Fatalf("ParseContactUpdateEvent returned error: %v", err)
 	}
 
 	if want, got := "contact.update", event.Name; want != got {
-		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseContactUpdateEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseContactUpdateEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseContactUpdateEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -229,21 +229,102 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	event := &ContactEvent{}
 	err := ParseContactEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+		t.Fatalf("ParseContactDeleteEvent returned error: %v", err)
 	}
 
 	if want, got := "contact.delete", event.Name; want != got {
-		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseContactDeleteEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseContactDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseContactDeleteEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
 	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
+	payload := `{"data": {"record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "record.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}
+`
+
+	event := &ZoneRecordEvent{}
+	err := ParseZoneRecordEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseZoneRecordCreateEvent returned error: %v", err)
+	}
+
+	if want, got := "record.create", event.Name; want != got {
+		t.Errorf("ParseZoneRecordCreateEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseZoneRecordCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "_frame", event.ZoneRecord.Name; want != got {
+		t.Errorf("ParseZoneRecordCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ZoneRecordEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
+	payload := `{"data": {"record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "record.update", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}
+`
+
+	event := &ZoneRecordEvent{}
+	err := ParseZoneRecordEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseZoneRecordUpdateEvent returned error: %v", err)
+	}
+
+	if want, got := "record.update", event.Name; want != got {
+		t.Errorf("ParseZoneRecordUpdateEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseZoneRecordUpdateEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "_frame", event.ZoneRecord.Name; want != got {
+		t.Errorf("ParseZoneRecordUpdateEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ZoneRecordEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
+	payload := `{"data": {"record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "record.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}
+`
+
+	event := &ZoneRecordEvent{}
+	err := ParseZoneRecordEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseZoneRecordDeleteEvent returned error: %v", err)
+	}
+
+	if want, got := "record.delete", event.Name; want != got {
+		t.Errorf("ParseZoneRecordDeleteEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseZoneRecordDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "_frame", event.ZoneRecord.Name; want != got {
+		t.Errorf("ParseZoneRecordDeleteEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ZoneRecordEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}

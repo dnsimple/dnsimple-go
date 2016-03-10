@@ -31,6 +31,11 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"webhook.create",
 		"webhook.delete":
 		event = &WebhookEvent{}
+	case // zone record
+		"record.create",
+		"record.update",
+		"record.delete":
+		event = &ZoneRecordEvent{}
 	default:
 		event = &GenericEvent{}
 	}
@@ -90,6 +95,25 @@ func ParseDomainEvent(e *DomainEvent, payload []byte) error {
 }
 
 func (e *DomainEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// ZoneRecordEvent represents the base event sent for a webhook action.
+//
+type ZoneRecordEvent struct {
+	Event_Header
+	Data       *ZoneRecordEvent     `json:"data"`
+	ZoneRecord *dnsimple.ZoneRecord `json:"record"`
+}
+
+// ParseZoneRecordEvent unpacks the data into a ZoneRecordEvent.
+func ParseZoneRecordEvent(e *ZoneRecordEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *ZoneRecordEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
