@@ -15,11 +15,20 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"account.add_user",                // TODO
 		"account.remove_user":             // TODO
 		event = &AccountEvent{}
+	//case // certificate
+	//	"certificate.issue",
+	//	"certificate.reissue",
+	//	"certificate.remove_private_key":
+	//	event = &CertificateEvent{}
 	case // contact
 		"contact.create",
 		"contact.update",
 		"contact.delete":
 		event = &ContactEvent{}
+	//case // dnssec
+	//	"dnssec.create",
+	//	"dnssec.delete":
+	//	event = &DNSSEC{}
 	case // domain
 		"domain.auto_renewal_enable",
 		"domain.auto_renewal_disable",
@@ -34,15 +43,60 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.token_reset",
 		"domain.transfer": // TODO
 		event = &DomainEvent{}
-	case // webhook
-		"webhook.create",
-		"webhook.delete":
-		event = &WebhookEvent{}
+	//case // email forward
+	//	"email_forward.create",
+	//	"email_forward.delete":
+	//	event = &EmailForwardEvent{}
+	//case // name servers
+	//	"name_server.deregister",
+	//	"name_server.register":
+	//	event = &NameServerEvent{}
+	//case // push
+	//	"push.accept",
+	//	"push.initiate",
+	//	"push.reject":
+	//	event = &PushEvent{}
 	case // zone record
 		"record.create",
 		"record.update",
 		"record.delete":
 		event = &ZoneRecordEvent{}
+	//case // secondary dns
+	//	"secondary_dns.create",
+	//	"secondary_dns.update",
+	//	"secondary_dns.delete":
+	//	event = &SecondaryDNSEvent{}
+	//case // subscription
+	//	"subscription.migrate",
+	//	"subscription.subscribe",
+	//	"subscription.unsubscribe":
+	//	event = &SubscriptionEvent{}
+	//case // template
+	//	"template.create",
+	//	"template.delete",
+	//	"template.update":
+	//	event = &TemplateEvent{}
+	//case // template record
+	//	"template_record.create",
+	//	"template_record.delete":
+	//	event = &TemplateRecordEvent{}
+	//case // vanity
+	//	"vanity.disable",
+	//	"vanity.enable":
+	//	event = &VanityEvent{}
+	case // webhook
+		"webhook.create",
+		"webhook.delete":
+		event = &WebhookEvent{}
+	//case // whois privacy
+	//	"whois_privacy.disable",
+	//	"whois_privacy.enable",
+	//	"whois_privacy.renew":
+	//	event = &WhoisPrivacyEvent{}
+	//case // zone
+	//	"zone.create",
+	//	"zone.delete":
+	//	event = &ZoneEvent{}
 	default:
 		event = &GenericEvent{}
 	}
