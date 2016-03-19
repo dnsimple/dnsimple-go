@@ -8,6 +8,13 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	var event Event
 
 	switch name {
+	case // account
+		"account.update",                  // TODO
+		"account.billing_settings_update", // TODO
+		"account.payment_details_update",  // TODO
+		"account.add_user",                // TODO
+		"account.remove_user":             // TODO
+		event = &AccountEvent{}
 	case // contact
 		"contact.create",
 		"contact.update",
@@ -44,8 +51,10 @@ func switchEvent(name string, payload []byte) (Event, error) {
 }
 
 //
-// GenericEvent represents a generic event, where the data is a simple map of strings.
+// GenericEvent
 //
+
+// GenericEvent represents a generic event, where the data is a simple map of strings.
 type GenericEvent struct {
 	Event_Header
 	Data interface{} `json:"data"`
@@ -62,8 +71,31 @@ func ParseGenericEvent(e *GenericEvent, payload []byte) error {
 }
 
 //
-// ContactEvent represents the base event sent for a contact action.
+// AccountEvent
 //
+
+// AccountEvent represents the base event sent for an account action.
+type AccountEvent struct {
+	Event_Header
+	Data    *AccountEvent     `json:"data"`
+	Account *dnsimple.Account `json:"account"`
+}
+
+// ParseAccountEvent unpacks the data into an AccountEvent.
+func ParseAccountEvent(e *AccountEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *AccountEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// ContactEvent
+//
+
+// ContactEvent represents the base event sent for a contact action.
 type ContactEvent struct {
 	Event_Header
 	Data    *ContactEvent     `json:"data"`
@@ -81,8 +113,10 @@ func (e *ContactEvent) parse(payload []byte) error {
 }
 
 //
-// DomainEvent represents the base event sent for a domain action.
+// DomainEvent
 //
+
+// DomainEvent represents the base event sent for a domain action.
 type DomainEvent struct {
 	Event_Header
 	Data   *DomainEvent     `json:"data"`
@@ -100,8 +134,10 @@ func (e *DomainEvent) parse(payload []byte) error {
 }
 
 //
-// ZoneRecordEvent represents the base event sent for a webhook action.
+// ZoneRecordEvent
 //
+
+// ZoneRecordEvent represents the base event sent for a webhook action.
 type ZoneRecordEvent struct {
 	Event_Header
 	Data       *ZoneRecordEvent     `json:"data"`
@@ -119,8 +155,10 @@ func (e *ZoneRecordEvent) parse(payload []byte) error {
 }
 
 //
-// WebhookEvent represents the base event sent for a webhook action.
+// WebhookEvent
 //
+
+// WebhookEvent represents the base event sent for a webhook action.
 type WebhookEvent struct {
 	Event_Header
 	Data    *WebhookEvent     `json:"data"`
