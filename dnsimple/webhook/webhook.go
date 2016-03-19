@@ -45,6 +45,7 @@ type Event_Header struct {
 	Actor      *Actor   `json:"actor"`
 	Account    *Account `json:"account"`
 	Name       string   `json:"name"`
+	Auto       bool     `json:"auto"`
 	payload    []byte
 }
 

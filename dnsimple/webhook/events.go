@@ -19,7 +19,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.create",
 		"domain.delete",
 		"domain.register",
-		"domain.renew",              // TODO
+		"domain.renew",
 		"domain.delegation_change",  // TODO
 		"domain.registrant_change",  // TODO
 		"domain.resolution_enable",  // TODO
