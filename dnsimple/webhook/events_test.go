@@ -13,19 +13,19 @@ func TestParseGenericEvent(t *testing.T) {
 	event := &GenericEvent{}
 	err := ParseGenericEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseGenericEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.create", event.Name; want != got {
-		t.Errorf("ParseGenericEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseGenericEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
 	data := event.Data.(map[string]interface{})
 	if want, got := "example.com", data["domain"].(map[string]interface{})["name"]; want != got {
-		t.Errorf("ParseDomainCreateEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -44,17 +44,17 @@ func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainAutoRenewalEnableEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.auto_renewal_enable", event.Name; want != got {
-		t.Errorf("ParseDomainAutoRenewalEnableEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainAutoRenewalEnableEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainAutoRenewalEnableEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -70,17 +70,17 @@ func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainAutoRenewalDisableEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.auto_renewal_disable", event.Name; want != got {
-		t.Errorf("ParseDomainAutoRenewalDisableEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainAutoRenewalDisableEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainAutoRenewalDisableEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -96,17 +96,17 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainCreateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.create", event.Name; want != got {
-		t.Errorf("ParseDomainCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainCreateEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -122,17 +122,17 @@ func TestParseDomainEvent_Domain_Delete(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainDeleteEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.delete", event.Name; want != got {
-		t.Errorf("ParseDomainDeleteEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainDeleteEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -148,17 +148,17 @@ func TestParseDomainEvent_Domain_Register(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainRegisterEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.register", event.Name; want != got {
-		t.Errorf("ParseDomainRegisterEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainRegisterEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainRegisterEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -174,17 +174,17 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	event := &DomainEvent{}
 	err := ParseDomainEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseDomainTokenResetEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "domain.token_reset", event.Name; want != got {
-		t.Errorf("ParseDomainTokenResetEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseDomainTokenResetEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
-		t.Errorf("ParseDomainTokenResetEvent Domain.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -201,17 +201,17 @@ func TestParseContactEvent_Contact_Create(t *testing.T) {
 	event := &ContactEvent{}
 	err := ParseContactEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseContactCreateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "contact.create", event.Name; want != got {
-		t.Errorf("ParseContactCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseContactCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseContactCreateEvent Contact.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -228,17 +228,17 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 	event := &ContactEvent{}
 	err := ParseContactEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseContactUpdateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "contact.update", event.Name; want != got {
-		t.Errorf("ParseContactUpdateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseContactUpdateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseContactUpdateEvent Contact.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -255,17 +255,17 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	event := &ContactEvent{}
 	err := ParseContactEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseContactDeleteEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "contact.delete", event.Name; want != got {
-		t.Errorf("ParseContactDeleteEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseContactDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseContactDeleteEvent Contact.Name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -282,17 +282,17 @@ func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 	event := &ZoneRecordEvent{}
 	err := ParseZoneRecordEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseZoneRecordCreateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "record.create", event.Name; want != got {
-		t.Errorf("ParseZoneRecordCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseZoneRecordCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "_frame", event.ZoneRecord.Name; want != got {
-		t.Errorf("ParseZoneRecordCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -309,17 +309,17 @@ func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 	event := &ZoneRecordEvent{}
 	err := ParseZoneRecordEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseZoneRecordUpdateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "record.update", event.Name; want != got {
-		t.Errorf("ParseZoneRecordUpdateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseZoneRecordUpdateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "_frame", event.ZoneRecord.Name; want != got {
-		t.Errorf("ParseZoneRecordUpdateEvent Webhook.URL expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -336,17 +336,17 @@ func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
 	event := &ZoneRecordEvent{}
 	err := ParseZoneRecordEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseZoneRecordDeleteEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "record.delete", event.Name; want != got {
-		t.Errorf("ParseZoneRecordDeleteEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseZoneRecordDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "_frame", event.ZoneRecord.Name; want != got {
-		t.Errorf("ParseZoneRecordDeleteEvent Webhook.URL expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -362,17 +362,17 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	event := &WebhookEvent{}
 	err := ParseWebhookEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseWebhookCreateEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "webhook.create", event.Name; want != got {
-		t.Errorf("ParseWebhookCreateEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseWebhookCreateEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-		t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
@@ -388,17 +388,17 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 	event := &WebhookEvent{}
 	err := ParseWebhookEvent(event, []byte(payload))
 	if err != nil {
-		t.Fatalf("ParseWebhookDeleteEvent returned error: %v", err)
+		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
 	if want, got := "webhook.delete", event.Name; want != got {
-		t.Errorf("ParseWebhookDeleteEvent name expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseWebhookDeleteEvent requestID expected to be an UUID, got %v", event.RequestID)
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-		t.Errorf("ParseWebhookCreateEvent Webhook.URL expected to be %v, got %v", want, got)
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
