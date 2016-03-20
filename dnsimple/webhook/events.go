@@ -88,11 +88,11 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"webhook.create",
 		"webhook.delete":
 		event = &WebhookEvent{}
-	//case // whois privacy
-	//	"whois_privacy.disable",
-	//	"whois_privacy.enable",
-	//	"whois_privacy.renew":
-	//	event = &WhoisPrivacyEvent{}
+	case // whois privacy
+		"whois_privacy.disable",
+		"whois_privacy.enable",
+		"whois_privacy.renew":
+		event = &WhoisPrivacyEvent{}
 	//case // zone
 	//	"zone.create",
 	//	"zone.delete":
@@ -188,27 +188,6 @@ func (e *DomainEvent) parse(payload []byte) error {
 }
 
 //
-// ZoneRecordEvent
-//
-
-// ZoneRecordEvent represents the base event sent for a webhook action.
-type ZoneRecordEvent struct {
-	Event_Header
-	Data       *ZoneRecordEvent     `json:"data"`
-	ZoneRecord *dnsimple.ZoneRecord `json:"record"`
-}
-
-// ParseZoneRecordEvent unpacks the data into a ZoneRecordEvent.
-func ParseZoneRecordEvent(e *ZoneRecordEvent, payload []byte) error {
-	return e.parse(payload)
-}
-
-func (e *ZoneRecordEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
-	return unmashalEvent(payload, e)
-}
-
-//
 // WebhookEvent
 //
 
@@ -225,6 +204,49 @@ func ParseWebhookEvent(e *WebhookEvent, payload []byte) error {
 }
 
 func (e *WebhookEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// WhoisPrivacyEvent
+//
+
+// WhoisPrivacyEvent represents the base event sent for a whois privacy action.
+type WhoisPrivacyEvent struct {
+	Event_Header
+	Data         *WhoisPrivacyEvent     `json:"data"`
+	Domain       *dnsimple.Domain       `json:"domain"`
+	WhoisPrivacy *dnsimple.WhoisPrivacy `json:"whois_privacy"`
+}
+
+// ParseWhoisPrivacyEvent unpacks the data into a WhoisPrivacyEvent.
+func ParseWhoisPrivacyEvent(e *WhoisPrivacyEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *WhoisPrivacyEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// ZoneRecordEvent
+//
+
+// ZoneRecordEvent represents the base event sent for a webhook action.
+type ZoneRecordEvent struct {
+	Event_Header
+	Data       *ZoneRecordEvent     `json:"data"`
+	ZoneRecord *dnsimple.ZoneRecord `json:"record"`
+}
+
+// ParseZoneRecordEvent unpacks the data into a ZoneRecordEvent.
+func ParseZoneRecordEvent(e *ZoneRecordEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *ZoneRecordEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }

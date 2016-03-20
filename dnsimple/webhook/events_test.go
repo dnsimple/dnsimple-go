@@ -305,6 +305,145 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	}
 }
 
+func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
+	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
+
+	event := &WebhookEvent{}
+	err := ParseWebhookEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "webhook.create", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WebhookEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
+	payload := `{"data": {"webhook": {"id": 23, "url": "https://webhook.test"}}, "name": "webhook.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "756bad5c-b432-43be-821a-2f4c4f285d19"}`
+
+	event := &WebhookEvent{}
+	err := ParseWebhookEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "webhook.delete", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WebhookEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.disable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+
+	event := &WhoisPrivacyEvent{}
+	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "whois_privacy.disable", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WhoisPrivacyEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+
+	event := &WhoisPrivacyEvent{}
+	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "whois_privacy.enable", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WhoisPrivacyEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.renew", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+
+	event := &WhoisPrivacyEvent{}
+	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "whois_privacy.renew", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*WhoisPrivacyEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 	payload := `{"data": {"record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "record.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}
 `
@@ -381,58 +520,6 @@ func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
 
 	parsedEvent, err := Parse([]byte(payload))
 	_, ok := parsedEvent.(*ZoneRecordEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
-func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
-
-	event := &WebhookEvent{}
-	err := ParseWebhookEvent(event, []byte(payload))
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "webhook.create", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*WebhookEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
-func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 23, "url": "https://webhook.test"}}, "name": "webhook.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "756bad5c-b432-43be-821a-2f4c4f285d19"}`
-
-	event := &WebhookEvent{}
-	err := ParseWebhookEvent(event, []byte(payload))
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "webhook.delete", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
-		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*WebhookEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
