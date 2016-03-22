@@ -9,11 +9,11 @@ import (
 )
 
 func TestTemplates_templatePath(t *testing.T) {
-	if want, got := "/1010/templates", templatePath("1010", 0); want != got {
+	if want, got := "/1010/templates", templatePath("1010", ""); want != got {
 		t.Errorf("templatePath(%v,  ) = %v, want %v", "1010", got, want)
 	}
 
-	if want, got := "/1010/templates/1", templatePath("1010", 1); want != got {
+	if want, got := "/1010/templates/1", templatePath("1010", "1"); want != got {
 		t.Errorf("templatePath(%v, 1) = %v, want %v", "1010", got, want)
 	}
 }
@@ -71,5 +71,39 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 	_, err := client.Templates.ListTemplates("1010", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
+	}
+}
+
+func TestTemplatesService_Get(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getTemplate/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	templateResponse, err := client.Templates.GetTemplate("1010", "1")
+	if err != nil {
+		t.Fatalf("Templates.GetTemplate() returned error: %v", err)
+	}
+
+	template := templateResponse.Data
+	wantSingle := &Template{
+		ID:          1,
+		AccountID:   1010,
+		Name:        "Alpha",
+		ShortName:   "alpha",
+		Description: "An alpha template.",
+		CreatedAt:   "2016-03-22T11:08:58.262Z",
+		UpdatedAt:   "2016-03-22T11:08:58.262Z"}
+
+	if !reflect.DeepEqual(template, wantSingle) {
+		t.Fatalf("Templates.GetTemplate() returned %+v, want %+v", template, wantSingle)
 	}
 }
