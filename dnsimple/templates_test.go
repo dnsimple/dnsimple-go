@@ -44,7 +44,7 @@ func TestTemplatesService_List(t *testing.T) {
 
 	templates := templatesResponse.Data
 	if want, got := 2, len(templates); want != got {
-		t.Errorf("Templates.ListTemplates() expected to return %v contacts, got %v", want, got)
+		t.Errorf("Templates.ListTemplates() expected to return %v templates, got %v", want, got)
 	}
 
 	if want, got := 1, templates[0].ID; want != got {
@@ -52,5 +52,24 @@ func TestTemplatesService_List(t *testing.T) {
 	}
 	if want, got := "Alpha", templates[0].Name; want != got {
 		t.Fatalf("Templates.ListTemplates() returned Name expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestTemplatesService_List_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listTemplates/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Templates.ListTemplates("1010", &ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
 	}
 }
