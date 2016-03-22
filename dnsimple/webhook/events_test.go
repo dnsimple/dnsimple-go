@@ -225,6 +225,33 @@ func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 	}
 }
 
+func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-03-22T09:17:06.313Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 2}}, "name": "domain.resolution_enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "b6eb3eae-8f3b-476a-997a-564d830df015"}`
+
+	event := &DomainEvent{}
+	err := ParseDomainEvent(event, []byte(payload))
+
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "domain.resolution_enable", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent RequestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-02-07T23:26:16.368Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 11549}}, "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "name": "domain.token_reset", "api_version": "v2", "request_identifier": "33537afb-0e99-49ec-b69e-93ffcc3db763"}`
 

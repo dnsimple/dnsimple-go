@@ -39,7 +39,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.delegation_change", // TODO
 		"domain.registrant_change", // TODO
 		"domain.resolution_disable",
-		"domain.resolution_enable", // TODO
+		"domain.resolution_enable",
 		"domain.token_reset",
 		"domain.transfer": // TODO
 		event = &DomainEvent{}
