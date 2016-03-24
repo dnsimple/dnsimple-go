@@ -359,6 +359,58 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	}
 }
 
+func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
+	payload := `{"data": {"email_forward": {"id": 1, "to": "example@example.io", "from": "hello@example.com", "domain_id": 2, "created_at": "2016-03-24T19:40:09.357Z", "updated_at": "2016-03-24T19:40:09.357Z"}}, "name": "email_forward.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "f5f33be8-7074-4fa1-a296-4ddd9003c4a4"}`
+
+	event := &EmailForwardEvent{}
+	err := ParseEmailForwardEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "email_forward.create", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "hello@example.com", event.EmailForward.From; want != got {
+		t.Errorf("ParseEvent EmailForward.From expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*EmailForwardEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
+	payload := `{"data": {"email_forward": {"id": 1, "to": "example@example.io", "from": "hello@example.com", "domain_id": 2, "created_at": "2016-03-24T19:40:09.357Z", "updated_at": "2016-03-24T19:40:09.357Z"}}, "name": "email_forward.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "f5f33be8-7074-4fa1-a296-4ddd9003c4a4"}`
+
+	event := &EmailForwardEvent{}
+	err := ParseEmailForwardEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "email_forward.delete", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "hello@example.com", event.EmailForward.From; want != got {
+		t.Errorf("ParseEvent EmailForward.From expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*EmailForwardEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
 

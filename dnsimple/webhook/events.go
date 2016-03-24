@@ -43,10 +43,10 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.token_reset",
 		"domain.transfer": // TODO
 		event = &DomainEvent{}
-	//case // email forward
-	//	"email_forward.create",
-	//	"email_forward.delete":
-	//	event = &EmailForwardEvent{}
+	case // email forward
+		"email_forward.create",
+		"email_forward.delete":
+		event = &EmailForwardEvent{}
 	//case // name servers
 	//	"name_server.deregister",
 	//	"name_server.register":
@@ -183,6 +183,27 @@ func ParseDomainEvent(e *DomainEvent, payload []byte) error {
 }
 
 func (e *DomainEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// EmailForwardEvent
+//
+
+// EmailForwardEvent represents the base event sent for an email forward action.
+type EmailForwardEvent struct {
+	Event_Header
+	Data         *EmailForwardEvent     `json:"data"`
+	EmailForward *dnsimple.EmailForward `json:"email_forward"`
+}
+
+// ParseDomainEvent unpacks the payload into a EmailForwardEvent.
+func ParseEmailForwardEvent(e *EmailForwardEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *EmailForwardEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
