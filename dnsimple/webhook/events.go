@@ -56,11 +56,6 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	//	"push.initiate",
 	//	"push.reject":
 	//	event = &PushEvent{}
-	case // zone record
-		"zone_record.create",
-		"zone_record.update",
-		"zone_record.delete":
-		event = &ZoneRecordEvent{}
 	//case // secondary dns
 	//	"secondary_dns.create",
 	//	"secondary_dns.update",
@@ -97,6 +92,11 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	//	"zone.create",
 	//	"zone.delete":
 	//	event = &ZoneEvent{}
+	case // zone record
+		"zone_record.create",
+		"zone_record.update",
+		"zone_record.delete":
+		event = &ZoneRecordEvent{}
 	default:
 		event = &GenericEvent{}
 	}
