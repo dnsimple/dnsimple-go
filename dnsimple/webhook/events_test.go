@@ -422,6 +422,33 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 	}
 }
 
+func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
+	//payload := `{"data": {"domain": {"id": 6637, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 24, "auto_renew": false, "created_at": "2016-03-24T21:03:49.392Z", "expires_on": null, "updated_at": "2016-03-24T21:03:49.392Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 409}}, "name": "domain.transfer:started", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "49901af0-569e-4acd-900f-6edf0ebc123c"}`
+	payload := `{"data": {"domain": {"id": 6637, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 24, "auto_renew": false, "created_at": "2016-03-24T21:03:49.392Z", "expires_on": null, "updated_at": "2016-03-24T21:03:49.392Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 409}}, "name": "domain.transfer", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "49901af0-569e-4acd-900f-6edf0ebc123c"}`
+
+	event := &DomainEvent{}
+	err := ParseDomainEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "domain.transfer", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 	payload := `{"data": {"email_forward": {"id": 1, "to": "example@example.io", "from": "hello@example.com", "domain_id": 2, "created_at": "2016-03-24T19:40:09.357Z", "updated_at": "2016-03-24T19:40:09.357Z"}}, "name": "email_forward.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "f5f33be8-7074-4fa1-a296-4ddd9003c4a4"}`
 

@@ -41,7 +41,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.resolution_disable",
 		"domain.resolution_enable",
 		"domain.token_reset",
-		"domain.transfer": // TODO
+		"domain.transfer":
 		event = &DomainEvent{}
 	case // email forward
 		"email_forward.create",
@@ -177,6 +177,7 @@ type DomainEvent struct {
 	Data       *DomainEvent         `json:"data"`
 	Domain     *dnsimple.Domain     `json:"domain"`
 	Registrant *dnsimple.Contact    `json:"registrant"`
+	Delegation *dnsimple.Delegation `json:"name_servers"`
 }
 
 // ParseDomainEvent unpacks the payload into a DomainEvent.
