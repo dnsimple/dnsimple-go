@@ -27,7 +27,7 @@ func TestRegistrarService_GetDomainDelegation(t *testing.T) {
 	}
 
 	delegation := delegationResponse.Data
-	wantSingle := Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
+	wantSingle := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
 
 	if !reflect.DeepEqual(delegation, wantSingle) {
 		t.Fatalf("Registrar.GetDomainDelegation() returned %+v, want %+v", delegation, wantSingle)
@@ -59,7 +59,7 @@ func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
 	}
 
 	delegation := delegationResponse.Data
-	wantSingle := Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
+	wantSingle := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
 
 	if !reflect.DeepEqual(delegation, wantSingle) {
 		t.Fatalf("Registrar.ChangeDomainDelegation() returned %+v, want %+v", delegation, wantSingle)

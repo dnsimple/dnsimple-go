@@ -10,7 +10,7 @@ type Delegation []string
 // WhoisPrivacyResponse represents a response from an API method that returns a delegation struct.
 type DelegationResponse struct {
 	Response
-	Data Delegation `json:"data"`
+	Data *Delegation `json:"data"`
 }
 
 // GetDomainDelegation gets the current delegated name servers for the domain.

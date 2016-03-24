@@ -1,8 +1,11 @@
 package webhook
 
 import (
+	"reflect"
 	"regexp"
 	"testing"
+
+	"github.com/aetrion/dnsimple-go/dnsimple"
 )
 
 var regexpUUID = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
@@ -270,6 +273,36 @@ func TestParseDomainEvent_Domain_Renew(t *testing.T) {
 	}
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*DomainEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseDomainEvent_Domain_DelegationChange(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-01-16T16:08:50.649Z", "expires_on": "2018-01-16", "updated_at": "2016-03-24T20:30:05.895Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 2}, "name_servers": ["ns1.dnsimple.com", "ns2.dnsimple.com"]}, "name": "domain.delegation_change", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "a07b97ac-6275-4e15-92dd-1d45881f7a2c"}`
+
+	event := &DomainEvent{}
+	err := ParseDomainEvent(event, []byte(payload))
+
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "domain.delegation_change", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent RequestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "example.com", event.Domain.Name; want != got {
+		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
+	}
+	if want, got := (&dnsimple.Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com"}), event.Delegation; !reflect.DeepEqual(want, got) {
+		t.Errorf("ParseEvent Delegation expected to be %v, got %v", want, got)
 	}
 
 	parsedEvent, err := Parse([]byte(payload))
