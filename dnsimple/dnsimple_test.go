@@ -68,6 +68,20 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 	}
 }
 
+func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
+	var data []interface{}
+
+	body, _ := ioutil.ReadAll(r.Body)
+
+	if err := json.Unmarshal(body, &data); err != nil {
+		t.Fatalf("Could not decode json body: %v", err)
+	}
+
+	if !reflect.DeepEqual(values, data) {
+		t.Errorf("Request parameters = %v, want %v", data, values)
+	}
+}
+
 func readHttpFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../fixtures.http" + filename)
 	if err != nil {
