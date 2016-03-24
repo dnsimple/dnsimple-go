@@ -86,6 +86,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	case // whois privacy
 		"whois_privacy.disable",
 		"whois_privacy.enable",
+		"whois_privacy.purchase",
 		"whois_privacy.renew":
 		event = &WhoisPrivacyEvent{}
 	//case // zone
