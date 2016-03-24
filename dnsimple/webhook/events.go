@@ -89,10 +89,10 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"whois_privacy.purchase",
 		"whois_privacy.renew":
 		event = &WhoisPrivacyEvent{}
-	//case // zone
-	//	"zone.create",
-	//	"zone.delete":
-	//	event = &ZoneEvent{}
+	case // zone
+		"zone.create",
+		"zone.delete":
+		event = &ZoneEvent{}
 	case // zone record
 		"zone_record.create",
 		"zone_record.update",
@@ -253,10 +253,31 @@ func (e *WhoisPrivacyEvent) parse(payload []byte) error {
 }
 
 //
+// ZoneEvent
+//
+
+// ZoneEvent represents the base event sent for a zone action.
+type ZoneEvent struct {
+	Event_Header
+	Data *ZoneEvent     `json:"data"`
+	Zone *dnsimple.Zone `json:"zone"`
+}
+
+// ParseZoneEvent unpacks the data into a ZoneEvent.
+func ParseZoneEvent(e *ZoneEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *ZoneEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
 // ZoneRecordEvent
 //
 
-// ZoneRecordEvent represents the base event sent for a webhook action.
+// ZoneRecordEvent represents the base event sent for a zone record action.
 type ZoneRecordEvent struct {
 	Event_Header
 	Data       *ZoneRecordEvent     `json:"data"`
