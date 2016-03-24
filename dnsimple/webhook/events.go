@@ -37,7 +37,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.register",
 		"domain.renew",
 		"domain.delegation_change", // TODO
-		"domain.registrant_change", // TODO
+		"domain.registrant_change",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
 		"domain.token_reset",
@@ -174,8 +174,9 @@ func (e *ContactEvent) parse(payload []byte) error {
 // DomainEvent represents the base event sent for a domain action.
 type DomainEvent struct {
 	Event_Header
-	Data   *DomainEvent     `json:"data"`
-	Domain *dnsimple.Domain `json:"domain"`
+	Data       *DomainEvent      `json:"data"`
+	Domain     *dnsimple.Domain  `json:"domain"`
+	Registrant *dnsimple.Contact `json:"registrant"`
 }
 
 // ParseDomainEvent unpacks the payload into a DomainEvent.
