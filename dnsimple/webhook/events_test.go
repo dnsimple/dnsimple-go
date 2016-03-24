@@ -38,6 +38,87 @@ func TestParseGenericEvent(t *testing.T) {
 	}
 }
 
+func TestParseContactEvent_Contact_Create(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.create", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseContactEvent_Contact_Update(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.update", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.update", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseContactEvent_Contact_Delete(t *testing.T) {
+	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
+`
+
+	event := &ContactEvent{}
+	err := ParseContactEvent(event, []byte(payload))
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "contact.delete", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "Webhook", event.Contact.Label; want != got {
+		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse([]byte(payload))
+	_, ok := parsedEvent.(*ContactEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-02-13T12:33:22.723Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 11}}, "name": "domain.auto_renewal_enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "91d47480-c2ce-411c-ac95-b5b54f346bff"}`
 
@@ -273,87 +354,6 @@ func TestParseDomainEvent_Domain_TokenReset(t *testing.T) {
 
 	parsedEvent, err := Parse([]byte(payload))
 	_, ok := parsedEvent.(*DomainEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
-func TestParseContactEvent_Contact_Create(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
-
-	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "contact.create", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*ContactEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
-func TestParseContactEvent_Contact_Update(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.update", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
-
-	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "contact.update", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*ContactEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
-func TestParseContactEvent_Contact_Delete(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 29032, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 981, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email_address": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
-
-	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "contact.delete", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
-		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse([]byte(payload))
-	_, ok := parsedEvent.(*ContactEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
