@@ -64,6 +64,22 @@ func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions)
 	return templatesResponse, nil
 }
 
+// CreateTemplate creates a new template.
+//
+// See https://developer.dnsimple.com/v2/templates/#create
+func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes Template) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, ""))
+	templateResponse := &TemplateResponse{}
+
+	resp, err := s.client.post(path, templateAttributes, templateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	templateResponse.HttpResponse = resp
+	return templateResponse, nil
+}
+
 // GetTemplate fetches a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#get

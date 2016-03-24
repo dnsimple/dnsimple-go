@@ -1,0 +1,18 @@
+HTTP/1.1 201 Created
+Server: nginx
+Date: Tue, 22 Mar 2016 11:11:50 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Status: 200 OK
+X-RateLimit-Limit: 2400
+X-RateLimit-Remaining: 2396
+X-RateLimit-Reset: 1458648490
+ETag: W/"2d1c99cff82eace0e995d901b465bbde"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 774e871f-8bda-40d7-bed9-bd907e872987
+X-Runtime: 0.193956
+Strict-Transport-Security: max-age=31536000
+
+{"data": {"id": 2, "name": "Beta", "account_id": 1010, "created_at": "2016-03-24T11:33:39.122Z", "short_name": "beta", "updated_at": "2016-03-24T11:33:39.122Z", "description": "A beta template."}}
+

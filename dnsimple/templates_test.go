@@ -74,6 +74,40 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 	}
 }
 
+func TestTemplatesService_Create(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createTemplate/created.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "Beta"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	templateAttributes := Template{Name: "Beta"}
+
+	templateResponse, err := client.Templates.CreateTemplate(accountID, templateAttributes)
+	if err != nil {
+		t.Fatalf("Templates.CreateTemplate() returned error: %v", err)
+	}
+
+	template := templateResponse.Data
+	if want, got := 2, template.ID; want != got {
+		t.Fatalf("Templates.CreateTemplate() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "Beta", template.Name; want != got {
+		t.Fatalf("Templates.CreateTemplate() returned Label expected to be `%v`, got `%v`", want, got)
+	}
+}
+
 func TestTemplatesService_Get(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
