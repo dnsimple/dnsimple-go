@@ -28,3 +28,19 @@ func (s *RegistrarService) GetDomainDelegation(accountID string, domainName stri
 	delegationResponse.HttpResponse = resp
 	return delegationResponse, nil
 }
+
+// ChangeDomainDelegation updates the delegated name severs for the domain.
+//
+// See https://developer.dnsimple.com/v2/registrar/delegation/#get
+func (s *RegistrarService) ChangeDomainDelegation(accountID string, domainName string, newDelegation *Delegation) (*DelegationResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation", accountID, domainName))
+	delegationResponse := &DelegationResponse{}
+
+	resp, err := s.client.put(path, newDelegation, delegationResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	delegationResponse.HttpResponse = resp
+	return delegationResponse, nil
+}
