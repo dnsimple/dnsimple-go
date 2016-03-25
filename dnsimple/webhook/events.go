@@ -283,7 +283,7 @@ func (e *ZoneEvent) parse(payload []byte) error {
 type ZoneRecordEvent struct {
 	Event_Header
 	Data       *ZoneRecordEvent     `json:"data"`
-	ZoneRecord *dnsimple.ZoneRecord `json:"record"`
+	ZoneRecord *dnsimple.ZoneRecord `json:"zone_record"`
 }
 
 // ParseZoneRecordEvent unpacks the data into a ZoneRecordEvent.
