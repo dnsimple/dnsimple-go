@@ -74,6 +74,11 @@ type ListOptions struct {
 
 	// The number of entries to return per page
 	PerPage int `url:"per_page,omitempty"`
+
+	// The order criteria to sort the results.
+	// The value is a comma-separated list of field[:direction],
+	// eg. name | name:desc | name:desc,expiration:desc
+	Sort string `url:"sorting,omitempty"`
 }
 
 // NewClient returns a new DNSimple API client using the given credentials.

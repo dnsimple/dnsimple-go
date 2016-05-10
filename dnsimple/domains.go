@@ -31,11 +31,6 @@ type Domain struct {
 // DomainListOptions specifies the optional parameters you can provide
 // to customize the DomainsService.ListDomains method.
 type DomainListOptions struct {
-	// The order criteria to sort the domain list.
-	// The value is a comma-separated list of field[:direction],
-	// eg. name | name:desc | name:desc,expiration:desc
-	Sort string `url:"sorting,omitempty"`
-
 	// Filter by domains containing given string
 	NameLike string `url:"name_like,omitempty"`
 
