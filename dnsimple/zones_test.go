@@ -51,13 +51,18 @@ func TestZonesService_ListZones_WithOptions(t *testing.T) {
 	mux.HandleFunc("/v2/1010/zones", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/listZones/success.http")
 
-		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+		testQuery(t, r, url.Values{
+			"page":      []string{"2"},
+			"per_page":  []string{"20"},
+			"sorting":   []string{"name,expiration:desc"},
+			"name_like": []string{"example"},
+		})
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListZones("1010", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Zones.ListZones("1010", &ZoneListOptions{"example", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Zones.ListZones() returned error: %v", err)
 	}
