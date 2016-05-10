@@ -28,6 +28,23 @@ type Domain struct {
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
+// DomainListOptions specifies the optional parameters you can provide
+// to customize the DomainsService.ListDomains method.
+type DomainListOptions struct {
+	// The order criteria to sort the domain list.
+	// The value is a comma-separated list of field[:direction],
+	// eg. name | name:desc | name:desc,expiration:desc
+	Sort string `url:"sorting,omitempty"`
+
+	// Filter by domains containing given string
+	NameLike string `url:"name_like,omitempty"`
+
+	// Filter by domains containing given registrant ID
+	RegistrantID int `url:"registrant_id,omitempty"`
+
+	ListOptions
+}
+
 // DomainResponse represents a response from an API method that returns a Domain struct.
 type DomainResponse struct {
 	Response
@@ -66,7 +83,7 @@ func domainPath(accountID string, domain interface{}) string {
 // ListDomains lists the domains for an account.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) ListDomains(accountID string, options *ListOptions) (*DomainsResponse, error) {
+func (s *DomainsService) ListDomains(accountID string, options *DomainListOptions) (*DomainsResponse, error) {
 	path := versioned(domainPath(accountID, nil))
 	domainsResponse := &DomainsResponse{}
 
