@@ -14,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 const (
@@ -275,67 +277,15 @@ func CheckResponse(resp *http.Response) error {
 	return errorResponse
 }
 
-// see encoding/json
-func isEmptyValue(v reflect.Value) bool {
-	switch v.Kind() {
-	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
-		return v.Len() == 0
-	case reflect.Bool:
-		return !v.Bool()
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int() == 0
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return v.Uint() == 0
-	case reflect.Float32, reflect.Float64:
-		return v.Float() == 0
-	case reflect.Interface, reflect.Ptr:
-		return v.IsNil()
-	}
-	return false
-}
-
 // addOptions adds the parameters in opt as URL query parameters to s.  opt
 // must be a struct whose fields may contain "url" tags.
 func addURLQueryOptions(path string, options interface{}) (string, error) {
-	val := reflect.ValueOf(options)
-	qso := map[string]string{}
+	opt := reflect.ValueOf(options)
 
 	// options is a pointer
 	// return if the value of the pointer is nil,
-	// otherwise replace the pointer with the value.
-	if val.Kind() == reflect.Ptr {
-		if val.IsNil() {
-			return path, nil
-		}
-		val = val.Elem()
-	}
-
-	// extract all the options from the struct
-	typ := val.Type()
-	for i := 0; i < val.NumField(); i++ {
-		sf := typ.Field(i)
-		sv := val.Field(i)
-
-		tag := sf.Tag.Get("url")
-
-		// The field has a different tag
-		if tag == "" {
-			continue
-		}
-
-		// The field is ignored with `url:"-"`
-		if tag == "-" {
-			continue
-		}
-
-		splits := strings.Split(tag, ",")
-		name, opts := splits[0], splits[1:]
-
-		if optionsContains(opts, "omitempty") && isEmptyValue(sv) {
-			continue
-		}
-
-		qso[name] = fmt.Sprint(sv.Interface())
+	if opt.Kind() == reflect.Ptr && opt.IsNil() {
+		return path, nil
 	}
 
 	// append the options to the URL
@@ -343,20 +293,17 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 	if err != nil {
 		return path, err
 	}
-	qs := u.Query()
-	for k, v := range qso {
-		qs.Add(k, v)
+
+	qs, err := query.Values(options)
+	if err != nil {
+		return path, err
 	}
-	u.RawQuery = qs.Encode()
+
+	uqs := u.Query()
+	for k, _ := range qs {
+		uqs.Set(k, qs.Get(k))
+	}
+	u.RawQuery = uqs.Encode()
 
 	return u.String(), nil
-}
-
-func optionsContains(options []string, option string) bool {
-	for _, s := range options {
-		if s == option {
-			return true
-		}
-	}
-	return false
 }
