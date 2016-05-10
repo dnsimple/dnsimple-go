@@ -25,7 +25,7 @@ type Zone struct {
 // ZoneListOptions specifies the optional parameters you can provide
 // to customize the ZonesService.ListZones method.
 type ZoneListOptions struct {
-	// Select domains where name contains given string.
+	// Select domains where the name contains given string.
 	NameLike string `url:"name_like,omitempty"`
 
 	ListOptions

@@ -31,7 +31,7 @@ type Domain struct {
 // DomainListOptions specifies the optional parameters you can provide
 // to customize the DomainsService.ListDomains method.
 type DomainListOptions struct {
-	// Select domains where name contains given string.
+	// Select domains where the name contains given string.
 	NameLike string `url:"name_like,omitempty"`
 
 	// Select domains where the registrant matches given ID.

@@ -19,6 +19,22 @@ type ZoneRecord struct {
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
+// ZoneRecordListOptions specifies the optional parameters you can provide
+// to customize the ZonesService.ListZoneRecords method.
+type ZoneRecordListOptions struct {
+	// Select records where the name matches given string.
+	Name string `url:"name,omitempty"`
+
+	// Select records where the name contains given string.
+	NameLike string `url:"name_like,omitempty"`
+
+	// Select records of given type.
+	// Eg. TXT, A, NS.
+	Type string `url:"record_type,omitempty"`
+
+	ListOptions
+}
+
 // ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.
 type ZoneRecordResponse struct {
 	Response
@@ -44,7 +60,7 @@ func zoneRecordPath(accountID string, zoneID string, recordID int) string {
 // ListRecords lists the zone records for a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListRecords(accountID string, zoneID string, options *ListOptions) (*ZoneRecordsResponse, error) {
+func (s *ZonesService) ListRecords(accountID string, zoneID string, options *ZoneRecordListOptions) (*ZoneRecordsResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneID, 0))
 	recordsResponse := &ZoneRecordsResponse{}
 
