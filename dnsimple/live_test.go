@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -16,7 +17,7 @@ var (
 
 func init() {
 	dnsimpleToken = os.Getenv("DNSIMPLE_TOKEN")
-	dnsimpleBaseURL = os.Getenv("DOMAINR_BASE_URL")
+	dnsimpleBaseURL = os.Getenv("DNSIMPLE_BASE_URL")
 
 	// Prevent peoeple from wiping out their entire production account by mistake
 	if dnsimpleBaseURL == "" {
@@ -134,6 +135,32 @@ func TestLive_Webhooks(t *testing.T) {
 	webhook = webhookResponse.Data
 }
 
+func TestLive_Zones(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(dnsimpleClient)
+	if err != nil {
+		t.Fatalf("Live Zones/Whoami() returned error: %v", err)
+	}
+
+	accountID := strconv.Itoa(whoami.Account.ID)
+
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(fmt.Sprintf("%v", accountID), Domain{Name: fmt.Sprintf("example-%v.test", time.Now().Unix())})
+	if err != nil {
+		t.Fatalf("Live Zones/CreateZone() returned error: %v", err)
+	}
+
+	zoneName := domainResponse.Data.Name
+	recordResponse, err := dnsimpleClient.Zones.CreateRecord(accountID, zoneName, ZoneRecord{Name: fmt.Sprintf("%v", time.Now().Unix()), Type: "TXT", Content: "Test"})
+	if err != nil {
+		t.Fatalf("Live Zones/CreateRecord() returned error: %v", err)
+	}
+
+	fmt.Printf("ZoneRecord: %+v\n", recordResponse.Data)
+}
+
 func TestLive_Error(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")
@@ -141,12 +168,12 @@ func TestLive_Error(t *testing.T) {
 
 	whoami, err := Whoami(dnsimpleClient)
 	if err != nil {
-		t.Fatalf("Live Error()/Whoami() returned error: %v", err)
+		t.Fatalf("Live Error/Whoami() returned error: %v", err)
 	}
 
-	_, err = dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.com", time.Now().Unix()), &DomainRegisterRequest{})
+	_, err = dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.test", time.Now().Unix()), &DomainRegisterRequest{})
 	if err == nil {
-		t.Fatalf("Live Error()/RegisterDomain() expected to return error")
+		t.Fatalf("Live Error/RegisterDomain() expected to return error")
 	}
 
 	e := err.(*ErrorResponse)
