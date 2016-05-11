@@ -78,7 +78,7 @@ type ListOptions struct {
 	// The order criteria to sort the results.
 	// The value is a comma-separated list of field[:direction],
 	// eg. name | name:desc | name:desc,expiration:desc
-	Sort string `url:"sorting,omitempty"`
+	Sort string `url:"sort,omitempty"`
 }
 
 // NewClient returns a new DNSimple API client using the given credentials.

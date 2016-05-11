@@ -78,7 +78,7 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{
 			"page":          []string{"2"},
 			"per_page":      []string{"20"},
-			"sorting":       []string{"name,expiration:desc"},
+			"sort":          []string{"name,expiration:desc"},
 			"name_like":     []string{"example"},
 			"registrant_id": []string{"10"},
 		})

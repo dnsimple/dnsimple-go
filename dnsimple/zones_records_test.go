@@ -64,7 +64,7 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{
 			"page":        []string{"2"},
 			"per_page":    []string{"20"},
-			"sorting":     []string{"name,expiration:desc"},
+			"sort":        []string{"name,expiration:desc"},
 			"name":        []string{"example"},
 			"name_like":   []string{"www"},
 			"record_type": []string{"A"},
