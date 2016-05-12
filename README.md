@@ -51,7 +51,7 @@ func main() {
     fmt.Println(whoamiResponse.Data.User)
 
     // get the list of domains
-    domainsResponse, err := client.Domains.ListDomains(whoami.Account.Id, nil)
+    domainsResponse, err := client.Domains.ListDomains(whoami.Account.ID, nil)
     if err != nil {
         fmt.Printf("Domains.ListDomains() returned error: %v\n", err)
         os.Exit(1)
@@ -62,6 +62,12 @@ func main() {
     for _, domain := range domainsResponse.Data {
         fmt.Println(domain)
     }
+
+    // List methods support a variety of options to paginate, sort and filter records.
+    // Here's a few example:
+
+    // get the list of domains filtered by name and sorted by expiration
+    client.Domains.ListDomains(whoami.Account.ID, &DomainListOptions{NameLike: "com", Sort: "expiration:DESC"})
 }
 ```
 

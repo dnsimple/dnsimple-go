@@ -75,13 +75,19 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/listDomains/success.http")
 
-		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+		testQuery(t, r, url.Values{
+			"page":          []string{"2"},
+			"per_page":      []string{"20"},
+			"sort":          []string{"name,expiration:desc"},
+			"name_like":     []string{"example"},
+			"registrant_id": []string{"10"},
+		})
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListDomains("1010", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListDomains("1010", &DomainListOptions{"example", 10, ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Domains.ListDomains() returned error: %v", err)
 	}

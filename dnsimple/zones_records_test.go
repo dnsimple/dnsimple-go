@@ -61,13 +61,20 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/listZoneRecords/success.http")
 
-		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+		testQuery(t, r, url.Values{
+			"page":        []string{"2"},
+			"per_page":    []string{"20"},
+			"sort":        []string{"name,expiration:desc"},
+			"name":        []string{"example"},
+			"name_like":   []string{"www"},
+			"record_type": []string{"A"},
+		})
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListRecords("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Zones.ListRecords("1010", "example.com", &ZoneRecordListOptions{"example", "www", "A", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
