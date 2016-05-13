@@ -30,6 +30,7 @@ package main
 import (
   "fmt"
   "os"
+	"strconv"
 
   "github.com/aetrion/dnsimple-go/dnsimple"
 )
@@ -50,8 +51,12 @@ func main() {
     fmt.Println(whoamiResponse.Data.Account)
     fmt.Println(whoamiResponse.Data.User)
 
+  	// either assign the account ID or fetch it from the response
+  	// if you are authenticated with an account token
+  	accountID := strconv.Itoa(whoamiResponse.Data.Account.ID)
+
     // get the list of domains
-    domainsResponse, err := client.Domains.ListDomains(whoami.Account.ID, nil)
+    domainsResponse, err := client.Domains.ListDomains(accountID, nil)
     if err != nil {
         fmt.Printf("Domains.ListDomains() returned error: %v\n", err)
         os.Exit(1)
