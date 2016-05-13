@@ -72,7 +72,7 @@ func main() {
     // Here's a few example:
 
     // get the list of domains filtered by name and sorted by expiration
-    client.Domains.ListDomains(accountID, &DomainListOptions{NameLike: "com", Sort: "expiration:DESC"})
+    client.Domains.ListDomains(accountID, &dnsimple.DomainListOptions{NameLike: "com", Sort: "expiration:DESC"})
 }
 ```
 
