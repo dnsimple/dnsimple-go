@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.11.0
 
 - NEW: Added support for parsing ZoneRecord webhooks.
 - NEW: Added support for listing options (GH-25).
