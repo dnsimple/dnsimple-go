@@ -83,7 +83,7 @@ type ListOptions struct {
 
 // NewClient returns a new DNSimple API client using the given credentials.
 func NewClient(credentials Credentials) *Client {
-	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL, UserAgent: defaultUserAgent}
+	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL}
 	c.Identity = &IdentityService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
@@ -117,12 +117,31 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("User-Agent", c.UserAgent)
+	req.Header.Add("User-Agent", formatUserAgent(c.UserAgent))
 	for key, value := range c.Credentials.Headers() {
 		req.Header.Add(key, value)
 	}
 
 	return req, nil
+}
+
+// formatUserAgent builds the final user agent to use for HTTP requests.
+//
+// If no custom user agent is provided, the default user agent is used.
+//
+//     dnsimple-go/1.0
+//
+// If a custom user agent is provided, the final user agent is the combination of the custom user agent
+// prepended by the default user agent.
+//
+//     dnsimple-go/1.0 customAgentFlag
+//
+func formatUserAgent(customUserAgent string) string {
+	if customUserAgent == "" {
+		return defaultUserAgent;
+	}
+
+	return fmt.Sprintf("%s %s", defaultUserAgent, customUserAgent)
 }
 
 func versioned(path string) string {

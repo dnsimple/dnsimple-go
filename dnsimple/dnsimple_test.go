@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"fmt"
 )
 
 var (
@@ -130,8 +131,20 @@ func TestClient_NewRequest(t *testing.T) {
 
 	// test that default user-agent is attached to the request
 	ua := req.Header.Get("User-Agent")
-	if ua != c.UserAgent {
-		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, c.UserAgent)
+	if ua != defaultUserAgent {
+		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, defaultUserAgent)
+	}
+}
+
+func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c.UserAgent = "AwesomeClient"
+	req, _ := c.NewRequest("GET", "/", nil)
+
+	// test that default user-agent is attached to the request
+	ua := req.Header.Get("User-Agent")
+	if want := fmt.Sprintf("%s AwesomeClient", defaultUserAgent); ua != want {
+		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, want)
 	}
 }
 
