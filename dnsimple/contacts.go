@@ -29,7 +29,7 @@ type Contact struct {
 	Country       string `json:"country,omitempty"`
 	Phone         string `json:"phone,omitempty"`
 	Fax           string `json:"fax,omitempty"`
-	Email         string `json:"email_address,omitempty"`
+	Email         string `json:"email,omitempty"`
 	CreatedAt     string `json:"created_at,omitempty"`
 	UpdatedAt     string `json:"updated_at,omitempty"`
 }
