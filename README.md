@@ -28,11 +28,11 @@ This library is a Go client you can use to interact with the [DNSimple API v2](h
 package main
 
 import (
-  "fmt"
-  "os"
-	"strconv"
+    "fmt"
+    "os"
+    "strconv"
 
-  "github.com/aetrion/dnsimple-go/dnsimple"
+    "github.com/aetrion/dnsimple-go/dnsimple"
 )
 
 func main() {
