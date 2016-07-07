@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +12,6 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-	"fmt"
 )
 
 var (

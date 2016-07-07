@@ -53,6 +53,7 @@ type Client struct {
 
 	// Services used for talking to different parts of the DNSimple API.
 	Identity  *IdentityService
+	Accounts  *AccountsService
 	Contacts  *ContactsService
 	Domains   *DomainsService
 	Oauth     *OauthService
@@ -85,6 +86,7 @@ type ListOptions struct {
 func NewClient(credentials Credentials) *Client {
 	c := &Client{Credentials: credentials, HttpClient: &http.Client{}, BaseURL: defaultBaseURL}
 	c.Identity = &IdentityService{client: c}
+	c.Accounts = &AccountsService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Oauth = &OauthService{client: c}
