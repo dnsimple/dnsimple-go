@@ -21,12 +21,6 @@ func accountsPath() string {
 	return fmt.Sprintf("/accounts")
 }
 
-// AccountResponse represents a response from an API method that returns an Account struct.
-type AccountResponse struct {
-	Response
-	Data *Account `json:"data"`
-}
-
 // AccountsResponse represents a response from an API method that returns a collection of Account struct.
 type AccountsResponse struct {
 	Response
