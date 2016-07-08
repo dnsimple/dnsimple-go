@@ -36,9 +36,9 @@ type Service struct {
 	Settings         []ServiceSetting `json:"settings,omitempty"`
 }
 
-func servicePath(service interface{}) string {
-	if service != nil {
-		return fmt.Sprintf("/services/%v", service)
+func servicePath(serviceID string) string {
+	if serviceID != "" {
+		return fmt.Sprintf("/services/%v", serviceID)
 	}
 	return fmt.Sprintf("/services")
 }
@@ -59,7 +59,7 @@ type ServicesResponse struct {
 //
 // See https://developer.dnsimple.com/v2/services/#list
 func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse, error) {
-	path := versioned(servicePath(nil))
+	path := versioned(servicePath(""))
 	servicesResponse := &ServicesResponse{}
 
 	path, err := addURLQueryOptions(path, options)

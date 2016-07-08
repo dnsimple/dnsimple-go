@@ -9,12 +9,8 @@ import (
 )
 
 func TestServices_servicePath(t *testing.T) {
-	if want, got := "/services", servicePath(nil); want != got {
+	if want, got := "/services", servicePath(""); want != got {
 		t.Errorf("servicePath() = %v, want %v", got, want)
-	}
-
-	if want, got := "/services/1", servicePath(1); want != got {
-		t.Errorf("servicePath(1) = %v, want %v", got, want)
 	}
 
 	if want, got := "/services/1", servicePath("1"); want != got {
