@@ -18,11 +18,11 @@ func TestServices_servicePath(t *testing.T) {
 	}
 
 	if want, got := "/services/1", servicePath("1"); want != got {
-		t.Errorf("servicePath('1') = %v, want %v", got, want)
+		t.Errorf("servicePath(\"1\") = %v, want %v", got, want)
 	}
 
 	if want, got := "/services/short_name", servicePath("short_name"); want != got {
-		t.Errorf("servicePath('short_name') = %v, want %v", got, want)
+		t.Errorf("servicePath(\"short_name\") = %v, want %v", got, want)
 	}
 }
 
