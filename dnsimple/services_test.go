@@ -88,7 +88,7 @@ func TestServicesService_Get(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	serviceID := 1
+	serviceID := "1"
 
 	serviceResponse, err := client.Services.GetService(serviceID)
 	if err != nil {

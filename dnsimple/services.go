@@ -79,7 +79,7 @@ func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse,
 // GetService fetches a service.
 //
 // See https://developer.dnsimple.com/v2/services/#get
-func (s *ServicesService) GetService(serviceID int) (*ServiceResponse, error) {
+func (s *ServicesService) GetService(serviceID string) (*ServiceResponse, error) {
 	path := versioned(servicePath(serviceID))
 	serviceResponse := &ServiceResponse{}
 
