@@ -55,7 +55,7 @@ type ServicesResponse struct {
 	Data []Service `json:"data"`
 }
 
-// ListServices list the services for an account.
+// ListServices list the one-click services available in DNSimple.
 //
 // See https://developer.dnsimple.com/v2/services/#list
 func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse, error) {
@@ -76,7 +76,7 @@ func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse,
 	return servicesResponse, nil
 }
 
-// GetService fetches a service.
+// GetService fetches a one-click service.
 //
 // See https://developer.dnsimple.com/v2/services/#get
 func (s *ServicesService) GetService(serviceID string) (*ServiceResponse, error) {
