@@ -14,7 +14,7 @@ type ServicesService struct {
 
 // ServiceSetting represents a single group of settings for a DNSimple Service.
 type ServiceSetting struct {
-	Name        string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
 	Label       string `json:"label,omitempty"`
 	Append      string `json:"append,omitempty"`
 	Description string `json:"description,omitempty"`

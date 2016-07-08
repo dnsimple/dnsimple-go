@@ -116,7 +116,7 @@ func TestServicesService_Get(t *testing.T) {
 		UpdatedAt:        "2016-03-04T09:23:27.655Z",
 		Settings: []ServiceSetting{
 			{
-				Name:        "", // FIXME: this MUST be "username"
+				Name:        "username",
 				Label:       "Service 1 Account Username",
 				Append:      ".service1.com",
 				Description: "Your Service 1 username is used to connect services to your account.",
