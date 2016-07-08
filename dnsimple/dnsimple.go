@@ -59,6 +59,7 @@ type Client struct {
 	Oauth     *OauthService
 	Registrar *RegistrarService
 	Tlds      *TldsService
+	Services  *ServicesService
 	Webhooks  *WebhooksService
 	Zones     *ZonesService
 	Templates *TemplatesService
@@ -93,6 +94,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Registrar = &RegistrarService{client: c}
 	c.Templates = &TemplatesService{client: c}
 	c.Tlds = &TldsService{client: c}
+	c.Services = &ServicesService{client: c}
 	c.Webhooks = &WebhooksService{client: c}
 	c.Zones = &ZonesService{client: c}
 	return c
