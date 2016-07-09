@@ -25,7 +25,11 @@ type Certificate struct {
 	UpdatedAt           string `json:"updated_at,omitempty"`
 	ExpiresOn           string `json:"expires_on,omitempty"`
 
-	CertificateRequest string `json:"csr,omitempty"`
+	CertificateRequest       string   `json:"csr,omitempty"`
+	PrivateKey               string   `json:"private_key,omitempty"`
+	ServerCertificate        string   `json:"server,omitempty"`
+	RootCertificate          string   `json:"root,omitempty"`
+	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
 func certificatePath(accountID, domainIdentifier, certificateID string) string {
@@ -75,6 +79,22 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 // See https://developer.dnsimple.com/v2/domains/certificates#get
 func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)))
+	certificateResponse := &CertificateResponse{}
+
+	resp, err := s.client.get(path, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
+}
+
+// GetCertificatePrivateKey fetches the certificate private key.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates#get-private-key
+func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
+	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/private_key")
 	certificateResponse := &CertificateResponse{}
 
 	resp, err := s.client.get(path, certificateResponse)
