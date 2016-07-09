@@ -90,6 +90,22 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 	return certificateResponse, nil
 }
 
+// DownloadCertificate fetches the certificate private key.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates#download
+func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
+	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/download")
+	certificateResponse := &CertificateResponse{}
+
+	resp, err := s.client.get(path, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
+}
+
 // GetCertificatePrivateKey fetches the certificate private key.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#get-private-key
