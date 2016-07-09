@@ -59,10 +59,11 @@ type Client struct {
 	Domains      *DomainsService
 	Oauth        *OauthService
 	Registrar    *RegistrarService
+	Services     *ServicesService
+	Templates    *TemplatesService
 	Tlds         *TldsService
 	Webhooks     *WebhooksService
 	Zones        *ZonesService
-	Templates    *TemplatesService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -95,6 +96,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Registrar = &RegistrarService{client: c}
 	c.Templates = &TemplatesService{client: c}
 	c.Tlds = &TldsService{client: c}
+	c.Services = &ServicesService{client: c}
 	c.Webhooks = &WebhooksService{client: c}
 	c.Zones = &ZonesService{client: c}
 	return c
