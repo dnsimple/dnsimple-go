@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // CertificatesService handles communication with the certificate related
@@ -18,19 +19,20 @@ type Certificate struct {
 	DomainID            int    `json:"domain_id,omitempty"`
 	CommonName          string `json:"common_name,omitempty"`
 	Years               int    `json:"years,omitempty"`
-	CSR                 string `json:"csr,omitempty"`
 	State               string `json:"state,omitempty"`
 	AuthorityIdentifier string `json:"authority_identifier,omitempty"`
 	CreatedAt           string `json:"created_at,omitempty"`
 	UpdatedAt           string `json:"updated_at,omitempty"`
 	ExpiresOn           string `json:"expires_on,omitempty"`
+
+	CertificateRequest string `json:"csr,omitempty"`
 }
 
 func certificatePath(accountID, domainIdentifier, certificateID string) string {
 	path := fmt.Sprintf("%v/certificates", domainPath(accountID, domainIdentifier))
 
 	if certificateID != "" {
-		return fmt.Sprintf("/%v", certificateID)
+		path += fmt.Sprintf("/%v", certificateID)
 	}
 	return path
 }
@@ -66,4 +68,20 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 
 	certificatesResponse.HttpResponse = resp
 	return certificatesResponse, nil
+}
+
+// GetCertificate fetches the certificate.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates#get
+func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
+	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)))
+	certificateResponse := &CertificateResponse{}
+
+	resp, err := s.client.get(path, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
 }
