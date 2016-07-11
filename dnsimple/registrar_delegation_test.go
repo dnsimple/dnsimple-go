@@ -97,3 +97,26 @@ func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
 		t.Fatalf("Registrar.ChangeDomainDelegationToVanity() returned %+v, want %+v", delegation, wantSingle)
 	}
 }
+
+func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/delegation/vanity", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/changeDomainDelegationFromVanity/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		// want := []interface{}{"ns1.example.com", "ns2.example.com"}
+		// testRequestJSONArray(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Registrar.ChangeDomainDelegationFromVanity("1010", "example.com")
+	if err != nil {
+		t.Fatalf("Registrar.ChangeDomainDelegationFromVanity() returned error: %v", err)
+	}
+}

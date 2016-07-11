@@ -76,3 +76,19 @@ func (s *RegistrarService) ChangeDomainDelegationToVanity(accountID string, doma
 	delegationResponse.HttpResponse = resp
 	return delegationResponse, nil
 }
+
+// ChangeDomainDelegationFromVanity disables vanity name servers for the given domain.
+//
+// See https://developer.dnsimple.com/v2/registrar/delegation/#dedelegateFromVanity
+func (s *RegistrarService) ChangeDomainDelegationFromVanity(accountID string, domainName string) (*VanityDelegationResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation/vanity", accountID, domainName))
+	delegationResponse := &VanityDelegationResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	delegationResponse.HttpResponse = resp
+	return delegationResponse, nil
+}
