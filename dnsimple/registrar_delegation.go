@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Domain represents a list of name servers that correspond to a domain delegation.
+// Delegation represents a list of name servers that correspond to a domain delegation.
 type Delegation []string
 
 // Vanity Name Server
