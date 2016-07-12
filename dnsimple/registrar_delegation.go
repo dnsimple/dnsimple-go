@@ -7,7 +7,7 @@ import (
 // Delegation represents a list of name servers that correspond to a domain delegation.
 type Delegation []string
 
-// Vanity Name Server
+// VanityNameServer represents data for a single vanity name server
 type VanityNameServer struct {
 	ID        int    `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
@@ -17,13 +17,13 @@ type VanityNameServer struct {
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
-// WhoisPrivacyResponse represents a response from an API method that returns a delegation struct.
+// DelegationResponse represents a response from an API method that returns a delegation struct.
 type DelegationResponse struct {
 	Response
 	Data *Delegation `json:"data"`
 }
 
-// Response for vanity name server enable and disable operations
+// VanityDelegationResponse represents a response for vanity name server enable and disable operations.
 type VanityDelegationResponse struct {
 	Response
 	Data []VanityNameServer `json:"data"`
