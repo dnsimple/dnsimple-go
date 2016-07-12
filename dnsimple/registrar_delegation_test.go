@@ -108,9 +108,6 @@ func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
 
-		// want := []interface{}{"ns1.example.com", "ns2.example.com"}
-		// testRequestJSONArray(t, r, want)
-
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
