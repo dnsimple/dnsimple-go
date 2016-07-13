@@ -24,8 +24,13 @@ type Certificate struct {
 	CreatedAt           string `json:"created_at,omitempty"`
 	UpdatedAt           string `json:"updated_at,omitempty"`
 	ExpiresOn           string `json:"expires_on,omitempty"`
+	CertificateRequest  string `json:"csr,omitempty"`
+}
 
-	CertificateRequest       string   `json:"csr,omitempty"`
+// CertificateBundle represents a container for all the PEM-encoded X509 certificate entities,
+// such as the private key, the server certificate and the intermediate chain.
+type CertificateBundle struct {
+	// CertificateRequest       string   `json:"csr,omitempty"`
 	PrivateKey               string   `json:"private_key,omitempty"`
 	ServerCertificate        string   `json:"server,omitempty"`
 	RootCertificate          string   `json:"root,omitempty"`
@@ -45,6 +50,12 @@ func certificatePath(accountID, domainIdentifier, certificateID string) string {
 type CertificateResponse struct {
 	Response
 	Data *Certificate `json:"data"`
+}
+
+// CertificateBundleResponse represents a response from an API method that returns a CertificatBundle struct.
+type CertificateBundleResponse struct {
+	Response
+	Data *CertificateBundle `json:"data"`
 }
 
 // CertificatesResponse represents a response from an API method that returns a collection of Certificate struct.
@@ -94,31 +105,31 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 // as well the root certificate and the intermediate chain.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#download
-func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
+func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier string, certificateID int) (*CertificateBundleResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/download")
-	certificateResponse := &CertificateResponse{}
+	certificateBundleResponse := &CertificateBundleResponse{}
 
-	resp, err := s.client.get(path, certificateResponse)
+	resp, err := s.client.get(path, certificateBundleResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
-	return certificateResponse, nil
+	certificateBundleResponse.HttpResponse = resp
+	return certificateBundleResponse, nil
 }
 
 // GetCertificatePrivateKey fetches the certificate private key.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#get-private-key
-func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifier string, certificateID int) (*CertificateResponse, error) {
+func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifier string, certificateID int) (*CertificateBundleResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/private_key")
-	certificateResponse := &CertificateResponse{}
+	certificateBundleResponse := &CertificateBundleResponse{}
 
-	resp, err := s.client.get(path, certificateResponse)
+	resp, err := s.client.get(path, certificateBundleResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
-	return certificateResponse, nil
+	certificateBundleResponse.HttpResponse = resp
+	return certificateBundleResponse, nil
 }
