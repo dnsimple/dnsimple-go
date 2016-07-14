@@ -6,7 +6,7 @@ Clone the repository [in your workspace](https://golang.org/doc/code.html#Organi
 
 ```
 $ mkdir -p $GOPATH/src/github.com/aetrion && cd $_
-$ git clone git@github.com:aetrion/dnsimple-go.git
+$ git clone git@github.com:dnsimple/dnsimple-go.git
 $ cd dnsimple-go
 ```
 
@@ -33,5 +33,5 @@ $ go test ./... -v
 
 Submit unit tests for your changes. You can test your changes on your machine by [running the test suite](#testing).
 
-When you submit a PR, tests will also be run on the continuous integration environment [through Travis](https://travis-ci.org/aetrion/dnsimple-go).
+When you submit a PR, tests will also be run on the continuous integration environment [through Travis](https://travis-ci.org/dnsimple/dnsimple-go).
 

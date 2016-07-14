@@ -2,8 +2,8 @@
 
 A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 
-[![Build Status](https://travis-ci.org/aetrion/dnsimple-go.svg)](https://travis-ci.org/aetrion/dnsimple-go)
-[![GoDoc](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple)
+[![Build Status](https://travis-ci.org/dnsimple/dnsimple-go.svg)](https://travis-ci.org/dnsimple/dnsimple-go)
+[![GoDoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple)
 
 
 ## :warning: Beta Warning
@@ -16,7 +16,7 @@ This library is currently in beta version, the methods and the implementation sh
 ## Installation
 
 ```
-$ go get github.com/aetrion/dnsimple-go/dnsimple
+$ go get github.com/dnsimple/dnsimple-go/dnsimple
 ```
 
 
@@ -32,7 +32,7 @@ import (
     "os"
     "strconv"
 
-    "github.com/aetrion/dnsimple-go/dnsimple"
+    "github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
 func main() {
@@ -76,7 +76,7 @@ func main() {
 }
 ```
 
-For more complete documentation, see [godoc](https://godoc.org/github.com/aetrion/dnsimple-go/dnsimple).
+For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple).
 
 
 ## Contributing

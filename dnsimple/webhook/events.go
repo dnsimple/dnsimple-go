@@ -1,7 +1,7 @@
 package webhook
 
 import (
-	"github.com/aetrion/dnsimple-go/dnsimple"
+	"github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
 func switchEvent(name string, payload []byte) (Event, error) {

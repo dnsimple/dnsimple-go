@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/aetrion/dnsimple-go/dnsimple"
+	"github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
 var regexpUUID = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
