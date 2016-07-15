@@ -28,8 +28,6 @@ func TestVanityNameServersService_Enable(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	// newDelegation := &Delegation{"ns1.example.com", "ns2.example.com"}
-
 	vanityNameServerResponse, err := client.VanityNameServers.Enable("1010", "example.com")
 	if err != nil {
 		t.Fatalf("VanityNameServers.Enable() returned error: %v", err)
@@ -40,5 +38,25 @@ func TestVanityNameServersService_Enable(t *testing.T) {
 
 	if delegation != wantSingle {
 		t.Fatalf("VanityNameServers.Enable() returned %+v, want %+v", delegation, wantSingle)
+	}
+}
+
+func TestVanityNameServersService_Disable(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/vanity/example.com", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/disableVanityNameServers/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.VanityNameServers.Disable("1010", "example.com")
+	if err != nil {
+		t.Fatalf("VanityNameServers.Disable() returned error: %v", err)
 	}
 }
