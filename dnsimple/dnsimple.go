@@ -52,18 +52,19 @@ type Client struct {
 	UserAgent string
 
 	// Services used for talking to different parts of the DNSimple API.
-	Identity     *IdentityService
-	Accounts     *AccountsService
-	Certificates *CertificatesService
-	Contacts     *ContactsService
-	Domains      *DomainsService
-	Oauth        *OauthService
-	Registrar    *RegistrarService
-	Services     *ServicesService
-	Templates    *TemplatesService
-	Tlds         *TldsService
-	Webhooks     *WebhooksService
-	Zones        *ZonesService
+	Identity          *IdentityService
+	Accounts          *AccountsService
+	Certificates      *CertificatesService
+	Contacts          *ContactsService
+	Domains           *DomainsService
+	Oauth             *OauthService
+	Registrar         *RegistrarService
+	Services          *ServicesService
+	Templates         *TemplatesService
+	Tlds              *TldsService
+	VanityNameServers *VanityNameServersService
+	Webhooks          *WebhooksService
+	Zones             *ZonesService
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
@@ -94,9 +95,10 @@ func NewClient(credentials Credentials) *Client {
 	c.Domains = &DomainsService{client: c}
 	c.Oauth = &OauthService{client: c}
 	c.Registrar = &RegistrarService{client: c}
+	c.Services = &ServicesService{client: c}
 	c.Templates = &TemplatesService{client: c}
 	c.Tlds = &TldsService{client: c}
-	c.Services = &ServicesService{client: c}
+	c.VanityNameServers = &VanityNameServersService{client: c}
 	c.Webhooks = &WebhooksService{client: c}
 	c.Zones = &ZonesService{client: c}
 	return c
