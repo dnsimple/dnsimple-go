@@ -32,10 +32,10 @@ func vanityNameServerPath(accountID string, domainID string) string {
 	return fmt.Sprintf("/%v/vanity/%v", accountID, domainID)
 }
 
-// Enable Vanity Name Servers for the given domain
+// EnableVanityNameServers Vanity Name Servers for the given domain
 //
 // See https://developer.dnsimple.com/v2/vanity/#enable
-func (s *VanityNameServersService) Enable(accountID string, domainID string) (*VanityNameServerResponse, error) {
+func (s *VanityNameServersService) EnableVanityNameServers(accountID string, domainID string) (*VanityNameServerResponse, error) {
 	path := versioned(vanityNameServerPath(accountID, domainID))
 	vanityNameServerResponse := &VanityNameServerResponse{}
 
@@ -48,10 +48,10 @@ func (s *VanityNameServersService) Enable(accountID string, domainID string) (*V
 	return vanityNameServerResponse, nil
 }
 
-// Disable Vanity Name Servers for the given domain
+// DisableVanityNameServers Vanity Name Servers for the given domain
 //
 // See https://developer.dnsimple.com/v2/vanity/#disable
-func (s *VanityNameServersService) Disable(accountID string, domainID string) (*VanityNameServerResponse, error) {
+func (s *VanityNameServersService) DisableVanityNameServers(accountID string, domainID string) (*VanityNameServerResponse, error) {
 	path := versioned(vanityNameServerPath(accountID, domainID))
 	vanityNameServerResponse := &VanityNameServerResponse{}
 

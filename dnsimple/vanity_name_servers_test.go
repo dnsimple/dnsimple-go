@@ -12,7 +12,7 @@ func TestVanityNameServers_vanityNameServerPath(t *testing.T) {
 	}
 }
 
-func TestVanityNameServersService_Enable(t *testing.T) {
+func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -26,20 +26,20 @@ func TestVanityNameServersService_Enable(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	vanityNameServerResponse, err := client.VanityNameServers.Enable("1010", "example.com")
+	vanityNameServerResponse, err := client.VanityNameServers.EnableVanityNameServers("1010", "example.com")
 	if err != nil {
-		t.Fatalf("VanityNameServers.Enable() returned error: %v", err)
+		t.Fatalf("VanityNameServers.EnableVanityNameServers() returned error: %v", err)
 	}
 
 	delegation := vanityNameServerResponse.Data[0].Name
 	wantSingle := "ns1.example.com"
 
 	if delegation != wantSingle {
-		t.Fatalf("VanityNameServers.Enable() returned %+v, want %+v", delegation, wantSingle)
+		t.Fatalf("VanityNameServers.EnableVanityNameServers() returned %+v, want %+v", delegation, wantSingle)
 	}
 }
 
-func TestVanityNameServersService_Disable(t *testing.T) {
+func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -53,8 +53,8 @@ func TestVanityNameServersService_Disable(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.VanityNameServers.Disable("1010", "example.com")
+	_, err := client.VanityNameServers.DisableVanityNameServers("1010", "example.com")
 	if err != nil {
-		t.Fatalf("VanityNameServers.Disable() returned error: %v", err)
+		t.Fatalf("VanityNameServers.DisableVanityNameServers() returned error: %v", err)
 	}
 }
