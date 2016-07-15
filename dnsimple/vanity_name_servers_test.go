@@ -3,8 +3,6 @@ package dnsimple
 import (
 	"io"
 	"net/http"
-	// "net/url"
-	// "reflect"
 	"testing"
 )
 
