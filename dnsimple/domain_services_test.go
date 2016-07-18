@@ -76,3 +76,23 @@ func TestDomainServicesService_ApplyService(t *testing.T) {
 		t.Fatalf("DomainServices.ApplyService() returned error: %v", err)
 	}
 }
+
+func TestDomainServicesService_UnapplyService(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/services/service1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/unapplyService/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.DomainServices.UnapplyService("1010", "example.com", "service1")
+	if err != nil {
+		t.Fatalf("DomainServices.UnapplyService() returned error: %v", err)
+	}
+}

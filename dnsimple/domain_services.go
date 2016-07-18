@@ -60,3 +60,19 @@ func (s *DomainServicesService) ApplyService(accountID string, domainID string, 
 	serviceResponse.HttpResponse = resp
 	return serviceResponse, nil
 }
+
+// UnapplyService unapply a one-click services from a domain.
+//
+// See https://developer.dnsimple.com/v2/services/domains/#unapply
+func (s *DomainServicesService) UnapplyService(accountID string, domainID string, serviceID string) (*ServiceResponse, error) {
+	path := versioned(domainServicesPath(accountID, domainID, serviceID))
+	serviceResponse := &ServiceResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	serviceResponse.HttpResponse = resp
+	return serviceResponse, nil
+}
