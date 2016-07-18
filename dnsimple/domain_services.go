@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// DomainServicesService handles communication with the domain services
+// DomainServicesService handles communication with the domain one-click services
 // methods of the DNSimple API.
 //
 // See https://developer.dnsimple.com/v2/services/domains/
@@ -19,7 +19,12 @@ func domainServicesPath(accountID string, domainID string, serviceID string) str
 	return fmt.Sprintf("/%v/domains/%v/services", accountID, domainID)
 }
 
-// AppliedServices list the applied services for a domain.
+// DomainServiceSettings represents optional settings when applying a DNSimple one-click service to a domain.
+type DomainServiceSettings struct {
+	Settings map[string]string `url:"settings,omitempty"`
+}
+
+// AppliedServices list the applied one-click services for a domain.
 //
 // See https://developer.dnsimple.com/v2/services/domains/#applied
 func (s *DomainServicesService) AppliedServices(accountID string, domainID string, options *ListOptions) (*ServicesResponse, error) {
@@ -38,4 +43,20 @@ func (s *DomainServicesService) AppliedServices(accountID string, domainID strin
 
 	servicesResponse.HttpResponse = resp
 	return servicesResponse, nil
+}
+
+// ApplyService apply a one-click services to a domain.
+//
+// See https://developer.dnsimple.com/v2/services/domains/#apply
+func (s *DomainServicesService) ApplyService(accountID string, domainID string, serviceID string, settings DomainServiceSettings) (*ServiceResponse, error) {
+	path := versioned(domainServicesPath(accountID, domainID, serviceID))
+	serviceResponse := &ServiceResponse{}
+
+	resp, err := s.client.post(path, settings, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	serviceResponse.HttpResponse = resp
+	return serviceResponse, nil
 }

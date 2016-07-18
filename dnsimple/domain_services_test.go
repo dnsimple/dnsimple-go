@@ -54,3 +54,25 @@ func TestDomainServicesService_AppliedServices(t *testing.T) {
 		t.Fatalf("DomainServices.AppliedServices() returned ShortName expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestDomainServicesService_ApplyService(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/services/service1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/applyService/created.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	settings := DomainServiceSettings{Settings: map[string]string{"app": "foo"}}
+
+	_, err := client.DomainServices.ApplyService("1010", "example.com", "service1", settings)
+	if err != nil {
+		t.Fatalf("DomainServices.ApplyService() returned error: %v", err)
+	}
+}
