@@ -176,3 +176,23 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 		t.Fatalf("Templates.UpdateTemplate() returned %+v, want %+v", template, wantSingle)
 	}
 }
+
+func TestTemplatesService_DeleteTemplate(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/deleteTemplate/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Templates.DeleteTemplate("1010", "1")
+	if err != nil {
+		t.Fatalf("Templates.DeleteTemplate() returned error: %v", err)
+	}
+}

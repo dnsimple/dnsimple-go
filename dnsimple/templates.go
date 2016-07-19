@@ -111,3 +111,19 @@ func (s *TemplatesService) UpdateTemplate(accountID string, templateID string, t
 	templateResponse.HttpResponse = resp
 	return templateResponse, nil
 }
+
+// DeleteTemplate deletes a template.
+//
+// See https://developer.dnsimple.com/v2/templates/#delete
+func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, templateID))
+	templateResponse := &TemplateResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	templateResponse.HttpResponse = resp
+	return templateResponse, nil
+}
