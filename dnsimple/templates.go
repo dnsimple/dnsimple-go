@@ -95,3 +95,19 @@ func (s *TemplatesService) GetTemplate(accountID string, templateID string) (*Te
 	templateResponse.HttpResponse = resp
 	return templateResponse, nil
 }
+
+// UpdateTemplate updates a template.
+//
+// See https://developer.dnsimple.com/v2/templates/#update
+func (s *TemplatesService) UpdateTemplate(accountID string, templateID string, templateAttributes Template) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, templateID))
+	templateResponse := &TemplateResponse{}
+
+	resp, err := s.client.patch(path, templateAttributes, templateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	templateResponse.HttpResponse = resp
+	return templateResponse, nil
+}

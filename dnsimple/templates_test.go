@@ -141,3 +141,38 @@ func TestTemplatesService_Get(t *testing.T) {
 		t.Fatalf("Templates.GetTemplate() returned %+v, want %+v", template, wantSingle)
 	}
 }
+
+func TestTemplatesService_UpdateTemplate(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/updateTemplate/success.http")
+
+		testMethod(t, r, "PATCH")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	templateAttributes := Template{Name: "Alpha"}
+	templateResponse, err := client.Templates.UpdateTemplate("1010", "1", templateAttributes)
+	if err != nil {
+		t.Fatalf("Templates.UpdateTemplate() returned error: %v", err)
+	}
+
+	template := templateResponse.Data
+	wantSingle := &Template{
+		ID:          1,
+		AccountID:   1010,
+		Name:        "Alpha",
+		ShortName:   "alpha",
+		Description: "An alpha template.",
+		CreatedAt:   "2016-03-22T11:08:58.262Z",
+		UpdatedAt:   "2016-03-22T11:08:58.262Z"}
+
+	if !reflect.DeepEqual(template, wantSingle) {
+		t.Fatalf("Templates.UpdateTemplate() returned %+v, want %+v", template, wantSingle)
+	}
+}
