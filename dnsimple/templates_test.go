@@ -196,3 +196,61 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 		t.Fatalf("Templates.DeleteTemplate() returned error: %v", err)
 	}
 }
+
+// Template Records
+
+func TestTemplatesService_ListTemplateRecords(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listTemplateRecords/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+		testQuery(t, r, url.Values{})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	templatesRecordsResponse, err := client.Templates.ListTemplateRecords("1010", "1", nil)
+	if err != nil {
+		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
+	}
+
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), templatesRecordsResponse.Pagination; !reflect.DeepEqual(want, got) {
+		t.Errorf("Templates.ListTemplateRecords() pagination expected to be %v, got %v", want, got)
+	}
+
+	templates := templatesRecordsResponse.Data
+	if want, got := 2, len(templates); want != got {
+		t.Errorf("Templates.ListTemplateRecords() expected to return %v templates, got %v", want, got)
+	}
+
+	if want, got := 296, templates[0].ID; want != got {
+		t.Fatalf("Templates.ListTemplateRecords() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "192.168.1.1", templates[0].Content; want != got {
+		t.Fatalf("Templates.ListTemplateRecords() returned Name expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/listTemplateRecords/success.http")
+
+		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Templates.ListTemplateRecords("1010", "1", &ListOptions{Page: 2, PerPage: 20})
+	if err != nil {
+		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
+	}
+}

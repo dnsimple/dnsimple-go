@@ -127,3 +127,29 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 	templateResponse.HttpResponse = resp
 	return templateResponse, nil
 }
+
+// Template Records
+
+// TemplateRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
+type TemplateRecordsResponse ZoneRecordsResponse
+
+// ListTemplateRecords list the templates for an account.
+//
+// See https://developer.dnsimple.com/v2/templates/records/#list
+func (s *TemplatesService) ListTemplateRecords(accountID string, templateID string, options *ListOptions) (*TemplateRecordsResponse, error) {
+	path := versioned(templatePath(accountID, templateID)) + "/records"
+	templateRecordsResponse := &TemplateRecordsResponse{}
+
+	path, err := addURLQueryOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.get(path, templateRecordsResponse)
+	if err != nil {
+		return templateRecordsResponse, err
+	}
+
+	templateRecordsResponse.HttpResponse = resp
+	return templateRecordsResponse, nil
+}
