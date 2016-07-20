@@ -215,3 +215,19 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateID string
 	templateRecordResponse.HttpResponse = resp
 	return templateRecordResponse, nil
 }
+
+// DeleteTemplateRecord deletes a template record.
+//
+// See https://developer.dnsimple.com/v2/templates/records/#delete
+func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateID string, templateRecordID string) (*TemplateRecordResponse, error) {
+	path := versioned(templateRecordPath(accountID, templateID, templateRecordID))
+	templateRecordResponse := &TemplateRecordResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	templateRecordResponse.HttpResponse = resp
+	return templateRecordResponse, nil
+}
