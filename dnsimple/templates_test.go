@@ -232,7 +232,7 @@ func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 		t.Fatalf("Templates.ListTemplateRecords() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "192.168.1.1", templates[0].Content; want != got {
-		t.Fatalf("Templates.ListTemplateRecords() returned Name expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Templates.ListTemplateRecords() returned Content expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -252,5 +252,38 @@ func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
 	_, err := client.Templates.ListTemplateRecords("1010", "1", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
+	}
+}
+
+func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createTemplateRecord/created.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"name": "Beta"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	templateRecordAttributes := TemplateRecord{Name: "Beta"}
+
+	templateRecordResponse, err := client.Templates.CreateTemplateRecord("1010", "1", templateRecordAttributes)
+	if err != nil {
+		t.Fatalf("Templates.CreateTemplateRecord() returned error: %v", err)
+	}
+
+	templateRecord := templateRecordResponse.Data
+	if want, got := 300, templateRecord.ID; want != got {
+		t.Fatalf("Templates.CreateTemplateRecord() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "mx.example.com", templateRecord.Content; want != got {
+		t.Fatalf("Templates.CreateTemplateRecord() returned Content expected to be `%v`, got `%v`", want, got)
 	}
 }

@@ -130,8 +130,20 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 
 // Template Records
 
-// TemplateRecordsResponse represents a response from an API method that returns a collection of ZoneRecord struct.
-type TemplateRecordsResponse ZoneRecordsResponse
+// TemplateRecord represents a DNS record in DNSimple.
+type TemplateRecord ZoneRecord
+
+// TemplateRecordResponse represents a response from an API method that returns a TemplateRecord struct.
+type TemplateRecordResponse struct {
+	Response
+	Data *TemplateRecord `json:"data"`
+}
+
+// TemplateRecordsResponse represents a response from an API method that returns a collection of TemplateRecord struct.
+type TemplateRecordsResponse struct {
+	Response
+	Data []TemplateRecord `json:"data"`
+}
 
 // ListTemplateRecords list the templates for an account.
 //
@@ -152,4 +164,20 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateID stri
 
 	templateRecordsResponse.HttpResponse = resp
 	return templateRecordsResponse, nil
+}
+
+// CreateTemplateRecord creates a new template record.
+//
+// See https://developer.dnsimple.com/v2/templates/records/#create
+func (s *TemplatesService) CreateTemplateRecord(accountID string, templateID string, templateRecordAttributes TemplateRecord) (*TemplateRecordResponse, error) {
+	path := versioned(templatePath(accountID, templateID)) + "/records"
+	templateRecordResponse := &TemplateRecordResponse{}
+
+	resp, err := s.client.post(path, templateRecordAttributes, templateRecordResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	templateRecordResponse.HttpResponse = resp
+	return templateRecordResponse, nil
 }
