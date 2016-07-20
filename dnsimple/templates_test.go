@@ -287,3 +287,39 @@ func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
 		t.Fatalf("Templates.CreateTemplateRecord() returned Content expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestTemplatesService_GetTemplateRecord(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/templates/1/records/2", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getTemplateRecord/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	templateRecordResponse, err := client.Templates.GetTemplateRecord("1010", "1", "2")
+	if err != nil {
+		t.Fatalf("Templates.GetTemplateRecord() returned error: %v", err)
+	}
+
+	templateRecord := templateRecordResponse.Data
+	wantSingle := &TemplateRecord{
+		ID:         301,
+		TemplateID: 268,
+		Name:       "",
+		Content:    "mx.example.com",
+		TTL:        600,
+		Priority:   10,
+		Type:       "MX",
+		CreatedAt:  "2016-05-03T08:03:26.444Z",
+		UpdatedAt:  "2016-05-03T08:03:26.444Z"}
+
+	if !reflect.DeepEqual(templateRecord, wantSingle) {
+		t.Fatalf("Templates.GetTemplateRecord() returned %+v, want %+v", templateRecord, wantSingle)
+	}
+}
