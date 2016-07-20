@@ -199,6 +199,16 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 
 // Template Records
 
+func TestTemplates_templateRecordPath(t *testing.T) {
+	if want, got := "/1010/templates/1/records", templateRecordPath("1010", "1", ""); want != got {
+		t.Errorf("templateRecordPath(%v, %v, ) = %v, want %v", "1010", "1", got, want)
+	}
+
+	if want, got := "/1010/templates/1/records/2", templateRecordPath("1010", "1", "2"); want != got {
+		t.Errorf("templateRecordPath(%v, %v, 2) = %v, want %v", "1010", "1", got, want)
+	}
+}
+
 func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
