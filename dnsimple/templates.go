@@ -128,6 +128,22 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 	return templateResponse, nil
 }
 
+// ApplyTemplate deletes a template.
+//
+// See https://developer.dnsimple.com/v2/templates/domains/#apply
+func (s *TemplatesService) ApplyTemplate(accountID string, domainID string, templateID string) (*TemplateResponse, error) {
+	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainID), templateID))
+	templateResponse := &TemplateResponse{}
+
+	resp, err := s.client.post(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	templateResponse.HttpResponse = resp
+	return templateResponse, nil
+}
+
 // Template Records
 
 // TemplateRecord represents a DNS record for a template in DNSimple.
