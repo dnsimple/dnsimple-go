@@ -157,7 +157,7 @@ type TemplateRecordsResponse struct {
 
 func templateRecordPath(accountID string, templateID string, templateRecordID string) string {
 	if templateRecordID != "" {
-		return fmt.Sprintf(templatePath(accountID, templateID)+"/records/%v", templateRecordID)
+		return fmt.Sprintf("%v/records/%v", templatePath(accountID, templateID), templateRecordID)
 	}
 
 	return templatePath(accountID, templateID) + "/records"
