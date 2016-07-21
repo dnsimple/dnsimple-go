@@ -103,3 +103,35 @@ func TestZonesService_GetZone(t *testing.T) {
 		t.Fatalf("Zones.GetZone() returned %+v, want %+v", zone, wantSingle)
 	}
 }
+
+func TestZonesService_GetZoneFile(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/file", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getZoneFile/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneFileResponse, err := client.Zones.GetZoneFile(accountID, zoneName)
+	if err != nil {
+		t.Fatalf("Zones.GetZoneFile() returned error: %v", err)
+	}
+
+	zoneFile := zoneFileResponse.Data
+	wantSingle := &ZoneFile{
+		Zone: "$ORIGIN example.com.\n$TTL 1h\nexample.com. 3600 IN SOA ns1.dnsimple.com. admin.dnsimple.com. 1453132552 86400 7200 604800 300\nexample.com. 3600 IN NS ns1.dnsimple.com.\nexample.com. 3600 IN NS ns2.dnsimple.com.\nexample.com. 3600 IN NS ns3.dnsimple.com.\nexample.com. 3600 IN NS ns4.dnsimple.com.\n",
+	}
+
+	if !reflect.DeepEqual(zoneFile, wantSingle) {
+		t.Fatalf("Zones.GetZoneFile() returned %+v, want %+v", zoneFile, wantSingle)
+	}
+}

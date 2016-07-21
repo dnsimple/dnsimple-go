@@ -22,6 +22,11 @@ type Zone struct {
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
+// ZoneFile represents a Zone File in DNSimple.
+type ZoneFile struct {
+	Zone string `json:"zone,omitempty"`
+}
+
 // ZoneListOptions specifies the optional parameters you can provide
 // to customize the ZonesService.ListZones method.
 type ZoneListOptions struct {
@@ -41,6 +46,12 @@ type ZoneResponse struct {
 type ZonesResponse struct {
 	Response
 	Data []Zone `json:"data"`
+}
+
+// ZoneFileResponse represents a response from an API method that returns a ZoneFile struct.
+type ZoneFileResponse struct {
+	Response
+	Data *ZoneFile `json:"data"`
 }
 
 // ListZones the zones for an account.
@@ -78,4 +89,20 @@ func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse
 
 	zoneResponse.HttpResponse = resp
 	return zoneResponse, nil
+}
+
+// GetZoneFile fetches a zone file.
+//
+// See https://developer.dnsimple.com/v2/zones/#get-file
+func (s *ZonesService) GetZoneFile(accountID string, zoneName string) (*ZoneFileResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/zones/%v/file", accountID, zoneName))
+	zoneFileResponse := &ZoneFileResponse{}
+
+	resp, err := s.client.get(path, zoneFileResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	zoneFileResponse.HttpResponse = resp
+	return zoneFileResponse, nil
 }
