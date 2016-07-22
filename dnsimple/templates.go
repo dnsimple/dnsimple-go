@@ -128,7 +128,7 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 	return templateResponse, nil
 }
 
-// ApplyTemplate deletes a template.
+// ApplyTemplate applies a template to the given domain.
 //
 // See https://developer.dnsimple.com/v2/templates/domains/#apply
 func (s *TemplatesService) ApplyTemplate(accountID string, domainID string, templateID string) (*TemplateResponse, error) {
