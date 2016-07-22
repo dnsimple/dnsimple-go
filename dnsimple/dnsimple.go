@@ -162,7 +162,7 @@ func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
 		return nil, err
 	}
 
-	return c.Do(req, nil, obj)
+	return c.Do(req, obj)
 }
 
 func (c *Client) post(path string, payload, obj interface{}) (*http.Response, error) {
@@ -171,7 +171,7 @@ func (c *Client) post(path string, payload, obj interface{}) (*http.Response, er
 		return nil, err
 	}
 
-	return c.Do(req, payload, obj)
+	return c.Do(req, obj)
 }
 
 func (c *Client) put(path string, payload, obj interface{}) (*http.Response, error) {
@@ -180,7 +180,7 @@ func (c *Client) put(path string, payload, obj interface{}) (*http.Response, err
 		return nil, err
 	}
 
-	return c.Do(req, payload, obj)
+	return c.Do(req, obj)
 }
 
 func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, error) {
@@ -189,7 +189,7 @@ func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, e
 		return nil, err
 	}
 
-	return c.Do(req, payload, obj)
+	return c.Do(req, obj)
 }
 
 func (c *Client) delete(path string, payload interface{}, obj interface{}) (*http.Response, error) {
@@ -198,7 +198,7 @@ func (c *Client) delete(path string, payload interface{}, obj interface{}) (*htt
 		return nil, err
 	}
 
-	return c.Do(req, payload, obj)
+	return c.Do(req, obj)
 }
 
 // Do sends an API request and returns the API response.
@@ -207,7 +207,7 @@ func (c *Client) delete(path string, payload interface{}, obj interface{}) (*htt
 // or returned as an error if an API error has occurred.
 // If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(req *http.Request, payload, obj interface{}) (*http.Response, error) {
+func (c *Client) Do(req *http.Request, obj interface{}) (*http.Response, error) {
 	if c.Debug {
 		log.Printf("Executing request (%v): %#v", req.URL, req)
 	}
