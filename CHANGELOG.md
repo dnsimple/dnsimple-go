@@ -3,7 +3,7 @@
 #### master
 
 - NEW: Added support for Accounts methods (GH-29)
-- NEW: Added support for Services methods (GH-30)
+- NEW: Added support for Services methods (GH-30, GH-35)
 - NEW: Added support for Certificates methods (GH-31)
 - NEW: Added support for Vanity name servers methods (GH-34)
 - NEW: Added support for delegation methods (GH-32)
