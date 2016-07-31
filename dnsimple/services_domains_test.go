@@ -71,7 +71,7 @@ func TestServicesService_ApplyService(t *testing.T) {
 
 	settings := DomainServiceSettings{Settings: map[string]string{"app": "foo"}}
 
-	_, err := client.Services.ApplyService("1010", "example.com", "service1", settings)
+	_, err := client.Services.ApplyService("1010", "service1", "example.com", settings)
 	if err != nil {
 		t.Fatalf("DomainServices.ApplyService() returned error: %v", err)
 	}
@@ -91,7 +91,7 @@ func TestServicesService_UnapplyService(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Services.UnapplyService("1010", "example.com", "service1")
+	_, err := client.Services.UnapplyService("1010", "service1", "example.com")
 	if err != nil {
 		t.Fatalf("DomainServices.UnapplyService() returned error: %v", err)
 	}
