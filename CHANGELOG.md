@@ -1,6 +1,7 @@
 # CHANGELOG
 
-#### master
+
+#### Release 0.13.0
 
 - NEW: Added support for Accounts methods (GH-29)
 - NEW: Added support for Services methods (GH-30, GH-35)
