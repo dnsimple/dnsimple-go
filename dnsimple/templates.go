@@ -23,9 +23,9 @@ type Template struct {
 	UpdatedAt   string `json:"updated_at,omitempty"`
 }
 
-func templatePath(accountID string, templateID string) string {
-	if templateID != "" {
-		return fmt.Sprintf("/%v/templates/%v", accountID, templateID)
+func templatePath(accountID string, templateIdentifier string) string {
+	if templateIdentifier != "" {
+		return fmt.Sprintf("/%v/templates/%v", accountID, templateIdentifier)
 	}
 
 	return fmt.Sprintf("/%v/templates", accountID)
@@ -83,8 +83,8 @@ func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes T
 // GetTemplate fetches a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#get
-func (s *TemplatesService) GetTemplate(accountID string, templateID string) (*TemplateResponse, error) {
-	path := versioned(templatePath(accountID, templateID))
+func (s *TemplatesService) GetTemplate(accountID string, templateIdentifier string) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
 	resp, err := s.client.get(path, templateResponse)
@@ -99,8 +99,8 @@ func (s *TemplatesService) GetTemplate(accountID string, templateID string) (*Te
 // UpdateTemplate updates a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#update
-func (s *TemplatesService) UpdateTemplate(accountID string, templateID string, templateAttributes Template) (*TemplateResponse, error) {
-	path := versioned(templatePath(accountID, templateID))
+func (s *TemplatesService) UpdateTemplate(accountID string, templateIdentifier string, templateAttributes Template) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
 	resp, err := s.client.patch(path, templateAttributes, templateResponse)
@@ -115,8 +115,8 @@ func (s *TemplatesService) UpdateTemplate(accountID string, templateID string, t
 // DeleteTemplate deletes a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#delete
-func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (*TemplateResponse, error) {
-	path := versioned(templatePath(accountID, templateID))
+func (s *TemplatesService) DeleteTemplate(accountID string, templateIdentifier string) (*TemplateResponse, error) {
+	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)
@@ -131,8 +131,8 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 // ApplyTemplate applies a template to the given domain.
 //
 // See https://developer.dnsimple.com/v2/templates/domains/#apply
-func (s *TemplatesService) ApplyTemplate(accountID string, templateID string, domainID string) (*TemplateResponse, error) {
-	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainID), templateID))
+func (s *TemplatesService) ApplyTemplate(accountID string, templateIdentifier string, domainID string) (*TemplateResponse, error) {
+	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainID), templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
 	resp, err := s.client.post(path, nil, nil)
