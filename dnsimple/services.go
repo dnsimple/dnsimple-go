@@ -55,7 +55,7 @@ type ServicesResponse struct {
 	Data []Service `json:"data"`
 }
 
-// ListServices list the one-click services available in DNSimple.
+// ListServices lists the one-click services available in DNSimple.
 //
 // See https://developer.dnsimple.com/v2/services/#list
 func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse, error) {
@@ -79,8 +79,8 @@ func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse,
 // GetService fetches a one-click service.
 //
 // See https://developer.dnsimple.com/v2/services/#get
-func (s *ServicesService) GetService(serviceID string) (*ServiceResponse, error) {
-	path := versioned(servicePath(serviceID))
+func (s *ServicesService) GetService(serviceIdentifier string) (*ServiceResponse, error) {
+	path := versioned(servicePath(serviceIdentifier))
 	serviceResponse := &ServiceResponse{}
 
 	resp, err := s.client.get(path, serviceResponse)
