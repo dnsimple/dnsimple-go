@@ -131,7 +131,7 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateID string) (
 // ApplyTemplate applies a template to the given domain.
 //
 // See https://developer.dnsimple.com/v2/templates/domains/#apply
-func (s *TemplatesService) ApplyTemplate(accountID string, domainID string, templateID string) (*TemplateResponse, error) {
+func (s *TemplatesService) ApplyTemplate(accountID string, templateID string, domainID string) (*TemplateResponse, error) {
 	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainID), templateID))
 	templateResponse := &TemplateResponse{}
 

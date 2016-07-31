@@ -211,7 +211,7 @@ func TestTemplatesService_ApplyTemplate(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.ApplyTemplate("1010", "example.com", "1")
+	_, err := client.Templates.ApplyTemplate("1010", "1", "example.com")
 	if err != nil {
 		t.Fatalf("Templates.ApplyTemplate() returned error: %v", err)
 	}
