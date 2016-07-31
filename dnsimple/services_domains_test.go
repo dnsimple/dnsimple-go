@@ -18,7 +18,7 @@ func TestDomainServices_domainServicesPath(t *testing.T) {
 	}
 }
 
-func TestDomainServicesService_AppliedServices(t *testing.T) {
+func TestServicesService_AppliedServices(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -33,7 +33,7 @@ func TestDomainServicesService_AppliedServices(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	servicesResponse, err := client.DomainServices.AppliedServices("1010", "example.com", nil)
+	servicesResponse, err := client.Services.AppliedServices("1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("DomainServices.AppliedServices() returned error: %v", err)
 	}
@@ -55,7 +55,7 @@ func TestDomainServicesService_AppliedServices(t *testing.T) {
 	}
 }
 
-func TestDomainServicesService_ApplyService(t *testing.T) {
+func TestServicesService_ApplyService(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -71,13 +71,13 @@ func TestDomainServicesService_ApplyService(t *testing.T) {
 
 	settings := DomainServiceSettings{Settings: map[string]string{"app": "foo"}}
 
-	_, err := client.DomainServices.ApplyService("1010", "example.com", "service1", settings)
+	_, err := client.Services.ApplyService("1010", "example.com", "service1", settings)
 	if err != nil {
 		t.Fatalf("DomainServices.ApplyService() returned error: %v", err)
 	}
 }
 
-func TestDomainServicesService_UnapplyService(t *testing.T) {
+func TestServicesService_UnapplyService(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -91,7 +91,7 @@ func TestDomainServicesService_UnapplyService(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.DomainServices.UnapplyService("1010", "example.com", "service1")
+	_, err := client.Services.UnapplyService("1010", "example.com", "service1")
 	if err != nil {
 		t.Fatalf("DomainServices.UnapplyService() returned error: %v", err)
 	}
