@@ -26,8 +26,18 @@ type DomainPushResponse struct {
 	Data *DomainPush `json:"data"`
 }
 
-func domainPushPath(accountID string, domain interface{}, pushID int) string {
-	path := fmt.Sprintf("%v/pushes", domainPath(accountID, domain))
+// DomainPushesResponse represents a response from an API method that returns a collection of DomainPush struct.
+type DomainPushesResponse struct {
+	Response
+	Data []DomainPush `json:"data"`
+}
+
+func initiateDomainPushPath(accountID string, domain interface{}) string {
+	return fmt.Sprintf("%v/pushes", domainPath(accountID, domain))
+}
+
+func domainPushPath(accountID string, pushID int) string {
+	path := fmt.Sprintf("%v/pushes", accountID)
 
 	if pushID != 0 {
 		path += fmt.Sprintf("/%d", pushID)
@@ -40,7 +50,7 @@ func domainPushPath(accountID string, domain interface{}, pushID int) string {
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#initiate
 func (s *DomainsService) InitiatePush(accountID string, domain interface{}, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
-	path := versioned(domainPushPath(accountID, domain, 0))
+	path := versioned(initiateDomainPushPath(accountID, domain))
 	pushResponse := &DomainPushResponse{}
 
 	resp, err := s.client.post(path, pushAttributes, pushResponse)
@@ -50,4 +60,25 @@ func (s *DomainsService) InitiatePush(accountID string, domain interface{}, push
 
 	pushResponse.HttpResponse = resp
 	return pushResponse, nil
+}
+
+// ListPushes lists the pushes for an account.
+//
+// See https://developer.dnsimple.com/v2/domains/pushes/#list
+func (s *DomainsService) ListPushes(accountID string, options *ListOptions) (*DomainPushesResponse, error) {
+	path := versioned(domainPushPath(accountID, 0))
+	pushesResponse := &DomainPushesResponse{}
+
+	path, err := addURLQueryOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.get(path, pushesResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	pushesResponse.HttpResponse = resp
+	return pushesResponse, nil
 }
