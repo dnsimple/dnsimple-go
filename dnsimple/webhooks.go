@@ -7,7 +7,7 @@ import (
 // WebhooksService handles communication with the webhook related
 // methods of the DNSimple API.
 //
-// See PRIVATE
+// See https://developer.dnsimple.com/v2/webhooks
 type WebhooksService struct {
 	client *Client
 }
@@ -41,7 +41,7 @@ func webhookPath(accountID string, webhookID int) (path string) {
 
 // ListWebhooks lists the webhooks for an account.
 //
-// See PRIVATE
+// See https://developer.dnsimple.com/v2/webhooks#list
 func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhooksResponse := &WebhooksResponse{}
@@ -57,7 +57,7 @@ func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*Webho
 
 // CreateWebhook creates a new webhook.
 //
-// See PRIVATE
+// See https://developer.dnsimple.com/v2/webhooks#create
 func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhookResponse := &WebhookResponse{}
@@ -73,7 +73,7 @@ func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webh
 
 // GetWebhook fetches a webhook.
 //
-// See PRIVATE
+// See https://developer.dnsimple.com/v2/webhooks#get
 func (s *WebhooksService) GetWebhook(accountID string, webhookID int) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
@@ -89,7 +89,7 @@ func (s *WebhooksService) GetWebhook(accountID string, webhookID int) (*WebhookR
 
 // DeleteWebhook PERMANENTLY deletes a webhook from the account.
 //
-// See PRIVATE
+// See https://developer.dnsimple.com/v2/webhooks#delete
 func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
