@@ -129,3 +129,23 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 		t.Fatalf("Domains.AcceptPush() returned error: %v", err)
 	}
 }
+
+func TestDomainsService_RejectPush(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/2020/pushes/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/rejectPush/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Domains.RejectPush("2020", 1)
+	if err != nil {
+		t.Fatalf("Domains.RejectPush() returned error: %v", err)
+	}
+}

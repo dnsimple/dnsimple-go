@@ -99,3 +99,19 @@ func (s *DomainsService) AcceptPush(accountID string, pushID int, pushAttributes
 	pushResponse.HttpResponse = resp
 	return pushResponse, nil
 }
+
+// RejectPush reject a push for a domain.
+//
+// See https://developer.dnsimple.com/v2/domains/pushes/#reject
+func (s *DomainsService) RejectPush(accountID string, pushID int) (*DomainPushResponse, error) {
+	path := versioned(domainPushPath(accountID, pushID))
+	pushResponse := &DomainPushResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	pushResponse.HttpResponse = resp
+	return pushResponse, nil
+}
