@@ -104,3 +104,28 @@ func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
 		t.Fatalf("Domains.ListPushes() returned error: %v", err)
 	}
 }
+
+func TestDomainsService_AcceptPush(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/2020/pushes/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/acceptPush/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"contact_id": "2"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	pushAttributes := DomainPushAttributes{ContactID: "2"}
+
+	_, err := client.Domains.AcceptPush("2020", 1, pushAttributes)
+	if err != nil {
+		t.Fatalf("Domains.AcceptPush() returned error: %v", err)
+	}
+}

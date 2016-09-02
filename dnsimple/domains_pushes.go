@@ -18,6 +18,7 @@ type DomainPush struct {
 // DomainPushAttributes represent a domain push payload (see initiate).
 type DomainPushAttributes struct {
 	NewAccountEmail string `json:"new_account_email,omitempty"`
+	ContactID       string `json:"contact_id,omitempty"`
 }
 
 // DomainPushResponse represents a response from an API method that returns a DomainPush struct.
@@ -81,4 +82,20 @@ func (s *DomainsService) ListPushes(accountID string, options *ListOptions) (*Do
 
 	pushesResponse.HttpResponse = resp
 	return pushesResponse, nil
+}
+
+// AcceptPush accept a push for a domain.
+//
+// See https://developer.dnsimple.com/v2/domains/pushes/#accept
+func (s *DomainsService) AcceptPush(accountID string, pushID int, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
+	path := versioned(domainPushPath(accountID, pushID))
+	pushResponse := &DomainPushResponse{}
+
+	resp, err := s.client.post(path, pushAttributes, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	pushResponse.HttpResponse = resp
+	return pushResponse, nil
 }
