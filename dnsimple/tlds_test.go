@@ -27,7 +27,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 79, TotalEntries: 158}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 97, TotalEntries: 193}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
 		t.Errorf("Tlds.ListTlds() pagination expected to be %v, got %v", want, got)
 	}
 
@@ -37,6 +37,10 @@ func TestTldsService_ListTlds(t *testing.T) {
 	}
 
 	if want, got := "ac", tlds[0].Tld; want != got {
+		t.Fatalf("Tlds.ListTlds() returned Tld expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := 1, tlds[0].MinimumRegistration; want != got {
 		t.Fatalf("Tlds.ListTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -81,6 +85,9 @@ func TestTldsService_GetTld(t *testing.T) {
 
 	tld := tldResponse.Data
 	if want, got := "com", tld.Tld; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := 1, tld.MinimumRegistration; want != got {
 		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
 }
