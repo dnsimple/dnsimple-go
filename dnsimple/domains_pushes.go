@@ -33,8 +33,8 @@ type DomainPushesResponse struct {
 	Data []DomainPush `json:"data"`
 }
 
-func initiateDomainPushPath(accountID string, domain interface{}) string {
-	return fmt.Sprintf("%v/pushes", domainPath(accountID, domain))
+func initiateDomainPushPath(accountID string, domainID string) string {
+	return fmt.Sprintf("%v/pushes", domainPath(accountID, domainID))
 }
 
 func domainPushPath(accountID string, pushID int) string {
@@ -50,8 +50,8 @@ func domainPushPath(accountID string, pushID int) string {
 // InitiatePush initiate a new domain push.
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#initiate
-func (s *DomainsService) InitiatePush(accountID string, domain interface{}, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
-	path := versioned(initiateDomainPushPath(accountID, domain))
+func (s *DomainsService) InitiatePush(accountID string, domainID string, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
+	path := versioned(initiateDomainPushPath(accountID, domainID))
 	pushResponse := &DomainPushResponse{}
 
 	resp, err := s.client.post(path, pushAttributes, pushResponse)
