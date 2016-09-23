@@ -27,7 +27,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 97, TotalEntries: 193}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
+	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 98, TotalEntries: 195}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
 		t.Errorf("Tlds.ListTlds() pagination expected to be %v, got %v", want, got)
 	}
 
@@ -41,7 +41,19 @@ func TestTldsService_ListTlds(t *testing.T) {
 	}
 
 	if want, got := 1, tlds[0].MinimumRegistration; want != got {
-		t.Fatalf("Tlds.ListTlds() returned Tld expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Tlds.ListTlds() returned MinimumRegistration expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := true, tlds[0].RegistrationEnabled; want != got {
+		t.Fatalf("Tlds.ListTlds() returned RegistrationEnabled expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := true, tlds[0].RenewalEnabled; want != got {
+		t.Fatalf("Tlds.ListTlds() returned RenewalEnabled expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := false, tlds[0].TransferEnabled; want != got {
+		t.Fatalf("Tlds.ListTlds() returned TransferEnabled expected to be `%v`, got `%v`", want, got)
 	}
 }
 
