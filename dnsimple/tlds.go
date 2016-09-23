@@ -19,6 +19,9 @@ type Tld struct {
 	WhoisPrivacy        bool   `json:"whois_privacy"`
 	AutoRenewOnly       bool   `json:"auto_renew_only"`
 	MinimumRegistration int    `json:"minimum_registration"`
+	RegistrationEnabled bool   `json:"registration_enabled"`
+	RenewalEnabled      bool   `json:"renewal_enabled"`
+	TransferEnabled     bool   `json:"transfer_enabled"`
 }
 
 // TldExtendedAttribute represents an extended attributes supported or required
