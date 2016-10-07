@@ -55,6 +55,7 @@ type Client struct {
 	Identity          *IdentityService
 	Accounts          *AccountsService
 	Certificates      *CertificatesService
+	Collaborators     *CollaboratorsService
 	Contacts          *ContactsService
 	Domains           *DomainsService
 	Oauth             *OauthService
@@ -91,6 +92,7 @@ func NewClient(credentials Credentials) *Client {
 	c.Identity = &IdentityService{client: c}
 	c.Accounts = &AccountsService{client: c}
 	c.Certificates = &CertificatesService{client: c}
+	c.Collaborators = &CollaboratorsService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}
 	c.Oauth = &OauthService{client: c}
