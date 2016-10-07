@@ -26,6 +26,11 @@ type Collaborator struct {
 	AcceptedAt string `json:"accepted_at,omitempty"`
 }
 
+// CollaboratorAttributes represents Collaborator attributes for Add.
+type CollaboratorAttributes struct {
+	Email string `json:"email,omitempty"`
+}
+
 func collaboratorPath(accountID, domainIdentifier, collaboratorID string) string {
 	path := fmt.Sprintf("%v/collaborators", domainPath(accountID, domainIdentifier))
 
@@ -66,4 +71,21 @@ func (s *CollaboratorsService) ListCollaborators(accountID, domainIdentifier str
 
 	collaboratorsResponse.HttpResponse = resp
 	return collaboratorsResponse, nil
+}
+
+// AddCollaborator adds a new collaborator to the domain in the account.
+//
+// See https://developer.dnsimple.com/v2/domains/collaborators#add
+func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifier string, collaboratorAttributes CollaboratorAttributes) (*CollaboratorResponse, error) {
+	path := versioned(collaboratorPath(accountID, domainIdentifier, ""))
+	fmt.Println(path)
+	collaboratorResponse := &CollaboratorResponse{}
+
+	resp, err := s.client.post(path, collaboratorAttributes, collaboratorResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	collaboratorResponse.HttpResponse = resp
+	return collaboratorResponse, nil
 }

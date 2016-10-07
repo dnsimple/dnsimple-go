@@ -68,3 +68,85 @@ func TestCollaboratorsService_ListCollaborators_WithOptions(t *testing.T) {
 		t.Fatalf("Collaborators.ListCollaborators() returned error: %v", err)
 	}
 }
+
+func TestCollaboratorsService_AddCollaborator(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/addCollaborator/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"email": "existing-user@example.com"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	domainID := "example.com"
+	collaboratorAttributes := CollaboratorAttributes{Email: "existing-user@example.com"}
+
+	collaboratorResponse, err := client.Collaborators.AddCollaborator(accountID, domainID, collaboratorAttributes)
+	if err != nil {
+		t.Fatalf("Collaborators.AddCollaborator() returned error: %v", err)
+	}
+
+	collaborator := collaboratorResponse.Data
+	if want, got := 100, collaborator.ID; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "example.com", collaborator.DomainName; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned DomainName expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := false, collaborator.Invitation; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned Invitation expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "2016-10-07T08:53:41.643Z", collaborator.AcceptedAt; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestCollaboratorsService_AddNonExistingCollaborator(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/addCollaborator/invite-success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"email": "invited-user@example.com"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	domainID := "example.com"
+	collaboratorAttributes := CollaboratorAttributes{Email: "invited-user@example.com"}
+
+	collaboratorResponse, err := client.Collaborators.AddCollaborator(accountID, domainID, collaboratorAttributes)
+	if err != nil {
+		t.Fatalf("Collaborators.AddCollaborator() returned error: %v", err)
+	}
+
+	collaborator := collaboratorResponse.Data
+	if want, got := 101, collaborator.ID; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "example.com", collaborator.DomainName; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned DomainName expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := true, collaborator.Invitation; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned Invitation expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "", collaborator.AcceptedAt; want != got {
+		t.Fatalf("Collaborators.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
+	}
+}
