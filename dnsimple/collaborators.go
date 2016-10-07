@@ -25,7 +25,7 @@ type Collaborator struct {
 	AcceptedAt string `json:"accepted_at,omitempty"`
 }
 
-// CollaboratorAttributes represents Collaborator attributes for Add.
+// CollaboratorAttributes represents Collaborator attributes for AddCollaborator operation.
 type CollaboratorAttributes struct {
 	Email string `json:"email,omitempty"`
 }
