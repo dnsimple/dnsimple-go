@@ -2,7 +2,6 @@ package dnsimple
 
 import (
 	"fmt"
-	// "strconv"
 )
 
 // CollaboratorsService handles communication with the collaborator related
