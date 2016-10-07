@@ -150,3 +150,27 @@ func TestCollaboratorsService_AddNonExistingCollaborator(t *testing.T) {
 		t.Fatalf("Collaborators.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func TestDomainsService_RemoveCollaborator(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/collaborators/100", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/removeCollaborator/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	domainID := "example.com"
+	contactID := "100"
+
+	_, err := client.Collaborators.RemoveCollaborator(accountID, domainID, contactID)
+	if err != nil {
+		t.Fatalf("Collaborators.RemoveCollaborator() returned error: %v", err)
+	}
+}

@@ -78,10 +78,25 @@ func (s *CollaboratorsService) ListCollaborators(accountID, domainIdentifier str
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
 func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifier string, collaboratorAttributes CollaboratorAttributes) (*CollaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, ""))
-	fmt.Println(path)
 	collaboratorResponse := &CollaboratorResponse{}
 
 	resp, err := s.client.post(path, collaboratorAttributes, collaboratorResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	collaboratorResponse.HttpResponse = resp
+	return collaboratorResponse, nil
+}
+
+// RemoveCollaborator PERMANENTLY deletes a domain from the account.
+//
+// See https://developer.dnsimple.com/v2/domains/collaborators#add
+func (s *CollaboratorsService) RemoveCollaborator(accountID string, domainIdentifier string, collaboratorID string) (*CollaboratorResponse, error) {
+	path := versioned(collaboratorPath(accountID, domainIdentifier, collaboratorID))
+	collaboratorResponse := &CollaboratorResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
