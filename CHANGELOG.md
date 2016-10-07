@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+#### Release 0.14.0
+
+- NEW: Added support for Collaborators methods (GH-48)
+- NEW: Added support for Domains Pushes methods (GH-42)
+- NEW: Added region support to `ZoneRecord` (GH-47)
+- NEW: Added attributes to `Tld`: `MinimumRegistration`, `RegistrationEnabled`, `RenewalEnabled`, and `TransferEnabled` (GH-43, GH-45)
+- CHANGED: Renamed `DomainTransferRequest.AuthInfo` to `AuthCode` (GH-27)
+
 #### Release 0.13.0
 
 - NEW: Added support for Accounts methods (GH-29)
