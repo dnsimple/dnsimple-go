@@ -93,18 +93,15 @@ func TestZonesService_CreateRecord(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		// --- FAIL: TestZonesService_CreateRecord (0.00s)
-		// 	dnsimple_test.go:68: Request parameters = map[type:MX name: content:mxa.example.com regions:[SV1 IAD]], want map[content:mxa.example.com type:MX regions:[SV1 IAD]]
-		//
-		// want := map[string]interface{}{"content": "mxa.example.com", "type": "MX", "regions": []string{"SV1", "IAD"}}
-		// testRequestJSON(t, r, want)
+		want := map[string]interface{}{"name": "foo", "content": "mxa.example.com", "type": "MX"}
+		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
-	recordValues := ZoneRecord{Content: "mxa.example.com", Type: "MX", Regions: []string{"SV1", "IAD"}}
+	recordValues := ZoneRecord{Name: "foo", Content: "mxa.example.com", Type: "MX"}
 
 	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
 	if err != nil {
@@ -136,17 +133,16 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"name": "", "content": "192.168.0.10", "type": "A"}
+		want := map[string]interface{}{"name": "", "content": "127.0.0.1", "type": "A"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	accountID := "1010"
-	recordValues := ZoneRecord{Name: "", Content: "192.168.0.10", Type: "A"}
+	recordValues := ZoneRecord{Name: "", Content: "127.0.0.1", Type: "A"}
 
-	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
+	recordResponse, err := client.Zones.CreateRecord("1010", "example.com", recordValues)
 	if err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -157,6 +153,58 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 	}
 	if !reflect.DeepEqual([]string{"global"}, record.Regions) {
 		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", record.Regions, []string{"global"})
+	}
+}
+
+func TestZonesService_CreateRecord_Regions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	var recordValues ZoneRecord
+
+	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+
+		want := map[string]interface{}{"name": "foo"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
+	if _, err := client.Zones.CreateRecord("1", "example.com", recordValues); err != nil {
+		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
+	}
+
+	mux.HandleFunc("/v2/2/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+
+		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	if _, err := client.Zones.CreateRecord("2", "example.com", recordValues); err != nil {
+		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
+	}
+
+	mux.HandleFunc("/v2/3/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+
+		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	if _, err := client.Zones.CreateRecord("2", "example.com", recordValues); err != nil {
+		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
 }
 
@@ -211,18 +259,15 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
 
-		// --- FAIL: TestZonesService_UpdateRecord (0.00s)
-		// 	dnsimple_test.go:68: Request parameters = map[content:mxb.example.com priority:20 regions:[global] name:], want map[regions:[global] content:mxb.example.com priority:20]
-		//
-		// 		want := map[string]interface{}{"content": "mxb.example.com", "priority": 20, "regions": []string{"global"}}
-		// 		testRequestJSON(t, r, want)
+		want := map[string]interface{}{"name": "foo", "content": "127.0.0.1"}
+		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
-	recordValues := ZoneRecord{Content: "mxb.example.com", Priority: 20, Regions: []string{"global"}}
+	recordValues := ZoneRecord{Name: "foo", Content: "127.0.0.1"}
 
 	recordResponse, err := client.Zones.UpdateRecord(accountID, "example.com", 5, recordValues)
 	if err != nil {
@@ -235,6 +280,58 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	}
 	if want, got := "mxb.example.com", record.Content; want != got {
 		t.Fatalf("Zones.UpdateRecord() returned Label expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestZonesService_UpdateRecord_Regions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	var recordValues ZoneRecord
+
+	mux.HandleFunc("/v2/1/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+
+		want := map[string]interface{}{"name": "foo"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
+	if _, err := client.Zones.UpdateRecord("1", "example.com", 1, recordValues); err != nil {
+		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
+	}
+
+	mux.HandleFunc("/v2/2/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+
+		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	if _, err := client.Zones.UpdateRecord("2", "example.com", 1, recordValues); err != nil {
+		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
+	}
+
+	mux.HandleFunc("/v2/3/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+
+		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	if _, err := client.Zones.UpdateRecord("2", "example.com", 1, recordValues); err != nil {
+		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
 }
 
