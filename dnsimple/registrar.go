@@ -85,7 +85,7 @@ type DomainTransferRequest struct {
 	RegistrantID int `json:"registrant_id"`
 	// The Auth-Code required to transfer the domain.
 	// This is provided by the current registrar of the domain.
-	AuthInfo string `json:"auth_info,omitempty"`
+	AuthCode string `json:"auth_code,omitempty"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
 	// Default to false.
 	EnableWhoisPrivacy bool `json:"private_whois,omitempty"`

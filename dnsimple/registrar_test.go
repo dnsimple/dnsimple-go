@@ -74,14 +74,14 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"registrant_id": float64(2), "auth_info": "x1y2z3"}
+		want := map[string]interface{}{"registrant_id": float64(2), "auth_code": "x1y2z3"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthInfo: "x1y2z3"}
+	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3"}
 
 	transferResponse, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest)
 	if err != nil {
