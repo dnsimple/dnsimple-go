@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### master
+
+- NEW: Added support for Collaborators methods (GH-48)
+
 
 #### Release 0.13.0
 
