@@ -46,7 +46,7 @@ func testQuery(t *testing.T, r *http.Request, want url.Values) {
 
 func testHeader(t *testing.T, r *http.Request, name, want string) {
 	if got := r.Header.Get(name); want != got {
-		t.Errorf("Request() %v expected to be `%v`, got `%v`", name, want, got)
+		t.Errorf("Request() %v expected to be `%#v`, got `%#v`", name, want, got)
 	}
 }
 
@@ -65,7 +65,7 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 	}
 
 	if !reflect.DeepEqual(values, data) {
-		t.Errorf("Request parameters = %v, want %v", data, values)
+		t.Errorf("Request parameters = %#v, want %#v", data, values)
 	}
 }
 
@@ -79,7 +79,7 @@ func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 	}
 
 	if !reflect.DeepEqual(values, data) {
-		t.Errorf("Request parameters = %v, want %v", data, values)
+		t.Errorf("Request parameters = %#v, want %#v", data, values)
 	}
 }
 
