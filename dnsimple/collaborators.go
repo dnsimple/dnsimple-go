@@ -75,11 +75,11 @@ func (s *CollaboratorsService) ListCollaborators(accountID, domainIdentifier str
 // AddCollaborator adds a new collaborator to the domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
-func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifier string, collaboratorAttributes CollaboratorAttributes) (*CollaboratorResponse, error) {
+func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*CollaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, ""))
 	collaboratorResponse := &CollaboratorResponse{}
 
-	resp, err := s.client.post(path, collaboratorAttributes, collaboratorResponse)
+	resp, err := s.client.post(path, attributes, collaboratorResponse)
 	if err != nil {
 		return nil, err
 	}
