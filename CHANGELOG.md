@@ -3,6 +3,7 @@
 #### master
 
 - NEW: Added support for Collaborators methods (GH-48)
+- NEW: Added region support to `ZoneRecord` (GH-47)
 
 
 #### Release 0.13.0
