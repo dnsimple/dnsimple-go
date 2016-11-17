@@ -4,6 +4,7 @@
 
 - NEW: Added support for Collaborators methods (GH-48)
 - NEW: Added region support to `ZoneRecord` (GH-47)
+- NEW: Added support for Domains Pushes methods (GH-42)
 
 - CHANGED: Renamed `DomainTransferRequest.AuthInfo` to `AuthCode` (GH-46)
 
