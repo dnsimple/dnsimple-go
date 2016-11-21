@@ -34,11 +34,12 @@ type Contact struct {
 	UpdatedAt     string `json:"updated_at,omitempty"`
 }
 
-func contactPath(accountID string, contact interface{}) string {
-	if contact != nil {
-		return fmt.Sprintf("/%v/contacts/%v", accountID, contact)
+func contactPath(accountID string, contactID int) (path string) {
+	path = fmt.Sprintf("/%v/contacts", accountID)
+	if contactID != 0 {
+		path += fmt.Sprintf("/%v", contactID)
 	}
-	return fmt.Sprintf("/%v/contacts", accountID)
+	return path
 }
 
 // ContactResponse represents a response from an API method that returns a Contact struct.
@@ -57,7 +58,7 @@ type ContactsResponse struct {
 //
 // See https://developer.dnsimple.com/v2/contacts/#list
 func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (*ContactsResponse, error) {
-	path := versioned(contactPath(accountID, nil))
+	path := versioned(contactPath(accountID, 0))
 	contactsResponse := &ContactsResponse{}
 
 	path, err := addURLQueryOptions(path, options)
@@ -78,7 +79,7 @@ func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (
 //
 // See https://developer.dnsimple.com/v2/contacts/#create
 func (s *ContactsService) CreateContact(accountID string, contactAttributes Contact) (*ContactResponse, error) {
-	path := versioned(contactPath(accountID, nil))
+	path := versioned(contactPath(accountID, 0))
 	contactResponse := &ContactResponse{}
 
 	resp, err := s.client.post(path, contactAttributes, contactResponse)

@@ -37,14 +37,12 @@ func initiateDomainPushPath(accountID string, domainID string) string {
 	return fmt.Sprintf("%v/pushes", domainPath(accountID, domainID))
 }
 
-func domainPushPath(accountID string, pushID int) string {
-	path := fmt.Sprintf("%v/pushes", accountID)
-
+func domainPushPath(accountID string, pushID int) (path string) {
+	path = fmt.Sprintf("%v/pushes", accountID)
 	if pushID != 0 {
 		path += fmt.Sprintf("/%d", pushID)
 	}
-
-	return path
+	return
 }
 
 // InitiatePush initiate a new domain push.

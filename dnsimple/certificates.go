@@ -37,13 +37,12 @@ type CertificateBundle struct {
 	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
-func certificatePath(accountID, domainIdentifier, certificateID string) string {
-	path := fmt.Sprintf("%v/certificates", domainPath(accountID, domainIdentifier))
-
+func certificatePath(accountID, domainIdentifier, certificateID string) (path string) {
+	path = fmt.Sprintf("%v/certificates", domainPath(accountID, domainIdentifier))
 	if certificateID != "" {
 		path += fmt.Sprintf("/%v", certificateID)
 	}
-	return path
+	return
 }
 
 // CertificateResponse represents a response from an API method that returns a Certificate struct.

@@ -9,25 +9,16 @@ import (
 )
 
 func TestDomains_domainPath(t *testing.T) {
-	actual := domainPath("1", nil)
-	expected := "/1/domains"
-
-	if actual != expected {
-		t.Errorf("domainPath(\"1\", nil): actual %s, expected %s", actual, expected)
+	if want, got := "/1010/domains", domainPath("1010", ""); want != got {
+		t.Errorf("domainPath(%v) = %v, want %v", "1010", got, want)
 	}
 
-	actual = domainPath("1", "example.com")
-	expected = "/1/domains/example.com"
-
-	if actual != expected {
-		t.Errorf("domainPath(\"1\", \"example.com\", nil): actual %s, expected %s", actual, expected)
+	if want, got := "/1010/domains/1", domainPath("1010", "1"); want != got {
+		t.Errorf("domainPath(%v, 1) = %v, want %v", "1010", got, want)
 	}
 
-	actual = domainPath("1", 1)
-	expected = "/1/domains/1"
-
-	if actual != expected {
-		t.Errorf("domainPath(\"1\", 1, nil): actual %s, expected %s", actual, expected)
+	if want, got := "/1010/domains/example.com", domainPath("1010", "example.com"); want != got {
+		t.Errorf("domainPath(%v, 1) = %v, want %v", "1010", got, want)
 	}
 }
 
