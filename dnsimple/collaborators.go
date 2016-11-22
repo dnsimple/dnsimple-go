@@ -4,14 +4,6 @@ import (
 	"fmt"
 )
 
-// CollaboratorsService handles communication with the collaborator related
-// methods of the DNSimple API.
-//
-// See https://developer.dnsimple.com/v2/domains/collaborators
-type CollaboratorsService struct {
-	client *Client
-}
-
 // Collaborator represents a Collaborator in DNSimple.
 type Collaborator struct {
 	ID         int    `json:"id,omitempty"`
@@ -54,7 +46,7 @@ type CollaboratorsResponse struct {
 // ListCollaborators list the collaborators for a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#list
-func (s *CollaboratorsService) ListCollaborators(accountID, domainIdentifier string, options *ListOptions) (*CollaboratorsResponse, error) {
+func (s *DomainsService) ListCollaborators(accountID, domainIdentifier string, options *ListOptions) (*CollaboratorsResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, ""))
 	collaboratorsResponse := &CollaboratorsResponse{}
 
@@ -75,7 +67,7 @@ func (s *CollaboratorsService) ListCollaborators(accountID, domainIdentifier str
 // AddCollaborator adds a new collaborator to the domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
-func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*CollaboratorResponse, error) {
+func (s *DomainsService) AddCollaborator(accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*CollaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, ""))
 	collaboratorResponse := &CollaboratorResponse{}
 
@@ -91,7 +83,7 @@ func (s *CollaboratorsService) AddCollaborator(accountID string, domainIdentifie
 // RemoveCollaborator PERMANENTLY deletes a domain from the account.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
-func (s *CollaboratorsService) RemoveCollaborator(accountID string, domainIdentifier string, collaboratorID string) (*CollaboratorResponse, error) {
+func (s *DomainsService) RemoveCollaborator(accountID string, domainIdentifier string, collaboratorID string) (*CollaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, collaboratorID))
 	collaboratorResponse := &CollaboratorResponse{}
 
