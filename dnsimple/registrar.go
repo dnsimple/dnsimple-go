@@ -19,7 +19,7 @@ type DomainCheck struct {
 	Premium   bool   `json:"premium"`
 }
 
-// DomainCheckResponse represents a response from the domain check.
+// DomainCheckResponse represents a response from a domain check request.
 type DomainCheckResponse struct {
 	Response
 	Data *DomainCheck `json:"data"`
@@ -147,10 +147,21 @@ type DomainRenewRequest struct {
 	Period int `json:"period"`
 }
 
-// DomainRenewalResponse represents a response from an API method that results in a domain renewal.
+// DomainRenewal represents the result of a domain renewal call.
+type DomainRenewal struct {
+	ID           int    `json:"id"`
+	DomainID     int    `json:"domain_id"`
+	Period       int    `json:"period"`
+	PrivateWhois bool   `json:"private_whois"`
+	PremiumPrice int    `json:"premium_price"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
+}
+
+// DomainRenewalResponse represents a response from an API method that returns a domain renewal.
 type DomainRenewalResponse struct {
 	Response
-	Data *Domain `json:"data"`
+	Data *DomainRenewal `json:"data"`
 }
 
 // RenewDomain renews a domain name.

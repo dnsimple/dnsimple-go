@@ -134,16 +134,16 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	registrationResponse, err := client.Registrar.RenewDomain("1010", "example.com", nil)
+	renewalResponse, err := client.Registrar.RenewDomain("1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Registrar.Renew() returned error: %v", err)
 	}
 
-	domain := registrationResponse.Data
-	if want, got := 1, domain.ID; want != got {
-		t.Fatalf("Registrar.Renew() returned ID expected to be `%v`, got `%v`", want, got)
+	renewal := renewalResponse.Data
+	if want, got := 1, renewal.ID; want != got {
+		t.Fatalf("Registrar.RenewDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "example.com", domain.Name; want != got {
-		t.Fatalf("Registrar.Renew() returned Name expected to be `%v`, got `%v`", want, got)
+	if want, got := 999, renewal.DomainID; want != got {
+		t.Fatalf("Registrar.RenewDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }
