@@ -19,7 +19,7 @@ type DomainCheck struct {
 	Premium   bool   `json:"premium"`
 }
 
-// DomainCheckResponse represents a response from the domain check.
+// DomainCheckResponse represents a response from a domain check request.
 type DomainCheckResponse struct {
 	Response
 	Data *DomainCheck `json:"data"`
@@ -54,10 +54,24 @@ type DomainRegisterRequest struct {
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 }
 
+// DomainRegistration represents the result of a domain renewal call.
+type DomainRegistration struct {
+	ID           int    `json:"id"`
+	DomainID     int    `json:"domain_id"`
+	RegistrantID int    `json:"registrant_id"`
+	Period       int    `json:"period"`
+	State        string `json:"state"`
+	AutoRenew    bool   `json:"auto_renew"`
+	PrivateWhois bool   `json:"private_whois"`
+	PremiumPrice string `json:"premium_price"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
+}
+
 // DomainRegistrationResponse represents a response from an API method that results in a domain registration.
 type DomainRegistrationResponse struct {
 	Response
-	Data *Domain `json:"data"`
+	Data *DomainRegistration `json:"data"`
 }
 
 // RegisterDomain registers a domain name.
@@ -94,10 +108,23 @@ type DomainTransferRequest struct {
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 }
 
+// DomainTransfer represents the result of a domain renewal call.
+type DomainTransfer struct {
+	ID           int    `json:"id"`
+	DomainID     int    `json:"domain_id"`
+	RegistrantID int    `json:"registrant_id"`
+	State        string `json:"state"`
+	AutoRenew    bool   `json:"auto_renew"`
+	PrivateWhois bool   `json:"private_whois"`
+	PremiumPrice string `json:"premium_price"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
+}
+
 // DomainTransferResponse represents a response from an API method that results in a domain transfer.
 type DomainTransferResponse struct {
 	Response
-	Data *Domain `json:"data"`
+	Data *DomainTransfer `json:"data"`
 }
 
 // TransferDomain transfers a domain name.
@@ -147,10 +174,22 @@ type DomainRenewRequest struct {
 	Period int `json:"period"`
 }
 
-// DomainRenewalResponse represents a response from an API method that results in a domain renewal.
+// DomainRenewal represents the result of a domain renewal call.
+type DomainRenewal struct {
+	ID           int    `json:"id"`
+	DomainID     int    `json:"domain_id"`
+	Period       int    `json:"period"`
+	State        string `json:"state"`
+	PrivateWhois bool   `json:"private_whois"`
+	PremiumPrice string `json:"premium_price"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
+}
+
+// DomainRenewalResponse represents a response from an API method that returns a domain renewal.
 type DomainRenewalResponse struct {
 	Response
-	Data *Domain `json:"data"`
+	Data *DomainRenewal `json:"data"`
 }
 
 // RenewDomain renews a domain name.
