@@ -179,6 +179,7 @@ type DomainRenewal struct {
 	ID           int    `json:"id"`
 	DomainID     int    `json:"domain_id"`
 	Period       int    `json:"period"`
+	State        string `json:"state"`
 	PrivateWhois bool   `json:"private_whois"`
 	PremiumPrice int    `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
