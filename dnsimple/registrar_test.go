@@ -52,15 +52,15 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 
 	registrationResponse, err := client.Registrar.RegisterDomain("1010", "example.com", registerRequest)
 	if err != nil {
-		t.Fatalf("Registrar.Register() returned error: %v", err)
+		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
 	}
 
-	domain := registrationResponse.Data
-	if want, got := 1, domain.ID; want != got {
-		t.Fatalf("Registrar.Register() returned ID expected to be `%v`, got `%v`", want, got)
+	registration := registrationResponse.Data
+	if want, got := 1, registration.ID; want != got {
+		t.Fatalf("Registrar.RegisterDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "example.com", domain.Name; want != got {
-		t.Fatalf("Registrar.Register() returned Name expected to be `%v`, got `%v`", want, got)
+	if want, got := 999, registration.DomainID; want != got {
+		t.Fatalf("Registrar.RegisterDomain() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }
 
