@@ -85,15 +85,15 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 
 	transferResponse, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest)
 	if err != nil {
-		t.Fatalf("Registrar.Transfer() returned error: %v", err)
+		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
 	}
 
-	domain := transferResponse.Data
-	if want, got := 1, domain.ID; want != got {
-		t.Fatalf("Registrar.Transfer() returned ID expected to be `%v`, got `%v`", want, got)
+	transfer := transferResponse.Data
+	if want, got := 1, transfer.ID; want != got {
+		t.Fatalf("Registrar.TransferDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "example.com", domain.Name; want != got {
-		t.Fatalf("Registrar.Transfer() returned Name expected to be `%v`, got `%v`", want, got)
+	if want, got := 999, transfer.DomainID; want != got {
+		t.Fatalf("Registrar.TransferDomain() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -136,7 +136,7 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 
 	renewalResponse, err := client.Registrar.RenewDomain("1010", "example.com", nil)
 	if err != nil {
-		t.Fatalf("Registrar.Renew() returned error: %v", err)
+		t.Fatalf("Registrar.RenewDomain() returned error: %v", err)
 	}
 
 	renewal := renewalResponse.Data
