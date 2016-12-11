@@ -63,7 +63,7 @@ type DomainRegistration struct {
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
 	PrivateWhois bool   `json:"private_whois"`
-	PremiumPrice int    `json:"premium_price"`
+	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
@@ -116,7 +116,7 @@ type DomainTransfer struct {
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
 	PrivateWhois bool   `json:"private_whois"`
-	PremiumPrice int    `json:"premium_price"`
+	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
@@ -181,7 +181,7 @@ type DomainRenewal struct {
 	Period       int    `json:"period"`
 	State        string `json:"state"`
 	PrivateWhois bool   `json:"private_whois"`
-	PremiumPrice int    `json:"premium_price"`
+	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
