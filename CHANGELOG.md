@@ -7,6 +7,7 @@
 - NEW: Added support for Domains Pushes methods (GH-42)
 
 - CHANGED: Renamed `DomainTransferRequest.AuthInfo` to `AuthCode` (GH-46)
+- CHANGED: Updated registration, transfer, renewal response payload (dnsimple/dnsimple-developer#111, dnsimple/dnsimple-go#52).
 
 
 #### Release 0.13.0
