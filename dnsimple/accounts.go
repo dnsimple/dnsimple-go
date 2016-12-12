@@ -1,7 +1,6 @@
 package dnsimple
 
 import (
-	"fmt"
 )
 
 type AccountsService struct {
@@ -17,10 +16,6 @@ type Account struct {
 	UpdatedAt      string `json:"updated_at,omitempty"`
 }
 
-func accountsPath() string {
-	return fmt.Sprintf("/accounts")
-}
-
 // AccountsResponse represents a response from an API method that returns a collection of Account struct.
 type AccountsResponse struct {
 	Response
@@ -31,7 +26,7 @@ type AccountsResponse struct {
 //
 // See https://developer.dnsimple.com/v2/accounts/#list
 func (s *AccountsService) ListAccounts(options *ListOptions) (*AccountsResponse, error) {
-	path := versioned(accountsPath())
+	path := versioned("/accounts")
 	accountsResponse := &AccountsResponse{}
 
 	path, err := addURLQueryOptions(path, options)

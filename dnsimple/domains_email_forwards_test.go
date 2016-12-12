@@ -11,6 +11,16 @@ import (
 
 var regexpEmail = regexp.MustCompile(`.+@.+`)
 
+func TestEmailForwardPath(t *testing.T) {
+	if want, got := "/1010/domains/example.com/email_forwards", emailForwardPath("1010", "example.com", 0); want != got {
+		t.Errorf("emailForwardPath(%v) = %v, want %v", "", got, want)
+	}
+
+	if want, got := "/1010/domains/example.com/email_forwards/2", emailForwardPath("1010", "example.com", 2); want != got {
+		t.Errorf("emailForwardPath(%v) = %v, want %v", "2", got, want)
+	}
+}
+
 func TestDomainsService_EmailForwardsList(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

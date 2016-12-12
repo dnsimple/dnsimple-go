@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-func TestContacts_contactPath(t *testing.T) {
-	if want, got := "/1010/contacts", contactPath("1010", nil); want != got {
-		t.Errorf("contactPath(%v,  ) = %v, want %v", "1010", got, want)
+func TestContactPath(t *testing.T) {
+	if want, got := "/1010/contacts", contactPath("1010", 0); want != got {
+		t.Errorf("contactPath(%v) = %v, want %v", "", got, want)
 	}
 
 	if want, got := "/1010/contacts/1", contactPath("1010", 1); want != got {
-		t.Errorf("contactPath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("contactPath(%v) = %v, want %v", "1", got, want)
 	}
 }
 

@@ -23,14 +23,14 @@ const (
 	// This is a pro-forma convention given that Go dependencies
 	// tends to be fetched directly from the repo.
 	// It is also used in the user-agent identify the client.
-	libraryVersion = "0.13.0"
+	Version = "0.13.0"
 
 	// defaultBaseURL to the DNSimple production API.
 	defaultBaseURL = "https://api.dnsimple.com"
 
 	// userAgent represents the default user agent used
 	// when no other user agent is set.
-	defaultUserAgent = "dnsimple-go/" + libraryVersion
+	defaultUserAgent = "dnsimple-go/" + Version
 
 	apiVersion = "v2"
 )

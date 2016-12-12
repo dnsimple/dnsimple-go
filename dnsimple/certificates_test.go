@@ -8,6 +8,16 @@ import (
 	"testing"
 )
 
+func TestCertificatePath(t *testing.T) {
+	if want, got := "/1010/domains/example.com/certificates", certificatePath("1010", "example.com", ""); want != got {
+		t.Errorf("certificatePath(%v) = %v, want %v", "", got, want)
+	}
+
+	if want, got := "/1010/domains/example.com/certificates/2", certificatePath("1010", "example.com", "2"); want != got {
+		t.Errorf("certificatePath(%v) = %v, want %v", "2", got, want)
+	}
+}
+
 func TestCertificatesService_ListCertificates(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

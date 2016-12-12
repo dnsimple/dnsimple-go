@@ -22,13 +22,12 @@ type CollaboratorAttributes struct {
 	Email string `json:"email,omitempty"`
 }
 
-func collaboratorPath(accountID, domainIdentifier, collaboratorID string) string {
-	path := fmt.Sprintf("%v/collaborators", domainPath(accountID, domainIdentifier))
-
+func collaboratorPath(accountID, domainIdentifier, collaboratorID string) (path string) {
+	path = fmt.Sprintf("%v/collaborators", domainPath(accountID, domainIdentifier))
 	if collaboratorID != "" {
 		path += fmt.Sprintf("/%v", collaboratorID)
 	}
-	return path
+	return
 }
 
 // CollaboratorResponse represents a response from an API method that returns a Collaborator struct.
