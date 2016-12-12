@@ -100,7 +100,7 @@ func TestTemplatesService_Create(t *testing.T) {
 	}
 
 	template := templateResponse.Data
-	if want, got := 2, template.ID; want != got {
+	if want, got := 1, template.ID; want != got {
 		t.Fatalf("Templates.CreateTemplate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Beta", template.Name; want != got {
@@ -130,12 +130,12 @@ func TestTemplatesService_Get(t *testing.T) {
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
+		SID:   "alpha",
 		AccountID:   1010,
 		Name:        "Alpha",
-		ShortName:   "alpha",
 		Description: "An alpha template.",
-		CreatedAt:   "2016-03-22T11:08:58.262Z",
-		UpdatedAt:   "2016-03-22T11:08:58.262Z"}
+		CreatedAt:   "2016-03-22T11:08:58Z",
+		UpdatedAt:   "2016-03-22T11:08:58Z"}
 
 	if !reflect.DeepEqual(template, wantSingle) {
 		t.Fatalf("Templates.GetTemplate() returned %+v, want %+v", template, wantSingle)
@@ -165,12 +165,12 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
+		SID:   "alpha",
 		AccountID:   1010,
 		Name:        "Alpha",
-		ShortName:   "alpha",
 		Description: "An alpha template.",
-		CreatedAt:   "2016-03-22T11:08:58.262Z",
-		UpdatedAt:   "2016-03-22T11:08:58.262Z"}
+		CreatedAt:   "2016-03-22T11:08:58Z",
+		UpdatedAt:   "2016-03-22T11:08:58Z"}
 
 	if !reflect.DeepEqual(template, wantSingle) {
 		t.Fatalf("Templates.UpdateTemplate() returned %+v, want %+v", template, wantSingle)
