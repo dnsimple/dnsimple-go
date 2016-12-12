@@ -130,7 +130,7 @@ func TestTemplatesService_Get(t *testing.T) {
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
-		SID:   "alpha",
+		SID:         "alpha",
 		AccountID:   1010,
 		Name:        "Alpha",
 		Description: "An alpha template.",
@@ -165,7 +165,7 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
-		SID:   "alpha",
+		SID:         "alpha",
 		AccountID:   1010,
 		Name:        "Alpha",
 		Description: "An alpha template.",

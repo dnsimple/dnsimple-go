@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -28,6 +29,55 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 	check := checkResponse.Data
 	if want, got := "ruby.codes", check.Domain; want != got {
 		t.Fatalf("Registrar.CheckDomain() returned Domain expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/premium_price", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getDomainPremiumPrice/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	priceResponse, err := client.Registrar.GetDomainPremiumPrice("1010", "example.com", nil)
+	if err != nil {
+		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
+	}
+
+	price := priceResponse.Data
+	if want, got := "109.00", price.PremiumPrice; want != got {
+		t.Fatalf("Registrar.GetDomainPremiumPrice() returned Domain expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/premium_price", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getDomainPremiumPrice/success.http")
+
+		testQuery(t, r, url.Values{
+			"action": []string{"registration"},
+		})
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Registrar.GetDomainPremiumPrice("1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
+	if err != nil {
+		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
 	}
 }
 
