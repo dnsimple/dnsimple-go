@@ -105,7 +105,7 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 	if want, got := false, collaborator.Invitation; want != got {
 		t.Fatalf("Domains.AddCollaborator() returned Invitation expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "2016-10-07T08:53:41.643Z", collaborator.AcceptedAt; want != got {
+	if want, got := "2016-10-07T08:53:41Z", collaborator.AcceptedAt; want != got {
 		t.Fatalf("Domains.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
 	}
 }

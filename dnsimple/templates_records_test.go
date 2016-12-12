@@ -135,8 +135,8 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 		TTL:        600,
 		Priority:   10,
 		Type:       "MX",
-		CreatedAt:  "2016-05-03T08:03:26.444Z",
-		UpdatedAt:  "2016-05-03T08:03:26.444Z"}
+		CreatedAt:  "2016-05-03T08:03:26Z",
+		UpdatedAt:  "2016-05-03T08:03:26Z"}
 
 	if !reflect.DeepEqual(templateRecord, wantSingle) {
 		t.Fatalf("Templates.GetTemplateRecord() returned %+v, want %+v", templateRecord, wantSingle)

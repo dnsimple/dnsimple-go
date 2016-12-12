@@ -18,7 +18,7 @@ func TestAccountsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/accounts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listAccounts/success.http")
+		httpResponse := httpResponseFixture(t, "/listAccounts/success-user.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -34,7 +34,7 @@ func TestAccountsService_List(t *testing.T) {
 	}
 
 	accounts := accountsResponse.Data
-	if want, got := 1, len(accounts); want != got {
+	if want, got := 2, len(accounts); want != got {
 		t.Errorf("Accounts.ListAccounts() expected to return %v accounts, got %v", want, got)
 	}
 

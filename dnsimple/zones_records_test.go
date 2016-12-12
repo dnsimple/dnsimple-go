@@ -128,7 +128,7 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created_apex.http")
+		httpResponse := httpResponseFixture(t, "/createZoneRecord/created-apex.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -241,8 +241,8 @@ func TestZonesService_GetRecord(t *testing.T) {
 		Priority:     10,
 		SystemRecord: false,
 		Regions:      []string{"SV1", "IAD"},
-		CreatedAt:    "2016-10-05T09:51:35.313Z",
-		UpdatedAt:    "2016-10-05T09:51:35.313Z"}
+		CreatedAt:    "2016-10-05T09:51:35Z",
+		UpdatedAt:    "2016-10-05T09:51:35Z"}
 
 	if !reflect.DeepEqual(record, wantSingle) {
 		t.Fatalf("Zones.GetRecord() returned %+v, want %+v", record, wantSingle)

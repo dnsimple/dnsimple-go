@@ -147,8 +147,8 @@ func TestContactsService_Get(t *testing.T) {
 		Phone:         "+18001234567",
 		Fax:           "+18011234567",
 		Email:         "first@example.com",
-		CreatedAt:     "2016-01-19T20:50:26.066Z",
-		UpdatedAt:     "2016-01-19T20:50:26.066Z"}
+		CreatedAt:     "2016-01-19T20:50:26Z",
+		UpdatedAt:     "2016-01-19T20:50:26Z"}
 
 	if !reflect.DeepEqual(contact, wantSingle) {
 		t.Fatalf("Contacts.GetContact() returned %+v, want %+v", contact, wantSingle)

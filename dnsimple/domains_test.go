@@ -159,8 +159,8 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		State:        "hosted",
 		PrivateWhois: false,
 		ExpiresOn:    "",
-		CreatedAt:    "2014-12-06T15:56:55.573Z",
-		UpdatedAt:    "2015-12-09T00:20:56.056Z"}
+		CreatedAt:    "2014-12-06T15:56:55Z",
+		UpdatedAt:    "2015-12-09T00:20:56Z"}
 
 	if !reflect.DeepEqual(domain, wantSingle) {
 		t.Fatalf("Domains.Get() returned %+v, want %+v", domain, wantSingle)
