@@ -8,12 +8,13 @@ import (
 	"testing"
 )
 
-func TestDomains_initiateDomainPushPath(t *testing.T) {
-	actual := initiateDomainPushPath("1", "example.com")
-	expected := "/1/domains/example.com/pushes"
+func TestDomainPushPath(t *testing.T) {
+	if want, got := "/1010/pushes", domainPushPath("1010", 0); want != got {
+		t.Errorf("domainPushPath(%v) = %v, want %v", 0, got, want)
+	}
 
-	if actual != expected {
-		t.Errorf("initiateDomainPushPathdomainPath(\"1\", \"example.com\", 0): actual %s, expected %s", actual, expected)
+	if want, got := "/1010/pushes/1", domainPushPath("1010", 1); want != got {
+		t.Errorf("domainPushPath(%v) = %v, want %v", 1, got, want)
 	}
 }
 

@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-func TestTemplates_templatePath(t *testing.T) {
+func TestTemplatePath(t *testing.T) {
 	if want, got := "/1010/templates", templatePath("1010", ""); want != got {
-		t.Errorf("templatePath(%v,  ) = %v, want %v", "1010", got, want)
+		t.Errorf("templatePath(%v) = %v, want %v", "", got, want)
 	}
 
 	if want, got := "/1010/templates/1", templatePath("1010", "1"); want != got {
-		t.Errorf("templatePath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("templatePath(%v) = %v, want %v", "1", got, want)
 	}
 }
 

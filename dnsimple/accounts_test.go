@@ -7,12 +7,6 @@ import (
 	"testing"
 )
 
-func TestAccounts_accountPath(t *testing.T) {
-	if want, got := "/accounts", accountsPath(); want != got {
-		t.Errorf("accountsPath() = %v, want %v", got, want)
-	}
-}
-
 func TestAccountsService_List(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

@@ -20,6 +20,14 @@ type ZoneRecord struct {
 	UpdatedAt    string   `json:"updated_at,omitempty"`
 }
 
+func zoneRecordPath(accountID string, zoneID string, recordID int) (path string) {
+	path = fmt.Sprintf("/%v/zones/%v/records", accountID, zoneID)
+	if recordID != 0 {
+		path += fmt.Sprintf("/%d", recordID)
+	}
+	return
+}
+
 // ZoneRecordListOptions specifies the optional parameters you can provide
 // to customize the ZonesService.ListZoneRecords method.
 type ZoneRecordListOptions struct {
@@ -46,16 +54,6 @@ type ZoneRecordResponse struct {
 type ZoneRecordsResponse struct {
 	Response
 	Data []ZoneRecord `json:"data"`
-}
-
-func zoneRecordPath(accountID string, zoneID string, recordID int) string {
-	path := fmt.Sprintf("/%v/zones/%v/records", accountID, zoneID)
-
-	if recordID != 0 {
-		path += fmt.Sprintf("/%d", recordID)
-	}
-
-	return path
 }
 
 // ListRecords lists the zone records for a zone.

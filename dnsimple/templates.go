@@ -23,12 +23,12 @@ type Template struct {
 	UpdatedAt   string `json:"updated_at,omitempty"`
 }
 
-func templatePath(accountID string, templateIdentifier string) string {
+func templatePath(accountID string, templateIdentifier string) (path string) {
+	path = fmt.Sprintf("/%v/templates", accountID)
 	if templateIdentifier != "" {
-		return fmt.Sprintf("/%v/templates/%v", accountID, templateIdentifier)
+		path += fmt.Sprintf("/%v", templateIdentifier)
 	}
-
-	return fmt.Sprintf("/%v/templates", accountID)
+	return
 }
 
 // TemplateResponse represents a response from an API method that returns a Template struct.

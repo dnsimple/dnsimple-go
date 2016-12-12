@@ -8,6 +8,16 @@ import (
 	"testing"
 )
 
+func TestCollaboratorPath(t *testing.T) {
+	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", ""); want != got {
+		t.Errorf("collaboratorPath(%v) = %v, want %v", "", got, want)
+	}
+
+	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", "2"); want != got {
+		t.Errorf("collaboratorPath(%v) = %v, want %v", "2", got, want)
+	}
+}
+
 func TestDomainsService_ListCollaborators(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

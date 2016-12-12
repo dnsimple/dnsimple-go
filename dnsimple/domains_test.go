@@ -8,17 +8,13 @@ import (
 	"testing"
 )
 
-func TestDomains_domainPath(t *testing.T) {
+func TestDomainPath(t *testing.T) {
 	if want, got := "/1010/domains", domainPath("1010", ""); want != got {
-		t.Errorf("domainPath(%v) = %v, want %v", "1010", got, want)
-	}
-
-	if want, got := "/1010/domains/1", domainPath("1010", "1"); want != got {
-		t.Errorf("domainPath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("domainPath(%v) = %v, want %v", "", got, want)
 	}
 
 	if want, got := "/1010/domains/example.com", domainPath("1010", "example.com"); want != got {
-		t.Errorf("domainPath(%v, 1) = %v, want %v", "1010", got, want)
+		t.Errorf("domainPath(%v) = %v, want %v", "example.com", got, want)
 	}
 }
 

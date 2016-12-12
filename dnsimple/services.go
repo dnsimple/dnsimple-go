@@ -36,11 +36,12 @@ type Service struct {
 	Settings         []ServiceSetting `json:"settings,omitempty"`
 }
 
-func servicePath(serviceID string) string {
+func servicePath(serviceID string) (path string) {
+	path = "/services"
 	if serviceID != "" {
-		return fmt.Sprintf("/services/%v", serviceID)
+		path += fmt.Sprintf("/%v", serviceID)
 	}
-	return fmt.Sprintf("/services")
+	return
 }
 
 // ServiceResponse represents a response from an API method that returns a Service struct.
