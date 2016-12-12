@@ -32,8 +32,8 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 		DomainID:  2,
 		Enabled:   true,
 		ExpiresOn: "2017-02-13",
-		CreatedAt: "2016-02-13T14:34:50.135Z",
-		UpdatedAt: "2016-02-13T14:34:52.571Z"}
+		CreatedAt: "2016-02-13T14:34:50Z",
+		UpdatedAt: "2016-02-13T14:34:52Z"}
 
 	if !reflect.DeepEqual(privacy, wantSingle) {
 		t.Fatalf("Registrar.GetWhoisPrivacy() returned %+v, want %+v", privacy, wantSingle)

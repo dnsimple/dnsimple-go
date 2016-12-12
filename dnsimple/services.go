@@ -25,8 +25,8 @@ type ServiceSetting struct {
 // Service represents a Service in DNSimple.
 type Service struct {
 	ID               int              `json:"id,omitempty"`
+	SID              string           `json:"sid,omitempty"`
 	Name             string           `json:"name,omitempty"`
-	ShortName        string           `json:"short_name,omitempty"`
 	Description      string           `json:"description,omitempty"`
 	SetupDescription string           `json:"setup_description,omitempty"`
 	RequiresSetup    bool             `json:"requires_setup,omitempty"`

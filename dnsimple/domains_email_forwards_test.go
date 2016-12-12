@@ -124,8 +124,8 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		DomainID:  228963,
 		From:      "jim@a-domain.com",
 		To:        "jim@another.com",
-		CreatedAt: "2016-02-04T14:26:50.282Z",
-		UpdatedAt: "2016-02-04T14:26:50.282Z"}
+		CreatedAt: "2016-02-04T14:26:50Z",
+		UpdatedAt: "2016-02-04T14:26:50Z"}
 
 	if !reflect.DeepEqual(forward, wantSingle) {
 		t.Fatalf("Domains.GetEmailForward() returned %+v, want %+v", forward, wantSingle)

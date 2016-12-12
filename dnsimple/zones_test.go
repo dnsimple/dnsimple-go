@@ -96,8 +96,8 @@ func TestZonesService_GetZone(t *testing.T) {
 		AccountID: 1010,
 		Name:      "example-alpha.com",
 		Reverse:   false,
-		CreatedAt: "2015-04-23T07:40:03.045Z",
-		UpdatedAt: "2015-04-23T07:40:03.051Z"}
+		CreatedAt: "2015-04-23T07:40:03Z",
+		UpdatedAt: "2015-04-23T07:40:03Z"}
 
 	if !reflect.DeepEqual(zone, wantSingle) {
 		t.Fatalf("Zones.GetZone() returned %+v, want %+v", zone, wantSingle)

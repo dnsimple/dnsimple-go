@@ -102,14 +102,14 @@ func TestServicesService_Get(t *testing.T) {
 	service := serviceResponse.Data
 	wantSingle := &Service{
 		ID:               1,
+		SID:              "service1",
 		Name:             "Service 1",
-		ShortName:        "service1",
 		Description:      "First service example.",
 		SetupDescription: "",
 		RequiresSetup:    true,
 		DefaultSubdomain: "",
-		CreatedAt:        "2014-02-14T19:15:19.953Z",
-		UpdatedAt:        "2016-03-04T09:23:27.655Z",
+		CreatedAt:        "2014-02-14T19:15:19Z",
+		UpdatedAt:        "2016-03-04T09:23:27Z",
 		Settings: []ServiceSetting{
 			{
 				Name:        "username",

@@ -6,17 +6,18 @@ import (
 
 // ZoneRecord represents a DNS record in DNSimple.
 type ZoneRecord struct {
-	ID           int    `json:"id,omitempty"`
-	ZoneID       string `json:"zone_id,omitempty"`
-	ParentID     int    `json:"parent_id,omitempty"`
-	Type         string `json:"type,omitempty"`
-	Name         string `json:"name"`
-	Content      string `json:"content,omitempty"`
-	TTL          int    `json:"ttl,omitempty"`
-	Priority     int    `json:"priority,omitempty"`
-	SystemRecord bool   `json:"system_record,omitempty"`
-	CreatedAt    string `json:"created_at,omitempty"`
-	UpdatedAt    string `json:"updated_at,omitempty"`
+	ID           int      `json:"id,omitempty"`
+	ZoneID       string   `json:"zone_id,omitempty"`
+	ParentID     int      `json:"parent_id,omitempty"`
+	Type         string   `json:"type,omitempty"`
+	Name         string   `json:"name"`
+	Content      string   `json:"content,omitempty"`
+	TTL          int      `json:"ttl,omitempty"`
+	Priority     int      `json:"priority,omitempty"`
+	SystemRecord bool     `json:"system_record,omitempty"`
+	Regions      []string `json:"regions,omitempty"`
+	CreatedAt    string   `json:"created_at,omitempty"`
+	UpdatedAt    string   `json:"updated_at,omitempty"`
 }
 
 // ZoneRecordListOptions specifies the optional parameters you can provide
@@ -116,8 +117,8 @@ func (s *ZonesService) GetRecord(accountID string, zoneID string, recordID int) 
 func (s *ZonesService) UpdateRecord(accountID string, zoneID string, recordID int, recordAttributes ZoneRecord) (*ZoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneID, recordID))
 	recordResponse := &ZoneRecordResponse{}
-
 	resp, err := s.client.patch(path, recordAttributes, recordResponse)
+
 	if err != nil {
 		return nil, err
 	}

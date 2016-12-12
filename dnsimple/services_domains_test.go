@@ -50,7 +50,7 @@ func TestServicesService_AppliedServices(t *testing.T) {
 	if want, got := 1, services[0].ID; want != got {
 		t.Fatalf("DomainServices.AppliedServices() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "wordpress", services[0].ShortName; want != got {
+	if want, got := "wordpress", services[0].SID; want != got {
 		t.Fatalf("DomainServices.AppliedServices() returned ShortName expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -60,7 +60,7 @@ func TestServicesService_ApplyService(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/services/service1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/applyService/created.http")
+		httpResponse := httpResponseFixture(t, "/applyService/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
