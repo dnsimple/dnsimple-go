@@ -109,17 +109,17 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	}
 
 	record := recordResponse.Data
-	if want, got := 5, record.ID; want != got {
+	if want, got := 1, record.ID; want != got {
 		t.Fatalf("Zones.CreateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "", record.Name; want != got {
+	if want, got := "www", record.Name; want != got {
 		t.Fatalf("Zones.CreateRecord() returned Name expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "MX", record.Type; want != got {
+	if want, got := "A", record.Type; want != got {
 		t.Fatalf("Zones.CreateRecord() returned Type expected to be `%v`, got `%v`", want, got)
 	}
-	if !reflect.DeepEqual([]string{"SV1", "IAD"}, record.Regions) {
-		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", record.Regions, []string{"SV1", "IAD"})
+	if !reflect.DeepEqual([]string{"global"}, record.Regions) {
+		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", record.Regions, []string{"global"})
 	}
 }
 
