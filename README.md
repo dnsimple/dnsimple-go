@@ -6,13 +6,6 @@ A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 [![GoDoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple)
 
 
-## :warning: Beta Warning
-
-This project targets the development of the API client for the [DNSimple API v2](https://developer.dnsimple.com/v2/). If you are looking for the initial version of the client for [DNSimple API v1](https://developer.dnsimple.com/v1/) then use the [`weppos/dnsimple-go`](https://github.com/weppos/dnsimple-go) project.
-
-This library is currently in beta version, the methods and the implementation should be considered a work-in-progress. Changes in the method naming, method signatures, public or internal APIs may happen during the beta period.
-
-
 ## Installation
 
 ```
@@ -51,9 +44,9 @@ func main() {
     fmt.Println(whoamiResponse.Data.Account)
     fmt.Println(whoamiResponse.Data.User)
 
-  	// either assign the account ID or fetch it from the response
-  	// if you are authenticated with an account token
-  	accountID := strconv.Itoa(whoamiResponse.Data.Account.ID)
+    // either assign the account ID or fetch it from the response
+    // if you are authenticated with an account token
+    accountID := strconv.Itoa(whoamiResponse.Data.Account.ID)
 
     // get the list of domains
     domainsResponse, err := client.Domains.ListDomains(accountID, nil)
