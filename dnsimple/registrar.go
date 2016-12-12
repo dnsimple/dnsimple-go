@@ -28,7 +28,7 @@ type DomainCheckResponse struct {
 // CheckDomain checks a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#check
-func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*DomainCheckResponse, error) {
+func (s *RegistrarService) CheckDomain(accountID, domainName string) (*DomainCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
 	checkResponse := &DomainCheckResponse{}
 
@@ -39,6 +39,37 @@ func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*Do
 
 	checkResponse.HttpResponse = resp
 	return checkResponse, nil
+}
+
+// DomainPremiumPrice represents the premium price for a premium domain.
+type DomainPremiumPrice struct {
+	// The domain premium price
+	PremiumPrice string `json:"premium_price"`
+	// The registrar action.
+	// Possible values are registration|transfer|renewal
+	Action string `json:"action"`
+}
+
+// DomainPremiumPriceResponse represents a response from a domain premium price request.
+type DomainPremiumPriceResponse struct {
+	Response
+	Data *DomainPremiumPrice `json:"data"`
+}
+
+// Gets the premium price for a domain.
+//
+// See https://developer.dnsimple.com/v2/registrar/#premium-price
+func (s *RegistrarService) GetDomainPremiumPrice(accountID, domainName string) (*DomainPremiumPriceResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/premium_price", accountID, domainName))
+	priceResponse := &DomainPremiumPriceResponse{}
+
+	resp, err := s.client.get(path, priceResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	priceResponse.HttpResponse = resp
+	return priceResponse, nil
 }
 
 // DomainRegisterRequest represents the attributes you can pass to a register API request.

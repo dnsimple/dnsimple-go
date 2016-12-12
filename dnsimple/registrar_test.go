@@ -31,6 +31,31 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 	}
 }
 
+func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/premium_price", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getDomainPremiumPrice/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	priceResponse, err := client.Registrar.GetDomainPremiumPrice("1010", "example.com")
+	if err != nil {
+		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
+	}
+
+	price := priceResponse.Data
+	if want, got := "109.00", price.PremiumPrice; want != got {
+		t.Fatalf("Registrar.GetDomainPremiumPrice() returned Domain expected to be `%v`, got `%v`", want, got)
+	}
+}
+
 func TestRegistrarService_RegisterDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
