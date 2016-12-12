@@ -48,7 +48,7 @@ type DomainRegisterRequest struct {
 	RegistrantID int `json:"registrant_id"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
 	// Default to false.
-	EnableWhoisPrivacy bool `json:"private_whois,omitempty"`
+	EnableWhoisPrivacy bool `json:"whois_privacy,omitempty"`
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
@@ -62,7 +62,7 @@ type DomainRegistration struct {
 	Period       int    `json:"period"`
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
-	PrivateWhois bool   `json:"private_whois"`
+	WhoisPrivacy bool   `json:"whois_privacy"`
 	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
@@ -102,7 +102,7 @@ type DomainTransferRequest struct {
 	AuthCode string `json:"auth_code,omitempty"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
 	// Default to false.
-	EnableWhoisPrivacy bool `json:"private_whois,omitempty"`
+	EnableWhoisPrivacy bool `json:"whois_privacy,omitempty"`
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
@@ -115,7 +115,7 @@ type DomainTransfer struct {
 	RegistrantID int    `json:"registrant_id"`
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
-	PrivateWhois bool   `json:"private_whois"`
+	WhoisPrivacy bool   `json:"whois_privacy"`
 	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
@@ -180,7 +180,6 @@ type DomainRenewal struct {
 	DomainID     int    `json:"domain_id"`
 	Period       int    `json:"period"`
 	State        string `json:"state"`
-	PrivateWhois bool   `json:"private_whois"`
 	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
