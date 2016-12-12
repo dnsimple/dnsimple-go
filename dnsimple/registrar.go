@@ -56,12 +56,31 @@ type DomainPremiumPriceResponse struct {
 	Data *DomainPremiumPrice `json:"data"`
 }
 
+// DomainPremiumPriceOptions specifies the optional parameters you can provide
+// to customize the RegistrarService.GetDomainPremiumPrice method.
+type DomainPremiumPriceOptions struct {
+	Action string `url:"action,omitempty"`
+}
+
 // Gets the premium price for a domain.
 //
+// You must specify an action to get the price for. Valid actions are:
+// - registration
+// - transfer
+// - renewal
+//
 // See https://developer.dnsimple.com/v2/registrar/#premium-price
-func (s *RegistrarService) GetDomainPremiumPrice(accountID, domainName string) (*DomainPremiumPriceResponse, error) {
+func (s *RegistrarService) GetDomainPremiumPrice(accountID, domainName string, options *DomainPremiumPriceOptions) (*DomainPremiumPriceResponse, error) {
+	var err error
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/premium_price", accountID, domainName))
 	priceResponse := &DomainPremiumPriceResponse{}
+
+	if options != nil {
+		path, err = addURLQueryOptions(path, options)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	resp, err := s.client.get(path, priceResponse)
 	if err != nil {
