@@ -52,12 +52,6 @@ type DomainsResponse struct {
 	Data []Domain `json:"data"`
 }
 
-// domainRequest represents a generic wrapper for a domain request,
-// when domainWrapper cannot be used because of type constraint on Domain.
-type domainRequest struct {
-	Domain interface{} `json:"domain"`
-}
-
 func domainPath(accountID string, domainIdentifier string) (path string) {
 	path = fmt.Sprintf("/%v/domains", accountID)
 	if domainIdentifier != "" {
