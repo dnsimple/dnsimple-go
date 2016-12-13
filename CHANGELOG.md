@@ -1,25 +1,28 @@
 # CHANGELOG
 
-#### master
+#### Release 0.14.0
 
-- NEW: Added support for Collaborators methods (GH-48)
-- NEW: Added region support to `ZoneRecord` (GH-47)
-- NEW: Added support for Domains Pushes methods (GH-42)
+- NEW: Added support for Collaborators API (GH-48)
+- NEW: Added support for ZoneRecord regions (GH-47)
+- NEW: Added support for Domain Pushes API (GH-42)
+- NEW: Added support for domains premium prices API (GH-53)
 
 - CHANGED: Renamed `DomainTransferRequest.AuthInfo` to `AuthCode` (GH-46)
-- CHANGED: Updated registration, transfer, renewal response payload (dnsimple/dnsimple-developer#111, dnsimple/dnsimple-go#52).
+- CHANGED: Updated registration, transfer, renewal response payload (dnsimple/dnsimple-developer#111, GH-52).
+- CHANGED: Normalize unique string identifiers to SID (dnsimple/dnsimple-developer#113)
+- CHANGED: Update whois privacy setting for domain (dnsimple/dnsimple-developer#120)
 
 
 #### Release 0.13.0
 
-- NEW: Added support for Accounts methods (GH-29)
-- NEW: Added support for Services methods (GH-30, GH-35)
-- NEW: Added support for Certificates methods (GH-31)
-- NEW: Added support for Vanity name servers methods (GH-34)
-- NEW: Added support for delegation methods (GH-32)
-- NEW: Added support for Templates methods (GH-36, GH-39)
-- NEW: Added support for Template Records methods (GH-37)
-- NEW: Added support for Zone files methods (GH-38)
+- NEW: Added support for Accounts API (GH-29)
+- NEW: Added support for Services API (GH-30, GH-35)
+- NEW: Added support for Certificates API (GH-31)
+- NEW: Added support for Vanity name servers API (GH-34)
+- NEW: Added support for delegation API (GH-32)
+- NEW: Added support for Templates API (GH-36, GH-39)
+- NEW: Added support for Template Records API (GH-37)
+- NEW: Added support for Zone files API (GH-38)
 
 
 #### Release 0.12.0
