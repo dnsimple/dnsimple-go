@@ -72,6 +72,20 @@ func main() {
 For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple).
 
 
+## Sandbox Environment
+
+We highly recommend testing against our [sandbox environment](https://developer.dnsimple.com/sandbox/) before using our production environment. This will allow you to avoid real purchases, live charges on your credit card, and reduce the chance of your running up against rate limits.
+
+The client supports both the production and sandbox environment. To switch to sandbox pass the sandbox API host using the `base_url` option when you construct the client:
+
+```go
+client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
+client.BaseURL = "https://api.sandbox.dnsimple.com"
+```
+
+You will need to ensure that you are using an access token created in the sandbox environment. Production tokens will *not* work in the sandbox environment.
+
+
 ## Contributing
 
 For instructions about contributing and testing, visit the [CONTRIBUTING](CONTRIBUTING.md) file.
