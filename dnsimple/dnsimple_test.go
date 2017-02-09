@@ -134,6 +134,12 @@ func TestClient_NewRequest(t *testing.T) {
 	if ua != defaultUserAgent {
 		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, defaultUserAgent)
 	}
+
+	// test that requests without a body won't send the Content-Type header
+	ct := req.Header.Get("Content-Type")
+	if ct != "" {
+		t.Errorf("NewRequest() Content-Type = %v, want %v", ct, "")
+	}
 }
 
 func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
@@ -160,8 +166,23 @@ func TestClient_NewRequest_WithBody(t *testing.T) {
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, _ := "foo", "https://go.example.com/v2/foo"
+	body := Webhook{ID: 1, URL: "https://dnsimple.test/webhook"}
+	req, _ := c.NewRequest("POST", inURL, body)
+
+	// test that requests with a body will send the Content-Type header
+	ct := req.Header.Get("Content-Type")
+	if ct != defaultContentType {
+		t.Errorf("NewRequest() Content-Type = %w, want %v", ct, defaultContentType)
+	}
+}
+
+func TestClient_NewRequest_WithBadBody(t *testing.T) {
+	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c.BaseURL = "https://go.example.com/"
+
+	inURL, _ := "foo", "https://go.example.com/v2/foo"
 	badObject := badObject{}
-	_, err := c.NewRequest("GET", inURL, &badObject)
+	_, err := c.NewRequest("POST", inURL, &badObject)
 
 	if err == nil {
 		t.Errorf("NewRequest with body expected error with blank string")
