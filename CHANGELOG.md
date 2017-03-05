@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### master
+
+- CHANGED: Changed response types to not be exported (GH-54)
+
 #### Release 0.14.0
 
 - NEW: Added support for Collaborators API (GH-48)
