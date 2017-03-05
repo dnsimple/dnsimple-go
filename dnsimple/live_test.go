@@ -99,8 +99,8 @@ func TestLive_Webhooks(t *testing.T) {
 
 	var err error
 	var webhook *Webhook
-	var webhookResponse *WebhookResponse
-	var webhooksResponse *WebhooksResponse
+	var webhookResponse *webhookResponse
+	var webhooksResponse *webhooksResponse
 
 	whoami, err := Whoami(dnsimpleClient)
 	if err != nil {
