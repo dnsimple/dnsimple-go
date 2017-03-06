@@ -70,3 +70,36 @@ func (s *DomainsService) CreateDelegationSignerRecord(accountID string, domainId
 	dsRecordResponse.HttpResponse = resp
 	return dsRecordResponse, nil
 }
+
+// GetDelegationSignerRecord fetches a delegation signer record.
+//
+// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-get
+func (s *DomainsService) GetDelegationSignerRecord(accountID string, domainIdentifier string, dsRecordID int) (*delegationSignerRecordResponse, error) {
+	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
+	dsRecordResponse := &delegationSignerRecordResponse{}
+
+	resp, err := s.client.get(path, dsRecordResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	dsRecordResponse.HttpResponse = resp
+	return dsRecordResponse, nil
+}
+
+// DeleteDelegationSignerRecord PERMANENTLY deletes a delegation signer record
+// from the domain.
+//
+// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-delete
+func (s *DomainsService) DeleteDelegationSignerRecord(accountID string, domainIdentifier string, dsRecordID int) (*delegationSignerRecordResponse, error) {
+	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
+	dsRecordResponse := &delegationSignerRecordResponse{}
+
+	resp, err := s.client.delete(path, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	dsRecordResponse.HttpResponse = resp
+	return dsRecordResponse, nil
+}
