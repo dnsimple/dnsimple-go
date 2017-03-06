@@ -72,3 +72,36 @@ func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
 		t.Fatalf("Domains.ListDelegationSignerRecords() returned error: %v", err)
 	}
 }
+
+func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/example.com/ds_records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/createDelegationSignerRecord/created.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"algorithm": "13", "digest": "ABC123", "digest_type": "2", "keytag": "1234"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	dsRecordAttributes := DelegationSignerRecord{Algorithm: "13", Digest: "ABC123", DigestType: "2", Keytag: "1234"}
+
+	dsRecordResponse, err := client.Domains.CreateDelegationSignerRecord("1010", "example.com", dsRecordAttributes)
+	if err != nil {
+		t.Fatalf("Domains.CreateDelegationSignerRecord() returned error: %v", err)
+	}
+
+	dsRecord := dsRecordResponse.Data
+	if want, got := 2, dsRecord.ID; want != got {
+		t.Fatalf("Domains.CreateDelegationSignerRecord() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "13", dsRecord.Algorithm; want != got {
+		t.Errorf("Domains.CreateDelegationSignerRecord() returned Algorithm expected to be `%v`, got %v", want, got)
+	}
+}

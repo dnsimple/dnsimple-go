@@ -54,3 +54,19 @@ func (s *DomainsService) ListDelegationSignerRecords(accountID string, domainIde
 	dsRecordsResponse.HttpResponse = resp
 	return dsRecordsResponse, nil
 }
+
+// CreateDelegationSignerRecord creates a new delegation signer record.
+//
+// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-create
+func (s *DomainsService) CreateDelegationSignerRecord(accountID string, domainIdentifier string, dsRecordAttributes DelegationSignerRecord) (*delegationSignerRecordResponse, error) {
+	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, 0))
+	dsRecordResponse := &delegationSignerRecordResponse{}
+
+	resp, err := s.client.post(path, dsRecordAttributes, dsRecordResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	dsRecordResponse.HttpResponse = resp
+	return dsRecordResponse, nil
+}
