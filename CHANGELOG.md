@@ -2,6 +2,8 @@
 
 #### master
 
+- NEW: Added support for the DNSSEC Beta (GH-58)
+
 - CHANGED: Changed response types to not be exported (GH-54)
 
 #### Release 0.14.0
