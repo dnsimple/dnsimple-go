@@ -128,7 +128,7 @@ type DomainRegisterRequest struct {
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
 func (s *RegistrarService) RegisterDomain(accountID string, domainName string, request *DomainRegisterRequest) (*domainRegistrationResponse, error) {
-	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registration", accountID, domainName))
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registrations", accountID, domainName))
 	registrationResponse := &domainRegistrationResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID

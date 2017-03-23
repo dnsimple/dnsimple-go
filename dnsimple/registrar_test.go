@@ -85,7 +85,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registration", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registrations", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/registerDomain/success.http")
 
 		testMethod(t, r, "POST")
