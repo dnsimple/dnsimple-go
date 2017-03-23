@@ -205,7 +205,7 @@ type domainTransferOutResponse struct {
 //
 // See https://developer.dnsimple.com/v2/registrar/#transfer-out
 func (s *RegistrarService) TransferDomainOut(accountID string, domainName string) (*domainTransferOutResponse, error) {
-	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfer_out", accountID, domainName))
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/authorize_transfer_out", accountID, domainName))
 	transferResponse := &domainTransferOutResponse{}
 
 	resp, err := s.client.post(path, nil, nil)
