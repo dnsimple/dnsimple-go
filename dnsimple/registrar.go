@@ -245,7 +245,7 @@ type DomainRenewRequest struct {
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
 func (s *RegistrarService) RenewDomain(accountID string, domainName string, request *DomainRenewRequest) (*domainRenewalResponse, error) {
-	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewal", accountID, domainName))
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewals", accountID, domainName))
 	renewalResponse := &domainRenewalResponse{}
 
 	resp, err := s.client.post(path, request, renewalResponse)

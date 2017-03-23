@@ -171,7 +171,7 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/renewal", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/renewals", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/renewDomain/success.http")
 
 		testMethod(t, r, "POST")
