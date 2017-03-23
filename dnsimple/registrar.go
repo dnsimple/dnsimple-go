@@ -181,7 +181,7 @@ type DomainTransferRequest struct {
 //
 // See https://developer.dnsimple.com/v2/registrar/#transfer
 func (s *RegistrarService) TransferDomain(accountID string, domainName string, request *DomainTransferRequest) (*domainTransferResponse, error) {
-	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfer", accountID, domainName))
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers", accountID, domainName))
 	transferResponse := &domainTransferResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
