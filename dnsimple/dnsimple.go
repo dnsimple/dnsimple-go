@@ -32,6 +32,10 @@ const (
 	// when no other user agent is set.
 	defaultUserAgent = "dnsimple-go/" + Version
 
+	// defaultContentType represents the default HTTP header Content-Type to
+	// send for requests with a body
+	defaultContentType = "application/json"
+
 	apiVersion = "v2"
 )
 
@@ -123,7 +127,10 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json")
+	if req.ContentLength > 0 {
+		req.Header.Set("Content-Type", defaultContentType)
+	}
+
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", formatUserAgent(c.UserAgent))
 	for key, value := range c.Credentials.Headers() {
