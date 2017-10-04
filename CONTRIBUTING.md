@@ -1,5 +1,22 @@
 # Contributing to DNSimple/Go
 
+The main `dnsimple` package is defined in the `/dnsimple` subfolder of the `dnsimple/dnsimple-go` repository. Therefore, please note that you will need to move into the subfolder to run any `go` command that assumes the current directory to be the package root.
+
+For example, to get the dependencies you will have to run:
+
+    # from $GOPATH/src/github.com/dnsimple/dnsimple-go directory
+    $ cd dnsimple
+    $ go get
+
+Likewise, when you include this library as dependency, you will need to use
+
+    import "github.com/dnsimple/dnsimple-go/dnsimple"
+
+and not
+
+    import "github.com/dnsimple/dnsimple-go"
+
+
 ## Getting started
 
 Clone the repository [in your workspace](https://golang.org/doc/code.html#Organization) and move into it:
