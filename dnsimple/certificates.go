@@ -15,16 +15,19 @@ type CertificatesService struct {
 
 // Certificate represents a Certificate in DNSimple.
 type Certificate struct {
-	ID                  int    `json:"id,omitempty"`
-	DomainID            int    `json:"domain_id,omitempty"`
-	CommonName          string `json:"common_name,omitempty"`
-	Years               int    `json:"years,omitempty"`
-	State               string `json:"state,omitempty"`
-	AuthorityIdentifier string `json:"authority_identifier,omitempty"`
-	CreatedAt           string `json:"created_at,omitempty"`
-	UpdatedAt           string `json:"updated_at,omitempty"`
-	ExpiresOn           string `json:"expires_on,omitempty"`
-	CertificateRequest  string `json:"csr,omitempty"`
+	ID                  int      `json:"id,omitempty"`
+	DomainID            int      `json:"domain_id,omitempty"`
+	Name                string   `json:"name,omitempty"`
+	CommonName          string   `json:"common_name,omitempty"`
+	AlternateNames      []string `json:"alternate_names,omitempty"`
+	Years               int      `json:"years,omitempty"`
+	State               string   `json:"state,omitempty"`
+	AuthorityIdentifier string   `json:"authority_identifier,omitempty"`
+	AutoRenew           bool     `json:"auto_renew"`
+	CreatedAt           string   `json:"created_at,omitempty"`
+	UpdatedAt           string   `json:"updated_at,omitempty"`
+	ExpiresOn           string   `json:"expires_on,omitempty"`
+	CertificateRequest  string   `json:"csr,omitempty"`
 }
 
 // CertificateBundle represents a container for all the PEM-encoded X509 certificate entities,
@@ -37,8 +40,23 @@ type CertificateBundle struct {
 	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
+type CertificateAttributes struct {
+	ContactID      string   `json:"contact_id,omitempty"`
+	Name           string   `json:"name,omitempty"`
+	AutoRenew      bool     `json:"auto_renew,omitempty"`
+	AlternateNames []string `json:"alternate_names,omitempty"`
+}
+
 func certificatePath(accountID, domainIdentifier, certificateID string) (path string) {
 	path = fmt.Sprintf("%v/certificates", domainPath(accountID, domainIdentifier))
+	if certificateID != "" {
+		path += fmt.Sprintf("/%v", certificateID)
+	}
+	return
+}
+
+func letsencryptCertificatePath(accountID, domainIdentifier, certificateID string) (path string) {
+	path = fmt.Sprintf("%v/certificates/letsencrypt", domainPath(accountID, domainIdentifier))
 	if certificateID != "" {
 		path += fmt.Sprintf("/%v", certificateID)
 	}
@@ -131,4 +149,17 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 
 	certificateBundleResponse.HttpResponse = resp
 	return certificateBundleResponse, nil
+}
+
+func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier string, certificateAttributes CertificateAttributes) (*certificateResponse, error) {
+	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, ""))
+	certificateResponse := &certificateResponse{}
+
+	resp, err := s.client.post(path, certificateAttributes, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
 }
