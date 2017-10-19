@@ -40,7 +40,8 @@ type CertificateBundle struct {
 	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
-type CertificateAttributes struct {
+// LetsencryptCertificateAttributes is a set of attributes to purchase a Let's Encrypt certificate.
+type LetsencryptCertificateAttributes struct {
 	ContactID      string   `json:"contact_id,omitempty"`
 	Name           string   `json:"name,omitempty"`
 	AutoRenew      bool     `json:"auto_renew,omitempty"`
@@ -151,7 +152,7 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 	return certificateBundleResponse, nil
 }
 
-func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier string, certificateAttributes CertificateAttributes) (*certificateResponse, error) {
+func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, ""))
 	certificateResponse := &certificateResponse{}
 

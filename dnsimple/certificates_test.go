@@ -192,7 +192,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := CertificateAttributes{ContactID: "100"}
+	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
 
 	certificateResponse, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
 	if err != nil {
@@ -251,7 +251,7 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := CertificateAttributes{ContactID: "100", Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
+	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100", Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
 
 	_, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
 	if err != nil {
@@ -276,7 +276,7 @@ func TestCertificates_LetsencryptPurchaseWithoutFeature(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := CertificateAttributes{ContactID: "100"}
+	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
 
 	_, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
 	if err == nil {
