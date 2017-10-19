@@ -163,3 +163,16 @@ func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier st
 	certificateResponse.HttpResponse = resp
 	return certificateResponse, nil
 }
+
+func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
+	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/issue")
+	certificateResponse := &certificateResponse{}
+
+	resp, err := s.client.post(path, nil, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
+}
