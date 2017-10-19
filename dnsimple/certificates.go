@@ -40,6 +40,16 @@ type CertificateBundle struct {
 	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
+// CertificateRenewal represents a Certificate Renewal in DNSimple.
+type CertificateRenewal struct {
+	ID               int    `json:"id,omitempty"`
+	OldCertificateID int    `json:"old_certificate_id,omitempty"`
+	NewCertificateID int    `json:"new_certificate_id,omitempty"`
+	State            string `json:"state,omitempty"`
+	CreatedAt        string `json:"created_at,omitempty"`
+	UpdatedAt        string `json:"updated_at,omitempty"`
+}
+
 // LetsencryptCertificateAttributes is a set of attributes to purchase a Let's Encrypt certificate.
 type LetsencryptCertificateAttributes struct {
 	ContactID      string   `json:"contact_id,omitempty"`
@@ -80,6 +90,12 @@ type certificateBundleResponse struct {
 type certificatesResponse struct {
 	Response
 	Data []Certificate `json:"data"`
+}
+
+// certificateRenewalResponse represents a response from an API method that returns a CertificateRenewal struct.
+type certificateRenewalResponse struct {
+	Response
+	Data *CertificateRenewal `json:"data"`
 }
 
 // ListCertificates list the certificates for a domain.
@@ -182,4 +198,17 @@ func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier strin
 
 	certificateResponse.HttpResponse = resp
 	return certificateResponse, nil
+}
+
+func (s *CertificatesService) LetsencryptPurchaseRenewal(accountID, domainIdentifier string, certificateID int, certificateAttributes LetsencryptCertificateAttributes) (*certificateRenewalResponse, error) {
+	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/renewals")
+	certificateRenewalResponse := &certificateRenewalResponse{}
+
+	resp, err := s.client.post(path, certificateAttributes, certificateRenewalResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateRenewalResponse.HttpResponse = resp
+	return certificateRenewalResponse, nil
 }
