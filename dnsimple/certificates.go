@@ -200,6 +200,9 @@ func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier strin
 	return certificateResponse, nil
 }
 
+// LetsencryptPurchaseRenewal purchases a Let's Encrypt certificate renewal.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-purchase-renewal
 func (s *CertificatesService) LetsencryptPurchaseRenewal(accountID, domainIdentifier string, certificateID int, certificateAttributes LetsencryptCertificateAttributes) (*certificateRenewalResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/renewals")
 	certificateRenewalResponse := &certificateRenewalResponse{}
@@ -211,4 +214,20 @@ func (s *CertificatesService) LetsencryptPurchaseRenewal(accountID, domainIdenti
 
 	certificateRenewalResponse.HttpResponse = resp
 	return certificateRenewalResponse, nil
+}
+
+// LetsencryptIssueRenewal issues a Let's Encrypt certificate renewal.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-issue-renewal
+func (s *CertificatesService) LetsencryptIssueRenewal(accountID, domainIdentifier string, certificateID, certificateRenewalID int) (*certificateResponse, error) {
+	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + fmt.Sprintf("/renewals/%s/issue", strconv.Itoa(certificateRenewalID)))
+	certificateResponse := &certificateResponse{}
+
+	resp, err := s.client.post(path, nil, certificateResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateResponse.HttpResponse = resp
+	return certificateResponse, nil
 }
