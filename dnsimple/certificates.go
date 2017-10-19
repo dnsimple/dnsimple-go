@@ -152,6 +152,9 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 	return certificateBundleResponse, nil
 }
 
+// LetsencryptPurchase purchases a Let's Encrypt certificate.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-purchase
 func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, ""))
 	certificateResponse := &certificateResponse{}
@@ -165,6 +168,9 @@ func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier st
 	return certificateResponse, nil
 }
 
+// LetsencryptIssue issues a Let's Encrypt certificate.
+//
+// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-issue
 func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/issue")
 	certificateResponse := &certificateResponse{}
