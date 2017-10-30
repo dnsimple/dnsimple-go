@@ -135,3 +135,94 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 		t.Fatalf("Zones.GetZoneFile() returned %+v, want %+v", zoneFile, wantSingle)
 	}
 }
+
+func TestZonesService_GetZoneDistribution(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getZoneDistribution/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	if err != nil {
+		t.Fatalf("Zones.GetZoneDistribution() returned error: %v", err)
+	}
+
+	zone := zoneDistributionResponse.Data
+	wantSingle := &ZoneDistribution{
+		Distributed: true,
+	}
+
+	if !reflect.DeepEqual(zone, wantSingle) {
+		t.Fatalf("Zones.GetZoneDistribution() returned %+v, want %+v", zone, wantSingle)
+	}
+}
+
+func TestZonesService_GetZoneDistributionFailure(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getZoneDistribution/failure.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	if err != nil {
+		t.Fatalf("Zones.GetZoneDistribution() returned error: %v", err)
+	}
+
+	zone := zoneDistributionResponse.Data
+	wantSingle := &ZoneDistribution{
+		Distributed: false,
+	}
+
+	if !reflect.DeepEqual(zone, wantSingle) {
+		t.Fatalf("Zones.GetZoneDistribution() returned %+v, want %+v", zone, wantSingle)
+	}
+}
+
+func TestZonesService_GetZoneDistributionError(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/getZoneDistribution/error.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	if err == nil {
+		t.Fatalf("Zones.GetZoneDistribution() expected to return an error: %v", zoneDistributionResponse)
+	}
+
+	if zoneDistributionResponse != nil {
+		t.Fatalf("Zones.GetZoneDistribution() expected to return a nil response: %v", zoneDistributionResponse)
+	}
+}
