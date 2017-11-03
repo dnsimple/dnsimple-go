@@ -3,7 +3,6 @@ package dnsimple
 import (
 	"io"
 	"net/http"
-	"reflect"
 	"testing"
 )
 
@@ -23,12 +22,30 @@ func TestAuthService_Whoami(t *testing.T) {
 
 	whoamiResponse, err := client.Identity.Whoami()
 	if err != nil {
-		t.Fatalf("Auth.Whoami() returned error: %v", err)
+		t.Fatalf("Identity.Whoami() returned error: %v", err)
 	}
 
 	whoami := whoamiResponse.Data
-	want := &WhoamiData{Account: &Account{ID: 1, Email: "example-account@example.com"}}
-	if !reflect.DeepEqual(whoami, want) {
-		t.Errorf("Auth.Whoami() returned %+v, want %+v", whoami, want)
+
+	if whoami.User != nil {
+		t.Fatalf("Identity.Whoami() returned not null user: `%v`", whoami.User)
+	}
+
+	if whoami.Account == nil {
+		t.Fatalf("Identity.Whoami() returned null account")
+	}
+
+	account := whoami.Account
+
+	if want, got := 1, account.ID; want != got {
+		t.Fatalf("Identity.Whoami() returned ID expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := "example-account@example.com", account.Email; want != got {
+		t.Fatalf("Identity.Whoami() returned Email expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := "dnsimple-professional", account.PlanIdentifier; want != got {
+		t.Fatalf("Identity.Whoami() returned PlanIdentifier expected to be `%v`, got `%v`", want, got)
 	}
 }
