@@ -1,6 +1,7 @@
 # CHANGELOG
 
-#### master
+
+#### Release 0.15.0
 
 - NEW: Added support for the DNSSEC Beta (GH-58)
 
