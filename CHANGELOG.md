@@ -7,6 +7,9 @@
 - CHANGED: Changed response types to not be exported (GH-54)
 - CHANGED: Updated registrar URLs (GH-59)
 
+- FIXED: Unable to filter zone records by type (GH-65)
+
+
 #### Release 0.14.0
 
 - NEW: Added support for Collaborators API (GH-48)
