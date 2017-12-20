@@ -96,6 +96,7 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 	wantSingle := &Certificate{
 		ID:                  1,
 		DomainID:            2,
+		ContactID:           3,
 		CommonName:          "www.weppos.net",
 		AlternateNames:      []string{"weppos.net", "www.weppos.net"},
 		Years:               1,
