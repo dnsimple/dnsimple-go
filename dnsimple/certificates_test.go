@@ -193,17 +193,17 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
 
-	certificateResponse, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
+	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned error: %v", err)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
 	if want, got := 200, certificate.ID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned CommonName expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -226,9 +226,9 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100", Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
 
-	_, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
+	_, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned error: %v", err)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
 }
 
@@ -251,9 +251,9 @@ func TestCertificates_LetsencryptPurchaseWithoutFeature(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
 
-	_, err := client.Certificates.LetsencryptPurchase("1010", "example.com", certificateAttributes)
+	_, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
 	if err == nil {
-		t.Fatalf("Certificates.LetsencryptPurchase() must return error: 412")
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() must return error: 412")
 	}
 }
 
@@ -271,17 +271,17 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.LetsencryptIssue("1010", "example.com", 200)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate("1010", "example.com", 200)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptIssue() returned error: %v", err)
+		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
 	if want, got := 200, certificate.ID; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned CommonName expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -299,9 +299,9 @@ func TestCertificates_LetsencryptIssueWithoutFeature(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Certificates.LetsencryptIssue("1010", "example.com", 200)
+	_, err := client.Certificates.IssueLetsencryptCertificate("1010", "example.com", 200)
 	if err == nil {
-		t.Fatalf("Certificates.LetsencryptIssue() must return error: 412")
+		t.Fatalf("Certificates.IssueLetsencryptCertificate() must return error: 412")
 	}
 }
 
@@ -321,23 +321,23 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{}
 
-	certificateRenewalResponse, err := client.Certificates.LetsencryptPurchaseRenewal("1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned error: %v", err)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
 	if want, got := 999, certificateRenewal.ID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned State expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned State expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -360,23 +360,23 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true}
 
-	certificateRenewalResponse, err := client.Certificates.LetsencryptPurchaseRenewal("1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned error: %v", err)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
 	if want, got := 999, certificateRenewal.ID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned State expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned State expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -396,9 +396,9 @@ func TestCertificates_LetsencryptPurchaseRenewalWithoutFeature(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{}
 
-	_, err := client.Certificates.LetsencryptPurchaseRenewal("1010", "example.com", 200, certificateAttributes)
+	_, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
 	if err == nil {
-		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() must return error: 412")
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() must return error: 412")
 	}
 }
 
@@ -416,17 +416,17 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.LetsencryptIssueRenewal("1010", "example.com", 200, 999)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal("1010", "example.com", 200, 999)
 	if err != nil {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned error: %v", err)
+		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
 	if want, got := 300, certificate.ID; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned ID expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned CommonName expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -444,8 +444,8 @@ func TestCertificates_LetsencryptIssueRenewalWithoutFeature(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Certificates.LetsencryptIssueRenewal("1010", "example.com", 200, 999)
+	_, err := client.Certificates.IssueLetsencryptCertificateRenewal("1010", "example.com", 200, 999)
 	if err == nil {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() must return error: 412")
+		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() must return error: 412")
 	}
 }

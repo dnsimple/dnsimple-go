@@ -99,7 +99,7 @@ type certificateRenewalResponse struct {
 
 // ListCertificates list the certificates for a domain.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates#list
+// See https://developer.dnsimple.com/v2/domains/certificates#listCertificates
 func (s *CertificatesService) ListCertificates(accountID, domainIdentifier string, options *ListOptions) (*certificatesResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, ""))
 	certificatesResponse := &certificatesResponse{}
@@ -120,7 +120,7 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 
 // GetCertificate fetches the certificate.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates#get
+// See https://developer.dnsimple.com/v2/domains/certificates#getCertificate
 func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)))
 	certificateResponse := &certificateResponse{}
@@ -137,7 +137,7 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 // DownloadCertificate download the issued server certificate,
 // as well the root certificate and the intermediate chain.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates#download
+// See https://developer.dnsimple.com/v2/domains/certificates#downloadCertificate
 func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier string, certificateID int) (*certificateBundleResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/download")
 	certificateBundleResponse := &certificateBundleResponse{}
@@ -153,7 +153,7 @@ func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier st
 
 // GetCertificatePrivateKey fetches the certificate private key.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates#get-private-key
+// See https://developer.dnsimple.com/v2/domains/certificates#getCertificatePrivateKey
 func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifier string, certificateID int) (*certificateBundleResponse, error) {
 	path := versioned(certificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/private_key")
 	certificateBundleResponse := &certificateBundleResponse{}
@@ -167,10 +167,10 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 	return certificateBundleResponse, nil
 }
 
-// LetsencryptPurchase purchases a Let's Encrypt certificate.
+// PurchaseLetsencryptCertificate purchases a Let's Encrypt certificate.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-purchase
-func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificateResponse, error) {
+// See https://developer.dnsimple.com/v2/domains/certificates/#purchaseLetsencryptCertificate
+func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, ""))
 	certificateResponse := &certificateResponse{}
 
@@ -183,10 +183,10 @@ func (s *CertificatesService) LetsencryptPurchase(accountID, domainIdentifier st
 	return certificateResponse, nil
 }
 
-// LetsencryptIssue issues a Let's Encrypt certificate.
+// IssueLetsencryptCertificate issues a Let's Encrypt certificate.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-issue
-func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
+// See https://developer.dnsimple.com/v2/domains/certificates/#issueLetsencryptCertificate
+func (s *CertificatesService) IssueLetsencryptCertificate(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/issue")
 	certificateResponse := &certificateResponse{}
 
@@ -199,10 +199,10 @@ func (s *CertificatesService) LetsencryptIssue(accountID, domainIdentifier strin
 	return certificateResponse, nil
 }
 
-// LetsencryptPurchaseRenewal purchases a Let's Encrypt certificate renewal.
+// PurchaseLetsencryptCertificateRenewal purchases a Let's Encrypt certificate renewal.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-purchase-renewal
-func (s *CertificatesService) LetsencryptPurchaseRenewal(accountID, domainIdentifier string, certificateID int, certificateAttributes LetsencryptCertificateAttributes) (*certificateRenewalResponse, error) {
+// See https://developer.dnsimple.com/v2/domains/certificates/#purchaseRenewalLetsencryptCertificate
+func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(accountID, domainIdentifier string, certificateID int, certificateAttributes LetsencryptCertificateAttributes) (*certificateRenewalResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + "/renewals")
 	certificateRenewalResponse := &certificateRenewalResponse{}
 
@@ -215,10 +215,10 @@ func (s *CertificatesService) LetsencryptPurchaseRenewal(accountID, domainIdenti
 	return certificateRenewalResponse, nil
 }
 
-// LetsencryptIssueRenewal issues a Let's Encrypt certificate renewal.
+// IssueLetsencryptCertificateRenewal issues a Let's Encrypt certificate renewal.
 //
-// See https://developer.dnsimple.com/v2/domains/certificates/#letsencrypt-issue-renewal
-func (s *CertificatesService) LetsencryptIssueRenewal(accountID, domainIdentifier string, certificateID, certificateRenewalID int) (*certificateResponse, error) {
+// See https://developer.dnsimple.com/v2/domains/certificates/#issueRenewalLetsencryptCertificate
+func (s *CertificatesService) IssueLetsencryptCertificateRenewal(accountID, domainIdentifier string, certificateID, certificateRenewalID int) (*certificateResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, strconv.Itoa(certificateID)) + fmt.Sprintf("/renewals/%s/issue", strconv.Itoa(certificateRenewalID)))
 	certificateResponse := &certificateResponse{}
 
