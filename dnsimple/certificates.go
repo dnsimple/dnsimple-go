@@ -98,7 +98,7 @@ type certificateRenewalResponse struct {
 	Data *CertificateRenewal `json:"data"`
 }
 
-// ListCertificates list the certificates for a domain.
+// ListCertificates lists the certificates for a domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#listCertificates
 func (s *CertificatesService) ListCertificates(accountID, domainIdentifier string, options *ListOptions) (*certificatesResponse, error) {
@@ -119,7 +119,7 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 	return certificatesResponse, nil
 }
 
-// GetCertificate fetches the certificate.
+// GetCertificate gets the details of a certificate.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#getCertificate
 func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
@@ -135,8 +135,8 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 	return certificateResponse, nil
 }
 
-// DownloadCertificate download the issued server certificate,
-// as well the root certificate and the intermediate chain.
+// DownloadCertificate gets the PEM-encoded certificate,
+// along with the root certificate and intermediate chain.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#downloadCertificate
 func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier string, certificateID int) (*certificateBundleResponse, error) {
@@ -152,7 +152,7 @@ func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier st
 	return certificateBundleResponse, nil
 }
 
-// GetCertificatePrivateKey fetches the certificate private key.
+// GetCertificatePrivateKey gets the PEM-encoded certificate private key.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates#getCertificatePrivateKey
 func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifier string, certificateID int) (*certificateBundleResponse, error) {
@@ -184,7 +184,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainId
 	return certificateResponse, nil
 }
 
-// IssueLetsencryptCertificate issues a Let's Encrypt certificate.
+// IssueLetsencryptCertificate issues a pending Let's Encrypt certificate purchase order.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates/#issueLetsencryptCertificate
 func (s *CertificatesService) IssueLetsencryptCertificate(accountID, domainIdentifier string, certificateID int) (*certificateResponse, error) {
@@ -216,7 +216,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(accountID, d
 	return certificateRenewalResponse, nil
 }
 
-// IssueLetsencryptCertificateRenewal issues a Let's Encrypt certificate renewal.
+// IssueLetsencryptCertificateRenewal issues a pending Let's Encrypt certificate renewal order.
 //
 // See https://developer.dnsimple.com/v2/domains/certificates/#issueRenewalLetsencryptCertificate
 func (s *CertificatesService) IssueLetsencryptCertificateRenewal(accountID, domainIdentifier string, certificateID, certificateRenewalID int) (*certificateResponse, error) {
