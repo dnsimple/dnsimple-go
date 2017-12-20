@@ -96,9 +96,8 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 	wantSingle := &Certificate{
 		ID:                  1,
 		DomainID:            2,
-		Name:                "www",
 		CommonName:          "www.weppos.net",
-		AlternateNames:      []string{},
+		AlternateNames:      []string{"weppos.net", "www.weppos.net"},
 		Years:               1,
 		State:               "issued",
 		AuthorityIdentifier: "letsencrypt",
@@ -200,37 +199,11 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 	}
 
 	certificate := certificateResponse.Data
-
 	if want, got := 200, certificate.ID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchase() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-
-	if want, got := 300, certificate.DomainID; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "www", certificate.Name; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-
 	if want, got := "www.example.com", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchase() returned CommonName expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "new", certificate.State; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned State expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "letsencrypt", certificate.AuthorityIdentifier; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned AuthorityIdentifier expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := false, certificate.AutoRenew; want != got {
-		t.Fatalf("Certificates.LetsencryptPurchase() returned AutoRenew expected to be `%v`, got `%v`", want, got)
-	}
-
-	if !reflect.DeepEqual(certificate.AlternateNames, []string{}) {
-		t.Fatalf("Certificates.GetCertificate() returned AlternateNames %+v, want %+v", certificate.AlternateNames, []string{})
 	}
 }
 
@@ -304,37 +277,11 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 	}
 
 	certificate := certificateResponse.Data
-
 	if want, got := 200, certificate.ID; want != got {
 		t.Fatalf("Certificates.LetsencryptIssue() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-
-	if want, got := 300, certificate.DomainID; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "www", certificate.Name; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-
 	if want, got := "www.example.com", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.LetsencryptIssue() returned CommonName expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "requesting", certificate.State; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned State expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "letsencrypt", certificate.AuthorityIdentifier; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned AuthorityIdentifier expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := false, certificate.AutoRenew; want != got {
-		t.Fatalf("Certificates.LetsencryptIssue() returned AutoRenew expected to be `%v`, got `%v`", want, got)
-	}
-
-	if !reflect.DeepEqual(certificate.AlternateNames, []string{}) {
-		t.Fatalf("Certificates.LetsencryptIssue() returned AlternateNames %+v, want %+v", certificate.AlternateNames, []string{})
 	}
 }
 
@@ -380,19 +327,15 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-
 	if want, got := 999, certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := "new", certificateRenewal.State; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchase() returned State expected to be `%v`, got `%v`", want, got)
 	}
@@ -423,19 +366,15 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-
 	if want, got := 999, certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchaseRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-
 	if want, got := "new", certificateRenewal.State; want != got {
 		t.Fatalf("Certificates.LetsencryptPurchase() returned State expected to be `%v`, got `%v`", want, got)
 	}
@@ -483,37 +422,11 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	}
 
 	certificate := certificateResponse.Data
-
 	if want, got := 300, certificate.ID; want != got {
 		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-
-	if want, got := 300, certificate.DomainID; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "www", certificate.Name; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-
 	if want, got := "www.example.com", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned CommonName expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "requesting", certificate.State; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned State expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "letsencrypt", certificate.AuthorityIdentifier; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned AuthorityIdentifier expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := false, certificate.AutoRenew; want != got {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned AutoRenew expected to be `%v`, got `%v`", want, got)
-	}
-
-	if !reflect.DeepEqual(certificate.AlternateNames, []string{}) {
-		t.Fatalf("Certificates.LetsencryptIssueRenewal() returned AlternateNames %+v, want %+v", certificate.AlternateNames, []string{})
 	}
 }
 

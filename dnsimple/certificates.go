@@ -17,7 +17,6 @@ type CertificatesService struct {
 type Certificate struct {
 	ID                  int      `json:"id,omitempty"`
 	DomainID            int      `json:"domain_id,omitempty"`
-	Name                string   `json:"name,omitempty"`
 	CommonName          string   `json:"common_name,omitempty"`
 	AlternateNames      []string `json:"alternate_names,omitempty"`
 	Years               int      `json:"years,omitempty"`
