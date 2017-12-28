@@ -121,6 +121,9 @@ type DomainRegisterRequest struct {
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
+	// Required as confirmation of the price, only if the domain is premium.
+	// Default to true.
+	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
 // RegisterDomain registers a domain name.
@@ -173,6 +176,9 @@ type DomainTransferRequest struct {
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
+	// Required as confirmation of the price, only if the domain is premium.
+	// Default to true.
+	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
 // TransferDomain transfers a domain name.
@@ -236,6 +242,9 @@ type domainRenewalResponse struct {
 type DomainRenewRequest struct {
 	// The number of years
 	Period int `json:"period"`
+	// Required as confirmation of the price, only if the domain is premium.
+	// Default to true.
+	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
 // RenewDomain renews a domain name.
