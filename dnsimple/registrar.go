@@ -100,7 +100,6 @@ type DomainRegistration struct {
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
 	WhoisPrivacy bool   `json:"whois_privacy"`
-	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
@@ -150,7 +149,6 @@ type DomainTransfer struct {
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`
 	WhoisPrivacy bool   `json:"whois_privacy"`
-	PremiumPrice string `json:"premium_price"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
@@ -219,13 +217,12 @@ func (s *RegistrarService) TransferDomainOut(accountID string, domainName string
 
 // DomainRenewal represents the result of a domain renewal call.
 type DomainRenewal struct {
-	ID           int    `json:"id"`
-	DomainID     int    `json:"domain_id"`
-	Period       int    `json:"period"`
-	State        string `json:"state"`
-	PremiumPrice string `json:"premium_price"`
-	CreatedAt    string `json:"created_at,omitempty"`
-	UpdatedAt    string `json:"updated_at,omitempty"`
+	ID        int    `json:"id"`
+	DomainID  int    `json:"domain_id"`
+	Period    int    `json:"period"`
+	State     string `json:"state"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 // domainRenewalResponse represents a response from an API method that returns a domain renewal.
