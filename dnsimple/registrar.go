@@ -122,7 +122,6 @@ type DomainRegisterRequest struct {
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
-	// Default to true.
 	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
@@ -177,7 +176,6 @@ type DomainTransferRequest struct {
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
-	// Default to true.
 	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
@@ -243,7 +241,6 @@ type DomainRenewRequest struct {
 	// The number of years
 	Period int `json:"period"`
 	// Required as confirmation of the price, only if the domain is premium.
-	// Default to true.
 	PremiumPrice string `json:"premium_price,omitempty"`
 }
 
