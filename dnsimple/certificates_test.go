@@ -199,12 +199,9 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
 
-	certificate := certificateResponse.Data
-	if want, got := 200, certificate.ID; want != got {
+	certificatePurchase := certificateResponse.Data
+	if want, got := 300, certificatePurchase.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "www.example.com", certificate.CommonName; want != got {
-		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -233,31 +230,6 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 	}
 }
 
-func TestCertificates_LetsencryptPurchaseWithoutFeature(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/failure-feature.http")
-
-		testMethod(t, r, "POST")
-		testHeaders(t, r)
-
-		want := map[string]interface{}{"contact_id": "100"}
-		testRequestJSON(t, r, want)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
-	})
-
-	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
-
-	_, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
-	if err == nil {
-		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() must return error: 412")
-	}
-}
-
 func TestCertificates_LetsencryptIssue(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
@@ -283,26 +255,6 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned CommonName expected to be `%v`, got `%v`", want, got)
-	}
-}
-
-func TestCertificates_LetsencryptIssueWithoutFeature(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/issue", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/failure-feature.http")
-
-		testMethod(t, r, "POST")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
-	})
-
-	_, err := client.Certificates.IssueLetsencryptCertificate("1010", "example.com", 200)
-	if err == nil {
-		t.Fatalf("Certificates.IssueLetsencryptCertificate() must return error: 412")
 	}
 }
 
@@ -381,28 +333,6 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 	}
 }
 
-func TestCertificates_LetsencryptPurchaseRenewalWithoutFeature(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/failure-feature.http")
-
-		testMethod(t, r, "POST")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
-	})
-
-	certificateAttributes := LetsencryptCertificateAttributes{}
-
-	_, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
-	if err == nil {
-		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() must return error: 412")
-	}
-}
-
 func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
@@ -428,25 +358,5 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned CommonName expected to be `%v`, got `%v`", want, got)
-	}
-}
-
-func TestCertificates_LetsencryptIssueRenewalWithoutFeature(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals/999/issue", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/failure-feature.http")
-
-		testMethod(t, r, "POST")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
-	})
-
-	_, err := client.Certificates.IssueLetsencryptCertificateRenewal("1010", "example.com", 200, 999)
-	if err == nil {
-		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() must return error: 412")
 	}
 }

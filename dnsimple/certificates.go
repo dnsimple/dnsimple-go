@@ -40,12 +40,23 @@ type CertificateBundle struct {
 	IntermediateCertificates []string `json:"chain,omitempty"`
 }
 
+// CertificatePurchase represents a Certificate Purchase in DNSimple.
+type CertificatePurchase struct {
+	ID            int    `json:"id,omitempty"`
+	CertificateID int    `json:"new_certificate_id,omitempty"`
+	State         string `json:"state,omitempty"`
+	AutoRenew     bool   `json:"auto_renew,omitempty"`
+	CreatedAt     string `json:"created_at,omitempty"`
+	UpdatedAt     string `json:"updated_at,omitempty"`
+}
+
 // CertificateRenewal represents a Certificate Renewal in DNSimple.
 type CertificateRenewal struct {
 	ID               int    `json:"id,omitempty"`
 	OldCertificateID int    `json:"old_certificate_id,omitempty"`
 	NewCertificateID int    `json:"new_certificate_id,omitempty"`
 	State            string `json:"state,omitempty"`
+	AutoRenew        bool   `json:"auto_renew,omitempty"`
 	CreatedAt        string `json:"created_at,omitempty"`
 	UpdatedAt        string `json:"updated_at,omitempty"`
 }
@@ -90,6 +101,12 @@ type certificateBundleResponse struct {
 type certificatesResponse struct {
 	Response
 	Data []Certificate `json:"data"`
+}
+
+// certificatePurchaseResponse represents a response from an API method that returns a CertificatePurchase struct.
+type certificatePurchaseResponse struct {
+	Response
+	Data *CertificatePurchase `json:"data"`
 }
 
 // certificateRenewalResponse represents a response from an API method that returns a CertificateRenewal struct.
@@ -171,17 +188,17 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 // PurchaseLetsencryptCertificate purchases a Let's Encrypt certificate.
 //
 // See https://developer.dnsimple.com/v2/certificates/#purchaseLetsencryptCertificate
-func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificateResponse, error) {
+func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*certificatePurchaseResponse, error) {
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, ""))
-	certificateResponse := &certificateResponse{}
+	certificatePurchaseResponse := &certificatePurchaseResponse{}
 
-	resp, err := s.client.post(path, certificateAttributes, certificateResponse)
+	resp, err := s.client.post(path, certificateAttributes, certificatePurchaseResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
-	return certificateResponse, nil
+	certificatePurchaseResponse.HttpResponse = resp
+	return certificatePurchaseResponse, nil
 }
 
 // IssueLetsencryptCertificate issues a pending Let's Encrypt certificate purchase order.
