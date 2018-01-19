@@ -1,11 +1,20 @@
 # CHANGELOG
 
+
 #### master
+
+- REMOVED: Removed premium_price attribute from registrar order responses (GH-67). Please do not rely on that attribute, as it returned an incorrect value. The attribute is going to be removed, and the API now returns a null value.
+
+
+#### Release 0.15.0
 
 - NEW: Added support for the DNSSEC Beta (GH-58)
 
 - CHANGED: Changed response types to not be exported (GH-54)
 - CHANGED: Updated registrar URLs (GH-59)
+
+- FIXED: Unable to filter zone records by type (GH-65)
+
 
 #### Release 0.14.0
 
