@@ -1,7 +1,7 @@
 # CHANGELOG
 
 
-#### master
+#### Release 0.16.0
 
 - NEW: Added Let's Encrypt certificate methods (GH-63)
 
