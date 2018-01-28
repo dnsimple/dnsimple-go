@@ -29,7 +29,7 @@ $ git clone git@github.com:dnsimple/dnsimple-go.git
 $ cd dnsimple-go
 ```
 
-#### 3. Build and test
+#### 2. Build and test
 
 [Run the test suite](#testing) to check everything works as expected.
 
