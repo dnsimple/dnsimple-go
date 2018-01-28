@@ -19,6 +19,8 @@ and not
 
 ## Getting started
 
+#### 1. Clone the repository
+
 Clone the repository [in your workspace](https://golang.org/doc/code.html#Organization) and move into it:
 
 ```
@@ -26,6 +28,8 @@ $ mkdir -p $GOPATH/src/github.com/dnsimple && cd $_
 $ git clone git@github.com:dnsimple/dnsimple-go.git
 $ cd dnsimple-go
 ```
+
+#### 3. Build and test
 
 [Run the test suite](#testing) to check everything works as expected.
 
