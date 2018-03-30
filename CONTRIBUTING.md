@@ -36,22 +36,21 @@ cd dnsimple-go
 
 ## Testing
 
+Submit unit tests for your changes. You can test your changes on your machine by running the test suite (see below).
+
+When you submit a PR, tests will also be run on the [continuous integration environment via Travis](https://travis-ci.org/dnsimple/dnsimple-go).
+
+### Test Suite
+
 To run the test suite:
 
 ```shell
 go test ./... -v
 ```
 
-### Live Testing
+To run the test suite in a live environment (integration):
 
 ```shell
 export DNSIMPLE_TOKEN="some-token"
 go test ./... -v
 ```
-
-
-## Tests
-
-Submit unit tests for your changes. You can test your changes on your machine by [running the test suite](#testing).
-
-When you submit a PR, tests will also be run on the [continuous integration environment via Travis](https://travis-ci.org/dnsimple/dnsimple-go).
