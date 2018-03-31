@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### master
+
+- CHANGED: Renamed `Event_Header` to `EventHeader` as it's more go-style. The Event interface has been updated accordingly.
+
 
 #### Release 0.16.0
 
