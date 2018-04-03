@@ -5,8 +5,6 @@ import (
 )
 
 const (
-	httpHeaderDomainToken   = "X-DNSimple-Domain-Token"
-	httpHeaderApiToken      = "X-DNSimple-Token"
 	httpHeaderAuthorization = "Authorization"
 )
 
@@ -17,20 +15,6 @@ type Credentials interface {
 	// Returns the HTTP headers that should be set
 	// to authenticate the HTTP Request.
 	Headers() map[string]string
-}
-
-// Domain token authentication
-type domainTokenCredentials struct {
-	domainToken string
-}
-
-// NewDomainTokenCredentials construct Credentials using the DNSimple Domain Token method.
-func NewDomainTokenCredentials(domainToken string) Credentials {
-	return &domainTokenCredentials{domainToken: domainToken}
-}
-
-func (c *domainTokenCredentials) Headers() map[string]string {
-	return map[string]string{httpHeaderDomainToken: c.domainToken}
 }
 
 // HTTP basic authentication

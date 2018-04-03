@@ -7,16 +7,9 @@ import (
 )
 
 func testCredentials(t *testing.T, credentials Credentials, headers map[string]string) {
-
 	if want, got := headers, credentials.Headers(); !reflect.DeepEqual(want, got) {
 		t.Errorf("Header %v, want %v", got, want)
 	}
-}
-
-func TestDomainTokenCredentialsHttpHeader(t *testing.T) {
-	domainToken := "domain-token"
-	credentials := NewDomainTokenCredentials(domainToken)
-	testCredentials(t, credentials, map[string]string{httpHeaderDomainToken: domainToken})
 }
 
 func TestHttpBasicCredentialsHttpHeader(t *testing.T) {
