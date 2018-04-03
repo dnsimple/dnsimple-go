@@ -24,7 +24,7 @@ func setupMockServer() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	client = NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	client = NewClient(http.DefaultClient)
 	client.BaseURL = server.URL
 }
 
@@ -110,7 +110,7 @@ func httpResponseFixture(t *testing.T, filename string) *http.Response {
 }
 
 func TestNewClient(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c := NewClient(http.DefaultClient)
 
 	if c.BaseURL != defaultBaseURL {
 		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
@@ -118,7 +118,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestClient_NewRequest(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c := NewClient(http.DefaultClient)
 	c.BaseURL = "https://go.example.com"
 
 	inURL, outURL := "/foo", "https://go.example.com/foo"
@@ -137,7 +137,7 @@ func TestClient_NewRequest(t *testing.T) {
 }
 
 func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c := NewClient(http.DefaultClient)
 	c.UserAgent = "AwesomeClient"
 	req, _ := c.NewRequest("GET", "/", nil)
 
@@ -156,7 +156,7 @@ func (o *badObject) MarshalJSON() ([]byte, error) {
 }
 
 func TestClient_NewRequest_WithBody(t *testing.T) {
-	c := NewClient(NewOauthTokenCredentials("dnsimple-token"))
+	c := NewClient(http.DefaultClient)
 	c.BaseURL = "https://go.example.com/"
 
 	inURL, _ := "foo", "https://go.example.com/v2/foo"
