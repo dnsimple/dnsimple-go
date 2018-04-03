@@ -93,7 +93,7 @@ client := dnsimple.NewClient(tc)
 
 For HTTP Digest you can use the client provided by this package:
 
-```
+```go
 tp := dnsimple.BasicAuthTransport{
     Username: "XXX",
     Password: "XXX",
