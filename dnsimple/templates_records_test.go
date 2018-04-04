@@ -9,11 +9,11 @@ import (
 )
 
 func TestTemplates_templateRecordPath(t *testing.T) {
-	if want, got := "/1010/templates/1/records", templateRecordPath("1010", "1", ""); want != got {
+	if want, got := "/1010/templates/1/records", templateRecordPath("1010", "1", 0); want != got {
 		t.Errorf("templateRecordPath(%v, %v, ) = %v, want %v", "1010", "1", got, want)
 	}
 
-	if want, got := "/1010/templates/1/records/2", templateRecordPath("1010", "1", "2"); want != got {
+	if want, got := "/1010/templates/1/records/2", templateRecordPath("1010", "1", 2); want != got {
 		t.Errorf("templateRecordPath(%v, %v, 2) = %v, want %v", "1010", "1", got, want)
 	}
 }
@@ -121,7 +121,7 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	templateRecordResponse, err := client.Templates.GetTemplateRecord("1010", "1", "2")
+	templateRecordResponse, err := client.Templates.GetTemplateRecord("1010", "1", 2)
 	if err != nil {
 		t.Fatalf("Templates.GetTemplateRecord() returned error: %v", err)
 	}
@@ -157,7 +157,7 @@ func TestTemplatesService_DeleteTemplateRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.DeleteTemplateRecord("1010", "1", "2")
+	_, err := client.Templates.DeleteTemplateRecord("1010", "1", 2)
 	if err != nil {
 		t.Fatalf("Templates.DeleteTemplateRecord() returned error: %v", err)
 	}

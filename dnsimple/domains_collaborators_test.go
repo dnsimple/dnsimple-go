@@ -9,11 +9,11 @@ import (
 )
 
 func TestCollaboratorPath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", ""); want != got {
+	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", 0); want != got {
 		t.Errorf("collaboratorPath(%v) = %v, want %v", "", got, want)
 	}
 
-	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", "2"); want != got {
+	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", 2); want != got {
 		t.Errorf("collaboratorPath(%v) = %v, want %v", "2", got, want)
 	}
 }
@@ -177,9 +177,9 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 
 	accountID := "1010"
 	domainID := "example.com"
-	contactID := "100"
+	collaboratorID := 100
 
-	_, err := client.Domains.RemoveCollaborator(accountID, domainID, contactID)
+	_, err := client.Domains.RemoveCollaborator(accountID, domainID, collaboratorID)
 	if err != nil {
 		t.Fatalf("Domains.RemoveCollaborator() returned error: %v", err)
 	}
