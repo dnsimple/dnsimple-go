@@ -9,11 +9,11 @@ import (
 )
 
 func TestCertificatePath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/certificates", certificatePath("1010", "example.com", ""); want != got {
+	if want, got := "/1010/domains/example.com/certificates", certificatePath("1010", "example.com", 0); want != got {
 		t.Errorf("certificatePath(%v) = %v, want %v", "", got, want)
 	}
 
-	if want, got := "/1010/domains/example.com/certificates/2", certificatePath("1010", "example.com", "2"); want != got {
+	if want, got := "/1010/domains/example.com/certificates/2", certificatePath("1010", "example.com", 2); want != got {
 		t.Errorf("certificatePath(%v) = %v, want %v", "2", got, want)
 	}
 }
@@ -46,7 +46,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 		t.Errorf("Certificates.ListCertificates() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 1, certificates[0].ID; want != got {
+	if want, got := int64(1), certificates[0].ID; want != got {
 		t.Fatalf("Certificates.ListCertificates() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.weppos.net", certificates[0].CommonName; want != got {
@@ -185,14 +185,14 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"contact_id": "100"}
+		want := map[string]interface{}{"contact_id": float64(100)}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100"}
+	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100}
 
 	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
 	if err != nil {
@@ -200,7 +200,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 	}
 
 	certificatePurchase := certificateResponse.Data
-	if want, got := 300, certificatePurchase.ID; want != got {
+	if want, got := int64(300), certificatePurchase.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -215,14 +215,14 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"contact_id": "100", "name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}}
+		want := map[string]interface{}{"contact_id": float64(100), "name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{ContactID: "100", Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
+	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100, Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
 
 	_, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
 	if err != nil {
@@ -250,7 +250,7 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 	}
 
 	certificate := certificateResponse.Data
-	if want, got := 200, certificate.ID; want != got {
+	if want, got := int64(200), certificate.ID; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {
@@ -280,13 +280,13 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-	if want, got := 999, certificateRenewal.ID; want != got {
+	if want, got := int64(999), certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
+	if want, got := int64(200), certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
+	if want, got := int64(300), certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
@@ -319,13 +319,13 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-	if want, got := 999, certificateRenewal.ID; want != got {
+	if want, got := int64(999), certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 200, certificateRenewal.OldCertificateID; want != got {
+	if want, got := int64(200), certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 300, certificateRenewal.NewCertificateID; want != got {
+	if want, got := int64(300), certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
@@ -353,7 +353,7 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	}
 
 	certificate := certificateResponse.Data
-	if want, got := 300, certificate.ID; want != got {
+	if want, got := int64(300), certificate.ID; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www.example.com", certificate.CommonName; want != got {

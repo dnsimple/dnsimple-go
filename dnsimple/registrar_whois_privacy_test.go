@@ -63,7 +63,7 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 	}
 
 	privacy := privacyResponse.Data
-	if want, got := 1, privacy.ID; want != got {
+	if want, got := int64(1), privacy.ID; want != got {
 		t.Fatalf("Registrar.EnableWhoisPrivacy() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -91,7 +91,7 @@ func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
 	}
 
 	privacy := privacyResponse.Data
-	if want, got := 1, privacy.ID; want != got {
+	if want, got := int64(1), privacy.ID; want != got {
 		t.Fatalf("Registrar.DisableWhoisPrivacy() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }

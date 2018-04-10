@@ -43,10 +43,10 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 	}
 
 	push := pushResponse.Data
-	if want, got := 1, push.ID; want != got {
+	if want, got := int64(1), push.ID; want != got {
 		t.Fatalf("Domains.InitiatePush() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 2020, push.AccountID; want != got {
+	if want, got := int64(2020), push.AccountID; want != got {
 		t.Fatalf("Domains.InitiatePush() returned Account ID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -79,10 +79,10 @@ func TestDomainsService_DomainsPushesList(t *testing.T) {
 		t.Errorf("Domains.ListPushes() expected to return %v pushes, got %v", want, got)
 	}
 
-	if want, got := 1, pushes[0].ID; want != got {
+	if want, got := int64(1), pushes[0].ID; want != got {
 		t.Fatalf("Domains.ListPushes() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 2020, pushes[0].AccountID; want != got {
+	if want, got := int64(2020), pushes[0].AccountID; want != got {
 		t.Fatalf("Domains.ListPushes() returned Account ID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -116,14 +116,14 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"contact_id": "2"}
+		want := map[string]interface{}{"contact_id": float64(2)}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		io.Copy(w, httpResponse.Body)
 	})
 
-	pushAttributes := DomainPushAttributes{ContactID: "2"}
+	pushAttributes := DomainPushAttributes{ContactID: 2}
 
 	_, err := client.Domains.AcceptPush("2020", 1, pushAttributes)
 	if err != nil {

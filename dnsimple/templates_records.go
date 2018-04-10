@@ -6,8 +6,8 @@ import (
 
 // TemplateRecord represents a DNS record for a template in DNSimple.
 type TemplateRecord struct {
-	ID         int    `json:"id,omitempty"`
-	TemplateID int    `json:"template_id,omitempty"`
+	ID         int64  `json:"id,omitempty"`
+	TemplateID int64  `json:"template_id,omitempty"`
 	Name       string `json:"name"`
 	Content    string `json:"content,omitempty"`
 	TTL        int    `json:"ttl,omitempty"`
@@ -17,7 +17,7 @@ type TemplateRecord struct {
 	UpdatedAt  string `json:"updated_at,omitempty"`
 }
 
-func templateRecordPath(accountID string, templateIdentifier string, templateRecordID int) string {
+func templateRecordPath(accountID string, templateIdentifier string, templateRecordID int64) string {
 	if templateRecordID != 0 {
 		return fmt.Sprintf("%v/records/%v", templatePath(accountID, templateIdentifier), templateRecordID)
 	}
@@ -77,7 +77,7 @@ func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdenti
 // GetTemplateRecord fetches a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#get
-func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifier string, templateRecordID int) (*templateRecordResponse, error) {
+func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*templateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &templateRecordResponse{}
 
@@ -93,7 +93,7 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifie
 // DeleteTemplateRecord deletes a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#delete
-func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdentifier string, templateRecordID int) (*templateRecordResponse, error) {
+func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*templateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &templateRecordResponse{}
 

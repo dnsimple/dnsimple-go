@@ -47,7 +47,7 @@ func TestContactsService_List(t *testing.T) {
 		t.Errorf("Contacts.ListContacts() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 1, contacts[0].ID; want != got {
+	if want, got := int64(1), contacts[0].ID; want != got {
 		t.Fatalf("Contacts.ListContacts() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contacts[0].Label; want != got {
@@ -100,7 +100,7 @@ func TestContactsService_Create(t *testing.T) {
 	}
 
 	contact := contactResponse.Data
-	if want, got := 1, contact.ID; want != got {
+	if want, got := int64(1), contact.ID; want != got {
 		t.Fatalf("Contacts.CreateContact() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contact.Label; want != got {
@@ -123,7 +123,7 @@ func TestContactsService_Get(t *testing.T) {
 	})
 
 	accountID := "1010"
-	contactID := 1
+	contactID := int64(1)
 
 	contactResponse, err := client.Contacts.GetContact(accountID, contactID)
 	if err != nil {
@@ -174,7 +174,7 @@ func TestContactsService_Update(t *testing.T) {
 
 	contactAttributes := Contact{Label: "Default"}
 	accountID := "1010"
-	contactID := 1
+	contactID := int64(1)
 
 	contactResponse, err := client.Contacts.UpdateContact(accountID, contactID, contactAttributes)
 	if err != nil {
@@ -182,7 +182,7 @@ func TestContactsService_Update(t *testing.T) {
 	}
 
 	contact := contactResponse.Data
-	if want, got := 1, contact.ID; want != got {
+	if want, got := int64(1), contact.ID; want != got {
 		t.Fatalf("Contacts.UpdateContact() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "Default", contact.Label; want != got {
@@ -205,7 +205,7 @@ func TestContactsService_Delete(t *testing.T) {
 	})
 
 	accountID := "1010"
-	contactID := 1
+	contactID := int64(1)
 
 	_, err := client.Contacts.DeleteContact(accountID, contactID)
 	if err != nil {
