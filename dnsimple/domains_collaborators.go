@@ -66,7 +66,7 @@ func (s *DomainsService) ListCollaborators(accountID, domainIdentifier string, o
 // AddCollaborator adds a new collaborator to the domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
-func (s *DomainsService) AddCollaborator(accountID, domainIdentifier string, attributes CollaboratorAttributes) (*collaboratorResponse, error) {
+func (s *DomainsService) AddCollaborator(accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*collaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
 	collaboratorResponse := &collaboratorResponse{}
 
@@ -81,8 +81,8 @@ func (s *DomainsService) AddCollaborator(accountID, domainIdentifier string, att
 
 // RemoveCollaborator PERMANENTLY deletes a domain from the account.
 //
-// See https://developer.dnsimple.com/v2/domains/collaborators#add
-func (s *DomainsService) RemoveCollaborator(accountID, domainIdentifier string, collaboratorID int64) (*collaboratorResponse, error) {
+// See https://developer.dnsimple.com/v2/domains/collaborators#remove
+func (s *DomainsService) RemoveCollaborator(accountID string, domainIdentifier string, collaboratorID int64) (*collaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, collaboratorID))
 	collaboratorResponse := &collaboratorResponse{}
 
