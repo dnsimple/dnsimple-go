@@ -46,7 +46,7 @@ func TestZonesService_ListRecords(t *testing.T) {
 		t.Errorf("Zones.ListRecords() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 1, records[0].ID; want != got {
+	if want, got := int64(1), records[0].ID; want != got {
 		t.Fatalf("Zones.ListRecords() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "", records[0].Name; want != got {
@@ -109,7 +109,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	}
 
 	record := recordResponse.Data
-	if want, got := 1, record.ID; want != got {
+	if want, got := int64(1), record.ID; want != got {
 		t.Fatalf("Zones.CreateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "www", record.Name; want != got {
@@ -275,7 +275,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	}
 
 	record := recordResponse.Data
-	if want, got := 5, record.ID; want != got {
+	if want, got := int64(5), record.ID; want != got {
 		t.Fatalf("Zones.UpdateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "mxb.example.com", record.Content; want != got {

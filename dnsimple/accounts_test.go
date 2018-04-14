@@ -32,7 +32,7 @@ func TestAccountsService_List(t *testing.T) {
 		t.Errorf("Accounts.ListAccounts() expected to return %v accounts, got %v", want, got)
 	}
 
-	if want, got := 123, accounts[0].ID; want != got {
+	if want, got := int64(123), accounts[0].ID; want != got {
 		t.Fatalf("Accounts.ListAccounts() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "john@example.com", accounts[0].Email; want != got {

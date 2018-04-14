@@ -4,11 +4,11 @@ import (
 	"fmt"
 )
 
-func domainServicesPath(accountID string, domainID string, serviceIdentifier string) string {
+func domainServicesPath(accountID string, domainIdentifier string, serviceIdentifier string) string {
 	if serviceIdentifier != "" {
-		return fmt.Sprintf("/%v/domains/%v/services/%v", accountID, domainID, serviceIdentifier)
+		return fmt.Sprintf("/%v/domains/%v/services/%v", accountID, domainIdentifier, serviceIdentifier)
 	}
-	return fmt.Sprintf("/%v/domains/%v/services", accountID, domainID)
+	return fmt.Sprintf("/%v/domains/%v/services", accountID, domainIdentifier)
 }
 
 // DomainServiceSettings represents optional settings when applying a DNSimple one-click service to a domain.

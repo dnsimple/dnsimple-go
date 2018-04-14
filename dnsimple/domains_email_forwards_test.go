@@ -49,7 +49,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 		t.Errorf("Domains.ListEmailForwards() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 17702, forwards[0].ID; want != got {
+	if want, got := int64(17702), forwards[0].ID; want != got {
 		t.Fatalf("Domains.ListEmailForwards() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if !regexpEmail.MatchString(forwards[0].From) {
@@ -101,7 +101,7 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 	}
 
 	forward := forwardResponse.Data
-	if want, got := 17706, forward.ID; want != got {
+	if want, got := int64(17706), forward.ID; want != got {
 		t.Fatalf("Domains.CreateEmailForward() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if !regexpEmail.MatchString(forward.From) {

@@ -571,7 +571,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
@@ -600,7 +600,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
@@ -629,7 +629,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
@@ -658,7 +658,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 	if want, got := "example.com", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := 3, event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 

@@ -47,7 +47,7 @@ func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 		t.Errorf("Templates.ListTemplateRecords() expected to return %v templates, got %v", want, got)
 	}
 
-	if want, got := 296, templates[0].ID; want != got {
+	if want, got := int64(296), templates[0].ID; want != got {
 		t.Fatalf("Templates.ListTemplateRecords() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "192.168.1.1", templates[0].Content; want != got {
@@ -99,7 +99,7 @@ func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
 	}
 
 	templateRecord := templateRecordResponse.Data
-	if want, got := 300, templateRecord.ID; want != got {
+	if want, got := int64(300), templateRecord.ID; want != got {
 		t.Fatalf("Templates.CreateTemplateRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "mx.example.com", templateRecord.Content; want != got {
