@@ -33,13 +33,13 @@ type Account struct {
 
 // Event is an event generated in the DNSimple application.
 type Event interface {
-	EventName() string
-	EventHeader() *Event_Header
-	Payload() []byte
+	GetEventName() string
+	GetEventHeader() *EventHeader
+	GetPayload() []byte
 	parse([]byte) error
 }
 
-type Event_Header struct {
+type EventHeader struct {
 	APIVersion string   `json:"api_version"`
 	RequestID  string   `json:"request_identifier"`
 	Actor      *Actor   `json:"actor"`
@@ -53,22 +53,22 @@ type eventName struct {
 	Name string `json:"name"`
 }
 
-// Event returns the event name as defined in the name field of the payload.
-func (e *Event_Header) EventHeader() *Event_Header {
+// GetEventHeader returns the event GetEventHeader.
+func (e *EventHeader) GetEventHeader() *EventHeader {
 	return e
 }
 
-// EventName returns the event name as defined in the name field of the payload.
-func (e *Event_Header) EventName() string {
+// GetEventName returns the event name as defined in the name field of the payload.
+func (e *EventHeader) GetEventName() string {
 	return e.Name
 }
 
-// Payload returns the binary payload the event was deserialized from.
-func (e *Event_Header) Payload() []byte {
+// GetPayload returns the binary payload the event was deserialized from.
+func (e *EventHeader) GetPayload() []byte {
 	return e.payload
 }
 
-func (e *Event_Header) parse(payload []byte) error {
+func (e *EventHeader) parse(payload []byte) error {
 	e.payload = payload
 	return unmashalEvent(payload, e)
 }

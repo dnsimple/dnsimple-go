@@ -152,7 +152,7 @@ func TestRegistrarService_TransferDomainOut(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/authorize_transfer_out", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/transferDomainOut/success.http")
+		httpResponse := httpResponseFixture(t, "/authorizeDomainTransferOut/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)

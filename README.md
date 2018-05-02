@@ -105,4 +105,4 @@ For instructions about contributing and testing, visit the [CONTRIBUTING](CONTRI
 
 ## License
 
-Copyright (c) 2014-2016 Aetrion LLC. This is Free Software distributed under the MIT license.
+Copyright (c) 2014-2018 Aetrion LLC. This is Free Software distributed under the MIT license.

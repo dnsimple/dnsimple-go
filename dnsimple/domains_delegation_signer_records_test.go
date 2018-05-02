@@ -46,7 +46,7 @@ func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
 		t.Errorf("Domains.ListDelegationSignerRecords() expected to return %v delegation signer records, got %v", want, got)
 	}
 
-	if want, got := 24, dsRecords[0].ID; want != got {
+	if want, got := int64(24), dsRecords[0].ID; want != got {
 		t.Fatalf("Domains.ListDelegationSignerRecords() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "8", dsRecords[0].Algorithm; want != got {
@@ -98,7 +98,7 @@ func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
 	}
 
 	dsRecord := dsRecordResponse.Data
-	if want, got := 2, dsRecord.ID; want != got {
+	if want, got := int64(2), dsRecord.ID; want != got {
 		t.Fatalf("Domains.CreateDelegationSignerRecord() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "13", dsRecord.Algorithm; want != got {

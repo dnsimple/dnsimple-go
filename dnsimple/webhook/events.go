@@ -111,7 +111,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 // GenericEvent represents a generic event, where the data is a simple map of strings.
 type GenericEvent struct {
-	Event_Header
+	EventHeader
 	Data interface{} `json:"data"`
 }
 
@@ -131,7 +131,7 @@ func ParseGenericEvent(e *GenericEvent, payload []byte) error {
 
 // AccountEvent represents the base event sent for an account action.
 type AccountEvent struct {
-	Event_Header
+	EventHeader
 	Data    *AccountEvent     `json:"data"`
 	Account *dnsimple.Account `json:"account"`
 }
@@ -152,7 +152,7 @@ func (e *AccountEvent) parse(payload []byte) error {
 
 // ContactEvent represents the base event sent for a contact action.
 type ContactEvent struct {
-	Event_Header
+	EventHeader
 	Data    *ContactEvent     `json:"data"`
 	Contact *dnsimple.Contact `json:"contact"`
 }
@@ -173,7 +173,7 @@ func (e *ContactEvent) parse(payload []byte) error {
 
 // DomainEvent represents the base event sent for a domain action.
 type DomainEvent struct {
-	Event_Header
+	EventHeader
 	Data       *DomainEvent         `json:"data"`
 	Domain     *dnsimple.Domain     `json:"domain"`
 	Registrant *dnsimple.Contact    `json:"registrant"`
@@ -196,7 +196,7 @@ func (e *DomainEvent) parse(payload []byte) error {
 
 // EmailForwardEvent represents the base event sent for an email forward action.
 type EmailForwardEvent struct {
-	Event_Header
+	EventHeader
 	Data         *EmailForwardEvent     `json:"data"`
 	EmailForward *dnsimple.EmailForward `json:"email_forward"`
 }
@@ -217,7 +217,7 @@ func (e *EmailForwardEvent) parse(payload []byte) error {
 
 // WebhookEvent represents the base event sent for a webhook action.
 type WebhookEvent struct {
-	Event_Header
+	EventHeader
 	Data    *WebhookEvent     `json:"data"`
 	Webhook *dnsimple.Webhook `json:"webhook"`
 }
@@ -238,7 +238,7 @@ func (e *WebhookEvent) parse(payload []byte) error {
 
 // WhoisPrivacyEvent represents the base event sent for a whois privacy action.
 type WhoisPrivacyEvent struct {
-	Event_Header
+	EventHeader
 	Data         *WhoisPrivacyEvent     `json:"data"`
 	Domain       *dnsimple.Domain       `json:"domain"`
 	WhoisPrivacy *dnsimple.WhoisPrivacy `json:"whois_privacy"`
@@ -260,7 +260,7 @@ func (e *WhoisPrivacyEvent) parse(payload []byte) error {
 
 // ZoneEvent represents the base event sent for a zone action.
 type ZoneEvent struct {
-	Event_Header
+	EventHeader
 	Data *ZoneEvent     `json:"data"`
 	Zone *dnsimple.Zone `json:"zone"`
 }
@@ -281,7 +281,7 @@ func (e *ZoneEvent) parse(payload []byte) error {
 
 // ZoneRecordEvent represents the base event sent for a zone record action.
 type ZoneRecordEvent struct {
-	Event_Header
+	EventHeader
 	Data       *ZoneRecordEvent     `json:"data"`
 	ZoneRecord *dnsimple.ZoneRecord `json:"zone_record"`
 }

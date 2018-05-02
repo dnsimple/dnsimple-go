@@ -41,7 +41,7 @@ func TestWebhooksService_ListWebhooks(t *testing.T) {
 		t.Errorf("Webhooks.List() expected to return %v webhooks, got %v", want, got)
 	}
 
-	if want, got := 1, webhooks[0].ID; want != got {
+	if want, got := int64(1), webhooks[0].ID; want != got {
 		t.Fatalf("Webhooks.List() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "https://webhook.test", webhooks[0].URL; want != got {
@@ -74,7 +74,7 @@ func TestWebhooksService_CreateWebhook(t *testing.T) {
 	}
 
 	webhook := webhookResponse.Data
-	if want, got := 1, webhook.ID; want != got {
+	if want, got := int64(1), webhook.ID; want != got {
 		t.Fatalf("Webhooks.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "https://webhook.test", webhook.URL; want != got {

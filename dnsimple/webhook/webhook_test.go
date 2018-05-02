@@ -12,11 +12,11 @@ func TestParse(t *testing.T) {
 		t.Fatalf("Parse returned error: %v", err)
 	}
 
-	if want, got := "webhook.create", event.EventName(); want != got {
+	if want, got := "webhook.create", event.GetEventName(); want != got {
 		t.Errorf("Parse event Name expected to be %v, got %v", want, got)
 	}
 
-	eventAccount := event.EventHeader().Account
+	eventAccount := event.GetEventHeader().Account
 	if want, got := "User", eventAccount.Display; want != got {
 		t.Errorf("Parse event Account.Display expected to be %v, got %v", want, got)
 	}

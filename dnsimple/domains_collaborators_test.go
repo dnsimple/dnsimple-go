@@ -9,11 +9,11 @@ import (
 )
 
 func TestCollaboratorPath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", ""); want != got {
+	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", 0); want != got {
 		t.Errorf("collaboratorPath(%v) = %v, want %v", "", got, want)
 	}
 
-	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", "2"); want != got {
+	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", 2); want != got {
 		t.Errorf("collaboratorPath(%v) = %v, want %v", "2", got, want)
 	}
 }
@@ -46,13 +46,13 @@ func TestDomainsService_ListCollaborators(t *testing.T) {
 		t.Errorf("Domains.ListCollaborators() expected to return %v collaborators, got %v", want, got)
 	}
 
-	if want, got := 100, collaborators[0].ID; want != got {
+	if want, got := int64(100), collaborators[0].ID; want != got {
 		t.Fatalf("Domains.ListCollaborators() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example.com", collaborators[0].DomainName; want != got {
 		t.Fatalf("Domains.ListCollaborators() returned DomainName expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 999, collaborators[0].UserID; want != got {
+	if want, got := int64(999), collaborators[0].UserID; want != got {
 		t.Fatalf("Domains.ListCollaborators() returned UserID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := false, collaborators[0].Invitation; want != got {
@@ -106,7 +106,7 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 	}
 
 	collaborator := collaboratorResponse.Data
-	if want, got := 100, collaborator.ID; want != got {
+	if want, got := int64(100), collaborator.ID; want != got {
 		t.Fatalf("Domains.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example.com", collaborator.DomainName; want != got {
@@ -147,7 +147,7 @@ func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
 	}
 
 	collaborator := collaboratorResponse.Data
-	if want, got := 101, collaborator.ID; want != got {
+	if want, got := int64(101), collaborator.ID; want != got {
 		t.Fatalf("Domains.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example.com", collaborator.DomainName; want != got {
@@ -177,9 +177,9 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 
 	accountID := "1010"
 	domainID := "example.com"
-	contactID := "100"
+	collaboratorID := int64(100)
 
-	_, err := client.Domains.RemoveCollaborator(accountID, domainID, contactID)
+	_, err := client.Domains.RemoveCollaborator(accountID, domainID, collaboratorID)
 	if err != nil {
 		t.Fatalf("Domains.RemoveCollaborator() returned error: %v", err)
 	}
