@@ -136,12 +136,12 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 	}
 }
 
-func TestZonesService_GetZoneDistribution(t *testing.T) {
+func TestZonesService_CheckZoneDistribution(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getZoneDistribution/success.http")
+		httpResponse := httpResponseFixture(t, "/CheckZoneDistribution/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -153,9 +153,9 @@ func TestZonesService_GetZoneDistribution(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
 	if err != nil {
-		t.Fatalf("Zones.GetZoneDistribution() returned error: %v", err)
+		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
 	}
 
 	zone := zoneDistributionResponse.Data
@@ -164,16 +164,16 @@ func TestZonesService_GetZoneDistribution(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.GetZoneDistribution() returned %+v, want %+v", zone, wantSingle)
+		t.Fatalf("Zones.CheckZoneDistribution() returned %+v, want %+v", zone, wantSingle)
 	}
 }
 
-func TestZonesService_GetZoneDistributionFailure(t *testing.T) {
+func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getZoneDistribution/failure.http")
+		httpResponse := httpResponseFixture(t, "/CheckZoneDistribution/failure.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -185,9 +185,9 @@ func TestZonesService_GetZoneDistributionFailure(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
 	if err != nil {
-		t.Fatalf("Zones.GetZoneDistribution() returned error: %v", err)
+		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
 	}
 
 	zone := zoneDistributionResponse.Data
@@ -196,16 +196,16 @@ func TestZonesService_GetZoneDistributionFailure(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.GetZoneDistribution() returned %+v, want %+v", zone, wantSingle)
+		t.Fatalf("Zones.CheckZoneDistribution() returned %+v, want %+v", zone, wantSingle)
 	}
 }
 
-func TestZonesService_GetZoneDistributionError(t *testing.T) {
+func TestZonesService_CheckZoneDistributionError(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getZoneDistribution/error.http")
+		httpResponse := httpResponseFixture(t, "/CheckZoneDistribution/error.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -217,12 +217,12 @@ func TestZonesService_GetZoneDistributionError(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.GetZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
 	if err == nil {
-		t.Fatalf("Zones.GetZoneDistribution() expected to return an error: %v", zoneDistributionResponse)
+		t.Fatalf("Zones.CheckZoneDistribution() expected to return an error: %v", zoneDistributionResponse)
 	}
 
 	if zoneDistributionResponse != nil {
-		t.Fatalf("Zones.GetZoneDistribution() expected to return a nil response: %v", zoneDistributionResponse)
+		t.Fatalf("Zones.CheckZoneDistribution() expected to return a nil response: %v", zoneDistributionResponse)
 	}
 }
