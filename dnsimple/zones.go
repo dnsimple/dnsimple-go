@@ -120,7 +120,7 @@ func (s *ZonesService) GetZoneFile(accountID string, zoneName string) (*zoneFile
 
 // CheckZoneDistribution checks if a zone is fully distributed across DNSimple nodes.
 //
-// See https://developer.dnsimple.com/v2/zones/#get-zone-distribution
+// See https://developer.dnsimple.com/v2/zones/#checkZoneDistribution
 func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) (*zoneDistributionResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/distribution", accountID, zoneName))
 	zoneDistributionResponse := &zoneDistributionResponse{}
