@@ -116,13 +116,13 @@ func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneDistributionRecordResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
 	}
 
-	zone := zoneDistributionRecordResponse.Data
-	wantSingle := &ZoneRecordDistribution{
+	zone := zoneDistributionResponse.Data
+	wantSingle := &ZoneDistribution{
 		Distributed: true,
 	}
 
@@ -149,13 +149,13 @@ func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneRecordDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
 	}
 
-	zone := zoneRecordDistributionResponse.Data
-	wantSingle := &ZoneRecordDistribution{
+	zone := zoneDistributionResponse.Data
+	wantSingle := &ZoneDistribution{
 		Distributed: false,
 	}
 
@@ -182,12 +182,12 @@ func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneRecordDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
 	if err == nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return an error: %v", zoneRecordDistributionResponse)
+		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return an error: %v", zoneDistributionResponse)
 	}
 
-	if zoneRecordDistributionResponse != nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return a nil response: %v", zoneRecordDistributionResponse)
+	if zoneDistributionResponse != nil {
+		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return a nil response: %v", zoneDistributionResponse)
 	}
 }

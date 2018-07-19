@@ -7,21 +7,10 @@ type ZoneDistribution struct {
 	Distributed bool `json:"distributed"`
 }
 
-// ZoneRecordDistribution is the result of the zone record distribution check.
-type ZoneRecordDistribution struct {
-	Distributed bool `json:"distributed"`
-}
-
 // zoneDistributionResponse represents a response from an API method that returns a ZoneDistribution struct.
 type zoneDistributionResponse struct {
 	Response
 	Data *ZoneDistribution `json:"data"`
-}
-
-// zoneRecordDistributionResponse represents a response from an API method that returns a ZoneRecordDistribution struct.
-type zoneRecordDistributionResponse struct {
-	Response
-	Data *ZoneRecordDistribution `json:"data"`
 }
 
 // CheckZoneDistribution checks if a zone is fully distributed across DNSimple nodes.
@@ -43,15 +32,15 @@ func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) 
 // CheckZoneRecordDistribution checks if a zone is fully distributed across DNSimple nodes.
 //
 // See https://developer.dnsimple.com/v2/zones/#checkZoneRecordDistribution
-func (s *ZonesService) CheckZoneRecordDistribution(accountID string, zoneName string, recordID int64) (*zoneRecordDistributionResponse, error) {
+func (s *ZonesService) CheckZoneRecordDistribution(accountID string, zoneName string, recordID int64) (*zoneDistributionResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/records/%v/distribution", accountID, zoneName, recordID))
-	zoneRecordDistributionResponse := &zoneRecordDistributionResponse{}
+	zoneDistributionResponse := &zoneDistributionResponse{}
 
-	resp, err := s.client.get(path, zoneRecordDistributionResponse)
+	resp, err := s.client.get(path, zoneDistributionResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	zoneRecordDistributionResponse.HttpResponse = resp
-	return zoneRecordDistributionResponse, nil
+	zoneDistributionResponse.HttpResponse = resp
+	return zoneDistributionResponse, nil
 }
