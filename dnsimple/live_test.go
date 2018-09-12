@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 
@@ -151,9 +150,9 @@ func TestLive_Zones(t *testing.T) {
 		t.Fatalf("Live Zones/Whoami() returned error: %v", err)
 	}
 
-	accountID := strconv.Itoa(whoami.Account.ID)
+	accountID := fmt.Sprintf("%v", whoami.Account.ID)
 
-	domainResponse, err := dnsimpleClient.Domains.CreateDomain(fmt.Sprintf("%v", accountID), Domain{Name: fmt.Sprintf("example-%v.test", time.Now().Unix())})
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(accountID, Domain{Name: fmt.Sprintf("example-%v.test", time.Now().Unix())})
 	if err != nil {
 		t.Fatalf("Live Zones/CreateZone() returned error: %v", err)
 	}

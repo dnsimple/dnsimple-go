@@ -47,7 +47,7 @@ func TestDomainsService_ListDomains(t *testing.T) {
 		t.Errorf("Domains.ListDomains() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := 1, domains[0].ID; want != got {
+	if want, got := int64(1), domains[0].ID; want != got {
 		t.Fatalf("Domains.ListDomains() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example-alpha.com", domains[0].Name; want != got {
@@ -106,7 +106,7 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 	}
 
 	domain := domainResponse.Data
-	if want, got := 1, domain.ID; want != got {
+	if want, got := int64(1), domain.ID; want != got {
 		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example-alpha.com", domain.Name; want != got {
@@ -198,7 +198,7 @@ func TestDomainsService_ResetDomainToken(t *testing.T) {
 	}
 
 	domain := domainResponse.Data
-	if want, got := 1, domain.ID; want != got {
+	if want, got := int64(1), domain.ID; want != got {
 		t.Fatalf("Domains.ResetDomainToken() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "example-alpha.com", domain.Name; want != got {

@@ -37,7 +37,7 @@ func TestAuthService_Whoami(t *testing.T) {
 
 	account := whoami.Account
 
-	if want, got := 1, account.ID; want != got {
+	if want, got := int64(1), account.ID; want != got {
 		t.Fatalf("Identity.Whoami() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 
