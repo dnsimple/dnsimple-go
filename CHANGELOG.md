@@ -1,15 +1,17 @@
 # CHANGELOG
 
-#### master
+#### Release 0.20.0
 
 - CHANGED: Renamed `Event_Header` to `EventHeader` as it's more go-style. The Event interface has been updated accordingly.
+
+- CHANGED: Removed custom code for getting OAuth token. We now use RoundTripper for authentication (and pass an http.Client to create a new Client) (dnsimple/dnsimple-go#15, dnsimple/dnsimple-go#69).
 
 
 #### Release 0.16.0
 
-- NEW: Added Let's Encrypt certificate methods (GH-63)
+- NEW: Added Let's Encrypt certificate methods (dnsimple/dnsimple-go#63)
 
-- REMOVED: Removed premium_price attribute from registrar order responses (GH-67). Please do not rely on that attribute, as it returned an incorrect value. The attribute is going to be removed, and the API now returns a null value.
+- REMOVED: Removed premium_price attribute from registrar order responses (dnsimple/dnsimple-go#67). Please do not rely on that attribute, as it returned an incorrect value. The attribute is going to be removed, and the API now returns a null value.
 
 
 #### Release 0.15.0
