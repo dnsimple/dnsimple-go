@@ -21,18 +21,22 @@ This library is a Go client you can use to interact with the [DNSimple API v2](h
 package main
 
 import (
+    "context"
     "fmt"
     "os"
     "strconv"
 
     "github.com/dnsimple/dnsimple-go/dnsimple"
+    "golang.org/x/oauth2"
 )
 
 func main() {
     oauthToken := "xxxxxxx"
+    ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: oauthToken})
+    tc := oauth2.NewClient(context.Background(), ts)
 
     // new client
-    client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
+    client := dnsimple.NewClient(tc)
 
     // get the current authenticated account (if you don't know who you are)
     whoamiResponse, err := client.Identity.Whoami()
@@ -70,6 +74,36 @@ func main() {
 ```
 
 For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple).
+
+
+## Authentication
+
+When creating a new client you are required to provide an `http.Client` to use for authenticating the requests.
+Currently supported authentication mechanisms are OAuth and HTTP Digest.
+
+For OAuth we suggest to use the client provided by the `golang.org/x/oauth2` package:
+
+```go
+ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: "XXX"})
+tc := oauth2.NewClient(context.Background(), ts)
+
+// new client
+client := dnsimple.NewClient(tc)
+```
+
+For HTTP Digest you can use the client provided by this package:
+
+```go
+tp := dnsimple.BasicAuthTransport{
+    Username: "XXX",
+    Password: "XXX",
+}
+
+client := dnsimple.NewClient(tp.Client())
+```
+
+For any other custom need you can define your own `http.RoundTripper` implementation and
+pass a client that authenticated with the custom round tripper.
 
 
 ## Sandbox Environment

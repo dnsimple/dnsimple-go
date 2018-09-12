@@ -1,10 +1,13 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 	"time"
+
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -18,14 +21,17 @@ func init() {
 	dnsimpleToken = os.Getenv("DNSIMPLE_TOKEN")
 	dnsimpleBaseURL = os.Getenv("DNSIMPLE_BASE_URL")
 
-	// Prevent peoeple from wiping out their entire production account by mistake
+	// Prevent people from wiping out their entire production account by mistake
 	if dnsimpleBaseURL == "" {
 		dnsimpleBaseURL = "https://api.sandbox.dnsimple.com"
 	}
 
 	if len(dnsimpleToken) > 0 {
+		ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: dnsimpleToken})
+		tc := oauth2.NewClient(context.Background(), ts)
+
 		dnsimpleLiveTest = true
-		dnsimpleClient = NewClient(NewOauthTokenCredentials(dnsimpleToken))
+		dnsimpleClient = NewClient(tc)
 		dnsimpleClient.BaseURL = dnsimpleBaseURL
 		dnsimpleClient.UserAgent = fmt.Sprintf("%v +livetest", dnsimpleClient.UserAgent)
 	}
