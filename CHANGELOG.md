@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### master
+
+- NEW: Added zone distribution and zone record distribution (dnsimple/dnsimple-go#64)
+
 #### Release 0.20.0
 
 - CHANGED: Renamed `Event_Header` to `EventHeader` as it's more go-style. The Event interface has been updated accordingly.
