@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Release 0.21.0
+#### Release 0.21.0
 
 - NEW: Added zone distribution and zone record distribution (dnsimple/dnsimple-go#64)
 
