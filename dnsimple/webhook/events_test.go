@@ -154,6 +154,32 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	}
 }
 
+func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_start/example.http")
+
+	event := &DNSSECEvent{}
+	err := ParseDNSSECEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "dnssec.rotation_start", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "25074F314A81525B55B7A251F49D9ADBF8B2FD1FC87AF829B27E778F3556794A", event.DelegationSignerRecord.Digest; want != got {
+		t.Errorf("ParseEvent DelegationSignerRecord.Digest expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*DNSSECEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-02-13T12:33:22.723Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 11}}, "name": "domain.auto_renewal_enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "91d47480-c2ce-411c-ac95-b5b54f346bff"}`
 

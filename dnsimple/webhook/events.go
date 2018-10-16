@@ -25,10 +25,9 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"contact.update",
 		"contact.delete":
 		event = &ContactEvent{}
-	//case // dnssec
-	//	"dnssec.create",
-	//	"dnssec.delete":
-	//	event = &DNSSEC{}
+	case // dnssec
+		"dnssec.rotation_start":
+		event = &DNSSECEvent{}
 	case // domain
 		"domain.auto_renewal_enable",
 		"domain.auto_renewal_disable",
@@ -168,6 +167,28 @@ func (e *ContactEvent) parse(payload []byte) error {
 }
 
 //
+// DNSSECEvent
+//
+
+// DNSSECEvent represents the base event sent for a DNSSEC action.
+type DNSSECEvent struct {
+	EventHeader
+	Data                   *DNSSECEvent                     `json:"data"`
+	DelegationSignerRecord *dnsimple.DelegationSignerRecord `json:"delegation_signer_record"`
+	//DNSSECConfig           *dnsimple.DNSSECConfig           `json:"dnssec"`
+}
+
+// ParseDNSSECEvent unpacks the payload into a DNSSECEvent.
+func ParseDNSSECEvent(e *DNSSECEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *DNSSECEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
 // DomainEvent
 //
 
@@ -201,7 +222,7 @@ type EmailForwardEvent struct {
 	EmailForward *dnsimple.EmailForward `json:"email_forward"`
 }
 
-// ParseDomainEvent unpacks the payload into a EmailForwardEvent.
+// ParseEmailForwardEvent unpacks the payload into a EmailForwardEvent.
 func ParseEmailForwardEvent(e *EmailForwardEvent, payload []byte) error {
 	return e.parse(payload)
 }
