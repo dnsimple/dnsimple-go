@@ -21,6 +21,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"contact.delete":					// TODO
 		event = &ContactEvent{}
 	case // dnssec
+		"dnssec.rotation_complete",
 		"dnssec.rotation_start":
 		event = &DNSSECEvent{}
 	case // domain

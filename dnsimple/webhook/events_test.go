@@ -169,7 +169,33 @@ func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "25074F314A81525B55B7A251F49D9ADBF8B2FD1FC87AF829B27E778F3556794A", event.DelegationSignerRecord.Digest; want != got {
+	if want, got := "BD9D898E92D0F668E6BDBC5E79D52E5C3BAB12823A6EEE8C8B6DC633007DFABC", event.DelegationSignerRecord.Digest; want != got {
+		t.Errorf("ParseEvent DelegationSignerRecord.Digest expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*DNSSECEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_complete/example.http")
+
+	event := &DNSSECEvent{}
+	err := ParseDNSSECEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "dnssec.rotation_complete", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "EF1D343203E03F1C98120646971F7B96806B759B66622F0A224551DA1A1EFC9A", event.DelegationSignerRecord.Digest; want != got {
 		t.Errorf("ParseEvent DelegationSignerRecord.Digest expected to be %v, got %v", want, got)
 	}
 
