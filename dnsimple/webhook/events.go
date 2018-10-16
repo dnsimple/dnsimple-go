@@ -9,93 +9,56 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case // account
-		"account.update",                  // TODO
-		"account.billing_settings_update", // TODO
-		"account.payment_details_update",  // TODO
-		"account.add_user",                // TODO
-		"account.remove_user":             // TODO
+		"account.update",                  	// TODO
+		"account.billing_settings_update", 	// TODO
+		"account.payment_details_update",  	// TODO
+		"account.add_user",                	// TODO
+		"account.remove_user":             	// TODO
 		event = &AccountEvent{}
-	//case // certificate
-	//	"certificate.issue",
-	//	"certificate.reissue",
-	//	"certificate.remove_private_key":
-	//	event = &CertificateEvent{}
 	case // contact
-		"contact.create",
-		"contact.update",
-		"contact.delete":
+		"contact.create", 					// TODO
+		"contact.update",					// TODO
+		"contact.delete":					// TODO
 		event = &ContactEvent{}
 	case // dnssec
 		"dnssec.rotation_start":
 		event = &DNSSECEvent{}
 	case // domain
-		"domain.auto_renewal_enable",
-		"domain.auto_renewal_disable",
-		"domain.create",
-		"domain.delete",
-		"domain.register",
-		"domain.renew",
-		"domain.delegation_change",
-		"domain.registrant_change",
-		"domain.resolution_disable",
-		"domain.resolution_enable",
-		"domain.token_reset",
-		"domain.transfer":
+		"domain.auto_renewal_enable",		// TODO
+		"domain.auto_renewal_disable",		// TODO
+		"domain.create",					// TODO
+		"domain.delete",					// TODO
+		"domain.register",					// TODO
+		"domain.renew",						// TODO
+		"domain.delegation_change",			// TODO
+		"domain.registrant_change",			// TODO
+		"domain.resolution_disable",		// TODO
+		"domain.resolution_enable",			// TODO
+		"domain.token_reset",				// TODO
+		"domain.transfer":					// TODO
 		event = &DomainEvent{}
 	case // email forward
-		"email_forward.create",
-		"email_forward.delete":
+		"email_forward.create",				// TODO
+		"email_forward.delete":				// TODO
 		event = &EmailForwardEvent{}
-	//case // name servers
-	//	"name_server.deregister",
-	//	"name_server.register":
-	//	event = &NameServerEvent{}
-	//case // push
-	//	"push.accept",
-	//	"push.initiate",
-	//	"push.reject":
-	//	event = &PushEvent{}
-	//case // secondary dns
-	//	"secondary_dns.create",
-	//	"secondary_dns.update",
-	//	"secondary_dns.delete":
-	//	event = &SecondaryDNSEvent{}
-	//case // subscription
-	//	"subscription.migrate",
-	//	"subscription.subscribe",
-	//	"subscription.unsubscribe":
-	//	event = &SubscriptionEvent{}
-	//case // template
-	//	"template.create",
-	//	"template.delete",
-	//	"template.update":
-	//	event = &TemplateEvent{}
-	//case // template record
-	//	"template_record.create",
-	//	"template_record.delete":
-	//	event = &TemplateRecordEvent{}
-	//case // vanity
-	//	"vanity.disable",
-	//	"vanity.enable":
-	//	event = &VanityEvent{}
 	case // webhook
-		"webhook.create",
-		"webhook.delete":
+		"webhook.create",					// TODO
+		"webhook.delete":					// TODO
 		event = &WebhookEvent{}
 	case // whois privacy
-		"whois_privacy.disable",
-		"whois_privacy.enable",
-		"whois_privacy.purchase",
-		"whois_privacy.renew":
+		"whois_privacy.disable",			// TODO
+		"whois_privacy.enable",				// TODO
+		"whois_privacy.purchase",			// TODO
+		"whois_privacy.renew":				// TODO
 		event = &WhoisPrivacyEvent{}
 	case // zone
-		"zone.create",
-		"zone.delete":
+		"zone.create",						// TODO
+		"zone.delete":						// TODO
 		event = &ZoneEvent{}
 	case // zone record
-		"zone_record.create",
-		"zone_record.update",
-		"zone_record.delete":
+		"zone_record.create",				// TODO
+		"zone_record.update",				// TODO
+		"zone_record.delete":				// TODO
 		event = &ZoneRecordEvent{}
 	default:
 		event = &GenericEvent{}
