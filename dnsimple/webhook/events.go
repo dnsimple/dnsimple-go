@@ -31,7 +31,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.delete",					// TODO
 		"domain.register",					// TODO
 		"domain.renew",						// TODO
-		"domain.delegation_change",			// TODO
+		"domain.delegation_change",
 		"domain.registrant_change",			// TODO
 		"domain.resolution_disable",		// TODO
 		"domain.resolution_enable",			// TODO
@@ -57,8 +57,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"zone.delete":						// TODO
 		event = &ZoneEvent{}
 	case // zone record
-		"zone_record.create",				// TODO
-		"zone_record.update",				// TODO
+		"zone_record.create",
+		"zone_record.update",
 		"zone_record.delete":				// TODO
 		event = &ZoneRecordEvent{}
 	default:
