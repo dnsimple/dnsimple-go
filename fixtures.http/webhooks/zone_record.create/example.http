@@ -1,0 +1,13 @@
+POST /1djlwbe1 HTTP/1.1
+Host: example.com
+Content-Type: application/json
+User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
+Total-Route-Time: 7123
+Connect-Time: 1
+Via: 1.1 vegur
+X-Request-Id: 19e3af61-13ed-4d98-8131-fb3969174f81
+Content-Length: 639
+Accept-Encoding: gzip
+Connection: close
+
+{"data": {"zone_record": {"id": 14573574, "ttl": 3600, "name": "_dmarc", "type": "TXT", "content": "v=DMARC1; p=none; pct=100; rua=mailto:re+mbhilw6g93n@dmarc.postmarkapp.com; sp=none; aspf=r;", "regions": ["global"], "zone_id": "weppos.net", "priority": null, "parent_id": null, "created_at": "2018-09-25T13:32:40Z", "updated_at": "2018-09-25T13:32:40Z", "system_record": false}}, "name": "zone_record.create", "actor": {"id": "1120", "entity": "user", "pretty": "weppos@weppos.net"}, "account": {"id": 981, "display": "Personal", "identifier": "weppos"}, "api_version": "v2", "request_identifier": "5c6cd50c-51a8-4b7d-92f6-902205adfd97"}

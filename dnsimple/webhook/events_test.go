@@ -1,14 +1,46 @@
 package webhook
 
 import (
+	"bufio"
+	"io/ioutil"
+	"net/http"
 	"reflect"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
 var regexpUUID = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
+
+func readHttpRequestFixture(t *testing.T, filename string) string {
+	data, err := ioutil.ReadFile("../../fixtures.http" + filename)
+	if err != nil {
+		t.Fatalf("Unable to read HTTP fixture: %v", err)
+	}
+
+	s := string(data[:])
+
+	return s
+}
+
+func getHttpRequestFromFixture(t *testing.T, filename string) *http.Request {
+	req, err := http.ReadRequest(bufio.NewReader(strings.NewReader(readHttpRequestFixture(t, filename))))
+	if err != nil {
+		t.Fatalf("Unable to create http.Request from fixture: %v", err)
+	}
+	return req
+}
+
+func getHttpRequestBodyFromFixture(t *testing.T, filename string) []byte {
+	req := getHttpRequestFromFixture(t, filename)
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		t.Fatalf("Error reading fixture: %v", err)
+	}
+	return body
+}
 
 func TestParseGenericEvent(t *testing.T) {
 	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "name": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
@@ -722,10 +754,10 @@ func TestParseZoneEvent_Zone_Delete(t *testing.T) {
 }
 
 func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
-	payload := `{"data": {"zone_record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "zone_record.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone_record.create/example.http")
 
 	event := &ZoneRecordEvent{}
-	err := ParseZoneRecordEvent(event, []byte(payload))
+	err := ParseZoneRecordEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -736,11 +768,11 @@ func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "_frame", event.ZoneRecord.Name; want != got {
+	if want, got := "_dmarc", event.ZoneRecord.Name; want != got {
 		t.Errorf("ParseEvent ZoneRecord.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ZoneRecordEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
