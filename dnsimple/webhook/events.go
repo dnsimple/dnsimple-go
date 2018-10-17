@@ -25,8 +25,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"dnssec.rotation_start":
 		event = &DNSSECEvent{}
 	case // domain
-		"domain.auto_renewal_enable",		// TODO
-		"domain.auto_renewal_disable",		// TODO
+		"domain.auto_renewal_disable",
+		"domain.auto_renewal_enable",
 		"domain.create",					// TODO
 		"domain.delete",					// TODO
 		"domain.register",					// TODO
