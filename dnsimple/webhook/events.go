@@ -35,7 +35,6 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.registrant_change",			// TODO
 		"domain.resolution_disable",		// TODO
 		"domain.resolution_enable",			// TODO
-		"domain.token_reset",				// TODO
 		"domain.transfer":					// TODO
 		event = &DomainEvent{}
 	case // email forward
