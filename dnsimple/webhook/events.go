@@ -52,8 +52,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"whois_privacy.renew":				// TODO
 		event = &WhoisPrivacyEvent{}
 	case // zone
-		"zone.create",						// TODO
-		"zone.delete":						// TODO
+		"zone.create",
+		"zone.delete":
 		event = &ZoneEvent{}
 	case // zone record
 		"zone_record.create",
