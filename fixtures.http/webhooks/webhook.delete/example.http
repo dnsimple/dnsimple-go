@@ -1,0 +1,13 @@
+POST /1djlwbe1 HTTP/1.1
+Host: example.com
+Accept-Encoding: gzip
+X-Request-Id: 4e4b2552-9c80-4437-aea8-b09e8ceb0321
+User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
+Content-Type: application/json
+Content-Length: 350
+Via: 1.1 vegur
+Total-Route-Time: 0
+Connect-Time: 0
+Connection: close
+
+{"data": {"webhook": {"id": 215, "url": "https://xxxxxx-xxxxxxx-00000.herokuapp.com/xxxxxxxx"}}, "name": "webhook.delete", "actor": {"id": "1120", "entity": "user", "pretty": "hello@example.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "4d6f9084-850d-444d-a998-455a59f830d5"}

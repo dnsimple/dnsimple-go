@@ -9,16 +9,16 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case // account
-		"account.update",                  	// TODO
-		"account.billing_settings_update", 	// TODO
+		"account.update",
+		"account.billing_settings_update",
 		"account.payment_details_update",  	// TODO
 		"account.add_user",                	// TODO
-		"account.remove_user":             	// TODO
+		"account.remove_user":
 		event = &AccountEvent{}
 	case // contact
-		"contact.create", 					// TODO
-		"contact.update",					// TODO
-		"contact.delete":					// TODO
+		"contact.create",
+		"contact.update",
+		"contact.delete":
 		event = &ContactEvent{}
 	case // dnssec
 		"dnssec.rotation_complete",
@@ -42,8 +42,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"email_forward.delete":				// TODO
 		event = &EmailForwardEvent{}
 	case // webhook
-		"webhook.create",					// TODO
-		"webhook.delete":					// TODO
+		"webhook.create",
+		"webhook.delete":
 		event = &WebhookEvent{}
 	case // whois privacy
 		"whois_privacy.disable",			// TODO

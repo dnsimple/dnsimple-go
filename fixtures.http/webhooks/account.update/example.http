@@ -1,0 +1,13 @@
+POST /1djlwbe1 HTTP/1.1
+Host: example.com
+Accept-Encoding: gzip
+X-Request-Id: b2432f45-199b-4a6e-9a88-1c5f1383aa8b
+Content-Length: 442
+User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
+Content-Type: application/json
+Via: 1.1 vegur
+Total-Route-Time: 7068
+Connect-Time: 0
+Connection: close
+
+{"data": {"account": {"id": 123, "email": "hello@example.com", "created_at": "2011-03-17T21:30:25Z", "updated_at": "2018-11-05T12:27:17Z", "plan_identifier": "dnsimple-personal-yearly"}}, "name": "account.update", "actor": {"id": "1120", "entity": "user", "pretty": "hello@example.com"}, "account": {"id": 123, "display": "Personal2", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "692a46c5-1117-4995-8107-9dd1ad18fa20"}

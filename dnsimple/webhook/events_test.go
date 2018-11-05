@@ -73,12 +73,89 @@ func TestParseGenericEvent(t *testing.T) {
 	}
 }
 
+func TestParseAccountEvent_Account_Update(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
+
+	event := &AccountEvent{}
+	err := ParseAccountEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.update", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "hello@example.com", event.Account.Email; want != got {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.billing_settings_update/example.http")
+
+	event := &AccountEvent{}
+	err := ParseAccountEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.billing_settings_update", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "hello@example.com", event.Account.Email; want != got {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseAccountEvent_Account_RemoveUser(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.remove_user/example.http")
+
+	event := &AccountEvent{}
+	err := ParseAccountEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.remove_user", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "xxxxxx@xxxxx.xxx", event.Account.Email; want != got {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseContactEvent_Contact_Create(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 1, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 1010, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.create/example.http")
 
 	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
+	err := ParseContactEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -89,11 +166,11 @@ func TestParseContactEvent_Contact_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
+	if want, got := "Test", event.Contact.Label; want != got {
 		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ContactEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -101,11 +178,10 @@ func TestParseContactEvent_Contact_Create(t *testing.T) {
 }
 
 func TestParseContactEvent_Contact_Update(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 1, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 1010, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.update", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.update/example.http")
 
 	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
+	err := ParseContactEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -116,11 +192,11 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
+	if want, got := "Test", event.Contact.Label; want != got {
 		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ContactEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -128,11 +204,10 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 }
 
 func TestParseContactEvent_Contact_Delete(t *testing.T) {
-	payload := `{"data": {"contact": {"id": 1, "fax": "+39 339 1111111", "city": "Rome", "label": "Webhook", "phone": "+39 339 0000000", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "Developer", "last_name": "Contact", "account_id": 1010, "created_at": "2016-02-13T13:11:29.388Z", "first_name": "Example", "updated_at": "2016-02-13T13:11:29.388Z", "postal_code": "12037", "email": "example@example.com", "state_province": "Italy", "organization_name": "Company"}}, "name": "contact.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "3be0422c-8ca2-44d9-95d6-9f045b938781"}
-`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.delete/example.http")
 
 	event := &ContactEvent{}
-	err := ParseContactEvent(event, []byte(payload))
+	err := ParseContactEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -143,11 +218,11 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "Webhook", event.Contact.Label; want != got {
+	if want, got := "Test", event.Contact.Label; want != got {
 		t.Errorf("ParseEvent Contact.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ContactEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -559,7 +634,7 @@ func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
 }
 
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 25, "url": "https://webhook.test"}}, "name": "webhook.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "d6362e1f-310b-4009-a29d-ce76c849d32c"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/webhook.create/example.http")
 
 	event := &WebhookEvent{}
 	err := ParseWebhookEvent(event, []byte(payload))
@@ -573,7 +648,7 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+	if want, got := "https://xxxxxx-xxxxxxx-00000.herokuapp.com/xxxxxxxx", event.Webhook.URL; want != got {
 		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
@@ -585,7 +660,7 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 }
 
 func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
-	payload := `{"data": {"webhook": {"id": 23, "url": "https://webhook.test"}}, "name": "webhook.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "756bad5c-b432-43be-821a-2f4c4f285d19"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/webhook.delete/example.http")
 
 	event := &WebhookEvent{}
 	err := ParseWebhookEvent(event, []byte(payload))
@@ -599,7 +674,7 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "https://webhook.test", event.Webhook.URL; want != got {
+	if want, got := "https://xxxxxx-xxxxxxx-00000.herokuapp.com/xxxxxxxx", event.Webhook.URL; want != got {
 		t.Errorf("ParseEvent Webhook.URL expected to be %v, got %v", want, got)
 	}
 
