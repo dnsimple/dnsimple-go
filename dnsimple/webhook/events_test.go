@@ -259,10 +259,10 @@ func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Create(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "name": "domain.create", "api_version": "v2", "request_identifier": "096bfc29-2bf0-40c6-991b-f03b1f8521f1"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.create/example.http")
 
 	event := &DomainEvent{}
-	err := ParseDomainEvent(event, []byte(payload))
+	err := ParseDomainEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -273,11 +273,11 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "example.zone", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*DomainEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -285,10 +285,10 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Delete(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2016-02-07T14:46:29.142Z", "expires_on": null, "updated_at": "2016-02-07T14:46:29.142Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": null}}, "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "name": "domain.delete", "api_version": "v2", "request_identifier": "3e625f1c-3e8b-48fc-9326-9489f4b60e52"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.delete/example.http")
 
 	event := &DomainEvent{}
-	err := ParseDomainEvent(event, []byte(payload))
+	err := ParseDomainEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -299,11 +299,11 @@ func TestParseDomainEvent_Domain_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "example.zone", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*DomainEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -753,10 +753,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 }
 
 func TestParseZoneEvent_Zone_Create(t *testing.T) {
-	payload := `{"data": {"zone": {"id": 1, "name": "example.com", "reverse": false, "account_id": 1010, "created_at": "2016-03-24T20:08:54.109Z", "updated_at": "2016-03-24T20:08:54.109Z"}}, "name": "zone.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "1f4d7325-92a3-4504-a29d-0f664dfe7356"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone.create/example.http")
 
 	event := &ZoneEvent{}
-	err := ParseZoneEvent(event, []byte(payload))
+	err := ParseZoneEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -767,11 +767,11 @@ func TestParseZoneEvent_Zone_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Zone.Name; want != got {
+	if want, got := "example.zone", event.Zone.Name; want != got {
 		t.Errorf("ParseEvent Zone.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ZoneEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -779,10 +779,10 @@ func TestParseZoneEvent_Zone_Create(t *testing.T) {
 }
 
 func TestParseZoneEvent_Zone_Delete(t *testing.T) {
-	payload := `{"data": {"zone": {"id": 1, "name": "example.com", "reverse": false, "account_id": 1010, "created_at": "2016-03-24T20:08:54.109Z", "updated_at": "2016-03-24T20:08:54.109Z"}}, "name": "zone.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "1f4d7325-92a3-4504-a29d-0f664dfe7356"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone.delete/example.http")
 
 	event := &ZoneEvent{}
-	err := ParseZoneEvent(event, []byte(payload))
+	err := ParseZoneEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -793,11 +793,11 @@ func TestParseZoneEvent_Zone_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Zone.Name; want != got {
+	if want, got := "example.zone", event.Zone.Name; want != got {
 		t.Errorf("ParseEvent Zone.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ZoneEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -819,7 +819,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "_dmarc", event.ZoneRecord.Name; want != got {
+	if want, got := "", event.ZoneRecord.Name; want != got {
 		t.Errorf("ParseEvent ZoneRecord.Name expected to be %v, got %v", want, got)
 	}
 
@@ -845,7 +845,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "_dmarc", event.ZoneRecord.Name; want != got {
+	if want, got := "www", event.ZoneRecord.Name; want != got {
 		t.Errorf("ParseEvent ZoneRecord.Name expected to be %v, got %v", want, got)
 	}
 
@@ -857,10 +857,10 @@ func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 }
 
 func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
-	payload := `{"data": {"zone_record": {"id": 1, "ttl": 60, "name": "_frame", "type": "TXT", "content": "https://dnsimple.com/", "zone_id": "example.com", "priority": null, "parent_id": null, "created_at": "2016-02-22T21:06:48.957Z", "updated_at": "2016-02-22T21:23:22.503Z", "system_record": false}}, "name": "zone_record.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "8f6cd405-2c87-453b-8b95-7a296982e4b8"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone_record.delete/example.http")
 
 	event := &ZoneRecordEvent{}
-	err := ParseZoneRecordEvent(event, []byte(payload))
+	err := ParseZoneRecordEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -871,11 +871,11 @@ func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "_frame", event.ZoneRecord.Name; want != got {
+	if want, got := "www", event.ZoneRecord.Name; want != got {
 		t.Errorf("ParseEvent ZoneRecord.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*ZoneRecordEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
