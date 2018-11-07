@@ -11,7 +11,6 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	case // account
 		"account.update",
 		"account.billing_settings_update",
-		"account.payment_details_update",  	// TODO
 		//"account.add_user",
 		"account.remove_user":
 		event = &AccountEvent{}
