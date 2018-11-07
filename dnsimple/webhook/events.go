@@ -46,9 +46,9 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"webhook.delete":
 		event = &WebhookEvent{}
 	case // whois privacy
-		"whois_privacy.disable",			// TODO
-		"whois_privacy.enable",				// TODO
-		"whois_privacy.purchase",			// TODO
+		"whois_privacy.disable",
+		"whois_privacy.enable",
+		"whois_privacy.purchase",
 		"whois_privacy.renew":				// TODO
 		event = &WhoisPrivacyEvent{}
 	case // zone

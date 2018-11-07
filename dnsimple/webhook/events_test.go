@@ -712,10 +712,10 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.disable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.disable/example.http")
 
 	event := &WhoisPrivacyEvent{}
-	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	err := ParseWhoisPrivacyEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -726,14 +726,14 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "xxxxxxxx.email", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(39319), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*WhoisPrivacyEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -741,10 +741,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.enable/example.http")
 
 	event := &WhoisPrivacyEvent{}
-	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	err := ParseWhoisPrivacyEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -755,14 +755,14 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "xxxxxxxx.email", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(39319), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*WhoisPrivacyEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -770,10 +770,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": true, "created_at": "2016-01-17T17:10:41.187Z", "expires_on": "2017-01-17", "updated_at": "2016-01-17T17:11:19.797Z", "unicode_name": "example.com", "private_whois": true, "registrant_id": 2}, "whois_privacy": {"id": 3, "enabled": true, "domain_id": 1, "created_at": "2016-01-17T17:10:50.713Z", "expires_on": "2017-01-17", "updated_at": "2016-03-20T16:45:57.409Z"}}, "name": "whois_privacy.purchase", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "e3861a08-a771-4049-abc4-715a3f7b7d6f"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.purchase/example.http")
 
 	event := &WhoisPrivacyEvent{}
-	err := ParseWhoisPrivacyEvent(event, []byte(payload))
+	err := ParseWhoisPrivacyEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -784,14 +784,14 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "xxxxxxxx.email", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(3), event.WhoisPrivacy.ID; want != got {
+	if want, got := int64(39319), event.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*WhoisPrivacyEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
