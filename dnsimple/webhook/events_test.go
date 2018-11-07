@@ -501,10 +501,10 @@ func TestParseDomainEvent_Domain_RegistrantChange(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-03-22T09:17:06.313Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 2}}, "name": "domain.resolution_disable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "b6eb3eae-8f3b-476a-997a-564d830df015"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.resolution_disable/example.http")
 
 	event := &DomainEvent{}
-	err := ParseDomainEvent(event, []byte(payload))
+	err := ParseDomainEvent(event, payload)
 
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
@@ -516,11 +516,11 @@ func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent RequestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "example.zone", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*DomainEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -528,10 +528,10 @@ func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
-	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "token": "domain-token", "account_id": 1010, "auto_renew": false, "created_at": "2013-05-17T12:58:57.459Z", "expires_on": "2016-05-17", "updated_at": "2016-03-22T09:17:06.313Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 2}}, "name": "domain.resolution_enable", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "b6eb3eae-8f3b-476a-997a-564d830df015"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.resolution_enable/example.http")
 
 	event := &DomainEvent{}
-	err := ParseDomainEvent(event, []byte(payload))
+	err := ParseDomainEvent(event, payload)
 
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
@@ -543,11 +543,11 @@ func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent RequestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "example.com", event.Domain.Name; want != got {
+	if want, got := "example.zone", event.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*DomainEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
