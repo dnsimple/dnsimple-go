@@ -582,10 +582,10 @@ func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
 }
 
 func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
-	payload := `{"data": {"email_forward": {"id": 1, "to": "example@example.io", "from": "hello@example.com", "domain_id": 2, "created_at": "2016-03-24T19:40:09.357Z", "updated_at": "2016-03-24T19:40:09.357Z"}}, "name": "email_forward.create", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "f5f33be8-7074-4fa1-a296-4ddd9003c4a4"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.create/example.http")
 
 	event := &EmailForwardEvent{}
-	err := ParseEmailForwardEvent(event, []byte(payload))
+	err := ParseEmailForwardEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -596,11 +596,11 @@ func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "hello@example.com", event.EmailForward.From; want != got {
+	if want, got := "example@example.zone", event.EmailForward.From; want != got {
 		t.Errorf("ParseEvent EmailForward.From expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*EmailForwardEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
@@ -608,10 +608,10 @@ func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 }
 
 func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
-	payload := `{"data": {"email_forward": {"id": 1, "to": "example@example.io", "from": "hello@example.com", "domain_id": 2, "created_at": "2016-03-24T19:40:09.357Z", "updated_at": "2016-03-24T19:40:09.357Z"}}, "name": "email_forward.delete", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "f5f33be8-7074-4fa1-a296-4ddd9003c4a4"}`
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.delete/example.http")
 
 	event := &EmailForwardEvent{}
-	err := ParseEmailForwardEvent(event, []byte(payload))
+	err := ParseEmailForwardEvent(event, payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -622,11 +622,37 @@ func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "hello@example.com", event.EmailForward.From; want != got {
+	if want, got := ".*@example.zone", event.EmailForward.From; want != got {
 		t.Errorf("ParseEvent EmailForward.From expected to be %v, got %v", want, got)
 	}
 
-	parsedEvent, err := Parse([]byte(payload))
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*EmailForwardEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.update/example.http")
+
+	event := &EmailForwardEvent{}
+	err := ParseEmailForwardEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "email_forward.update", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := ".*@example.zone", event.EmailForward.From; want != got {
+		t.Errorf("ParseEvent EmailForward.From expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
 	_, ok := parsedEvent.(*EmailForwardEvent)
 	if !ok {
 		t.Fatalf("Parse returned error when typecasting: %v", err)

@@ -16,8 +16,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		event = &AccountEvent{}
 	case // contact
 		"contact.create",
-		"contact.update",
-		"contact.delete":
+		"contact.delete",
+		"contact.update":
 		event = &ContactEvent{}
 	case // dnssec
 		"dnssec.rotation_complete",
@@ -37,8 +37,9 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.transfer":					// TODO
 		event = &DomainEvent{}
 	case // email forward
-		"email_forward.create",				// TODO
-		"email_forward.delete":				// TODO
+		"email_forward.create",
+		"email_forward.delete",
+		"email_forward.update":
 		event = &EmailForwardEvent{}
 	case // webhook
 		"webhook.create",
@@ -56,8 +57,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		event = &ZoneEvent{}
 	case // zone record
 		"zone_record.create",
-		"zone_record.update",
-		"zone_record.delete":
+		"zone_record.delete",
+		"zone_record.update":
 		event = &ZoneRecordEvent{}
 	default:
 		event = &GenericEvent{}
