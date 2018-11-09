@@ -28,10 +28,10 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.auto_renewal_enable",
 		"domain.create",
 		"domain.delete",
-		"domain.register",					// TODO
+		"domain.register",
 		"domain.renew",
 		"domain.delegation_change",
-		"domain.registrant_change",			// TODO
+		"domain.registrant_change",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
 		"domain.transfer":					// TODO
