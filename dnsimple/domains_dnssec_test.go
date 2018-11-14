@@ -19,7 +19,7 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/dnssec", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/enableDnssec/success.http")
+		httpResponse := httpResponseFixture(t, "/api/enableDnssec/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -40,7 +40,7 @@ func TestDomainsService_DisableDnssec(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/dnssec", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/disableDnssec/success.http")
+		httpResponse := httpResponseFixture(t, "/api/disableDnssec/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
@@ -61,7 +61,7 @@ func TestDomainsService_GetDnssec(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/dnssec", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getDnssec/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getDnssec/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

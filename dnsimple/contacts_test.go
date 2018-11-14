@@ -23,7 +23,7 @@ func TestContactsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listContacts/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listContacts/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestContactsService_List_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listContacts/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listContacts/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -79,7 +79,7 @@ func TestContactsService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createContact/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createContact/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -113,7 +113,7 @@ func TestContactsService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getContact/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getContact/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -160,7 +160,7 @@ func TestContactsService_Update(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateContact/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateContact/success.http")
 
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
@@ -195,7 +195,7 @@ func TestContactsService_Delete(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/contacts/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteContact/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteContact/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

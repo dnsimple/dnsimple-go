@@ -12,7 +12,7 @@ func TestZonesService_CheckZoneDistribution(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneDistribution/success.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneDistribution/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -44,7 +44,7 @@ func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneDistribution/failure.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneDistribution/failure.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -76,7 +76,7 @@ func TestZonesService_CheckZoneDistributionError(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneDistribution/error.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneDistribution/error.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -103,7 +103,7 @@ func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/1/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneRecordDistribution/success.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneRecordDistribution/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -136,7 +136,7 @@ func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/1/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneRecordDistribution/failure.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneRecordDistribution/failure.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -169,7 +169,7 @@ func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/1/distribution", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/checkZoneRecordDistribution/error.http")
+		httpResponse := httpResponseFixture(t, "/api/checkZoneRecordDistribution/error.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

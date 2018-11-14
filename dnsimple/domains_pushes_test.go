@@ -23,7 +23,7 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/pushes", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/initiatePush/success.http")
+		httpResponse := httpResponseFixture(t, "/api/initiatePush/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -56,7 +56,7 @@ func TestDomainsService_DomainsPushesList(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/2020/pushes", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listPushes/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listPushes/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -92,7 +92,7 @@ func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/2020/pushes", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listPushes/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listPushes/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -111,7 +111,7 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/2020/pushes/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/acceptPush/success.http")
+		httpResponse := httpResponseFixture(t, "/api/acceptPush/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -136,7 +136,7 @@ func TestDomainsService_RejectPush(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/2020/pushes/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/rejectPush/success.http")
+		httpResponse := httpResponseFixture(t, "/api/rejectPush/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

@@ -23,7 +23,7 @@ func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTemplateRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTemplateRecords/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTemplateRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTemplateRecords/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -79,7 +79,7 @@ func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createTemplateRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createTemplateRecord/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -112,7 +112,7 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1/records/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getTemplateRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getTemplateRecord/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -148,7 +148,7 @@ func TestTemplatesService_DeleteTemplateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1/records/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteTemplateRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteTemplateRecord/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

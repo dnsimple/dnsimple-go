@@ -23,7 +23,7 @@ func TestTemplatesService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTemplates/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTemplates/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTemplates/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTemplates/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -79,7 +79,7 @@ func TestTemplatesService_Create(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createTemplate/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createTemplate/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -113,7 +113,7 @@ func TestTemplatesService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getTemplate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getTemplate/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -147,7 +147,7 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateTemplate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateTemplate/success.http")
 
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
@@ -182,7 +182,7 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/templates/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteTemplate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteTemplate/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

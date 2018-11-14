@@ -23,7 +23,7 @@ func TestServicesService_AppliedServices(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/services", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/appliedServices/success.http")
+		httpResponse := httpResponseFixture(t, "/api/appliedServices/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestServicesService_ApplyService(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/services/service1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/applyService/success.http")
+		httpResponse := httpResponseFixture(t, "/api/applyService/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -82,7 +82,7 @@ func TestServicesService_UnapplyService(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/services/service1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/unapplyService/success.http")
+		httpResponse := httpResponseFixture(t, "/api/unapplyService/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

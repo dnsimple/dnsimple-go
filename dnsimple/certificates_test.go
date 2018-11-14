@@ -23,7 +23,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listCertificates/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listCertificates/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -59,7 +59,7 @@ func TestCertificatesService_ListCertificates_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listCertificates/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listCertificates/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -78,7 +78,7 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getCertificate/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -119,7 +119,7 @@ func TestCertificatesService_DownloadCertificate(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/2/download", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/downloadCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/downloadCertificate/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -152,7 +152,7 @@ func TestCertificatesService_GetCertificatePrivateKey(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/2/private_key", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getCertificatePrivateKey/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getCertificatePrivateKey/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -180,7 +180,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/purchaseLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -210,7 +210,7 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/purchaseLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -235,7 +235,7 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/issue", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/issueLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/issueLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -263,7 +263,7 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseRenewalLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/purchaseRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -299,7 +299,7 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/purchaseRenewalLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/purchaseRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -338,7 +338,7 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals/999/issue", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/issueRenewalLetsencryptCertificate/success.http")
+		httpResponse := httpResponseFixture(t, "/api/issueRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)

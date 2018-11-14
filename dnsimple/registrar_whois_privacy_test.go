@@ -12,7 +12,7 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/whois_privacy", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getWhoisPrivacy/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getWhoisPrivacy/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -45,7 +45,7 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/whois_privacy", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/enableWhoisPrivacy/success.http")
+		httpResponse := httpResponseFixture(t, "/api/enableWhoisPrivacy/success.http")
 
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
@@ -73,7 +73,7 @@ func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/whois_privacy", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/disableWhoisPrivacy/success.http")
+		httpResponse := httpResponseFixture(t, "/api/disableWhoisPrivacy/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

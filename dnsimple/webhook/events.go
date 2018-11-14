@@ -9,29 +9,23 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case // account
-		"account.update",                  // TODO
-		"account.billing_settings_update", // TODO
-		"account.payment_details_update",  // TODO
-		"account.add_user",                // TODO
-		"account.remove_user":             // TODO
+		"account.update",
+		"account.billing_settings_update",
+		//"account.add_user",
+		"account.remove_user":
 		event = &AccountEvent{}
-	//case // certificate
-	//	"certificate.issue",
-	//	"certificate.reissue",
-	//	"certificate.remove_private_key":
-	//	event = &CertificateEvent{}
 	case // contact
 		"contact.create",
-		"contact.update",
-		"contact.delete":
+		"contact.delete",
+		"contact.update":
 		event = &ContactEvent{}
-	//case // dnssec
-	//	"dnssec.create",
-	//	"dnssec.delete":
-	//	event = &DNSSEC{}
+	case // dnssec
+		"dnssec.rotation_complete",
+		"dnssec.rotation_start":
+		event = &DNSSECEvent{}
 	case // domain
-		"domain.auto_renewal_enable",
 		"domain.auto_renewal_disable",
+		"domain.auto_renewal_enable",
 		"domain.create",
 		"domain.delete",
 		"domain.register",
@@ -40,45 +34,13 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.registrant_change",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
-		"domain.token_reset",
-		"domain.transfer":
+		"domain.transfer":					// TODO
 		event = &DomainEvent{}
 	case // email forward
 		"email_forward.create",
-		"email_forward.delete":
+		"email_forward.delete",
+		"email_forward.update":
 		event = &EmailForwardEvent{}
-	//case // name servers
-	//	"name_server.deregister",
-	//	"name_server.register":
-	//	event = &NameServerEvent{}
-	//case // push
-	//	"push.accept",
-	//	"push.initiate",
-	//	"push.reject":
-	//	event = &PushEvent{}
-	//case // secondary dns
-	//	"secondary_dns.create",
-	//	"secondary_dns.update",
-	//	"secondary_dns.delete":
-	//	event = &SecondaryDNSEvent{}
-	//case // subscription
-	//	"subscription.migrate",
-	//	"subscription.subscribe",
-	//	"subscription.unsubscribe":
-	//	event = &SubscriptionEvent{}
-	//case // template
-	//	"template.create",
-	//	"template.delete",
-	//	"template.update":
-	//	event = &TemplateEvent{}
-	//case // template record
-	//	"template_record.create",
-	//	"template_record.delete":
-	//	event = &TemplateRecordEvent{}
-	//case // vanity
-	//	"vanity.disable",
-	//	"vanity.enable":
-	//	event = &VanityEvent{}
 	case // webhook
 		"webhook.create",
 		"webhook.delete":
@@ -87,7 +49,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"whois_privacy.disable",
 		"whois_privacy.enable",
 		"whois_privacy.purchase",
-		"whois_privacy.renew":
+		"whois_privacy.renew":				// TODO
 		event = &WhoisPrivacyEvent{}
 	case // zone
 		"zone.create",
@@ -95,8 +57,8 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		event = &ZoneEvent{}
 	case // zone record
 		"zone_record.create",
-		"zone_record.update",
-		"zone_record.delete":
+		"zone_record.delete",
+		"zone_record.update":
 		event = &ZoneRecordEvent{}
 	default:
 		event = &GenericEvent{}
@@ -168,6 +130,28 @@ func (e *ContactEvent) parse(payload []byte) error {
 }
 
 //
+// DNSSECEvent
+//
+
+// DNSSECEvent represents the base event sent for a DNSSEC action.
+type DNSSECEvent struct {
+	EventHeader
+	Data                   *DNSSECEvent                     `json:"data"`
+	DelegationSignerRecord *dnsimple.DelegationSignerRecord `json:"delegation_signer_record"`
+	//DNSSECConfig           *dnsimple.DNSSECConfig           `json:"dnssec"`
+}
+
+// ParseDNSSECEvent unpacks the payload into a DNSSECEvent.
+func ParseDNSSECEvent(e *DNSSECEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *DNSSECEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
 // DomainEvent
 //
 
@@ -201,7 +185,7 @@ type EmailForwardEvent struct {
 	EmailForward *dnsimple.EmailForward `json:"email_forward"`
 }
 
-// ParseDomainEvent unpacks the payload into a EmailForwardEvent.
+// ParseEmailForwardEvent unpacks the payload into a EmailForwardEvent.
 func ParseEmailForwardEvent(e *EmailForwardEvent, payload []byte) error {
 	return e.parse(payload)
 }

@@ -23,7 +23,7 @@ func TestServicesService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/services", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listServices/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listServices/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestServicesService_List_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/services", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listServices/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listServices/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -79,7 +79,7 @@ func TestServicesService_Get(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/services/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getService/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getService/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

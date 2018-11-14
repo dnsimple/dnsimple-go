@@ -26,7 +26,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listEmailForwards/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listEmailForwards/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -62,7 +62,7 @@ func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listEmailForwards/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listEmailForwards/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -81,7 +81,7 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createEmailForward/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createEmailForward/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -114,7 +114,7 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getEmailForward/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getEmailForward/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -147,7 +147,7 @@ func TestDomainsService_DeleteEmailForward(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/email_forwards/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteEmailForward/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteEmailForward/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

@@ -22,7 +22,7 @@ func TestWebhooksService_ListWebhooks(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/webhooks", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listWebhooks/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listWebhooks/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -54,7 +54,7 @@ func TestWebhooksService_CreateWebhook(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/webhooks", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createWebhook/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createWebhook/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -87,7 +87,7 @@ func TestWebhooksService_GetWebhook(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/webhooks/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getWebhook/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getWebhook/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -116,7 +116,7 @@ func TestWebhooksService_DeleteWebhook(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/webhooks/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteWebhook/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteWebhook/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
