@@ -23,7 +23,7 @@ func TestZonesService_ListRecords(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listZoneRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listZoneRecords/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -62,7 +62,7 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listZoneRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listZoneRecords/success.http")
 
 		testQuery(t, r, url.Values{
 			"page":      []string{"2"},
@@ -88,7 +88,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -128,7 +128,7 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created-apex.http")
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created-apex.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -163,7 +163,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	var recordValues ZoneRecord
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
 
 		want := map[string]interface{}{"name": "foo"}
 		testRequestJSON(t, r, want)
@@ -178,7 +178,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	}
 
 	mux.HandleFunc("/v2/2/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
 
 		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
 		testRequestJSON(t, r, want)
@@ -193,7 +193,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	}
 
 	mux.HandleFunc("/v2/3/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createZoneRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
 
 		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
 		testRequestJSON(t, r, want)
@@ -213,7 +213,7 @@ func TestZonesService_GetRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/1539", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getZoneRecord/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -254,7 +254,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/5", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
 
 		testMethod(t, r, "PATCH")
 		testHeaders(t, r)
@@ -290,7 +290,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	var recordValues ZoneRecord
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
 
 		want := map[string]interface{}{"name": "foo"}
 		testRequestJSON(t, r, want)
@@ -305,7 +305,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	}
 
 	mux.HandleFunc("/v2/2/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
 
 		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
 		testRequestJSON(t, r, want)
@@ -320,7 +320,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	}
 
 	mux.HandleFunc("/v2/3/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/updateZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
 
 		want := map[string]interface{}{"name": "foo", "regions": []interface{}{"global"}}
 		testRequestJSON(t, r, want)
@@ -340,7 +340,7 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/zones/example.com/records/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteZoneRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteZoneRecord/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

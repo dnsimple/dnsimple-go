@@ -17,7 +17,7 @@ func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/vanity/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/enableVanityNameServers/success.http")
+		httpResponse := httpResponseFixture(t, "/api/enableVanityNameServers/success.http")
 
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
@@ -44,7 +44,7 @@ func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/vanity/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/disableVanityNameServers/success.http")
+		httpResponse := httpResponseFixture(t, "/api/disableVanityNameServers/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

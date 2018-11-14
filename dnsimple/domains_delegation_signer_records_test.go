@@ -23,7 +23,7 @@ func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/ds_records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listDelegationSignerRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listDelegationSignerRecords/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -59,7 +59,7 @@ func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/ds_records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listDelegationSignerRecords/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listDelegationSignerRecords/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -78,7 +78,7 @@ func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/ds_records", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createDelegationSignerRecord/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createDelegationSignerRecord/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -111,7 +111,7 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/ds_records/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getDelegationSignerRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getDelegationSignerRecord/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -146,7 +146,7 @@ func TestDomainsService_DeleteDelegationSignerRecord(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/ds_records/2", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteDelegationSignerRecord/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteDelegationSignerRecord/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

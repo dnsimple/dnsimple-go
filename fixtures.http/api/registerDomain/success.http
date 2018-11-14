@@ -1,16 +1,16 @@
 HTTP/1.1 201 Created
 Server: nginx
-Date: Fri, 09 Dec 2016 19:43:43 GMT
+Date: Fri, 09 Dec 2016 19:35:38 GMT
 Content-Type: application/json; charset=utf-8
 Transfer-Encoding: chunked
 Connection: keep-alive
 X-RateLimit-Limit: 2400
-X-RateLimit-Remaining: 2395
+X-RateLimit-Remaining: 2396
 X-RateLimit-Reset: 1481315246
-ETag: W/"e58e7ac3ad9e30162c5098f29f208066"
+ETag: W/"440b25022ab55cd8e84be64356bfd7d9"
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 0d00c622-9fc8-406a-93cb-d2c5d6ecd6b4
-X-Runtime: 6.483160
+X-Request-Id: aac22ee4-31d7-4d71-ad3d-d0004f5cf370
+X-Runtime: 11.906207
 X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Frame-Options: DENY
@@ -18,4 +18,4 @@ X-Permitted-Cross-Domain-Policies: none
 X-XSS-Protection: 1; mode=block
 Strict-Transport-Security: max-age=31536000
 
-{"data":{"id":1,"domain_id":999,"registrant_id":2,"state":"transferring","auto_renew":false,"whois_privacy":false,"premium_price":null,"created_at":"2016-12-09T19:43:41Z","updated_at":"2016-12-09T19:43:43Z"}}
+{"data":{"id":1,"domain_id":999,"registrant_id":2,"period":1,"state":"new","auto_renew":false,"whois_privacy":false,"created_at":"2016-12-09T19:35:31Z","updated_at":"2016-12-09T19:35:31Z"}}

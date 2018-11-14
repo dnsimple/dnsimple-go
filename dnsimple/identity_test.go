@@ -11,7 +11,7 @@ func TestAuthService_Whoami(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/whoami", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/whoami/success.http")
+		httpResponse := httpResponseFixture(t, "/api/whoami/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

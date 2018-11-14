@@ -12,7 +12,7 @@ func TestRegistrarService_GetDomainDelegation(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/delegation", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getDomainDelegation/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getDomainDelegation/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -39,7 +39,7 @@ func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/delegation", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/changeDomainDelegation/success.http")
+		httpResponse := httpResponseFixture(t, "/api/changeDomainDelegation/success.http")
 
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
@@ -71,7 +71,7 @@ func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/delegation/vanity", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/changeDomainDelegationToVanity/success.http")
+		httpResponse := httpResponseFixture(t, "/api/changeDomainDelegationToVanity/success.http")
 
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
@@ -103,7 +103,7 @@ func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/delegation/vanity", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/changeDomainDelegationFromVanity/success.http")
+		httpResponse := httpResponseFixture(t, "/api/changeDomainDelegationFromVanity/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

@@ -13,7 +13,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/tlds", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTlds/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTlds/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -62,7 +62,7 @@ func TestTldsService_ListTlds_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/tlds", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listTlds/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listTlds/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -81,7 +81,7 @@ func TestTldsService_GetTld(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/tlds/com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getTld/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getTld/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -109,7 +109,7 @@ func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/tlds/com/extended_attributes", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getTldExtendedAttributes/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getTldExtendedAttributes/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

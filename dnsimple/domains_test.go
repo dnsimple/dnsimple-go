@@ -23,7 +23,7 @@ func TestDomainsService_ListDomains(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listDomains/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listDomains/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -60,7 +60,7 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listDomains/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listDomains/success.http")
 
 		testQuery(t, r, url.Values{
 			"page":          []string{"2"},
@@ -85,7 +85,7 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1/domains", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/createDomain/created.http")
+		httpResponse := httpResponseFixture(t, "/api/createDomain/created.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -119,7 +119,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/getDomain/success.http")
+		httpResponse := httpResponseFixture(t, "/api/getDomain/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -142,7 +142,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		RegistrantID: 0,
 		Name:         "example-alpha.com",
 		UnicodeName:  "example-alpha.com",
-		Token:        "domain-token",
+		Token:        "",
 		State:        "hosted",
 		PrivateWhois: false,
 		ExpiresOn:    "",
@@ -159,7 +159,7 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/deleteDomain/success.http")
+		httpResponse := httpResponseFixture(t, "/api/deleteDomain/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
@@ -173,35 +173,5 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 	_, err := client.Domains.DeleteDomain(accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Domains.Delete() returned error: %v", err)
-	}
-}
-
-func TestDomainsService_ResetDomainToken(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/domains/example.com/token", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/resetDomainToken/success.http")
-
-		testMethod(t, r, "POST")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
-	})
-
-	accountID := "1010"
-
-	domainResponse, err := client.Domains.ResetDomainToken(accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Domains.ResetDomainToken() returned error: %v", err)
-	}
-
-	domain := domainResponse.Data
-	if want, got := int64(1), domain.ID; want != got {
-		t.Fatalf("Domains.ResetDomainToken() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example-alpha.com", domain.Name; want != got {
-		t.Fatalf("Domains.ResetDomainToken() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }

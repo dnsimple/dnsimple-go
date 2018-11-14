@@ -10,7 +10,7 @@ func TestRegistrarService_EnableDomainAutoRenewal(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/enableDomainAutoRenewal/success.http")
+		httpResponse := httpResponseFixture(t, "/api/enableDomainAutoRenewal/success.http")
 
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
@@ -31,7 +31,7 @@ func TestRegistrarService_DisableDomainAutoRenewal(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/registrar/domains/example.com/auto_renewal", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/disableDomainAutoRenewal/success.http")
+		httpResponse := httpResponseFixture(t, "/api/disableDomainAutoRenewal/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)

@@ -12,7 +12,7 @@ func TestAccountsService_List(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/accounts", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listAccounts/success-user.http")
+		httpResponse := httpResponseFixture(t, "/api/listAccounts/success-user.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)

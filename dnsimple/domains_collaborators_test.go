@@ -23,7 +23,7 @@ func TestDomainsService_ListCollaborators(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listCollaborators/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listCollaborators/success.http")
 
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
@@ -65,7 +65,7 @@ func TestDomainsService_ListCollaborators_WithOptions(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/listCollaborators/success.http")
+		httpResponse := httpResponseFixture(t, "/api/listCollaborators/success.http")
 
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
@@ -84,7 +84,7 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/addCollaborator/success.http")
+		httpResponse := httpResponseFixture(t, "/api/addCollaborator/success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -125,7 +125,7 @@ func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/collaborators", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/addCollaborator/invite-success.http")
+		httpResponse := httpResponseFixture(t, "/api/addCollaborator/invite-success.http")
 
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
@@ -166,7 +166,7 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 	defer teardownMockServer()
 
 	mux.HandleFunc("/v2/1010/domains/example.com/collaborators/100", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/removeCollaborator/success.http")
+		httpResponse := httpResponseFixture(t, "/api/removeCollaborator/success.http")
 
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
