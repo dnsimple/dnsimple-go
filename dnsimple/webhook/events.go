@@ -34,7 +34,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"domain.registrant_change",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
-		"domain.transfer":					// TODO
+		"domain.transfer": // TODO
 		event = &DomainEvent{}
 	case // email forward
 		"email_forward.create",
@@ -49,7 +49,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"whois_privacy.disable",
 		"whois_privacy.enable",
 		"whois_privacy.purchase",
-		"whois_privacy.renew":				// TODO
+		"whois_privacy.renew": // TODO
 		event = &WhoisPrivacyEvent{}
 	case // zone
 		"zone.create",

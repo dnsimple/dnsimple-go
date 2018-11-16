@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### master
+
+- CHANGED: Cleaned up webhook tests and added coverage for more events.
+
 #### Release 0.21.0
 
 - NEW: Added zone distribution and zone record distribution (dnsimple/dnsimple-go#64)
