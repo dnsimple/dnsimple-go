@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.22.0
 
 - CHANGED: Cleaned up webhook tests and added coverage for more events.
 
