@@ -113,7 +113,7 @@ We highly recommend testing against our [sandbox environment](https://developer.
 The client supports both the production and sandbox environment. To switch to sandbox pass the sandbox API host using the `base_url` option when you construct the client:
 
 ```go
-client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
+client := dnsimple.NewClient(tc)
 client.BaseURL = "https://api.sandbox.dnsimple.com"
 ```
 
@@ -125,7 +125,7 @@ You will need to ensure that you are using an access token created in the sandbo
 You customize the `User-Agent` header for the calls made to the DNSimple API:
 
 ```go
-client := dnsimple.NewClient(dnsimple.NewOauthTokenCredentials(oauthToken))
+client := dnsimple.NewClient(tc)
 client.UserAgent = "my-app"
 ```
 
