@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### Release 0.23.0
+
+- NEW: Added WHOIS privacy renewal (dnsimple/dnsimple-go#78)
+
 #### Release 0.22.0
 
 - CHANGED: Cleaned up webhook tests and added coverage for more events.
