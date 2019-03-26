@@ -10,9 +10,7 @@ func switchEvent(name string, payload []byte) (Event, error) {
 	switch name {
 	case // account
 		"account.update",
-		"account.billing_settings_update",
-		//"account.add_user",
-		"account.remove_user":
+		"account.billing_settings_update":
 		event = &AccountEvent{}
 	case // contact
 		"contact.create",

@@ -125,32 +125,6 @@ func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
 	}
 }
 
-func TestParseAccountEvent_Account_RemoveUser(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.remove_user/example.http")
-
-	event := &AccountEvent{}
-	err := ParseAccountEvent(event, payload)
-	if err != nil {
-		t.Fatalf("ParseEvent returned error: %v", err)
-	}
-
-	if want, got := "account.remove_user", event.Name; want != got {
-		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
-	}
-	if !regexpUUID.MatchString(event.RequestID) {
-		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
-	}
-	if want, got := "xxxxxx@xxxxx.xxx", event.Account.Email; want != got {
-		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
-	}
-
-	parsedEvent, err := Parse(payload)
-	_, ok := parsedEvent.(*AccountEvent)
-	if !ok {
-		t.Fatalf("Parse returned error when typecasting: %v", err)
-	}
-}
-
 func TestParseContactEvent_Contact_Create(t *testing.T) {
 	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.create/example.http")
 
