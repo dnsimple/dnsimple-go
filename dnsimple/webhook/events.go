@@ -12,6 +12,9 @@ func switchEvent(name string, payload []byte) (Event, error) {
 		"account.update",
 		"account.billing_settings_update":
 		event = &AccountEvent{}
+	case // certificate
+		"certificate.remove_private_key":
+		event = &CertificateEvent{}
 	case // contact
 		"contact.create",
 		"contact.delete",
@@ -102,6 +105,27 @@ func ParseAccountEvent(e *AccountEvent, payload []byte) error {
 }
 
 func (e *AccountEvent) parse(payload []byte) error {
+	e.payload, e.Data = payload, e
+	return unmashalEvent(payload, e)
+}
+
+//
+// CertificateEvent
+//
+
+// CertificateEvent represents the base event sent for a certificate action.
+type CertificateEvent struct {
+	EventHeader
+	Data        *CertificateEvent     `json:"data"`
+	Certificate *dnsimple.Certificate `json:"certificate"`
+}
+
+// ParseCertificateEvent unpacks the data into a CertificateEvent.
+func ParseCertificateEvent(e *CertificateEvent, payload []byte) error {
+	return e.parse(payload)
+}
+
+func (e *CertificateEvent) parse(payload []byte) error {
 	e.payload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
