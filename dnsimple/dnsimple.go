@@ -4,6 +4,7 @@ package dnsimple
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -40,6 +41,10 @@ type Client struct {
 	// httpClient is the underlying HTTP client
 	// used to communicate with the API.
 	httpClient *http.Client
+
+	// ctx is the context of the current request. It should only be modified by
+	// copying the entire Client using WithContext.
+	ctx context.Context
 
 	// BaseURL for API requests.
 	// Defaults to the public DNSimple API, but can be set to a different endpoint (e.g. the sandbox).
@@ -104,6 +109,40 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
+// WithContext creates a new DNSimple API client with a context of ctx that
+// shares the http.Client, base URL, user agent, and debug flag of the current
+// API client. This context will be used by all API requests that originate
+// from this API client.
+//
+// The provided ctx must be non-nil.
+func (c *Client) WithContext(ctx context.Context) *Client {
+	if ctx == nil {
+		panic("nil context")
+	}
+
+	c2 := &Client{
+		httpClient: c.httpClient,
+		BaseURL:    c.BaseURL,
+		UserAgent:  c.UserAgent,
+		Debug:      c.Debug,
+		ctx:        ctx,
+	}
+	c2.Identity = &IdentityService{client: c2}
+	c2.Accounts = &AccountsService{client: c2}
+	c2.Certificates = &CertificatesService{client: c2}
+	c2.Contacts = &ContactsService{client: c2}
+	c2.Domains = &DomainsService{client: c2}
+	c2.Oauth = &OauthService{client: c2}
+	c2.Registrar = &RegistrarService{client: c2}
+	c2.Services = &ServicesService{client: c2}
+	c2.Templates = &TemplatesService{client: c2}
+	c2.Tlds = &TldsService{client: c2}
+	c2.VanityNameServers = &VanityNameServersService{client: c2}
+	c2.Webhooks = &WebhooksService{client: c2}
+	c2.Zones = &ZonesService{client: c2}
+	return c2
+}
+
 // NewRequest creates an API request.
 // The path is expected to be a relative path and will be resolved
 // according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
@@ -121,6 +160,9 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
+	}
+	if c.ctx != nil {
+		req = req.WithContext(c.ctx)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
