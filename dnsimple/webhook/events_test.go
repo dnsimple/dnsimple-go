@@ -73,6 +73,32 @@ func TestParseGenericEvent(t *testing.T) {
 	}
 }
 
+func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.billing_settings_update/example.http")
+
+	event := &AccountEvent{}
+	err := ParseAccountEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.billing_settings_update", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "hello@example.com", event.Account.Email; want != got {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
 func TestParseAccountEvent_Account_Update(t *testing.T) {
 	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
 
@@ -99,8 +125,8 @@ func TestParseAccountEvent_Account_Update(t *testing.T) {
 	}
 }
 
-func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.billing_settings_update/example.http")
+func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.user_invitation_accept/example.http")
 
 	event := &AccountEvent{}
 	err := ParseAccountEvent(event, payload)
@@ -108,13 +134,39 @@ func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
 
-	if want, got := "account.billing_settings_update", event.Name; want != got {
+	if want, got := "account.user_invitation_accept", event.Name; want != got {
 		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
 	}
 	if !regexpUUID.MatchString(event.RequestID) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
-	if want, got := "hello@example.com", event.Account.Email; want != got {
+	if want, got := "xxxxx@xxxxx1.xxx", event.Account.Email; want != got {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+
+	parsedEvent, err := Parse(payload)
+	_, ok := parsedEvent.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
+
+func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.user_invite/example.http")
+
+	event := &AccountEvent{}
+	err := ParseAccountEvent(event, payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.user_invite", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+	if want, got := "xxxxx@xxxxx2.xxx", event.Account.Email; want != got {
 		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
 	}
 

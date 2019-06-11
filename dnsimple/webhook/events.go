@@ -9,8 +9,10 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 	switch name {
 	case // account
+		"account.billing_settings_update",
 		"account.update",
-		"account.billing_settings_update":
+		"account.user_invitation_accept",
+		"account.user_invite":
 		event = &AccountEvent{}
 	case // certificate
 		"certificate.remove_private_key":
