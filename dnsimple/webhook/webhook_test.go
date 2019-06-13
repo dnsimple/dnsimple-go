@@ -13,10 +13,10 @@ func TestParse(t *testing.T) {
 	}
 
 	if want, got := "webhook.create", event.GetEventName(); want != got {
-		t.Errorf("Parse event Name expected to be %v, got %v", want, got)
+		t.Errorf("Parse event EventName expected to be %v, got %v", want, got)
 	}
 
-	eventAccount := event.GetEventHeader().Account
+	eventAccount := event.GetEventAccount()
 	if want, got := "User", eventAccount.Display; want != got {
 		t.Errorf("Parse event Account.Display expected to be %v, got %v", want, got)
 	}
@@ -36,11 +36,11 @@ func TestParse_AccountEvent(t *testing.T) {
 	}
 
 	if want, got := "account.update", event.GetEventName(); want != got {
-		t.Errorf("Parse event Name expected to be %v, got %v", want, got)
+		t.Errorf("Parse event EventName expected to be %v, got %v", want, got)
 	}
 
-	eventAccount := event.GetEventHeader().Account
-	if want, got := "User", eventAccount.Display; want != got {
+	eventAccount := event.GetEventAccount()
+	if want, got := "Personal2", eventAccount.Display; want != got {
 		t.Errorf("Parse event Account.Display expected to be %v, got %v", want, got)
 	}
 

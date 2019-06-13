@@ -76,12 +76,12 @@ func switchEvent(name string, payload []byte) (Event, error) {
 
 // GenericEvent represents a generic event, where the data is a simple map of strings.
 type GenericEvent struct {
-	EventHeader
+	AbstractEvent
 	Data interface{} `json:"data"`
 }
 
 func (e *GenericEvent) parse(payload []byte) error {
-	e.payload = payload
+	e.eventPayload = payload
 	return unmashalEvent(payload, e)
 }
 
@@ -96,7 +96,7 @@ func ParseGenericEvent(e *GenericEvent, payload []byte) error {
 
 // AccountEvent represents the base event sent for an account action.
 type AccountEvent struct {
-	EventHeader
+	AbstractEvent
 	Data    *AccountEvent     `json:"data"`
 	Account *dnsimple.Account `json:"account"`
 }
@@ -107,7 +107,7 @@ func ParseAccountEvent(e *AccountEvent, payload []byte) error {
 }
 
 func (e *AccountEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -117,7 +117,7 @@ func (e *AccountEvent) parse(payload []byte) error {
 
 // CertificateEvent represents the base event sent for a certificate action.
 type CertificateEvent struct {
-	EventHeader
+	AbstractEvent
 	Data        *CertificateEvent     `json:"data"`
 	Certificate *dnsimple.Certificate `json:"certificate"`
 }
@@ -128,7 +128,7 @@ func ParseCertificateEvent(e *CertificateEvent, payload []byte) error {
 }
 
 func (e *CertificateEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -138,7 +138,7 @@ func (e *CertificateEvent) parse(payload []byte) error {
 
 // ContactEvent represents the base event sent for a contact action.
 type ContactEvent struct {
-	EventHeader
+	AbstractEvent
 	Data    *ContactEvent     `json:"data"`
 	Contact *dnsimple.Contact `json:"contact"`
 }
@@ -149,7 +149,7 @@ func ParseContactEvent(e *ContactEvent, payload []byte) error {
 }
 
 func (e *ContactEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -159,7 +159,7 @@ func (e *ContactEvent) parse(payload []byte) error {
 
 // DNSSECEvent represents the base event sent for a DNSSEC action.
 type DNSSECEvent struct {
-	EventHeader
+	AbstractEvent
 	Data                   *DNSSECEvent                     `json:"data"`
 	DelegationSignerRecord *dnsimple.DelegationSignerRecord `json:"delegation_signer_record"`
 	//DNSSECConfig           *dnsimple.DNSSECConfig           `json:"dnssec"`
@@ -171,7 +171,7 @@ func ParseDNSSECEvent(e *DNSSECEvent, payload []byte) error {
 }
 
 func (e *DNSSECEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -181,7 +181,7 @@ func (e *DNSSECEvent) parse(payload []byte) error {
 
 // DomainEvent represents the base event sent for a domain action.
 type DomainEvent struct {
-	EventHeader
+	AbstractEvent
 	Data       *DomainEvent         `json:"data"`
 	Domain     *dnsimple.Domain     `json:"domain"`
 	Registrant *dnsimple.Contact    `json:"registrant"`
@@ -194,7 +194,7 @@ func ParseDomainEvent(e *DomainEvent, payload []byte) error {
 }
 
 func (e *DomainEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -204,7 +204,7 @@ func (e *DomainEvent) parse(payload []byte) error {
 
 // EmailForwardEvent represents the base event sent for an email forward action.
 type EmailForwardEvent struct {
-	EventHeader
+	AbstractEvent
 	Data         *EmailForwardEvent     `json:"data"`
 	EmailForward *dnsimple.EmailForward `json:"email_forward"`
 }
@@ -215,7 +215,7 @@ func ParseEmailForwardEvent(e *EmailForwardEvent, payload []byte) error {
 }
 
 func (e *EmailForwardEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -225,7 +225,7 @@ func (e *EmailForwardEvent) parse(payload []byte) error {
 
 // WebhookEvent represents the base event sent for a webhook action.
 type WebhookEvent struct {
-	EventHeader
+	AbstractEvent
 	Data    *WebhookEvent     `json:"data"`
 	Webhook *dnsimple.Webhook `json:"webhook"`
 }
@@ -236,7 +236,7 @@ func ParseWebhookEvent(e *WebhookEvent, payload []byte) error {
 }
 
 func (e *WebhookEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -246,7 +246,7 @@ func (e *WebhookEvent) parse(payload []byte) error {
 
 // WhoisPrivacyEvent represents the base event sent for a whois privacy action.
 type WhoisPrivacyEvent struct {
-	EventHeader
+	AbstractEvent
 	Data         *WhoisPrivacyEvent     `json:"data"`
 	Domain       *dnsimple.Domain       `json:"domain"`
 	WhoisPrivacy *dnsimple.WhoisPrivacy `json:"whois_privacy"`
@@ -258,7 +258,7 @@ func ParseWhoisPrivacyEvent(e *WhoisPrivacyEvent, payload []byte) error {
 }
 
 func (e *WhoisPrivacyEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -268,7 +268,7 @@ func (e *WhoisPrivacyEvent) parse(payload []byte) error {
 
 // ZoneEvent represents the base event sent for a zone action.
 type ZoneEvent struct {
-	EventHeader
+	AbstractEvent
 	Data *ZoneEvent     `json:"data"`
 	Zone *dnsimple.Zone `json:"zone"`
 }
@@ -279,7 +279,7 @@ func ParseZoneEvent(e *ZoneEvent, payload []byte) error {
 }
 
 func (e *ZoneEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
 
@@ -289,7 +289,7 @@ func (e *ZoneEvent) parse(payload []byte) error {
 
 // ZoneRecordEvent represents the base event sent for a zone record action.
 type ZoneRecordEvent struct {
-	EventHeader
+	AbstractEvent
 	Data       *ZoneRecordEvent     `json:"data"`
 	ZoneRecord *dnsimple.ZoneRecord `json:"zone_record"`
 }
@@ -300,6 +300,6 @@ func ParseZoneRecordEvent(e *ZoneRecordEvent, payload []byte) error {
 }
 
 func (e *ZoneRecordEvent) parse(payload []byte) error {
-	e.payload, e.Data = payload, e
+	e.eventPayload, e.Data = payload, e
 	return unmashalEvent(payload, e)
 }
