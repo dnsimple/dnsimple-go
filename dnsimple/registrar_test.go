@@ -110,7 +110,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 		t.Fatalf("Registrar.RegisterDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 999, registration.DomainID; want != got {
-		t.Fatalf("Registrar.RegisterDomain() returned Name expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Registrar.RegisterDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }
 
@@ -143,7 +143,7 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 		t.Fatalf("Registrar.TransferDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := 999, transfer.DomainID; want != got {
-		t.Fatalf("Registrar.TransferDomain() returned Name expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Registrar.TransferDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }
 
