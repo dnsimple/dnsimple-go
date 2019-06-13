@@ -26,3 +26,26 @@ func TestParse(t *testing.T) {
 		t.Fatalf("Parse returned error when typecasting: %v", err)
 	}
 }
+
+func TestParse_AccountEvent(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
+
+	event, err := Parse(payload)
+	if err != nil {
+		t.Fatalf("Parse returned error: %v", err)
+	}
+
+	if want, got := "account.update", event.GetEventName(); want != got {
+		t.Errorf("Parse event Name expected to be %v, got %v", want, got)
+	}
+
+	eventAccount := event.GetEventHeader().Account
+	if want, got := "User", eventAccount.Display; want != got {
+		t.Errorf("Parse event Account.Display expected to be %v, got %v", want, got)
+	}
+
+	_, ok := event.(*AccountEvent)
+	if !ok {
+		t.Fatalf("Parse returned error when typecasting: %v", err)
+	}
+}
