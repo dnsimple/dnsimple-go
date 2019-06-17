@@ -79,6 +79,6 @@ type eventDataStruct struct {
 	Data interface{} `json:"data"`
 }
 
-func unmashalEventData(data []byte, v interface{}) error {
+func unmarshalEventData(data []byte, v interface{}) error {
 	return json.Unmarshal(data, &eventDataStruct{Data: v})
 }

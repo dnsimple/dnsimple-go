@@ -79,7 +79,7 @@ func switchEventData(event *EventContainer) (EventDataContainer, error) {
 type GenericEventData map[string]interface{}
 
 func (d *GenericEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -92,7 +92,7 @@ type AccountEventData struct {
 }
 
 func (d *AccountEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -105,7 +105,7 @@ type CertificateEventData struct {
 }
 
 func (d *CertificateEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -118,7 +118,7 @@ type ContactEventData struct {
 }
 
 func (d *ContactEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -132,7 +132,7 @@ type DNSSECEventData struct {
 }
 
 func (d *DNSSECEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -148,7 +148,7 @@ type DomainEventData struct {
 }
 
 func (d *DomainEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -161,7 +161,7 @@ type EmailForwardEventData struct {
 }
 
 func (d *EmailForwardEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -174,7 +174,7 @@ type WebhookEventData struct {
 }
 
 func (d *WebhookEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -188,7 +188,7 @@ type WhoisPrivacyEventData struct {
 }
 
 func (d *WhoisPrivacyEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -201,7 +201,7 @@ type ZoneEventData struct {
 }
 
 func (d *ZoneEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
 
 //
@@ -214,5 +214,5 @@ type ZoneRecordEventData struct {
 }
 
 func (d *ZoneRecordEventData) unmarshalEventData(payload []byte) error {
-	return unmashalEventData(payload, d)
+	return unmarshalEventData(payload, d)
 }
