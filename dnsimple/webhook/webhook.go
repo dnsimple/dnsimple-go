@@ -30,7 +30,7 @@ type Account struct {
 	Identifier string `json:"identifier,omitempty"`
 }
 
-type EventContainer struct {
+type Event struct {
 	APIVersion string   `json:"api_version"`
 	RequestID  string   `json:"request_identifier"`
 	Name       string   `json:"name"`
@@ -44,11 +44,11 @@ type EventDataContainer interface {
 	unmarshalEventData([]byte) error
 }
 
-func (e *EventContainer) GetData() EventDataContainer {
+func (e *Event) GetData() EventDataContainer {
 	return e.data
 }
 
-func (e *EventContainer) GetPayload() []byte {
+func (e *Event) GetPayload() []byte {
 	return e.payload
 }
 
@@ -59,8 +59,8 @@ func (e *EventContainer) GetPayload() []byte {
 //
 // The event data type is an EventContainerData interface. Therefore, you must perform typecasting
 // to access any type-specific field.
-func ParseEvent(payload []byte) (*EventContainer, error) {
-	e := &EventContainer{payload: payload}
+func ParseEvent(payload []byte) (*Event, error) {
+	e := &Event{payload: payload}
 
 	if err := json.Unmarshal(payload, e); err != nil {
 		return nil, err

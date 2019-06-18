@@ -4,8 +4,8 @@ import (
 	"github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
-func switchEventData(event *EventContainer) (EventDataContainer, error) {
-	var dataContainer EventDataContainer
+func switchEventData(event *Event) (EventDataContainer, error) {
+	var data EventDataContainer
 
 	switch event.Name {
 	case // account
@@ -13,19 +13,19 @@ func switchEventData(event *EventContainer) (EventDataContainer, error) {
 		"account.update",
 		"account.user_invitation_accept",
 		"account.user_invite":
-		dataContainer = &AccountEventData{}
+		data = &AccountEventData{}
 	case // certificate
 		"certificate.remove_private_key":
-		dataContainer = &CertificateEventData{}
+		data = &CertificateEventData{}
 	case // contact
 		"contact.create",
 		"contact.delete",
 		"contact.update":
-		dataContainer = &ContactEventData{}
+		data = &ContactEventData{}
 	case // dnssec
 		"dnssec.rotation_complete",
 		"dnssec.rotation_start":
-		dataContainer = &DNSSECEventData{}
+		data = &DNSSECEventData{}
 	case // domain
 		"domain.auto_renewal_disable",
 		"domain.auto_renewal_enable",
@@ -38,37 +38,37 @@ func switchEventData(event *EventContainer) (EventDataContainer, error) {
 		"domain.resolution_disable",
 		"domain.resolution_enable",
 		"domain.transfer": // TODO
-		dataContainer = &DomainEventData{}
+		data = &DomainEventData{}
 	case // email forward
 		"email_forward.create",
 		"email_forward.delete",
 		"email_forward.update":
-		dataContainer = &EmailForwardEventData{}
+		data = &EmailForwardEventData{}
 	case // webhook
 		"webhook.create",
 		"webhook.delete":
-		dataContainer = &WebhookEventData{}
+		data = &WebhookEventData{}
 	case // whois privacy
 		"whois_privacy.disable",
 		"whois_privacy.enable",
 		"whois_privacy.purchase",
 		"whois_privacy.renew": // TODO
-		dataContainer = &WhoisPrivacyEventData{}
+		data = &WhoisPrivacyEventData{}
 	case // zone
 		"zone.create",
 		"zone.delete":
-		dataContainer = &ZoneEventData{}
+		data = &ZoneEventData{}
 	case // zone record
 		"zone_record.create",
 		"zone_record.delete",
 		"zone_record.update":
-		dataContainer = &ZoneRecordEventData{}
+		data = &ZoneRecordEventData{}
 	default:
-		dataContainer = &GenericEventData{}
+		data = &GenericEventData{}
 	}
 
-	err := dataContainer.unmarshalEventData(event.payload)
-	return dataContainer, err
+	err := data.unmarshalEventData(event.payload)
+	return data, err
 }
 
 //
