@@ -1,16 +1,27 @@
 # CHANGELOG
 
+#### master
+
+- CHANGE: Redesigned webhook event parsing to avoid event/data conflicts (dnsimple/dnsimple-go#85)
+
+IMPORTANT: This release introduce breaking changes compared to the previous one,
+as the webhook even parsing has been significantly reworked.
+
+
 #### Release 0.23.0
 
 - NEW: Added WHOIS privacy renewal (dnsimple/dnsimple-go#78)
+
 
 #### Release 0.22.0
 
 - CHANGED: Cleaned up webhook tests and added coverage for more events.
 
+
 #### Release 0.21.0
 
 - NEW: Added zone distribution and zone record distribution (dnsimple/dnsimple-go#64)
+
 
 #### Release 0.20.0
 

@@ -4,7 +4,6 @@ package webhook
 
 import (
 	"encoding/json"
-
 	"github.com/dnsimple/dnsimple-go/dnsimple"
 )
 
@@ -16,13 +15,13 @@ type Actor struct {
 	Pretty string `json:"pretty"`
 }
 
-// Actor represents the account that this event is attached to.
+// Account represents the account that this event is attached to.
 type Account struct {
 	dnsimple.Account
 
 	// Display is a string that can be used as a display label
-	// and it is sent in a webhook payload.
-	// It generally represent the Name of the account.
+	// and it is sent in a webhook payload
+	// It generally represent the name of the account.
 	Display string `json:"display,omitempty"`
 
 	// Identifier is a human-readable string identifier
@@ -31,68 +30,55 @@ type Account struct {
 	Identifier string `json:"identifier,omitempty"`
 }
 
-// Event is an event generated in the DNSimple application.
-type Event interface {
-	GetEventName() string
-	GetEventHeader() *EventHeader
-	GetPayload() []byte
-	parse([]byte) error
-}
-
-type EventHeader struct {
+type Event struct {
 	APIVersion string   `json:"api_version"`
 	RequestID  string   `json:"request_identifier"`
+	Name       string   `json:"name"`
 	Actor      *Actor   `json:"actor"`
 	Account    *Account `json:"account"`
-	Name       string   `json:"name"`
-	Auto       bool     `json:"auto"`
+	data       EventDataContainer
 	payload    []byte
 }
 
-type eventName struct {
-	Name string `json:"name"`
+type EventDataContainer interface {
+	unmarshalEventData([]byte) error
 }
 
-// GetEventHeader returns the event GetEventHeader.
-func (e *EventHeader) GetEventHeader() *EventHeader {
-	return e
+func (e *Event) GetData() EventDataContainer {
+	return e.data
 }
 
-// GetEventName returns the event name as defined in the name field of the payload.
-func (e *EventHeader) GetEventName() string {
-	return e.Name
-}
-
-// GetPayload returns the binary payload the event was deserialized from.
-func (e *EventHeader) GetPayload() []byte {
+func (e *Event) GetPayload() []byte {
 	return e.payload
 }
 
-func (e *EventHeader) parse(payload []byte) error {
-	e.payload = payload
-	return unmashalEvent(payload, e)
-}
-
-// Parse takes a payload and attempts to deserialize the payload into an event type
-// that matches the event action in the payload. If no direct match is found, then a DefaultEvent is returned.
+// ParseEvent takes an event payload and attempts to deserialize the payload into an Event.
 //
-// Parse returns type is an Event interface. Therefore, you must perform typecasting
-// to access any event-specific field.
-func Parse(payload []byte) (Event, error) {
-	action, err := ParseName(payload)
+// The event data will be set with a data type that matches the event action in the payload.
+// If no direct match is found, then a GenericEventData is assigned.
+//
+// The event data type is an EventContainerData interface. Therefore, you must perform typecasting
+// to access any type-specific field.
+func ParseEvent(payload []byte) (*Event, error) {
+	e := &Event{payload: payload}
+
+	if err := json.Unmarshal(payload, e); err != nil {
+		return nil, err
+	}
+
+	data, err := switchEventData(e)
 	if err != nil {
 		return nil, err
 	}
 
-	return switchEvent(action, payload)
+	e.data = data
+	return e, nil
 }
 
-func ParseName(data []byte) (string, error) {
-	eventName := &eventName{}
-	err := json.Unmarshal(data, eventName)
-	return eventName.Name, err
+type eventDataStruct struct {
+	Data interface{} `json:"data"`
 }
 
-func unmashalEvent(data []byte, v interface{}) error {
-	return json.Unmarshal(data, v)
+func unmarshalEventData(data []byte, v interface{}) error {
+	return json.Unmarshal(data, &eventDataStruct{Data: v})
 }
