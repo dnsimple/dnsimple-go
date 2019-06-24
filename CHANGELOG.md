@@ -1,6 +1,8 @@
 # CHANGELOG
 
-#### master
+#### Release 0.30.0
+
+- NEW: Added webhook event parser for dnssec.create, dnssec.delete
 
 - CHANGE: Redesigned webhook event parsing to avoid event/data conflicts (dnsimple/dnsimple-go#85)
 
