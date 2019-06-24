@@ -23,6 +23,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"contact.update":
 		data = &ContactEventData{}
 	case // dnssec
+		"dnssec.create",
 		"dnssec.rotation_complete",
 		"dnssec.rotation_start":
 		data = &DNSSECEventData{}

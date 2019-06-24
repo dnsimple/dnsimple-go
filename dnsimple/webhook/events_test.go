@@ -260,6 +260,27 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 	}
 }
 
+func TestParseDNSSECEvent_DNSSEC_Create(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.create/example.http")
+
+	event, err := ParseEvent(payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "dnssec.create", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+
+	_, ok := event.GetData().(*DNSSECEventData)
+	if !ok {
+		t.Fatalf("ParseEvent type assertion failed")
+	}
+}
+
 func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
 	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_start/example.http")
 
