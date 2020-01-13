@@ -164,6 +164,30 @@ func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 	}
 }
 
+func TestParseCertificateEvent_Certificate_Issue(t *testing.T) {
+	payload := getHttpRequestBodyFromFixture(t, "/webhooks/certificate.issue/example.http")
+
+	event, err := ParseEvent(payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "certificate.issue", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+
+	data, ok := event.GetData().(*CertificateEventData)
+	if !ok {
+		t.Fatalf("ParseEvent type assertion failed")
+	}
+	if want, got := int64(86368), data.Certificate.ID; want != got {
+		t.Errorf("ParseEvent Certificate.ID expected to be %v, got %v", want, got)
+	}
+}
+
 func TestParseCertificateEvent_Certificate_RemovePrivateKey(t *testing.T) {
 	payload := getHttpRequestBodyFromFixture(t, "/webhooks/certificate.remove_private_key/example.http")
 
