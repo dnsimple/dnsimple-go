@@ -4,17 +4,23 @@ The main `dnsimple` package is defined in the `/dnsimple` subfolder of the `dnsi
 
 For example, to get the dependencies you will have to run:
 
-    # from $GOPATH/src/github.com/dnsimple/dnsimple-go directory
-    $ cd dnsimple
-    $ go get
+```
+# from $GOPATH/src/github.com/dnsimple/dnsimple-go directory
+cd dnsimple
+go get
+```
 
 Likewise, when you include this library as dependency, you will need to use
 
-    import "github.com/dnsimple/dnsimple-go/dnsimple"
+```
+import "github.com/dnsimple/dnsimple-go/dnsimple"
+```
 
 and not
 
-    import "github.com/dnsimple/dnsimple-go"
+```
+import "github.com/dnsimple/dnsimple-go"
+```
 
 
 ## Getting started
