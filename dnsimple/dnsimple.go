@@ -146,7 +146,7 @@ func formatUserAgent(customUserAgent string) string {
 		return defaultUserAgent
 	}
 
-	return fmt.Sprintf("%s %s", defaultUserAgent, customUserAgent)
+	return fmt.Sprintf("%s %s", customUserAgent, defaultUserAgent)
 }
 
 func versioned(path string) string {
