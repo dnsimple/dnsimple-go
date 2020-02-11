@@ -1,8 +1,10 @@
 # CHANGELOG
 
-#### master
+
+#### Release 0.31.0
 
 - CHANGED: User-agent format has been changed to prepend custom token before default token. (dnsimple/dnsimple-go#87)
+
 
 #### Release 0.30.0
 
