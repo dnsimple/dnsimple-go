@@ -143,7 +143,7 @@ func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 
 	// test that default user-agent is attached to the request
 	ua := req.Header.Get("User-Agent")
-	if want := fmt.Sprintf("%s AwesomeClient", defaultUserAgent); ua != want {
+	if want := fmt.Sprintf("AwesomeClient %s", defaultUserAgent); ua != want {
 		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, want)
 	}
 }
