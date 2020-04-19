@@ -102,6 +102,12 @@ tp := dnsimple.BasicAuthTransport{
 client := dnsimple.NewClient(tp.Client())
 ```
 
+For requests made to authorize OAuth access, and to exchange the short lived authorization token for the OAuth token, use an HTTP client with a timeout:
+
+```go
+client := dnsimple.NewClient(&http.Client{Timeout: time.Second * 10})
+```
+
 For any other custom need you can define your own `http.RoundTripper` implementation and
 pass a client that authenticated with the custom round tripper.
 
