@@ -128,11 +128,3 @@ func (s *DomainsService) DeleteDomain(accountID string, domainIdentifier string)
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
-
-// DEPRECATED
-//
-// See https://developer.dnsimple.com/v2/domains/#reset-token
-func (s *DomainsService) ResetDomainToken(accountID string, domainIdentifier string) (*domainResponse, error) {
-	// noop
-	return &domainResponse{}, nil
-}

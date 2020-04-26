@@ -5,6 +5,8 @@
 - CHANGED: Renamed ExchangeAuthorizationError.HttpResponse field to ExchangeAuthorizationError.HTTPResponse
 - CHANGED: Renamed Response.HttpResponse field to Response.HTTPResponse
 
+- REMOVED: Deleted deprecated ResetDomainToken method.
+
 
 #### Release 0.31.0
 
