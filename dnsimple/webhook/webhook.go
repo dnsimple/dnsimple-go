@@ -30,6 +30,7 @@ type Account struct {
 	Identifier string `json:"identifier,omitempty"`
 }
 
+// Event represents a webhook event.
 type Event struct {
 	APIVersion string   `json:"api_version"`
 	RequestID  string   `json:"request_identifier"`
@@ -40,6 +41,7 @@ type Event struct {
 	payload    []byte
 }
 
+// EventDataContainer defines the container for the event payload data.
 type EventDataContainer interface {
 	unmarshalEventData([]byte) error
 }

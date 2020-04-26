@@ -1,5 +1,9 @@
 package dnsimple
 
+// AccountsService handles communication with the account related
+// methods of the DNSimple API.
+//
+// See https://developer.dnsimple.com/v2/accounts/
 type AccountsService struct {
 	client *Client
 }
@@ -36,6 +40,6 @@ func (s *AccountsService) ListAccounts(options *ListOptions) (*accountsResponse,
 		return accountsResponse, err
 	}
 
-	accountsResponse.HttpResponse = resp
+	accountsResponse.HTTPResponse = resp
 	return accountsResponse, nil
 }

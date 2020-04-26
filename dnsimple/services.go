@@ -73,7 +73,7 @@ func (s *ServicesService) ListServices(options *ListOptions) (*servicesResponse,
 		return servicesResponse, err
 	}
 
-	servicesResponse.HttpResponse = resp
+	servicesResponse.HTTPResponse = resp
 	return servicesResponse, nil
 }
 
@@ -89,6 +89,6 @@ func (s *ServicesService) GetService(serviceIdentifier string) (*serviceResponse
 		return nil, err
 	}
 
-	serviceResponse.HttpResponse = resp
+	serviceResponse.HTTPResponse = resp
 	return serviceResponse, nil
 }

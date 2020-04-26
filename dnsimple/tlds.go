@@ -80,7 +80,7 @@ func (s *TldsService) ListTlds(options *ListOptions) (*tldsResponse, error) {
 		return tldsResponse, err
 	}
 
-	tldsResponse.HttpResponse = resp
+	tldsResponse.HTTPResponse = resp
 	return tldsResponse, nil
 }
 
@@ -96,7 +96,7 @@ func (s *TldsService) GetTld(tld string) (*tldResponse, error) {
 		return nil, err
 	}
 
-	tldResponse.HttpResponse = resp
+	tldResponse.HTTPResponse = resp
 	return tldResponse, nil
 }
 
@@ -112,6 +112,6 @@ func (s *TldsService) GetTldExtendedAttributes(tld string) (*tldExtendedAttribut
 		return nil, err
 	}
 
-	tldResponse.HttpResponse = resp
+	tldResponse.HTTPResponse = resp
 	return tldResponse, nil
 }

@@ -73,7 +73,7 @@ func (s *ZonesService) ListRecords(accountID string, zoneName string, options *Z
 		return nil, err
 	}
 
-	recordsResponse.HttpResponse = resp
+	recordsResponse.HTTPResponse = resp
 	return recordsResponse, nil
 }
 
@@ -89,7 +89,7 @@ func (s *ZonesService) CreateRecord(accountID string, zoneName string, recordAtt
 		return nil, err
 	}
 
-	recordResponse.HttpResponse = resp
+	recordResponse.HTTPResponse = resp
 	return recordResponse, nil
 }
 
@@ -105,7 +105,7 @@ func (s *ZonesService) GetRecord(accountID string, zoneName string, recordID int
 		return nil, err
 	}
 
-	recordResponse.HttpResponse = resp
+	recordResponse.HTTPResponse = resp
 	return recordResponse, nil
 }
 
@@ -121,7 +121,7 @@ func (s *ZonesService) UpdateRecord(accountID string, zoneName string, recordID 
 		return nil, err
 	}
 
-	recordResponse.HttpResponse = resp
+	recordResponse.HTTPResponse = resp
 	return recordResponse, nil
 }
 
@@ -137,6 +137,6 @@ func (s *ZonesService) DeleteRecord(accountID string, zoneName string, recordID 
 		return nil, err
 	}
 
-	recordResponse.HttpResponse = resp
+	recordResponse.HTTPResponse = resp
 	return recordResponse, nil
 }

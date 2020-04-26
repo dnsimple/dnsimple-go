@@ -25,7 +25,7 @@ func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) 
 		return nil, err
 	}
 
-	zoneDistributionResponse.HttpResponse = resp
+	zoneDistributionResponse.HTTPResponse = resp
 	return zoneDistributionResponse, nil
 }
 
@@ -41,6 +41,6 @@ func (s *ZonesService) CheckZoneRecordDistribution(accountID string, zoneName st
 		return nil, err
 	}
 
-	zoneDistributionResponse.HttpResponse = resp
+	zoneDistributionResponse.HTTPResponse = resp
 	return zoneDistributionResponse, nil
 }

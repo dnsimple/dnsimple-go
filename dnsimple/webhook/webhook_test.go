@@ -28,7 +28,7 @@ func TestParseEvent_Generic(t *testing.T) {
 }
 
 func TestParseEvent_Account(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {

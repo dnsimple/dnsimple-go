@@ -77,7 +77,7 @@ func (s *DomainsService) ListDomains(accountID string, options *DomainListOption
 		return nil, err
 	}
 
-	domainsResponse.HttpResponse = resp
+	domainsResponse.HTTPResponse = resp
 	return domainsResponse, nil
 }
 
@@ -93,7 +93,7 @@ func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain)
 		return nil, err
 	}
 
-	domainResponse.HttpResponse = resp
+	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
 
@@ -109,7 +109,7 @@ func (s *DomainsService) GetDomain(accountID string, domainIdentifier string) (*
 		return nil, err
 	}
 
-	domainResponse.HttpResponse = resp
+	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
 
@@ -125,7 +125,7 @@ func (s *DomainsService) DeleteDomain(accountID string, domainIdentifier string)
 		return nil, err
 	}
 
-	domainResponse.HttpResponse = resp
+	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
 

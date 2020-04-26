@@ -60,7 +60,7 @@ func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions)
 		return templatesResponse, err
 	}
 
-	templatesResponse.HttpResponse = resp
+	templatesResponse.HTTPResponse = resp
 	return templatesResponse, nil
 }
 
@@ -76,7 +76,7 @@ func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes T
 		return nil, err
 	}
 
-	templateResponse.HttpResponse = resp
+	templateResponse.HTTPResponse = resp
 	return templateResponse, nil
 }
 
@@ -92,7 +92,7 @@ func (s *TemplatesService) GetTemplate(accountID string, templateIdentifier stri
 		return nil, err
 	}
 
-	templateResponse.HttpResponse = resp
+	templateResponse.HTTPResponse = resp
 	return templateResponse, nil
 }
 
@@ -108,7 +108,7 @@ func (s *TemplatesService) UpdateTemplate(accountID string, templateIdentifier s
 		return nil, err
 	}
 
-	templateResponse.HttpResponse = resp
+	templateResponse.HTTPResponse = resp
 	return templateResponse, nil
 }
 
@@ -124,6 +124,6 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateIdentifier s
 		return nil, err
 	}
 
-	templateResponse.HttpResponse = resp
+	templateResponse.HTTPResponse = resp
 	return templateResponse, nil
 }

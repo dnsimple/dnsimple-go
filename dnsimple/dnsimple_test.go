@@ -83,7 +83,7 @@ func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 	}
 }
 
-func readHttpFixture(t *testing.T, filename string) string {
+func readHTTPFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../fixtures.http" + filename)
 	if err != nil {
 		t.Fatalf("Unable to read HTTP fixture: %v", err)
@@ -101,7 +101,7 @@ func readHttpFixture(t *testing.T, filename string) string {
 }
 
 func httpResponseFixture(t *testing.T, filename string) *http.Response {
-	resp, err := http.ReadResponse(bufio.NewReader(strings.NewReader(readHttpFixture(t, filename))), nil)
+	resp, err := http.ReadResponse(bufio.NewReader(strings.NewReader(readHTTPFixture(t, filename))), nil)
 	if err != nil {
 		t.Fatalf("Unable to create http.Response from fixture: %v", err)
 	}

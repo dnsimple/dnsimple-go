@@ -51,7 +51,7 @@ func (s *DomainsService) ListEmailForwards(accountID string, domainIdentifier st
 		return nil, err
 	}
 
-	forwardsResponse.HttpResponse = resp
+	forwardsResponse.HTTPResponse = resp
 	return forwardsResponse, nil
 }
 
@@ -67,7 +67,7 @@ func (s *DomainsService) CreateEmailForward(accountID string, domainIdentifier s
 		return nil, err
 	}
 
-	forwardResponse.HttpResponse = resp
+	forwardResponse.HTTPResponse = resp
 	return forwardResponse, nil
 }
 
@@ -83,7 +83,7 @@ func (s *DomainsService) GetEmailForward(accountID string, domainIdentifier stri
 		return nil, err
 	}
 
-	forwardResponse.HttpResponse = resp
+	forwardResponse.HTTPResponse = resp
 	return forwardResponse, nil
 }
 
@@ -99,6 +99,6 @@ func (s *DomainsService) DeleteEmailForward(accountID string, domainIdentifier s
 		return nil, err
 	}
 
-	forwardResponse.HttpResponse = resp
+	forwardResponse.HTTPResponse = resp
 	return forwardResponse, nil
 }

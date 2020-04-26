@@ -33,7 +33,7 @@ func (s *ServicesService) AppliedServices(accountID string, domainIdentifier str
 		return servicesResponse, err
 	}
 
-	servicesResponse.HttpResponse = resp
+	servicesResponse.HTTPResponse = resp
 	return servicesResponse, nil
 }
 
@@ -49,7 +49,7 @@ func (s *ServicesService) ApplyService(accountID string, serviceIdentifier strin
 		return nil, err
 	}
 
-	serviceResponse.HttpResponse = resp
+	serviceResponse.HTTPResponse = resp
 	return serviceResponse, nil
 }
 
@@ -65,6 +65,6 @@ func (s *ServicesService) UnapplyService(accountID string, serviceIdentifier str
 		return nil, err
 	}
 
-	serviceResponse.HttpResponse = resp
+	serviceResponse.HTTPResponse = resp
 	return serviceResponse, nil
 }

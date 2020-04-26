@@ -71,7 +71,7 @@ func (s *ZonesService) ListZones(accountID string, options *ZoneListOptions) (*z
 		return zonesResponse, err
 	}
 
-	zonesResponse.HttpResponse = resp
+	zonesResponse.HTTPResponse = resp
 	return zonesResponse, nil
 }
 
@@ -87,7 +87,7 @@ func (s *ZonesService) GetZone(accountID string, zoneName string) (*zoneResponse
 		return nil, err
 	}
 
-	zoneResponse.HttpResponse = resp
+	zoneResponse.HTTPResponse = resp
 	return zoneResponse, nil
 }
 
@@ -103,6 +103,6 @@ func (s *ZonesService) GetZoneFile(accountID string, zoneName string) (*zoneFile
 		return nil, err
 	}
 
-	zoneFileResponse.HttpResponse = resp
+	zoneFileResponse.HTTPResponse = resp
 	return zoneFileResponse, nil
 }

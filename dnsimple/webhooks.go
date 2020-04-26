@@ -50,7 +50,7 @@ func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*webho
 		return webhooksResponse, err
 	}
 
-	webhooksResponse.HttpResponse = resp
+	webhooksResponse.HTTPResponse = resp
 	return webhooksResponse, nil
 }
 
@@ -66,7 +66,7 @@ func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webh
 		return nil, err
 	}
 
-	webhookResponse.HttpResponse = resp
+	webhookResponse.HTTPResponse = resp
 	return webhookResponse, nil
 }
 
@@ -82,7 +82,7 @@ func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*webhoo
 		return nil, err
 	}
 
-	webhookResponse.HttpResponse = resp
+	webhookResponse.HTTPResponse = resp
 	return webhookResponse, nil
 }
 
@@ -98,6 +98,6 @@ func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int64) (*web
 		return nil, err
 	}
 
-	webhookResponse.HttpResponse = resp
+	webhookResponse.HTTPResponse = resp
 	return webhookResponse, nil
 }

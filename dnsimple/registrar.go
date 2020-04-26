@@ -37,7 +37,7 @@ func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*do
 		return nil, err
 	}
 
-	checkResponse.HttpResponse = resp
+	checkResponse.HTTPResponse = resp
 	return checkResponse, nil
 }
 
@@ -87,7 +87,7 @@ func (s *RegistrarService) GetDomainPremiumPrice(accountID string, domainName st
 		return nil, err
 	}
 
-	priceResponse.HttpResponse = resp
+	priceResponse.HTTPResponse = resp
 	return priceResponse, nil
 }
 
@@ -139,7 +139,7 @@ func (s *RegistrarService) RegisterDomain(accountID string, domainName string, r
 		return nil, err
 	}
 
-	registrationResponse.HttpResponse = resp
+	registrationResponse.HTTPResponse = resp
 	return registrationResponse, nil
 }
 
@@ -181,7 +181,7 @@ type DomainTransferRequest struct {
 
 // TransferDomain transfers a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#transfer
+// See https://developer.dnsimple.com/v2/registrar/#transferDomain
 func (s *RegistrarService) TransferDomain(accountID string, domainName string, request *DomainTransferRequest) (*domainTransferResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers", accountID, domainName))
 	transferResponse := &domainTransferResponse{}
@@ -193,7 +193,7 @@ func (s *RegistrarService) TransferDomain(accountID string, domainName string, r
 		return nil, err
 	}
 
-	transferResponse.HttpResponse = resp
+	transferResponse.HTTPResponse = resp
 	return transferResponse, nil
 }
 
@@ -203,9 +203,9 @@ type domainTransferOutResponse struct {
 	Data *Domain `json:"data"`
 }
 
-// Transfer out a domain name.
+// TransferDomainOut prepares a domain for outbound transfer.
 //
-// See https://developer.dnsimple.com/v2/registrar/#transfer-out
+// See https://developer.dnsimple.com/v2/registrar/#authorizeDomainTransferOut
 func (s *RegistrarService) TransferDomainOut(accountID string, domainName string) (*domainTransferOutResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/authorize_transfer_out", accountID, domainName))
 	transferResponse := &domainTransferOutResponse{}
@@ -215,7 +215,7 @@ func (s *RegistrarService) TransferDomainOut(accountID string, domainName string
 		return nil, err
 	}
 
-	transferResponse.HttpResponse = resp
+	transferResponse.HTTPResponse = resp
 	return transferResponse, nil
 }
 
@@ -256,6 +256,6 @@ func (s *RegistrarService) RenewDomain(accountID string, domainName string, requ
 		return nil, err
 	}
 
-	renewalResponse.HttpResponse = resp
+	renewalResponse.HTTPResponse = resp
 	return renewalResponse, nil
 }

@@ -16,6 +16,6 @@ func (s *TemplatesService) ApplyTemplate(accountID string, templateIdentifier st
 		return nil, err
 	}
 
-	templateResponse.HttpResponse = resp
+	templateResponse.HTTPResponse = resp
 	return templateResponse, nil
 }

@@ -51,7 +51,7 @@ func (s *DomainsService) ListDelegationSignerRecords(accountID string, domainIde
 		return nil, err
 	}
 
-	dsRecordsResponse.HttpResponse = resp
+	dsRecordsResponse.HTTPResponse = resp
 	return dsRecordsResponse, nil
 }
 
@@ -67,7 +67,7 @@ func (s *DomainsService) CreateDelegationSignerRecord(accountID string, domainId
 		return nil, err
 	}
 
-	dsRecordResponse.HttpResponse = resp
+	dsRecordResponse.HTTPResponse = resp
 	return dsRecordResponse, nil
 }
 
@@ -83,7 +83,7 @@ func (s *DomainsService) GetDelegationSignerRecord(accountID string, domainIdent
 		return nil, err
 	}
 
-	dsRecordResponse.HttpResponse = resp
+	dsRecordResponse.HTTPResponse = resp
 	return dsRecordResponse, nil
 }
 
@@ -100,6 +100,6 @@ func (s *DomainsService) DeleteDelegationSignerRecord(accountID string, domainId
 		return nil, err
 	}
 
-	dsRecordResponse.HttpResponse = resp
+	dsRecordResponse.HTTPResponse = resp
 	return dsRecordResponse, nil
 }

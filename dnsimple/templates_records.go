@@ -54,7 +54,7 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentif
 		return templateRecordsResponse, err
 	}
 
-	templateRecordsResponse.HttpResponse = resp
+	templateRecordsResponse.HTTPResponse = resp
 	return templateRecordsResponse, nil
 }
 
@@ -70,7 +70,7 @@ func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdenti
 		return nil, err
 	}
 
-	templateRecordResponse.HttpResponse = resp
+	templateRecordResponse.HTTPResponse = resp
 	return templateRecordResponse, nil
 }
 
@@ -86,7 +86,7 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifie
 		return nil, err
 	}
 
-	templateRecordResponse.HttpResponse = resp
+	templateRecordResponse.HTTPResponse = resp
 	return templateRecordResponse, nil
 }
 
@@ -102,6 +102,6 @@ func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdenti
 		return nil, err
 	}
 
-	templateRecordResponse.HttpResponse = resp
+	templateRecordResponse.HTTPResponse = resp
 	return templateRecordResponse, nil
 }

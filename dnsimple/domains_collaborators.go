@@ -59,7 +59,7 @@ func (s *DomainsService) ListCollaborators(accountID, domainIdentifier string, o
 		return collaboratorsResponse, err
 	}
 
-	collaboratorsResponse.HttpResponse = resp
+	collaboratorsResponse.HTTPResponse = resp
 	return collaboratorsResponse, nil
 }
 
@@ -75,7 +75,7 @@ func (s *DomainsService) AddCollaborator(accountID string, domainIdentifier stri
 		return nil, err
 	}
 
-	collaboratorResponse.HttpResponse = resp
+	collaboratorResponse.HTTPResponse = resp
 	return collaboratorResponse, nil
 }
 
@@ -91,6 +91,6 @@ func (s *DomainsService) RemoveCollaborator(accountID string, domainIdentifier s
 		return nil, err
 	}
 
-	collaboratorResponse.HttpResponse = resp
+	collaboratorResponse.HTTPResponse = resp
 	return collaboratorResponse, nil
 }

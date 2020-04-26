@@ -16,7 +16,7 @@ func (s *RegistrarService) EnableDomainAutoRenewal(accountID string, domainName 
 		return nil, err
 	}
 
-	domainResponse.HttpResponse = resp
+	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
 
@@ -32,6 +32,6 @@ func (s *RegistrarService) DisableDomainAutoRenewal(accountID string, domainName
 		return nil, err
 	}
 
-	domainResponse.HttpResponse = resp
+	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }

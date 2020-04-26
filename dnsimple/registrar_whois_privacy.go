@@ -50,7 +50,7 @@ func (s *RegistrarService) GetWhoisPrivacy(accountID string, domainName string) 
 		return nil, err
 	}
 
-	privacyResponse.HttpResponse = resp
+	privacyResponse.HTTPResponse = resp
 	return privacyResponse, nil
 }
 
@@ -66,7 +66,7 @@ func (s *RegistrarService) EnableWhoisPrivacy(accountID string, domainName strin
 		return nil, err
 	}
 
-	privacyResponse.HttpResponse = resp
+	privacyResponse.HTTPResponse = resp
 	return privacyResponse, nil
 }
 
@@ -82,7 +82,7 @@ func (s *RegistrarService) DisableWhoisPrivacy(accountID string, domainName stri
 		return nil, err
 	}
 
-	privacyResponse.HttpResponse = resp
+	privacyResponse.HTTPResponse = resp
 	return privacyResponse, nil
 }
 
@@ -98,6 +98,6 @@ func (s *RegistrarService) RenewWhoisPrivacy(accountID string, domainName string
 		return nil, err
 	}
 
-	privacyRenewalResponse.HttpResponse = resp
+	privacyRenewalResponse.HTTPResponse = resp
 	return privacyRenewalResponse, nil
 }

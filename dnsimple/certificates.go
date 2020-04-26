@@ -7,7 +7,7 @@ import (
 // CertificatesService handles communication with the certificate related
 // methods of the DNSimple API.
 //
-// See https://developer.dnsimple.com/v2/certificates
+// See https://developer.dnsimple.com/v2/certificates/
 type CertificatesService struct {
 	client *Client
 }
@@ -131,7 +131,7 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 		return certificatesResponse, err
 	}
 
-	certificatesResponse.HttpResponse = resp
+	certificatesResponse.HTTPResponse = resp
 	return certificatesResponse, nil
 }
 
@@ -147,7 +147,7 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
+	certificateResponse.HTTPResponse = resp
 	return certificateResponse, nil
 }
 
@@ -164,7 +164,7 @@ func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier st
 		return nil, err
 	}
 
-	certificateBundleResponse.HttpResponse = resp
+	certificateBundleResponse.HTTPResponse = resp
 	return certificateBundleResponse, nil
 }
 
@@ -180,7 +180,7 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 		return nil, err
 	}
 
-	certificateBundleResponse.HttpResponse = resp
+	certificateBundleResponse.HTTPResponse = resp
 	return certificateBundleResponse, nil
 }
 
@@ -196,7 +196,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainId
 		return nil, err
 	}
 
-	certificatePurchaseResponse.HttpResponse = resp
+	certificatePurchaseResponse.HTTPResponse = resp
 	return certificatePurchaseResponse, nil
 }
 
@@ -212,7 +212,7 @@ func (s *CertificatesService) IssueLetsencryptCertificate(accountID, domainIdent
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
+	certificateResponse.HTTPResponse = resp
 	return certificateResponse, nil
 }
 
@@ -228,7 +228,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(accountID, d
 		return nil, err
 	}
 
-	certificateRenewalResponse.HttpResponse = resp
+	certificateRenewalResponse.HTTPResponse = resp
 	return certificateRenewalResponse, nil
 }
 
@@ -244,6 +244,6 @@ func (s *CertificatesService) IssueLetsencryptCertificateRenewal(accountID, doma
 		return nil, err
 	}
 
-	certificateResponse.HttpResponse = resp
+	certificateResponse.HTTPResponse = resp
 	return certificateResponse, nil
 }

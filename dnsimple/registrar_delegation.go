@@ -31,7 +31,7 @@ func (s *RegistrarService) GetDomainDelegation(accountID string, domainName stri
 		return nil, err
 	}
 
-	delegationResponse.HttpResponse = resp
+	delegationResponse.HTTPResponse = resp
 	return delegationResponse, nil
 }
 
@@ -47,7 +47,7 @@ func (s *RegistrarService) ChangeDomainDelegation(accountID string, domainName s
 		return nil, err
 	}
 
-	delegationResponse.HttpResponse = resp
+	delegationResponse.HTTPResponse = resp
 	return delegationResponse, nil
 }
 
@@ -63,7 +63,7 @@ func (s *RegistrarService) ChangeDomainDelegationToVanity(accountID string, doma
 		return nil, err
 	}
 
-	delegationResponse.HttpResponse = resp
+	delegationResponse.HTTPResponse = resp
 	return delegationResponse, nil
 }
 
@@ -79,6 +79,6 @@ func (s *RegistrarService) ChangeDomainDelegationFromVanity(accountID string, do
 		return nil, err
 	}
 
-	delegationResponse.HttpResponse = resp
+	delegationResponse.HTTPResponse = resp
 	return delegationResponse, nil
 }

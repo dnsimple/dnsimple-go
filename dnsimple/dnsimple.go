@@ -240,7 +240,7 @@ func (c *Client) Do(req *http.Request, obj interface{}) (*http.Response, error) 
 // A Response represents an API response.
 type Response struct {
 	// HTTP response
-	HttpResponse *http.Response
+	HTTPResponse *http.Response
 
 	// If the response is paginated, the Pagination will store them.
 	Pagination *Pagination `json:"pagination"`
@@ -248,23 +248,23 @@ type Response struct {
 
 // RateLimit returns the maximum amount of requests this account can send in an hour.
 func (r *Response) RateLimit() int {
-	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Limit"))
+	value, _ := strconv.Atoi(r.HTTPResponse.Header.Get("X-RateLimit-Limit"))
 	return value
 }
 
 // RateLimitRemaining returns the remaining amount of requests this account can send within this hour window.
 func (r *Response) RateLimitRemaining() int {
-	value, _ := strconv.Atoi(r.HttpResponse.Header.Get("X-RateLimit-Remaining"))
+	value, _ := strconv.Atoi(r.HTTPResponse.Header.Get("X-RateLimit-Remaining"))
 	return value
 }
 
 // RateLimitReset returns when the throttling window will be reset for this account.
 func (r *Response) RateLimitReset() time.Time {
-	value, _ := strconv.ParseInt(r.HttpResponse.Header.Get("X-RateLimit-Reset"), 10, 64)
+	value, _ := strconv.ParseInt(r.HTTPResponse.Header.Get("X-RateLimit-Reset"), 10, 64)
 	return time.Unix(value, 0)
 }
 
-// If the response is paginated, Pagination represents the pagination information.
+// Pagination represents the pagination information, if the response is paginated.
 type Pagination struct {
 	CurrentPage  int `json:"current_page"`
 	PerPage      int `json:"per_page"`
@@ -283,8 +283,8 @@ type ErrorResponse struct {
 // Error implements the error interface.
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %v %v",
-		r.HttpResponse.Request.Method, r.HttpResponse.Request.URL,
-		r.HttpResponse.StatusCode, r.Message)
+		r.HTTPResponse.Request.Method, r.HTTPResponse.Request.URL,
+		r.HTTPResponse.StatusCode, r.Message)
 }
 
 // CheckResponse checks the API response for errors, and returns them if present.
@@ -296,7 +296,7 @@ func CheckResponse(resp *http.Response) error {
 	}
 
 	errorResponse := &ErrorResponse{}
-	errorResponse.HttpResponse = resp
+	errorResponse.HTTPResponse = resp
 
 	err := json.NewDecoder(resp.Body).Decode(errorResponse)
 	if err != nil {
@@ -329,7 +329,7 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 	}
 
 	uqs := u.Query()
-	for k, _ := range qs {
+	for k := range qs {
 		uqs.Set(k, qs.Get(k))
 	}
 	u.RawQuery = uqs.Encode()

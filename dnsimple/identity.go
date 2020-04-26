@@ -33,7 +33,7 @@ func (s *IdentityService) Whoami() (*whoamiResponse, error) {
 		return nil, err
 	}
 
-	whoamiResponse.HttpResponse = resp
+	whoamiResponse.HTTPResponse = resp
 	return whoamiResponse, nil
 }
 

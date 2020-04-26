@@ -53,7 +53,7 @@ func (s *DomainsService) InitiatePush(accountID, domainID string, pushAttributes
 		return nil, err
 	}
 
-	pushResponse.HttpResponse = resp
+	pushResponse.HTTPResponse = resp
 	return pushResponse, nil
 }
 
@@ -74,7 +74,7 @@ func (s *DomainsService) ListPushes(accountID string, options *ListOptions) (*do
 		return nil, err
 	}
 
-	pushesResponse.HttpResponse = resp
+	pushesResponse.HTTPResponse = resp
 	return pushesResponse, nil
 }
 
@@ -90,7 +90,7 @@ func (s *DomainsService) AcceptPush(accountID string, pushID int64, pushAttribut
 		return nil, err
 	}
 
-	pushResponse.HttpResponse = resp
+	pushResponse.HTTPResponse = resp
 	return pushResponse, nil
 }
 
@@ -106,6 +106,6 @@ func (s *DomainsService) RejectPush(accountID string, pushID int64) (*domainPush
 		return nil, err
 	}
 
-	pushResponse.HttpResponse = resp
+	pushResponse.HTTPResponse = resp
 	return pushResponse, nil
 }

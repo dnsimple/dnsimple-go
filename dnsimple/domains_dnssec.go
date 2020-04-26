@@ -22,8 +22,7 @@ type dnssecResponse struct {
 
 // EnableDnssec enables DNSSEC on the domain.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#enable
-
+// See https://developer.dnsimple.com/v2/domains/dnssec/#enableDomainDnssec
 func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
@@ -33,13 +32,13 @@ func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string)
 		return nil, err
 	}
 
-	dnssecResponse.HttpResponse = resp
+	dnssecResponse.HTTPResponse = resp
 	return dnssecResponse, nil
 }
 
 // DisableDnssec disables DNSSEC on the domain.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#disable
+// See https://developer.dnsimple.com/v2/domains/dnssec/#disableDomainDnssec
 func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
@@ -49,13 +48,13 @@ func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string
 		return nil, err
 	}
 
-	dnssecResponse.HttpResponse = resp
+	dnssecResponse.HTTPResponse = resp
 	return dnssecResponse, nil
 }
 
 // GetDnssec retrieves the current status of DNSSEC on the domain.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#get
+// See https://developer.dnsimple.com/v2/domains/dnssec/#getDomainDnssec
 func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
@@ -65,6 +64,6 @@ func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*
 		return nil, err
 	}
 
-	dnssecResponse.HttpResponse = resp
+	dnssecResponse.HTTPResponse = resp
 	return dnssecResponse, nil
 }

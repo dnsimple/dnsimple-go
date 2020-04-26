@@ -71,7 +71,7 @@ func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (
 		return contactsResponse, err
 	}
 
-	contactsResponse.HttpResponse = resp
+	contactsResponse.HTTPResponse = resp
 	return contactsResponse, nil
 }
 
@@ -87,7 +87,7 @@ func (s *ContactsService) CreateContact(accountID string, contactAttributes Cont
 		return nil, err
 	}
 
-	contactResponse.HttpResponse = resp
+	contactResponse.HTTPResponse = resp
 	return contactResponse, nil
 }
 
@@ -103,7 +103,7 @@ func (s *ContactsService) GetContact(accountID string, contactID int64) (*contac
 		return nil, err
 	}
 
-	contactResponse.HttpResponse = resp
+	contactResponse.HTTPResponse = resp
 	return contactResponse, nil
 }
 
@@ -119,7 +119,7 @@ func (s *ContactsService) UpdateContact(accountID string, contactID int64, conta
 		return nil, err
 	}
 
-	contactResponse.HttpResponse = resp
+	contactResponse.HTTPResponse = resp
 	return contactResponse, nil
 }
 
@@ -135,6 +135,6 @@ func (s *ContactsService) DeleteContact(accountID string, contactID int64) (*con
 		return nil, err
 	}
 
-	contactResponse.HttpResponse = resp
+	contactResponse.HTTPResponse = resp
 	return contactResponse, nil
 }

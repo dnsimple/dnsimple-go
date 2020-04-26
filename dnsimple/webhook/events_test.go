@@ -14,7 +14,7 @@ import (
 
 var regexpUUID = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
 
-func readHttpRequestFixture(t *testing.T, filename string) string {
+func readHTTPRequestFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../../fixtures.http" + filename)
 	if err != nil {
 		t.Fatalf("Unable to read HTTP fixture: %v", err)
@@ -25,16 +25,16 @@ func readHttpRequestFixture(t *testing.T, filename string) string {
 	return s
 }
 
-func getHttpRequestFromFixture(t *testing.T, filename string) *http.Request {
-	req, err := http.ReadRequest(bufio.NewReader(strings.NewReader(readHttpRequestFixture(t, filename))))
+func getHTTPRequestFromFixture(t *testing.T, filename string) *http.Request {
+	req, err := http.ReadRequest(bufio.NewReader(strings.NewReader(readHTTPRequestFixture(t, filename))))
 	if err != nil {
 		t.Fatalf("Unable to create http.Request from fixture: %v", err)
 	}
 	return req
 }
 
-func getHttpRequestBodyFromFixture(t *testing.T, filename string) []byte {
-	req := getHttpRequestFromFixture(t, filename)
+func getHTTPRequestBodyFromFixture(t *testing.T, filename string) []byte {
+	req := getHTTPRequestFromFixture(t, filename)
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		t.Fatalf("Error reading fixture: %v", err)
@@ -69,7 +69,7 @@ func TestParseGenericEvent(t *testing.T) {
 }
 
 func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.billing_settings_update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.billing_settings_update/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -93,7 +93,7 @@ func TestParseAccountEvent_Account_BillingSettingsUpdate(t *testing.T) {
 }
 
 func TestParseAccountEvent_Account_Update(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.update/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -117,7 +117,7 @@ func TestParseAccountEvent_Account_Update(t *testing.T) {
 }
 
 func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.user_invitation_accept/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.user_invitation_accept/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -141,7 +141,7 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 }
 
 func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/account.user_invite/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.user_invite/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -165,7 +165,7 @@ func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 }
 
 func TestParseCertificateEvent_Certificate_Issue(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/certificate.issue/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/certificate.issue/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -189,7 +189,7 @@ func TestParseCertificateEvent_Certificate_Issue(t *testing.T) {
 }
 
 func TestParseCertificateEvent_Certificate_RemovePrivateKey(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/certificate.remove_private_key/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/certificate.remove_private_key/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -213,7 +213,7 @@ func TestParseCertificateEvent_Certificate_RemovePrivateKey(t *testing.T) {
 }
 
 func TestParseContactEvent_Contact_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/contact.create/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -237,7 +237,7 @@ func TestParseContactEvent_Contact_Create(t *testing.T) {
 }
 
 func TestParseContactEvent_Contact_Update(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/contact.update/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -261,7 +261,7 @@ func TestParseContactEvent_Contact_Update(t *testing.T) {
 }
 
 func TestParseContactEvent_Contact_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/contact.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/contact.delete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -285,7 +285,7 @@ func TestParseContactEvent_Contact_Delete(t *testing.T) {
 }
 
 func TestParseDNSSECEvent_DNSSEC_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/dnssec.create/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -306,7 +306,7 @@ func TestParseDNSSECEvent_DNSSEC_Create(t *testing.T) {
 }
 
 func TestParseDNSSECEvent_DNSSEC_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/dnssec.delete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -327,7 +327,7 @@ func TestParseDNSSECEvent_DNSSEC_Delete(t *testing.T) {
 }
 
 func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_start/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_start/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -351,7 +351,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
 }
 
 func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_complete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/dnssec.rotation_complete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -375,7 +375,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.auto_renewal_disable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.auto_renewal_disable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -399,7 +399,7 @@ func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.auto_renewal_enable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.auto_renewal_enable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -423,7 +423,7 @@ func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.create/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -447,7 +447,7 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.delete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -471,7 +471,7 @@ func TestParseDomainEvent_Domain_Delete(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Register(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.register/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.register/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -495,7 +495,7 @@ func TestParseDomainEvent_Domain_Register(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_Renew(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.renew/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.renew/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -522,7 +522,7 @@ func TestParseDomainEvent_Domain_Renew(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_DelegationChange(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.delegation_change/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.delegation_change/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -549,7 +549,7 @@ func TestParseDomainEvent_Domain_DelegationChange(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_RegistrantChange(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.registrant_change/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.registrant_change/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -576,7 +576,7 @@ func TestParseDomainEvent_Domain_RegistrantChange(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.resolution_disable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.resolution_disable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -600,7 +600,7 @@ func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 }
 
 func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/domain.resolution_enable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.resolution_enable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -649,7 +649,7 @@ func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
 }
 
 func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.create/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -673,7 +673,7 @@ func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 }
 
 func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.delete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -697,7 +697,7 @@ func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
 }
 
 func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/email_forward.update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.update/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -721,7 +721,7 @@ func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
 }
 
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/webhook.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/webhook.create/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -745,7 +745,7 @@ func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
 }
 
 func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/webhook.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/webhook.delete/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -769,7 +769,7 @@ func TestParseWebhookEvent_Webhook_Delete(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.disable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/whois_privacy.disable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -796,7 +796,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.enable/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/whois_privacy.enable/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -823,7 +823,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.purchase/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/whois_privacy.purchase/example.http")
 
 	event, err := ParseEvent(payload)
 	if err != nil {
@@ -850,7 +850,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
 }
 
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/whois_privacy.renew/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/whois_privacy.renew/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {
@@ -877,7 +877,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 }
 
 func TestParseZoneEvent_Zone_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone.create/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {
@@ -901,7 +901,7 @@ func TestParseZoneEvent_Zone_Create(t *testing.T) {
 }
 
 func TestParseZoneEvent_Zone_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone.delete/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {
@@ -925,7 +925,7 @@ func TestParseZoneEvent_Zone_Delete(t *testing.T) {
 }
 
 func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone_record.create/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.create/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {
@@ -949,7 +949,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 }
 
 func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone_record.update/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.update/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {
@@ -973,7 +973,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 }
 
 func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
-	payload := getHttpRequestBodyFromFixture(t, "/webhooks/zone_record.delete/example.http")
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.delete/example.http")
 
 	event, err := ParseEvent([]byte(payload))
 	if err != nil {

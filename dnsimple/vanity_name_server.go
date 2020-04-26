@@ -44,7 +44,7 @@ func (s *VanityNameServersService) EnableVanityNameServers(accountID string, dom
 		return nil, err
 	}
 
-	vanityNameServerResponse.HttpResponse = resp
+	vanityNameServerResponse.HTTPResponse = resp
 	return vanityNameServerResponse, nil
 }
 
@@ -60,6 +60,6 @@ func (s *VanityNameServersService) DisableVanityNameServers(accountID string, do
 		return nil, err
 	}
 
-	vanityNameServerResponse.HttpResponse = resp
+	vanityNameServerResponse.HTTPResponse = resp
 	return vanityNameServerResponse, nil
 }
