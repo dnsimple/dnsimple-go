@@ -22,5 +22,6 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 notifications:
+  email: false
   slack:
     secure: Dtb0Bf3AlAxeycfJuli46P8kG4B1at89vtMKbLKKGMwgimAWAKayNjJyuM+CaXtSiqeXOZqypKo9ScAjitQk/UTiE/NkScEZgT9wY+E0Cr+OZKBbIOLfKmFBi6+sjJUdJlVpA8aLqINOoeRH0sc6P5NE+g4StXl0C/M4PLBBfkI=
