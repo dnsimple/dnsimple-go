@@ -16,7 +16,7 @@ matrix:
     - go: tip
 
 install:
-  - go get ./...
+  - travis_cmd "go get ./..." --retry
 
 script:
   - ./test.sh
