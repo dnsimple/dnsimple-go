@@ -15,9 +15,6 @@ matrix:
   allow_failures:
     - go: tip
 
-install:
-  - travis_cmd "go get ./..." --retry
-
 script:
   - ./test.sh
 
