@@ -55,7 +55,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"whois_privacy.disable",
 		"whois_privacy.enable",
 		"whois_privacy.purchase",
-		"whois_privacy.renew": // TODO
+		"whois_privacy.renew":
 		data = &WhoisPrivacyEventData{}
 	case // zone
 		"zone.create",
