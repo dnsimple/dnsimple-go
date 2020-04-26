@@ -15,6 +15,9 @@ matrix:
   allow_failures:
     - go: tip
 
+install:
+  - go get ./...
+
 script:
   - ./test.sh
 
