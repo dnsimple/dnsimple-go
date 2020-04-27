@@ -68,7 +68,7 @@ type Client struct {
 }
 
 // ListOptions contains the common options you can pass to a List method
-// in order to control parameters such as paginations and page number.
+// in order to control parameters such as pagination and page number.
 type ListOptions struct {
 	// The page to return
 	Page int `url:"page,omitempty"`
@@ -130,6 +130,17 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 	return req, nil
 }
 
+// SetUserAgent overrides the default UserAgent.
+//
+// When a custom user agent is provided, the final user agent is the combination of the custom user agent
+// prepended by the default user agent.
+//
+//     customAgentFlag dnsimple-go/1.0
+//
+func(c *Client) SetUserAgent(ua string) {
+	c.UserAgent = ua
+}
+
 // formatUserAgent builds the final user agent to use for HTTP requests.
 //
 // If no custom user agent is provided, the default user agent is used.
@@ -139,7 +150,7 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 // If a custom user agent is provided, the final user agent is the combination of the custom user agent
 // prepended by the default user agent.
 //
-//     dnsimple-go/1.0 customAgentFlag
+//     customAgentFlag dnsimple-go/1.0
 //
 func formatUserAgent(customUserAgent string) string {
 	if customUserAgent == "" {

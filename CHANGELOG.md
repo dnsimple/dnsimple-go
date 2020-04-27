@@ -1,5 +1,10 @@
 # CHANGELOG
 
+#### master
+
+- NEW: Added Client.SetUserAgent() as a convenient helper to set a custom user agent.
+
+
 #### Release 0.40.0
 
 - CHANGED: Renamed ExchangeAuthorizationError.HttpResponse field to ExchangeAuthorizationError.HTTPResponse

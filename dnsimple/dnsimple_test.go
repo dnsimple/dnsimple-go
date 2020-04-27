@@ -117,6 +117,22 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestClient_SetUserAgent(t *testing.T) {
+	c := NewClient(http.DefaultClient)
+	customAgent := "custom-agent/0.1"
+
+	c.SetUserAgent(customAgent)
+	if want, got := "custom-agent/0.1", c.UserAgent; want != got {
+		t.Errorf("UserAgent not assigned, expected %v, got %v", want, got)
+	}
+
+	req, _ := c.NewRequest("GET", "/foo", nil)
+
+	if want, got := "custom-agent/0.1 " + defaultUserAgent, req.Header.Get("User-Agent"); want != got {
+		t.Errorf("Incorrect User-Agent Header, expected %v, got %v", want, got)
+	}
+}
+
 func TestClient_NewRequest(t *testing.T) {
 	c := NewClient(http.DefaultClient)
 	c.BaseURL = "https://go.example.com"
@@ -126,13 +142,13 @@ func TestClient_NewRequest(t *testing.T) {
 
 	// test that relative URL was expanded with the proper BaseURL
 	if req.URL.String() != outURL {
-		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+		t.Errorf("Incorrect request URL, expected %v, got %v", outURL, req.URL.String())
 	}
 
 	// test that default user-agent is attached to the request
 	ua := req.Header.Get("User-Agent")
 	if ua != defaultUserAgent {
-		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, defaultUserAgent)
+		t.Errorf("Incorrect request User-Agent, expected %v, got %v", defaultUserAgent, ua)
 	}
 }
 
@@ -144,7 +160,7 @@ func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 	// test that default user-agent is attached to the request
 	ua := req.Header.Get("User-Agent")
 	if want := fmt.Sprintf("AwesomeClient %s", defaultUserAgent); ua != want {
-		t.Errorf("NewRequest() User-Agent = %v, want %v", ua, want)
+		t.Errorf("Incorrect request User-Agent, expected %v, got %v", want, ua)
 	}
 }
 
