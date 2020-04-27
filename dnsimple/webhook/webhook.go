@@ -46,10 +46,12 @@ type EventDataContainer interface {
 	unmarshalEventData([]byte) error
 }
 
+// GetData returns the data container for the specific event type.
 func (e *Event) GetData() EventDataContainer {
 	return e.data
 }
 
+// GetPayload returns the data payload.
 func (e *Event) GetPayload() []byte {
 	return e.payload
 }
