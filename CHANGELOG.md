@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.40.0
 
 - CHANGED: Renamed ExchangeAuthorizationError.HttpResponse field to ExchangeAuthorizationError.HTTPResponse
 - CHANGED: Renamed Response.HttpResponse field to Response.HTTPResponse
