@@ -138,7 +138,7 @@ func TestClient_SetUserAgent(t *testing.T) {
 
 	req, _ := c.NewRequest("GET", "/foo", nil)
 
-	if want, got := "custom-agent/0.1 " + defaultUserAgent, req.Header.Get("User-Agent"); want != got {
+	if want, got := "custom-agent/0.1 "+defaultUserAgent, req.Header.Get("User-Agent"); want != got {
 		t.Errorf("Incorrect User-Agent Header, expected %v, got %v", want, got)
 	}
 }

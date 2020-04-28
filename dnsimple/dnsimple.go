@@ -137,7 +137,7 @@ func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Req
 //
 //     customAgentFlag dnsimple-go/1.0
 //
-func(c *Client) SetUserAgent(ua string) {
+func (c *Client) SetUserAgent(ua string) {
 	c.UserAgent = ua
 }
 

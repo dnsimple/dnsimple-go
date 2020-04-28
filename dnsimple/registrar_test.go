@@ -124,7 +124,7 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 
 		data, _ := getRequestJSON(r)
 
-		if want, got := map[string]interface {}{"att1":"val1", "att2":"val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
+		if want, got := map[string]interface{}{"att1": "val1", "att2": "val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
 			t.Errorf("RegisterDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
 		}
 
@@ -181,7 +181,7 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 
 		data, _ := getRequestJSON(r)
 
-		if want, got := map[string]interface {}{"att1":"val1", "att2":"val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
+		if want, got := map[string]interface{}{"att1": "val1", "att2": "val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
 			t.Errorf("TransferDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
 		}
 
