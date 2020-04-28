@@ -72,7 +72,7 @@ func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes T
 	path := versioned(templatePath(accountID, ""))
 	templateResponse := &templateResponse{}
 
-	resp, err := s.client.post(path, templateAttributes, templateResponse)
+	resp, err := s.client.post(context.TODO(), path, templateAttributes, templateResponse)
 	if err != nil {
 		return nil, err
 	}

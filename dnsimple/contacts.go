@@ -83,7 +83,7 @@ func (s *ContactsService) CreateContact(accountID string, contactAttributes Cont
 	path := versioned(contactPath(accountID, 0))
 	contactResponse := &contactResponse{}
 
-	resp, err := s.client.post(path, contactAttributes, contactResponse)
+	resp, err := s.client.post(context.TODO(), path, contactAttributes, contactResponse)
 	if err != nil {
 		return nil, err
 	}

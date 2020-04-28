@@ -63,7 +63,7 @@ func (s *DomainsService) CreateEmailForward(accountID string, domainIdentifier s
 	path := versioned(emailForwardPath(accountID, domainIdentifier, 0))
 	forwardResponse := &emailForwardResponse{}
 
-	resp, err := s.client.post(path, forwardAttributes, forwardResponse)
+	resp, err := s.client.post(context.TODO(), path, forwardAttributes, forwardResponse)
 	if err != nil {
 		return nil, err
 	}

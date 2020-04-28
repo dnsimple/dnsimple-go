@@ -94,7 +94,7 @@ func (s *RegistrarService) RenewWhoisPrivacy(accountID string, domainName string
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy/renewals", accountID, domainName))
 	privacyRenewalResponse := &whoisPrivacyRenewalResponse{}
 
-	resp, err := s.client.post(path, nil, privacyRenewalResponse)
+	resp, err := s.client.post(context.TODO(), path, nil, privacyRenewalResponse)
 	if err != nil {
 		return nil, err
 	}

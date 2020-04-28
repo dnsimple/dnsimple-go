@@ -65,7 +65,7 @@ func (s *DomainsService) CreateDelegationSignerRecord(accountID string, domainId
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, 0))
 	dsRecordResponse := &delegationSignerRecordResponse{}
 
-	resp, err := s.client.post(path, dsRecordAttributes, dsRecordResponse)
+	resp, err := s.client.post(context.TODO(), path, dsRecordAttributes, dsRecordResponse)
 	if err != nil {
 		return nil, err
 	}

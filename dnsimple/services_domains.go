@@ -45,7 +45,7 @@ func (s *ServicesService) ApplyService(accountID string, serviceIdentifier strin
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
 	serviceResponse := &serviceResponse{}
 
-	resp, err := s.client.post(path, settings, nil)
+	resp, err := s.client.post(context.TODO(), path, settings, nil)
 	if err != nil {
 		return nil, err
 	}

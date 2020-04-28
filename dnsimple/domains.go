@@ -89,7 +89,7 @@ func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain)
 	path := versioned(domainPath(accountID, ""))
 	domainResponse := &domainResponse{}
 
-	resp, err := s.client.post(path, domainAttributes, domainResponse)
+	resp, err := s.client.post(context.TODO(), path, domainAttributes, domainResponse)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -136,7 +137,7 @@ func (s *RegistrarService) RegisterDomain(accountID string, domainName string, r
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(path, request, registrationResponse)
+	resp, err := s.client.post(context.TODO(), path, request, registrationResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +193,7 @@ func (s *RegistrarService) TransferDomain(accountID string, domainName string, r
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(path, request, transferResponse)
+	resp, err := s.client.post(context.TODO(), path, request, transferResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +215,7 @@ func (s *RegistrarService) TransferDomainOut(accountID string, domainName string
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/authorize_transfer_out", accountID, domainName))
 	transferResponse := &domainTransferOutResponse{}
 
-	resp, err := s.client.post(path, nil, nil)
+	resp, err := s.client.post(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -255,7 +256,7 @@ func (s *RegistrarService) RenewDomain(accountID string, domainName string, requ
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewals", accountID, domainName))
 	renewalResponse := &domainRenewalResponse{}
 
-	resp, err := s.client.post(path, request, renewalResponse)
+	resp, err := s.client.post(context.TODO(), path, request, renewalResponse)
 	if err != nil {
 		return nil, err
 	}

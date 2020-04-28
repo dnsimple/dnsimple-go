@@ -71,7 +71,7 @@ func (s *DomainsService) AddCollaborator(accountID string, domainIdentifier stri
 	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
 	collaboratorResponse := &collaboratorResponse{}
 
-	resp, err := s.client.post(path, attributes, collaboratorResponse)
+	resp, err := s.client.post(context.TODO(), path, attributes, collaboratorResponse)
 	if err != nil {
 		return nil, err
 	}

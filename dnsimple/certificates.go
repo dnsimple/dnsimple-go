@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -191,7 +192,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificate(accountID, domainId
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, 0))
 	certificatePurchaseResponse := &certificatePurchaseResponse{}
 
-	resp, err := s.client.post(path, certificateAttributes, certificatePurchaseResponse)
+	resp, err := s.client.post(context.TODO(), path, certificateAttributes, certificatePurchaseResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +208,7 @@ func (s *CertificatesService) IssueLetsencryptCertificate(accountID, domainIdent
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + "/issue")
 	certificateResponse := &certificateResponse{}
 
-	resp, err := s.client.post(path, nil, certificateResponse)
+	resp, err := s.client.post(context.TODO(), path, nil, certificateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +224,7 @@ func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(accountID, d
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + "/renewals")
 	certificateRenewalResponse := &certificateRenewalResponse{}
 
-	resp, err := s.client.post(path, certificateAttributes, certificateRenewalResponse)
+	resp, err := s.client.post(context.TODO(), path, certificateAttributes, certificateRenewalResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +240,7 @@ func (s *CertificatesService) IssueLetsencryptCertificateRenewal(accountID, doma
 	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + fmt.Sprintf("/renewals/%d/issue", certificateRenewalID))
 	certificateResponse := &certificateResponse{}
 
-	resp, err := s.client.post(path, nil, certificateResponse)
+	resp, err := s.client.post(context.TODO(), path, nil, certificateResponse)
 	if err != nil {
 		return nil, err
 	}

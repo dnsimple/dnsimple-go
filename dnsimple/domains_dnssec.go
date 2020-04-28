@@ -28,7 +28,7 @@ func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string)
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
 
-	resp, err := s.client.post(path, dnssecResponse, nil)
+	resp, err := s.client.post(context.TODO(), path, dnssecResponse, nil)
 	if err != nil {
 		return nil, err
 	}

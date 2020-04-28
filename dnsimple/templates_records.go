@@ -66,7 +66,7 @@ func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdenti
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
 	templateRecordResponse := &templateRecordResponse{}
 
-	resp, err := s.client.post(path, templateRecordAttributes, templateRecordResponse)
+	resp, err := s.client.post(context.TODO(), path, templateRecordAttributes, templateRecordResponse)
 	if err != nil {
 		return nil, err
 	}

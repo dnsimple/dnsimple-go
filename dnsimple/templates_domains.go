@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -11,7 +12,7 @@ func (s *TemplatesService) ApplyTemplate(accountID string, templateIdentifier st
 	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainIdentifier), templateIdentifier))
 	templateResponse := &templateResponse{}
 
-	resp, err := s.client.post(path, nil, nil)
+	resp, err := s.client.post(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

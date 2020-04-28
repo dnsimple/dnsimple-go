@@ -49,7 +49,7 @@ func (s *DomainsService) InitiatePush(accountID, domainID string, pushAttributes
 	path := versioned(fmt.Sprintf("/%v/pushes", domainPath(accountID, domainID)))
 	pushResponse := &domainPushResponse{}
 
-	resp, err := s.client.post(path, pushAttributes, pushResponse)
+	resp, err := s.client.post(context.TODO(), path, pushAttributes, pushResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (s *DomainsService) AcceptPush(accountID string, pushID int64, pushAttribut
 	path := versioned(domainPushPath(accountID, pushID))
 	pushResponse := &domainPushResponse{}
 
-	resp, err := s.client.post(path, pushAttributes, nil)
+	resp, err := s.client.post(context.TODO(), path, pushAttributes, nil)
 	if err != nil {
 		return nil, err
 	}

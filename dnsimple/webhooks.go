@@ -62,7 +62,7 @@ func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webh
 	path := versioned(webhookPath(accountID, 0))
 	webhookResponse := &webhookResponse{}
 
-	resp, err := s.client.post(path, webhookAttributes, webhookResponse)
+	resp, err := s.client.post(context.TODO(), path, webhookAttributes, webhookResponse)
 	if err != nil {
 		return nil, err
 	}

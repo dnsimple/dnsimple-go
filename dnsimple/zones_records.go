@@ -85,7 +85,7 @@ func (s *ZonesService) CreateRecord(accountID string, zoneName string, recordAtt
 	path := versioned(zoneRecordPath(accountID, zoneName, 0))
 	recordResponse := &zoneRecordResponse{}
 
-	resp, err := s.client.post(path, recordAttributes, recordResponse)
+	resp, err := s.client.post(context.TODO(), path, recordAttributes, recordResponse)
 	if err != nil {
 		return nil, err
 	}

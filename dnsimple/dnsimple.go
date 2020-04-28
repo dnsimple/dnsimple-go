@@ -144,8 +144,8 @@ func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
 	return c.makeRequest(context.TODO(), http.MethodGet, path, nil, obj, nil)
 }
 
-func (c *Client) post(path string, payload, obj interface{}) (*http.Response, error) {
-	return c.makeRequest(context.TODO(), http.MethodPost, path, payload, obj, nil)
+func (c *Client) post(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodPost, path, payload, obj, nil)
 }
 
 func (c *Client) put(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
