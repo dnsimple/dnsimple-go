@@ -121,6 +121,8 @@ type DomainRegisterRequest struct {
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
+	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
+	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
 	PremiumPrice string `json:"premium_price,omitempty"`
 }
@@ -175,6 +177,8 @@ type DomainTransferRequest struct {
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
+	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
+	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
 	PremiumPrice string `json:"premium_price,omitempty"`
 }

@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"testing"
 )
 
@@ -114,6 +115,30 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	}
 }
 
+func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registrations", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/registerDomain/success.http")
+
+		data, _ := getRequestJSON(r)
+
+		if want, got := map[string]interface {}{"att1":"val1", "att2":"val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
+			t.Errorf("RegisterDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
+		}
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	registerRequest := &DomainRegisterRequest{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
+
+	if _, err := client.Registrar.RegisterDomain("1010", "example.com", registerRequest); err != nil {
+		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
+	}
+}
+
 func TestRegistrarService_TransferDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
@@ -144,6 +169,30 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 	}
 	if want, got := 999, transfer.DomainID; want != got {
 		t.Fatalf("Registrar.TransferDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
+	}
+}
+
+func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/transferDomain/success.http")
+
+		data, _ := getRequestJSON(r)
+
+		if want, got := map[string]interface {}{"att1":"val1", "att2":"val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
+			t.Errorf("TransferDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
+		}
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
+
+	if _, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest); err != nil {
+		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
 	}
 }
 
