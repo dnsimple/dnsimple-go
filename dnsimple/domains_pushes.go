@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -101,7 +102,7 @@ func (s *DomainsService) RejectPush(accountID string, pushID int64) (*domainPush
 	path := versioned(domainPushPath(accountID, pushID))
 	pushResponse := &domainPushResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

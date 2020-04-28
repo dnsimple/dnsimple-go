@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -132,7 +133,7 @@ func (s *ZonesService) DeleteRecord(accountID string, zoneName string, recordID 
 	path := versioned(zoneRecordPath(accountID, zoneName, recordID))
 	recordResponse := &zoneRecordResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

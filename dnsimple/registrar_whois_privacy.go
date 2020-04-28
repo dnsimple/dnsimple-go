@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -77,7 +78,7 @@ func (s *RegistrarService) DisableWhoisPrivacy(accountID string, domainName stri
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy", accountID, domainName))
 	privacyResponse := &whoisPrivacyResponse{}
 
-	resp, err := s.client.delete(path, nil, privacyResponse)
+	resp, err := s.client.delete(context.TODO(), path, nil, privacyResponse)
 	if err != nil {
 		return nil, err
 	}

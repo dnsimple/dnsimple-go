@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -94,7 +95,7 @@ func (s *DomainsService) DeleteEmailForward(accountID string, domainIdentifier s
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &emailForwardResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -74,7 +75,7 @@ func (s *RegistrarService) ChangeDomainDelegationFromVanity(accountID string, do
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation/vanity", accountID, domainName))
 	delegationResponse := &vanityDelegationResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -156,8 +156,8 @@ func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, e
 	return c.makeRequest(context.TODO(), http.MethodPatch, path, payload, obj, nil)
 }
 
-func (c *Client) delete(path string, payload, obj interface{}) (*http.Response, error) {
-	return c.makeRequest(context.TODO(), http.MethodDelete, path, payload, obj, nil)
+func (c *Client) delete(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodDelete, path, payload, obj, nil)
 }
 
 // Request executes an API request with the current client scope, and returns the response.

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -93,7 +94,7 @@ func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int64) (*web
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &webhookResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

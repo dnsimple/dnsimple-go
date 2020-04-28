@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -55,7 +56,7 @@ func (s *VanityNameServersService) DisableVanityNameServers(accountID string, do
 	path := versioned(vanityNameServerPath(accountID, domainIdentifier))
 	vanityNameServerResponse := &vanityNameServerResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

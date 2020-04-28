@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -60,7 +61,7 @@ func (s *ServicesService) UnapplyService(accountID string, serviceIdentifier str
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
 	serviceResponse := &serviceResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

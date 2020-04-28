@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -43,7 +44,7 @@ func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
 
-	resp, err := s.client.delete(path, dnssecResponse, nil)
+	resp, err := s.client.delete(context.TODO(), path, dnssecResponse, nil)
 	if err != nil {
 		return nil, err
 	}

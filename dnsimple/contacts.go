@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -130,7 +131,7 @@ func (s *ContactsService) DeleteContact(accountID string, contactID int64) (*con
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &contactResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

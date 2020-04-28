@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -119,7 +120,7 @@ func (s *TemplatesService) DeleteTemplate(accountID string, templateIdentifier s
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &templateResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -120,7 +121,7 @@ func (s *DomainsService) DeleteDomain(accountID string, domainIdentifier string)
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &domainResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

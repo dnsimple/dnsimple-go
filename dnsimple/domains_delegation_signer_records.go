@@ -1,6 +1,9 @@
 package dnsimple
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // DelegationSignerRecord represents a delegation signer record for a domain in DNSimple.
 type DelegationSignerRecord struct {
@@ -95,7 +98,7 @@ func (s *DomainsService) DeleteDelegationSignerRecord(accountID string, domainId
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
 	dsRecordResponse := &delegationSignerRecordResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

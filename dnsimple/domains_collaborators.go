@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -86,7 +87,7 @@ func (s *DomainsService) RemoveCollaborator(accountID string, domainIdentifier s
 	path := versioned(collaboratorPath(accountID, domainIdentifier, collaboratorID))
 	collaboratorResponse := &collaboratorResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
