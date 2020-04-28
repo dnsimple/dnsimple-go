@@ -55,12 +55,22 @@ func testHeaders(t *testing.T, r *http.Request) {
 	testHeader(t, r, "User-Agent", defaultUserAgent)
 }
 
-func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
+func getRequestJSON(r *http.Request) (map[string]interface{}, error) {
 	var data map[string]interface{}
 
 	body, _ := ioutil.ReadAll(r.Body)
 
 	if err := json.Unmarshal(body, &data); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
+	data, err := getRequestJSON(r)
+
+	if err != nil {
 		t.Fatalf("Could not decode json body: %v", err)
 	}
 
