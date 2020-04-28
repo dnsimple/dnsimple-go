@@ -43,7 +43,7 @@ func (s *RegistrarService) ChangeDomainDelegation(accountID string, domainName s
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation", accountID, domainName))
 	delegationResponse := &delegationResponse{}
 
-	resp, err := s.client.put(path, newDelegation, delegationResponse)
+	resp, err := s.client.put(context.TODO(), path, newDelegation, delegationResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *RegistrarService) ChangeDomainDelegationToVanity(accountID string, doma
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation/vanity", accountID, domainName))
 	delegationResponse := &vanityDelegationResponse{}
 
-	resp, err := s.client.put(path, newDelegation, delegationResponse)
+	resp, err := s.client.put(context.TODO(), path, newDelegation, delegationResponse)
 	if err != nil {
 		return nil, err
 	}

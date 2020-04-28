@@ -62,7 +62,7 @@ func (s *RegistrarService) EnableWhoisPrivacy(accountID string, domainName strin
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy", accountID, domainName))
 	privacyResponse := &whoisPrivacyResponse{}
 
-	resp, err := s.client.put(path, nil, privacyResponse)
+	resp, err := s.client.put(context.TODO(), path, nil, privacyResponse)
 	if err != nil {
 		return nil, err
 	}

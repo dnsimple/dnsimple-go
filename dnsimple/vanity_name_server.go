@@ -40,7 +40,7 @@ func (s *VanityNameServersService) EnableVanityNameServers(accountID string, dom
 	path := versioned(vanityNameServerPath(accountID, domainIdentifier))
 	vanityNameServerResponse := &vanityNameServerResponse{}
 
-	resp, err := s.client.put(path, nil, vanityNameServerResponse)
+	resp, err := s.client.put(context.TODO(), path, nil, vanityNameServerResponse)
 	if err != nil {
 		return nil, err
 	}

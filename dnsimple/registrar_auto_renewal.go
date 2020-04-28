@@ -12,7 +12,7 @@ func (s *RegistrarService) EnableDomainAutoRenewal(accountID string, domainName 
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/auto_renewal", accountID, domainName))
 	domainResponse := &domainResponse{}
 
-	resp, err := s.client.put(path, nil, nil)
+	resp, err := s.client.put(context.TODO(), path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
