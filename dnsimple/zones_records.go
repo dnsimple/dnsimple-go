@@ -116,7 +116,7 @@ func (s *ZonesService) GetRecord(accountID string, zoneName string, recordID int
 func (s *ZonesService) UpdateRecord(accountID string, zoneName string, recordID int64, recordAttributes ZoneRecord) (*zoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneName, recordID))
 	recordResponse := &zoneRecordResponse{}
-	resp, err := s.client.patch(path, recordAttributes, recordResponse)
+	resp, err := s.client.patch(context.TODO(), path, recordAttributes, recordResponse)
 
 	if err != nil {
 		return nil, err

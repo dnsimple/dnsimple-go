@@ -115,7 +115,7 @@ func (s *ContactsService) UpdateContact(accountID string, contactID int64, conta
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &contactResponse{}
 
-	resp, err := s.client.patch(path, contactAttributes, contactResponse)
+	resp, err := s.client.patch(context.TODO(), path, contactAttributes, contactResponse)
 	if err != nil {
 		return nil, err
 	}

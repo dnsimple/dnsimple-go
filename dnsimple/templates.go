@@ -104,7 +104,7 @@ func (s *TemplatesService) UpdateTemplate(accountID string, templateIdentifier s
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &templateResponse{}
 
-	resp, err := s.client.patch(path, templateAttributes, templateResponse)
+	resp, err := s.client.patch(context.TODO(), path, templateAttributes, templateResponse)
 	if err != nil {
 		return nil, err
 	}

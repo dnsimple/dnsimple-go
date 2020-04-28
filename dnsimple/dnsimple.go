@@ -152,8 +152,8 @@ func (c *Client) put(path string, payload, obj interface{}) (*http.Response, err
 	return c.makeRequest(context.TODO(), http.MethodPut, path, payload, obj, nil)
 }
 
-func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, error) {
-	return c.makeRequest(context.TODO(), http.MethodPatch, path, payload, obj, nil)
+func (c *Client) patch(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodPatch, path, payload, obj, nil)
 }
 
 func (c *Client) delete(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
