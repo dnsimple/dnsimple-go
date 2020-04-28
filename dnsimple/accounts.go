@@ -1,5 +1,9 @@
 package dnsimple
 
+import (
+	"context"
+)
+
 // AccountsService handles communication with the account related
 // methods of the DNSimple API.
 //
@@ -35,7 +39,7 @@ func (s *AccountsService) ListAccounts(options *ListOptions) (*accountsResponse,
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, accountsResponse)
+	resp, err := s.client.get(context.TODO(), path, accountsResponse)
 	if err != nil {
 		return accountsResponse, err
 	}

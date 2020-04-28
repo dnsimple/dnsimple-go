@@ -73,7 +73,7 @@ func (s *DomainsService) ListDomains(accountID string, options *DomainListOption
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, domainsResponse)
+	resp, err := s.client.get(context.TODO(), path, domainsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (s *DomainsService) GetDomain(accountID string, domainIdentifier string) (*
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &domainResponse{}
 
-	resp, err := s.client.get(path, domainResponse)
+	resp, err := s.client.get(context.TODO(), path, domainResponse)
 	if err != nil {
 		return nil, err
 	}

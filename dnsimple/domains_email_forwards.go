@@ -47,7 +47,7 @@ func (s *DomainsService) ListEmailForwards(accountID string, domainIdentifier st
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, forwardsResponse)
+	resp, err := s.client.get(context.TODO(), path, forwardsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (s *DomainsService) GetEmailForward(accountID string, domainIdentifier stri
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &emailForwardResponse{}
 
-	resp, err := s.client.get(path, forwardResponse)
+	resp, err := s.client.get(context.TODO(), path, forwardResponse)
 	if err != nil {
 		return nil, err
 	}

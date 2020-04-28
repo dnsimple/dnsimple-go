@@ -1,6 +1,9 @@
 package dnsimple
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // ZoneDistribution is the result of the zone distribution check.
 type ZoneDistribution struct {
@@ -20,7 +23,7 @@ func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) 
 	path := versioned(fmt.Sprintf("/%v/zones/%v/distribution", accountID, zoneName))
 	zoneDistributionResponse := &zoneDistributionResponse{}
 
-	resp, err := s.client.get(path, zoneDistributionResponse)
+	resp, err := s.client.get(context.TODO(), path, zoneDistributionResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +39,7 @@ func (s *ZonesService) CheckZoneRecordDistribution(accountID string, zoneName st
 	path := versioned(fmt.Sprintf("/%v/zones/%v/records/%v/distribution", accountID, zoneName, recordID))
 	zoneDistributionResponse := &zoneDistributionResponse{}
 
-	resp, err := s.client.get(path, zoneDistributionResponse)
+	resp, err := s.client.get(context.TODO(), path, zoneDistributionResponse)
 	if err != nil {
 		return nil, err
 	}

@@ -69,7 +69,7 @@ func (s *ZonesService) ListRecords(accountID string, zoneName string, options *Z
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, recordsResponse)
+	resp, err := s.client.get(context.TODO(), path, recordsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (s *ZonesService) GetRecord(accountID string, zoneName string, recordID int
 	path := versioned(zoneRecordPath(accountID, zoneName, recordID))
 	recordResponse := &zoneRecordResponse{}
 
-	resp, err := s.client.get(path, recordResponse)
+	resp, err := s.client.get(context.TODO(), path, recordResponse)
 	if err != nil {
 		return nil, err
 	}

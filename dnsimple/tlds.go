@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -75,7 +76,7 @@ func (s *TldsService) ListTlds(options *ListOptions) (*tldsResponse, error) {
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, tldsResponse)
+	resp, err := s.client.get(context.TODO(), path, tldsResponse)
 	if err != nil {
 		return tldsResponse, err
 	}
@@ -91,7 +92,7 @@ func (s *TldsService) GetTld(tld string) (*tldResponse, error) {
 	path := versioned(fmt.Sprintf("/tlds/%s", tld))
 	tldResponse := &tldResponse{}
 
-	resp, err := s.client.get(path, tldResponse)
+	resp, err := s.client.get(context.TODO(), path, tldResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (s *TldsService) GetTldExtendedAttributes(tld string) (*tldExtendedAttribut
 	path := versioned(fmt.Sprintf("/tlds/%s/extended_attributes", tld))
 	tldResponse := &tldExtendedAttributesResponse{}
 
-	resp, err := s.client.get(path, tldResponse)
+	resp, err := s.client.get(context.TODO(), path, tldResponse)
 	if err != nil {
 		return nil, err
 	}

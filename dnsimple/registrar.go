@@ -33,7 +33,7 @@ func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*do
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
 	checkResponse := &domainCheckResponse{}
 
-	resp, err := s.client.get(path, checkResponse)
+	resp, err := s.client.get(context.TODO(), path, checkResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (s *RegistrarService) GetDomainPremiumPrice(accountID string, domainName st
 		}
 	}
 
-	resp, err := s.client.get(path, priceResponse)
+	resp, err := s.client.get(context.TODO(), path, priceResponse)
 	if err != nil {
 		return nil, err
 	}

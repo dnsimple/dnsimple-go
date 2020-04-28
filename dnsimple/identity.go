@@ -1,5 +1,9 @@
 package dnsimple
 
+import (
+	"context"
+)
+
 // IdentityService handles communication with several authentication identity
 // methods of the DNSimple API.
 //
@@ -28,7 +32,7 @@ func (s *IdentityService) Whoami() (*whoamiResponse, error) {
 	path := versioned("/whoami")
 	whoamiResponse := &whoamiResponse{}
 
-	resp, err := s.client.get(path, whoamiResponse)
+	resp, err := s.client.get(context.TODO(), path, whoamiResponse)
 	if err != nil {
 		return nil, err
 	}

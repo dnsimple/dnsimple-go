@@ -29,7 +29,7 @@ func (s *ServicesService) AppliedServices(accountID string, domainIdentifier str
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, servicesResponse)
+	resp, err := s.client.get(context.TODO(), path, servicesResponse)
 	if err != nil {
 		return servicesResponse, err
 	}

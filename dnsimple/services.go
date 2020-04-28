@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -68,7 +69,7 @@ func (s *ServicesService) ListServices(options *ListOptions) (*servicesResponse,
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, servicesResponse)
+	resp, err := s.client.get(context.TODO(), path, servicesResponse)
 	if err != nil {
 		return servicesResponse, err
 	}
@@ -84,7 +85,7 @@ func (s *ServicesService) GetService(serviceIdentifier string) (*serviceResponse
 	path := versioned(servicePath(serviceIdentifier))
 	serviceResponse := &serviceResponse{}
 
-	resp, err := s.client.get(path, serviceResponse)
+	resp, err := s.client.get(context.TODO(), path, serviceResponse)
 	if err != nil {
 		return nil, err
 	}

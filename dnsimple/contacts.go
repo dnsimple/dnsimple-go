@@ -67,7 +67,7 @@ func (s *ContactsService) ListContacts(accountID string, options *ListOptions) (
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, contactsResponse)
+	resp, err := s.client.get(context.TODO(), path, contactsResponse)
 	if err != nil {
 		return contactsResponse, err
 	}
@@ -99,7 +99,7 @@ func (s *ContactsService) GetContact(accountID string, contactID int64) (*contac
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &contactResponse{}
 
-	resp, err := s.client.get(path, contactResponse)
+	resp, err := s.client.get(context.TODO(), path, contactResponse)
 	if err != nil {
 		return nil, err
 	}

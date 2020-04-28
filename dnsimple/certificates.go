@@ -127,7 +127,7 @@ func (s *CertificatesService) ListCertificates(accountID, domainIdentifier strin
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, certificatesResponse)
+	resp, err := s.client.get(context.TODO(), path, certificatesResponse)
 	if err != nil {
 		return certificatesResponse, err
 	}
@@ -143,7 +143,7 @@ func (s *CertificatesService) GetCertificate(accountID, domainIdentifier string,
 	path := versioned(certificatePath(accountID, domainIdentifier, certificateID))
 	certificateResponse := &certificateResponse{}
 
-	resp, err := s.client.get(path, certificateResponse)
+	resp, err := s.client.get(context.TODO(), path, certificateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func (s *CertificatesService) DownloadCertificate(accountID, domainIdentifier st
 	path := versioned(certificatePath(accountID, domainIdentifier, certificateID) + "/download")
 	certificateBundleResponse := &certificateBundleResponse{}
 
-	resp, err := s.client.get(path, certificateBundleResponse)
+	resp, err := s.client.get(context.TODO(), path, certificateBundleResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +176,7 @@ func (s *CertificatesService) GetCertificatePrivateKey(accountID, domainIdentifi
 	path := versioned(certificatePath(accountID, domainIdentifier, certificateID) + "/private_key")
 	certificateBundleResponse := &certificateBundleResponse{}
 
-	resp, err := s.client.get(path, certificateBundleResponse)
+	resp, err := s.client.get(context.TODO(), path, certificateBundleResponse)
 	if err != nil {
 		return nil, err
 	}

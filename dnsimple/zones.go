@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -66,7 +67,7 @@ func (s *ZonesService) ListZones(accountID string, options *ZoneListOptions) (*z
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, zonesResponse)
+	resp, err := s.client.get(context.TODO(), path, zonesResponse)
 	if err != nil {
 		return zonesResponse, err
 	}
@@ -82,7 +83,7 @@ func (s *ZonesService) GetZone(accountID string, zoneName string) (*zoneResponse
 	path := versioned(fmt.Sprintf("/%v/zones/%v", accountID, zoneName))
 	zoneResponse := &zoneResponse{}
 
-	resp, err := s.client.get(path, zoneResponse)
+	resp, err := s.client.get(context.TODO(), path, zoneResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +99,7 @@ func (s *ZonesService) GetZoneFile(accountID string, zoneName string) (*zoneFile
 	path := versioned(fmt.Sprintf("/%v/zones/%v/file", accountID, zoneName))
 	zoneFileResponse := &zoneFileResponse{}
 
-	resp, err := s.client.get(path, zoneFileResponse)
+	resp, err := s.client.get(context.TODO(), path, zoneFileResponse)
 	if err != nil {
 		return nil, err
 	}

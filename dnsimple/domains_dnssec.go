@@ -60,7 +60,7 @@ func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &dnssecResponse{}
 
-	resp, err := s.client.get(path, dnssecResponse)
+	resp, err := s.client.get(context.TODO(), path, dnssecResponse)
 	if err != nil {
 		return nil, err
 	}

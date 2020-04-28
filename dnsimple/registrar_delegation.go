@@ -27,7 +27,7 @@ func (s *RegistrarService) GetDomainDelegation(accountID string, domainName stri
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation", accountID, domainName))
 	delegationResponse := &delegationResponse{}
 
-	resp, err := s.client.get(path, delegationResponse)
+	resp, err := s.client.get(context.TODO(), path, delegationResponse)
 	if err != nil {
 		return nil, err
 	}

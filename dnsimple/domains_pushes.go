@@ -70,7 +70,7 @@ func (s *DomainsService) ListPushes(accountID string, options *ListOptions) (*do
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, pushesResponse)
+	resp, err := s.client.get(context.TODO(), path, pushesResponse)
 	if err != nil {
 		return nil, err
 	}

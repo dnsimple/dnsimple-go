@@ -56,7 +56,7 @@ func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions)
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, templatesResponse)
+	resp, err := s.client.get(context.TODO(), path, templatesResponse)
 	if err != nil {
 		return templatesResponse, err
 	}
@@ -88,7 +88,7 @@ func (s *TemplatesService) GetTemplate(accountID string, templateIdentifier stri
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &templateResponse{}
 
-	resp, err := s.client.get(path, templateResponse)
+	resp, err := s.client.get(context.TODO(), path, templateResponse)
 	if err != nil {
 		return nil, err
 	}

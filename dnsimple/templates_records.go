@@ -50,7 +50,7 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentif
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, templateRecordsResponse)
+	resp, err := s.client.get(context.TODO(), path, templateRecordsResponse)
 	if err != nil {
 		return templateRecordsResponse, err
 	}
@@ -82,7 +82,7 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifie
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &templateRecordResponse{}
 
-	resp, err := s.client.get(path, templateRecordResponse)
+	resp, err := s.client.get(context.TODO(), path, templateRecordResponse)
 	if err != nil {
 		return nil, err
 	}

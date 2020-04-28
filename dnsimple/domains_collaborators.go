@@ -55,7 +55,7 @@ func (s *DomainsService) ListCollaborators(accountID, domainIdentifier string, o
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, collaboratorsResponse)
+	resp, err := s.client.get(context.TODO(), path, collaboratorsResponse)
 	if err != nil {
 		return collaboratorsResponse, err
 	}

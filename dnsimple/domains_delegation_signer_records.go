@@ -49,7 +49,7 @@ func (s *DomainsService) ListDelegationSignerRecords(accountID string, domainIde
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, dsRecordsResponse)
+	resp, err := s.client.get(context.TODO(), path, dsRecordsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *DomainsService) GetDelegationSignerRecord(accountID string, domainIdent
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
 	dsRecordResponse := &delegationSignerRecordResponse{}
 
-	resp, err := s.client.get(path, dsRecordResponse)
+	resp, err := s.client.get(context.TODO(), path, dsRecordResponse)
 	if err != nil {
 		return nil, err
 	}

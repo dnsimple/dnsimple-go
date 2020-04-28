@@ -140,8 +140,8 @@ func versioned(path string) string {
 	return fmt.Sprintf("/%s/%s", apiVersion, strings.Trim(path, "/"))
 }
 
-func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
-	return c.makeRequest(context.TODO(), http.MethodGet, path, nil, obj, nil)
+func (c *Client) get(ctx context.Context, path string, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodGet, path, nil, obj, nil)
 }
 
 func (c *Client) post(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {

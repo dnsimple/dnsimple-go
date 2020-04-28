@@ -46,7 +46,7 @@ func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*webho
 	path := versioned(webhookPath(accountID, 0))
 	webhooksResponse := &webhooksResponse{}
 
-	resp, err := s.client.get(path, webhooksResponse)
+	resp, err := s.client.get(context.TODO(), path, webhooksResponse)
 	if err != nil {
 		return webhooksResponse, err
 	}
@@ -78,7 +78,7 @@ func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*webhoo
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &webhookResponse{}
 
-	resp, err := s.client.get(path, webhookResponse)
+	resp, err := s.client.get(context.TODO(), path, webhookResponse)
 	if err != nil {
 		return nil, err
 	}
