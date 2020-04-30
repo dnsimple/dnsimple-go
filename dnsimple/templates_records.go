@@ -26,14 +26,14 @@ func templateRecordPath(accountID string, templateIdentifier string, templateRec
 	return templatePath(accountID, templateIdentifier) + "/records"
 }
 
-// templateRecordResponse represents a response from an API method that returns a TemplateRecord struct.
-type templateRecordResponse struct {
+// TemplateRecordResponse represents a response from an API method that returns a TemplateRecord struct.
+type TemplateRecordResponse struct {
 	Response
 	Data *TemplateRecord `json:"data"`
 }
 
-// templateRecordsResponse represents a response from an API method that returns a collection of TemplateRecord struct.
-type templateRecordsResponse struct {
+// TemplateRecordsResponse represents a response from an API method that returns a collection of TemplateRecord struct.
+type TemplateRecordsResponse struct {
 	Response
 	Data []TemplateRecord `json:"data"`
 }
@@ -41,9 +41,9 @@ type templateRecordsResponse struct {
 // ListTemplateRecords list the templates for an account.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#list
-func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentifier string, options *ListOptions) (*templateRecordsResponse, error) {
+func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentifier string, options *ListOptions) (*TemplateRecordsResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
-	templateRecordsResponse := &templateRecordsResponse{}
+	templateRecordsResponse := &TemplateRecordsResponse{}
 
 	path, err := addURLQueryOptions(path, options)
 	if err != nil {
@@ -62,9 +62,9 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentif
 // CreateTemplateRecord creates a new template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#create
-func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdentifier string, templateRecordAttributes TemplateRecord) (*templateRecordResponse, error) {
+func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdentifier string, templateRecordAttributes TemplateRecord) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
-	templateRecordResponse := &templateRecordResponse{}
+	templateRecordResponse := &TemplateRecordResponse{}
 
 	resp, err := s.client.post(context.TODO(), path, templateRecordAttributes, templateRecordResponse)
 	if err != nil {
@@ -78,9 +78,9 @@ func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdenti
 // GetTemplateRecord fetches a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#get
-func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*templateRecordResponse, error) {
+func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
-	templateRecordResponse := &templateRecordResponse{}
+	templateRecordResponse := &TemplateRecordResponse{}
 
 	resp, err := s.client.get(context.TODO(), path, templateRecordResponse)
 	if err != nil {
@@ -94,9 +94,9 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifie
 // DeleteTemplateRecord deletes a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#delete
-func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*templateRecordResponse, error) {
+func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
-	templateRecordResponse := &templateRecordResponse{}
+	templateRecordResponse := &TemplateRecordResponse{}
 
 	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {

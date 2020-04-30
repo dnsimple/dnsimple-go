@@ -8,8 +8,11 @@
 
 #### Release 0.40.0
 
+Incompatible changes:
+
 - CHANGED: Renamed ExchangeAuthorizationError.HttpResponse field to ExchangeAuthorizationError.HTTPResponse
 - CHANGED: Renamed Response.HttpResponse field to Response.HTTPResponse
+- CHANGED: Changed all method signatures so that the returned value is exported (dnsimple/dnsimple-go#91)
 
 - REMOVED: Deleted deprecated ResetDomainToken method.
 

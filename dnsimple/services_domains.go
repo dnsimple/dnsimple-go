@@ -20,9 +20,9 @@ type DomainServiceSettings struct {
 // AppliedServices lists the applied one-click services for a domain.
 //
 // See https://developer.dnsimple.com/v2/services/domains/#applied
-func (s *ServicesService) AppliedServices(accountID string, domainIdentifier string, options *ListOptions) (*servicesResponse, error) {
+func (s *ServicesService) AppliedServices(accountID string, domainIdentifier string, options *ListOptions) (*ServicesResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, ""))
-	servicesResponse := &servicesResponse{}
+	servicesResponse := &ServicesResponse{}
 
 	path, err := addURLQueryOptions(path, options)
 	if err != nil {
@@ -41,9 +41,9 @@ func (s *ServicesService) AppliedServices(accountID string, domainIdentifier str
 // ApplyService applies a one-click services to a domain.
 //
 // See https://developer.dnsimple.com/v2/services/domains/#apply
-func (s *ServicesService) ApplyService(accountID string, serviceIdentifier string, domainIdentifier string, settings DomainServiceSettings) (*serviceResponse, error) {
+func (s *ServicesService) ApplyService(accountID string, serviceIdentifier string, domainIdentifier string, settings DomainServiceSettings) (*ServiceResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
-	serviceResponse := &serviceResponse{}
+	serviceResponse := &ServiceResponse{}
 
 	resp, err := s.client.post(context.TODO(), path, settings, nil)
 	if err != nil {
@@ -57,9 +57,9 @@ func (s *ServicesService) ApplyService(accountID string, serviceIdentifier strin
 // UnapplyService unapplies a one-click services from a domain.
 //
 // See https://developer.dnsimple.com/v2/services/domains/#unapply
-func (s *ServicesService) UnapplyService(accountID string, serviceIdentifier string, domainIdentifier string) (*serviceResponse, error) {
+func (s *ServicesService) UnapplyService(accountID string, serviceIdentifier string, domainIdentifier string) (*ServiceResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
-	serviceResponse := &serviceResponse{}
+	serviceResponse := &ServiceResponse{}
 
 	resp, err := s.client.delete(context.TODO(), path, nil, nil)
 	if err != nil {

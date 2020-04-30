@@ -15,8 +15,8 @@ func dnssecPath(accountID string, domainIdentifier string) (path string) {
 	return
 }
 
-// dnssecResponse represents a response from an API method that returns a Dnssec struct.
-type dnssecResponse struct {
+// DnssecResponse represents a response from an API method that returns a Dnssec struct.
+type DnssecResponse struct {
 	Response
 	Data *Dnssec `json:"data"`
 }
@@ -24,9 +24,9 @@ type dnssecResponse struct {
 // EnableDnssec enables DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#enableDomainDnssec
-func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
+func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
-	dnssecResponse := &dnssecResponse{}
+	dnssecResponse := &DnssecResponse{}
 
 	resp, err := s.client.post(context.TODO(), path, dnssecResponse, nil)
 	if err != nil {
@@ -40,9 +40,9 @@ func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string)
 // DisableDnssec disables DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#disableDomainDnssec
-func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
+func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
-	dnssecResponse := &dnssecResponse{}
+	dnssecResponse := &DnssecResponse{}
 
 	resp, err := s.client.delete(context.TODO(), path, dnssecResponse, nil)
 	if err != nil {
@@ -56,9 +56,9 @@ func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string
 // GetDnssec retrieves the current status of DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#getDomainDnssec
-func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*dnssecResponse, error) {
+func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
-	dnssecResponse := &dnssecResponse{}
+	dnssecResponse := &DnssecResponse{}
 
 	resp, err := s.client.get(context.TODO(), path, dnssecResponse)
 	if err != nil {
