@@ -12,7 +12,6 @@ Incompatible changes:
 - CHANGED: Changed all method signatures so that the returned value is exported (dnsimple/dnsimple-go#91)
 
 
-
 #### Release 0.40.0
 
 Incompatible changes:
