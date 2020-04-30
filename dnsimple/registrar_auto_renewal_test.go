@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"net/http"
 	"testing"
 )
@@ -20,7 +21,7 @@ func TestRegistrarService_EnableDomainAutoRenewal(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Registrar.EnableDomainAutoRenewal(accountID, "example.com")
+	_, err := client.Registrar.EnableDomainAutoRenewal(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Registrars.EnableDomainAutoRenewal() returned error: %v", err)
 	}
@@ -41,7 +42,7 @@ func TestRegistrarService_DisableDomainAutoRenewal(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Registrar.DisableDomainAutoRenewal(accountID, "example.com")
+	_, err := client.Registrar.DisableDomainAutoRenewal(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Registrars.DisableDomainAutoRenewal() returned error: %v", err)
 	}

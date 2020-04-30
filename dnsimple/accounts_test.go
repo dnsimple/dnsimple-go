@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,7 +23,7 @@ func TestAccountsService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	accountsResponse, err := client.Accounts.ListAccounts(nil)
+	accountsResponse, err := client.Accounts.ListAccounts(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("Accounts.ListAccounts() returned error: %v", err)
 	}

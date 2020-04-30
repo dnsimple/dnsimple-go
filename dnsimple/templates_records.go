@@ -41,7 +41,7 @@ type TemplateRecordsResponse struct {
 // ListTemplateRecords list the templates for an account.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#list
-func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentifier string, options *ListOptions) (*TemplateRecordsResponse, error) {
+func (s *TemplatesService) ListTemplateRecords(ctx context.Context, accountID string, templateIdentifier string, options *ListOptions) (*TemplateRecordsResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
 	templateRecordsResponse := &TemplateRecordsResponse{}
 
@@ -50,7 +50,7 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentif
 		return nil, err
 	}
 
-	resp, err := s.client.get(context.TODO(), path, templateRecordsResponse)
+	resp, err := s.client.get(ctx, path, templateRecordsResponse)
 	if err != nil {
 		return templateRecordsResponse, err
 	}
@@ -62,11 +62,11 @@ func (s *TemplatesService) ListTemplateRecords(accountID string, templateIdentif
 // CreateTemplateRecord creates a new template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#create
-func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdentifier string, templateRecordAttributes TemplateRecord) (*TemplateRecordResponse, error) {
+func (s *TemplatesService) CreateTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordAttributes TemplateRecord) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
 	templateRecordResponse := &TemplateRecordResponse{}
 
-	resp, err := s.client.post(context.TODO(), path, templateRecordAttributes, templateRecordResponse)
+	resp, err := s.client.post(ctx, path, templateRecordAttributes, templateRecordResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -78,11 +78,11 @@ func (s *TemplatesService) CreateTemplateRecord(accountID string, templateIdenti
 // GetTemplateRecord fetches a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#get
-func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
+func (s *TemplatesService) GetTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &TemplateRecordResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, templateRecordResponse)
+	resp, err := s.client.get(ctx, path, templateRecordResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -94,11 +94,11 @@ func (s *TemplatesService) GetTemplateRecord(accountID string, templateIdentifie
 // DeleteTemplateRecord deletes a template record.
 //
 // See https://developer.dnsimple.com/v2/templates/records/#delete
-func (s *TemplatesService) DeleteTemplateRecord(accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
+func (s *TemplatesService) DeleteTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &TemplateRecordResponse{}
 
-	resp, err := s.client.delete(context.TODO(), path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

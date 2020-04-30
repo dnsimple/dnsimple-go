@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +34,7 @@ func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	templatesRecordsResponse, err := client.Templates.ListTemplateRecords("1010", "1", nil)
+	templatesRecordsResponse, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", nil)
 	if err != nil {
 		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
 	}
@@ -68,7 +69,7 @@ func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.ListTemplateRecords("1010", "1", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
 	}
@@ -93,7 +94,7 @@ func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
 
 	templateRecordAttributes := TemplateRecord{Name: "Beta"}
 
-	templateRecordResponse, err := client.Templates.CreateTemplateRecord("1010", "1", templateRecordAttributes)
+	templateRecordResponse, err := client.Templates.CreateTemplateRecord(context.Background(), "1010", "1", templateRecordAttributes)
 	if err != nil {
 		t.Fatalf("Templates.CreateTemplateRecord() returned error: %v", err)
 	}
@@ -121,7 +122,7 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	templateRecordResponse, err := client.Templates.GetTemplateRecord("1010", "1", 2)
+	templateRecordResponse, err := client.Templates.GetTemplateRecord(context.Background(), "1010", "1", 2)
 	if err != nil {
 		t.Fatalf("Templates.GetTemplateRecord() returned error: %v", err)
 	}
@@ -157,7 +158,7 @@ func TestTemplatesService_DeleteTemplateRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.DeleteTemplateRecord("1010", "1", 2)
+	_, err := client.Templates.DeleteTemplateRecord(context.Background(), "1010", "1", 2)
 	if err != nil {
 		t.Fatalf("Templates.DeleteTemplateRecord() returned error: %v", err)
 	}

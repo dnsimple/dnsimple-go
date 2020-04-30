@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +34,7 @@ func TestDomainsService_ListDomains(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	domainsResponse, err := client.Domains.ListDomains("1010", nil)
+	domainsResponse, err := client.Domains.ListDomains(context.Background(), "1010", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListDomains() returned error: %v", err)
 	}
@@ -74,7 +75,7 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListDomains("1010", &DomainListOptions{"example", 10, ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
+	_, err := client.Domains.ListDomains(context.Background(), "1010", &DomainListOptions{"example", 10, ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Domains.ListDomains() returned error: %v", err)
 	}
@@ -100,7 +101,7 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 	accountID := "1"
 	domainAttributes := Domain{Name: "example.com"}
 
-	domainResponse, err := client.Domains.CreateDomain(accountID, domainAttributes)
+	domainResponse, err := client.Domains.CreateDomain(context.Background(), accountID, domainAttributes)
 	if err != nil {
 		t.Fatalf("Domains.Create() returned error: %v", err)
 	}
@@ -130,7 +131,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 
 	accountID := "1010"
 
-	domainResponse, err := client.Domains.GetDomain(accountID, "example.com")
+	domainResponse, err := client.Domains.GetDomain(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Errorf("Domains.Get() returned error: %v", err)
 	}
@@ -170,7 +171,7 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Domains.DeleteDomain(accountID, "example.com")
+	_, err := client.Domains.DeleteDomain(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Domains.Delete() returned error: %v", err)
 	}

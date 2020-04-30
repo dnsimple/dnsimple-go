@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -32,7 +33,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificatesResponse, err := client.Certificates.ListCertificates("1010", "example.com", nil)
+	certificatesResponse, err := client.Certificates.ListCertificates(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Certificates.ListCertificates() returned error: %v", err)
 	}
@@ -67,7 +68,7 @@ func TestCertificatesService_ListCertificates_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Certificates.ListCertificates("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Certificates.ListCertificates(context.Background(), "1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Certificates.ListCertificates() returned error: %v", err)
 	}
@@ -87,7 +88,7 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.GetCertificate("1010", "example.com", 2)
+	certificateResponse, err := client.Certificates.GetCertificate(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Errorf("Certificates.GetCertificate() returned error: %v", err)
 	}
@@ -128,7 +129,7 @@ func TestCertificatesService_DownloadCertificate(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateBundleResponse, err := client.Certificates.DownloadCertificate("1010", "example.com", 2)
+	certificateBundleResponse, err := client.Certificates.DownloadCertificate(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Errorf("Certificates.DownloadCertificate() returned error: %v", err)
 	}
@@ -161,7 +162,7 @@ func TestCertificatesService_GetCertificatePrivateKey(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateBundleResponse, err := client.Certificates.GetCertificatePrivateKey("1010", "example.com", 2)
+	certificateBundleResponse, err := client.Certificates.GetCertificatePrivateKey(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Errorf("Certificates.GetCertificatePrivateKey() returned error: %v", err)
 	}
@@ -194,7 +195,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100}
 
-	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
+	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "example.com", certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
@@ -224,7 +225,7 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100, Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
 
-	_, err := client.Certificates.PurchaseLetsencryptCertificate("1010", "example.com", certificateAttributes)
+	_, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "example.com", certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
@@ -244,7 +245,7 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate("1010", "example.com", 200)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate(context.Background(), "1010", "example.com", 200)
 	if err != nil {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned error: %v", err)
 	}
@@ -274,7 +275,7 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{}
 
-	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
@@ -313,7 +314,7 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true}
 
-	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal("1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
@@ -347,7 +348,7 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal("1010", "example.com", 200, 999)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, 999)
 	if err != nil {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned error: %v", err)
 	}

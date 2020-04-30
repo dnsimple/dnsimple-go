@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"testing"
@@ -26,7 +27,7 @@ func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	vanityNameServerResponse, err := client.VanityNameServers.EnableVanityNameServers("1010", "example.com")
+	vanityNameServerResponse, err := client.VanityNameServers.EnableVanityNameServers(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("VanityNameServers.EnableVanityNameServers() returned error: %v", err)
 	}
@@ -53,7 +54,7 @@ func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.VanityNameServers.DisableVanityNameServers("1010", "example.com")
+	_, err := client.VanityNameServers.DisableVanityNameServers(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("VanityNameServers.DisableVanityNameServers() returned error: %v", err)
 	}

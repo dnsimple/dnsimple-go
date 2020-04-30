@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,7 +23,7 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	checkResponse, err := client.Registrar.CheckDomain("1010", "example.com")
+	checkResponse, err := client.Registrar.CheckDomain(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("Registrar.CheckDomain() returned error: %v", err)
 	}
@@ -47,7 +48,7 @@ func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	priceResponse, err := client.Registrar.GetDomainPremiumPrice("1010", "example.com", nil)
+	priceResponse, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
 	}
@@ -76,7 +77,7 @@ func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Registrar.GetDomainPremiumPrice("1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
+	_, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
 	if err != nil {
 		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
 	}
@@ -101,7 +102,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 
 	registerRequest := &DomainRegisterRequest{RegistrantID: 2}
 
-	registrationResponse, err := client.Registrar.RegisterDomain("1010", "example.com", registerRequest)
+	registrationResponse, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
 	if err != nil {
 		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
 	}
@@ -134,7 +135,7 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 
 	registerRequest := &DomainRegisterRequest{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
-	if _, err := client.Registrar.RegisterDomain("1010", "example.com", registerRequest); err != nil {
+	if _, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest); err != nil {
 		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
 	}
 }
@@ -158,7 +159,7 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 
 	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3"}
 
-	transferResponse, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest)
+	transferResponse, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
 	if err != nil {
 		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
 	}
@@ -191,7 +192,7 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 
 	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
-	if _, err := client.Registrar.TransferDomain("1010", "example.com", transferRequest); err != nil {
+	if _, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest); err != nil {
 		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
 	}
 }
@@ -210,7 +211,7 @@ func TestRegistrarService_TransferDomainOut(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Registrar.TransferDomainOut("1010", "example.com")
+	_, err := client.Registrar.TransferDomainOut(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("Registrar.TransferOut() returned error: %v", err)
 	}
@@ -233,7 +234,7 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	renewalResponse, err := client.Registrar.RenewDomain("1010", "example.com", nil)
+	renewalResponse, err := client.Registrar.RenewDomain(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Registrar.RenewDomain() returned error: %v", err)
 	}

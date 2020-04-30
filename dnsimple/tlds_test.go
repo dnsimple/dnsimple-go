@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,7 +23,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	tldsResponse, err := client.Tlds.ListTlds(nil)
+	tldsResponse, err := client.Tlds.ListTlds(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}
@@ -70,7 +71,7 @@ func TestTldsService_ListTlds_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Tlds.ListTlds(&ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Tlds.ListTlds(context.Background(), &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}
@@ -90,7 +91,7 @@ func TestTldsService_GetTld(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	tldResponse, err := client.Tlds.GetTld("com")
+	tldResponse, err := client.Tlds.GetTld(context.Background(), "com")
 	if err != nil {
 		t.Fatalf("Tlds.GetTlds() returned error: %v", err)
 	}
@@ -118,7 +119,7 @@ func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	tldResponse, err := client.Tlds.GetTldExtendedAttributes("com")
+	tldResponse, err := client.Tlds.GetTldExtendedAttributes(context.Background(), "com")
 	if err != nil {
 		t.Fatalf("Tlds.GetTldExtendedAttributes() returned error: %v", err)
 	}

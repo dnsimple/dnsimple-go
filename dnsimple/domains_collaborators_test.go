@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -32,7 +33,7 @@ func TestDomainsService_ListCollaborators(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	collaboratorsResponse, err := client.Domains.ListCollaborators("1010", "example.com", nil)
+	collaboratorsResponse, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListCollaborators() returned error: %v", err)
 	}
@@ -73,7 +74,7 @@ func TestDomainsService_ListCollaborators_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListCollaborators("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Domains.ListCollaborators() returned error: %v", err)
 	}
@@ -100,7 +101,7 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 	domainID := "example.com"
 	collaboratorAttributes := CollaboratorAttributes{Email: "existing-user@example.com"}
 
-	collaboratorResponse, err := client.Domains.AddCollaborator(accountID, domainID, collaboratorAttributes)
+	collaboratorResponse, err := client.Domains.AddCollaborator(context.Background(), accountID, domainID, collaboratorAttributes)
 	if err != nil {
 		t.Fatalf("Domains.AddCollaborator() returned error: %v", err)
 	}
@@ -141,7 +142,7 @@ func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
 	domainID := "example.com"
 	collaboratorAttributes := CollaboratorAttributes{Email: "invited-user@example.com"}
 
-	collaboratorResponse, err := client.Domains.AddCollaborator(accountID, domainID, collaboratorAttributes)
+	collaboratorResponse, err := client.Domains.AddCollaborator(context.Background(), accountID, domainID, collaboratorAttributes)
 	if err != nil {
 		t.Fatalf("Domains.AddCollaborator() returned error: %v", err)
 	}
@@ -179,7 +180,7 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 	domainID := "example.com"
 	collaboratorID := int64(100)
 
-	_, err := client.Domains.RemoveCollaborator(accountID, domainID, collaboratorID)
+	_, err := client.Domains.RemoveCollaborator(context.Background(), accountID, domainID, collaboratorID)
 	if err != nil {
 		t.Fatalf("Domains.RemoveCollaborator() returned error: %v", err)
 	}

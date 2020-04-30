@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +34,7 @@ func TestTemplatesService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	templatesResponse, err := client.Templates.ListTemplates("1010", nil)
+	templatesResponse, err := client.Templates.ListTemplates(context.Background(), "1010", nil)
 	if err != nil {
 		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
 	}
@@ -68,7 +69,7 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.ListTemplates("1010", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Templates.ListTemplates(context.Background(), "1010", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
 	}
@@ -94,7 +95,7 @@ func TestTemplatesService_Create(t *testing.T) {
 	accountID := "1010"
 	templateAttributes := Template{Name: "Beta"}
 
-	templateResponse, err := client.Templates.CreateTemplate(accountID, templateAttributes)
+	templateResponse, err := client.Templates.CreateTemplate(context.Background(), accountID, templateAttributes)
 	if err != nil {
 		t.Fatalf("Templates.CreateTemplate() returned error: %v", err)
 	}
@@ -122,7 +123,7 @@ func TestTemplatesService_Get(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	templateResponse, err := client.Templates.GetTemplate("1010", "1")
+	templateResponse, err := client.Templates.GetTemplate(context.Background(), "1010", "1")
 	if err != nil {
 		t.Fatalf("Templates.GetTemplate() returned error: %v", err)
 	}
@@ -157,7 +158,7 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 	})
 
 	templateAttributes := Template{Name: "Alpha"}
-	templateResponse, err := client.Templates.UpdateTemplate("1010", "1", templateAttributes)
+	templateResponse, err := client.Templates.UpdateTemplate(context.Background(), "1010", "1", templateAttributes)
 	if err != nil {
 		t.Fatalf("Templates.UpdateTemplate() returned error: %v", err)
 	}
@@ -191,7 +192,7 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.DeleteTemplate("1010", "1")
+	_, err := client.Templates.DeleteTemplate(context.Background(), "1010", "1")
 	if err != nil {
 		t.Fatalf("Templates.DeleteTemplate() returned error: %v", err)
 	}

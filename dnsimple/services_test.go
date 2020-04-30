@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +34,7 @@ func TestServicesService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	servicesResponse, err := client.Services.ListServices(nil)
+	servicesResponse, err := client.Services.ListServices(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("Services.ListServices() returned error: %v", err)
 	}
@@ -68,7 +69,7 @@ func TestServicesService_List_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Services.ListServices(&ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Services.ListServices(context.Background(), &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Services.ListServices() returned error: %v", err)
 	}
@@ -90,7 +91,7 @@ func TestServicesService_Get(t *testing.T) {
 
 	serviceID := "1"
 
-	serviceResponse, err := client.Services.GetService(serviceID)
+	serviceResponse, err := client.Services.GetService(context.Background(), serviceID)
 	if err != nil {
 		t.Fatalf("Services.GetService() returned error: %v", err)
 	}

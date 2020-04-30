@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -32,7 +33,7 @@ func TestZonesService_ListRecords(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordsResponse, err := client.Zones.ListRecords("1010", "example.com", nil)
+	recordsResponse, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
@@ -77,7 +78,7 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListRecords("1010", "example.com", &ZoneRecordListOptions{"example", "www", "A", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
+	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{"example", "www", "A", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}
@@ -103,7 +104,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	accountID := "1010"
 	recordValues := ZoneRecord{Name: "foo", Content: "mxa.example.com", Type: "MX"}
 
-	recordResponse, err := client.Zones.CreateRecord(accountID, "example.com", recordValues)
+	recordResponse, err := client.Zones.CreateRecord(context.Background(), accountID, "example.com", recordValues)
 	if err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -142,7 +143,7 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 
 	recordValues := ZoneRecord{Name: "", Content: "127.0.0.1", Type: "A"}
 
-	recordResponse, err := client.Zones.CreateRecord("1010", "example.com", recordValues)
+	recordResponse, err := client.Zones.CreateRecord(context.Background(), "1010", "example.com", recordValues)
 	if err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -173,7 +174,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
-	if _, err := client.Zones.CreateRecord("1", "example.com", recordValues); err != nil {
+	if _, err := client.Zones.CreateRecord(context.Background(), "1", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
 
@@ -188,7 +189,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
-	if _, err := client.Zones.CreateRecord("2", "example.com", recordValues); err != nil {
+	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
 
@@ -203,7 +204,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
-	if _, err := client.Zones.CreateRecord("2", "example.com", recordValues); err != nil {
+	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
 }
@@ -224,7 +225,7 @@ func TestZonesService_GetRecord(t *testing.T) {
 
 	accountID := "1010"
 
-	recordResponse, err := client.Zones.GetRecord(accountID, "example.com", 1539)
+	recordResponse, err := client.Zones.GetRecord(context.Background(), accountID, "example.com", 1539)
 	if err != nil {
 		t.Fatalf("Zones.GetRecord() returned error: %v", err)
 	}
@@ -269,7 +270,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	accountID := "1010"
 	recordValues := ZoneRecord{Name: "foo", Content: "127.0.0.1"}
 
-	recordResponse, err := client.Zones.UpdateRecord(accountID, "example.com", 5, recordValues)
+	recordResponse, err := client.Zones.UpdateRecord(context.Background(), accountID, "example.com", 5, recordValues)
 	if err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
@@ -300,7 +301,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
-	if _, err := client.Zones.UpdateRecord("1", "example.com", 1, recordValues); err != nil {
+	if _, err := client.Zones.UpdateRecord(context.Background(), "1", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
 
@@ -315,7 +316,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
-	if _, err := client.Zones.UpdateRecord("2", "example.com", 1, recordValues); err != nil {
+	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
 
@@ -330,7 +331,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	})
 
 	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
-	if _, err := client.Zones.UpdateRecord("2", "example.com", 1, recordValues); err != nil {
+	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
 }
@@ -351,7 +352,7 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Zones.DeleteRecord(accountID, "example.com", 2)
+	_, err := client.Zones.DeleteRecord(context.Background(), accountID, "example.com", 2)
 	if err != nil {
 		t.Fatalf("Zones.DeleteRecord() returned error: %v", err)
 	}

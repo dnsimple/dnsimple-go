@@ -35,12 +35,12 @@ type VanityNameServerResponse struct {
 
 // EnableVanityNameServers Vanity Name Servers for the given domain
 //
-// See https://developer.dnsimple.com/v2/vanity/#enable
-func (s *VanityNameServersService) EnableVanityNameServers(accountID string, domainIdentifier string) (*VanityNameServerResponse, error) {
+// See https://developer.dnsimple.com/v2/vanity/#enableVanityNameServers
+func (s *VanityNameServersService) EnableVanityNameServers(ctx context.Context, accountID string, domainIdentifier string) (*VanityNameServerResponse, error) {
 	path := versioned(vanityNameServerPath(accountID, domainIdentifier))
 	vanityNameServerResponse := &VanityNameServerResponse{}
 
-	resp, err := s.client.put(context.TODO(), path, nil, vanityNameServerResponse)
+	resp, err := s.client.put(ctx, path, nil, vanityNameServerResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -51,12 +51,12 @@ func (s *VanityNameServersService) EnableVanityNameServers(accountID string, dom
 
 // DisableVanityNameServers Vanity Name Servers for the given domain
 //
-// See https://developer.dnsimple.com/v2/vanity/#disable
-func (s *VanityNameServersService) DisableVanityNameServers(accountID string, domainIdentifier string) (*VanityNameServerResponse, error) {
+// See https://developer.dnsimple.com/v2/vanity/#disableVanityNameServers
+func (s *VanityNameServersService) DisableVanityNameServers(ctx context.Context, accountID string, domainIdentifier string) (*VanityNameServerResponse, error) {
 	path := versioned(vanityNameServerPath(accountID, domainIdentifier))
 	vanityNameServerResponse := &VanityNameServerResponse{}
 
-	resp, err := s.client.delete(context.TODO(), path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

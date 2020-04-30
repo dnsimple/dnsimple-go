@@ -24,11 +24,11 @@ type DnssecResponse struct {
 // EnableDnssec enables DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#enableDomainDnssec
-func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
+func (s *DomainsService) EnableDnssec(ctx context.Context, accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &DnssecResponse{}
 
-	resp, err := s.client.post(context.TODO(), path, dnssecResponse, nil)
+	resp, err := s.client.post(ctx, path, dnssecResponse, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -40,11 +40,11 @@ func (s *DomainsService) EnableDnssec(accountID string, domainIdentifier string)
 // DisableDnssec disables DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#disableDomainDnssec
-func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
+func (s *DomainsService) DisableDnssec(ctx context.Context, accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &DnssecResponse{}
 
-	resp, err := s.client.delete(context.TODO(), path, dnssecResponse, nil)
+	resp, err := s.client.delete(ctx, path, dnssecResponse, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -56,11 +56,11 @@ func (s *DomainsService) DisableDnssec(accountID string, domainIdentifier string
 // GetDnssec retrieves the current status of DNSSEC on the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/dnssec/#getDomainDnssec
-func (s *DomainsService) GetDnssec(accountID string, domainIdentifier string) (*DnssecResponse, error) {
+func (s *DomainsService) GetDnssec(ctx context.Context, accountID string, domainIdentifier string) (*DnssecResponse, error) {
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &DnssecResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, dnssecResponse)
+	resp, err := s.client.get(ctx, path, dnssecResponse)
 	if err != nil {
 		return nil, err
 	}

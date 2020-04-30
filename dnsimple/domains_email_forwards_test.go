@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -35,7 +36,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	forwardsResponse, err := client.Domains.ListEmailForwards("1010", "example.com", nil)
+	forwardsResponse, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
@@ -70,7 +71,7 @@ func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListEmailForwards("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
@@ -95,7 +96,7 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 
 	forwardAttributes := EmailForward{From: "me"}
 
-	forwardResponse, err := client.Domains.CreateEmailForward("1010", "example.com", forwardAttributes)
+	forwardResponse, err := client.Domains.CreateEmailForward(context.Background(), "1010", "example.com", forwardAttributes)
 	if err != nil {
 		t.Fatalf("Domains.CreateEmailForward() returned error: %v", err)
 	}
@@ -123,7 +124,7 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	forwardResponse, err := client.Domains.GetEmailForward("1010", "example.com", 2)
+	forwardResponse, err := client.Domains.GetEmailForward(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Errorf("Domains.GetEmailForward() returned error: %v", err)
 	}
@@ -156,7 +157,7 @@ func TestDomainsService_DeleteEmailForward(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.DeleteEmailForward("1010", "example.com", 2)
+	_, err := client.Domains.DeleteEmailForward(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Fatalf("Domains.DeleteEmailForward() returned error: %v", err)
 	}

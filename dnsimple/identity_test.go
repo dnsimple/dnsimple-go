@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"testing"
@@ -20,7 +21,7 @@ func TestAuthService_Whoami(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	whoamiResponse, err := client.Identity.Whoami()
+	whoamiResponse, err := client.Identity.Whoami(context.Background())
 	if err != nil {
 		t.Fatalf("Identity.Whoami() returned error: %v", err)
 	}

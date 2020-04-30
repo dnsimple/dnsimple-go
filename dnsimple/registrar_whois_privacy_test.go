@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"reflect"
@@ -21,7 +22,7 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	privacyResponse, err := client.Registrar.GetWhoisPrivacy("1010", "example.com")
+	privacyResponse, err := client.Registrar.GetWhoisPrivacy(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Errorf("Registrar.GetWhoisPrivacy() returned error: %v", err)
 	}
@@ -57,7 +58,7 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	privacyResponse, err := client.Registrar.EnableWhoisPrivacy("1010", "example.com")
+	privacyResponse, err := client.Registrar.EnableWhoisPrivacy(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Errorf("Registrar.EnableWhoisPrivacy() returned error: %v", err)
 	}
@@ -85,7 +86,7 @@ func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	privacyResponse, err := client.Registrar.DisableWhoisPrivacy("1010", "example.com")
+	privacyResponse, err := client.Registrar.DisableWhoisPrivacy(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Errorf("Registrar.DisableWhoisPrivacy() returned error: %v", err)
 	}
@@ -110,7 +111,7 @@ func TestRegistrarService_RenewWhoisPrivacy(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	privacyRenewalResponse, err := client.Registrar.RenewWhoisPrivacy("1010", "example.com")
+	privacyRenewalResponse, err := client.Registrar.RenewWhoisPrivacy(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Errorf("Registrar.RenewWhoisPrivacy() returned error: %v", err)
 	}

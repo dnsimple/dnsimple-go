@@ -57,8 +57,8 @@ type ZoneListOptions struct {
 
 // ListZones the zones for an account.
 //
-// See https://developer.dnsimple.com/v2/zones/#list
-func (s *ZonesService) ListZones(accountID string, options *ZoneListOptions) (*ZonesResponse, error) {
+// See https://developer.dnsimple.com/v2/zones/#listZones
+func (s *ZonesService) ListZones(ctx context.Context, accountID string, options *ZoneListOptions) (*ZonesResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones", accountID))
 	zonesResponse := &ZonesResponse{}
 
@@ -67,7 +67,7 @@ func (s *ZonesService) ListZones(accountID string, options *ZoneListOptions) (*Z
 		return nil, err
 	}
 
-	resp, err := s.client.get(context.TODO(), path, zonesResponse)
+	resp, err := s.client.get(ctx, path, zonesResponse)
 	if err != nil {
 		return zonesResponse, err
 	}
@@ -78,12 +78,12 @@ func (s *ZonesService) ListZones(accountID string, options *ZoneListOptions) (*Z
 
 // GetZone fetches a zone.
 //
-// See https://developer.dnsimple.com/v2/zones/#get
-func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse, error) {
+// See https://developer.dnsimple.com/v2/zones/#getZone
+func (s *ZonesService) GetZone(ctx context.Context, accountID string, zoneName string) (*ZoneResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v", accountID, zoneName))
 	zoneResponse := &ZoneResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, zoneResponse)
+	resp, err := s.client.get(ctx, path, zoneResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -94,12 +94,12 @@ func (s *ZonesService) GetZone(accountID string, zoneName string) (*ZoneResponse
 
 // GetZoneFile fetches a zone file.
 //
-// See https://developer.dnsimple.com/v2/zones/#get-file
-func (s *ZonesService) GetZoneFile(accountID string, zoneName string) (*ZoneFileResponse, error) {
+// See https://developer.dnsimple.com/v2/zones/#getZoneFile
+func (s *ZonesService) GetZoneFile(ctx context.Context, accountID string, zoneName string) (*ZoneFileResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/file", accountID, zoneName))
 	zoneFileResponse := &ZoneFileResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, zoneFileResponse)
+	resp, err := s.client.get(ctx, path, zoneFileResponse)
 	if err != nil {
 		return nil, err
 	}

@@ -42,11 +42,11 @@ type WebhooksResponse struct {
 // ListWebhooks lists the webhooks for an account.
 //
 // See https://developer.dnsimple.com/v2/webhooks#list
-func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
+func (s *WebhooksService) ListWebhooks(ctx context.Context, accountID string, _ *ListOptions) (*WebhooksResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhooksResponse := &WebhooksResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, webhooksResponse)
+	resp, err := s.client.get(ctx, path, webhooksResponse)
 	if err != nil {
 		return webhooksResponse, err
 	}
@@ -58,11 +58,11 @@ func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*Webho
 // CreateWebhook creates a new webhook.
 //
 // See https://developer.dnsimple.com/v2/webhooks#create
-func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
+func (s *WebhooksService) CreateWebhook(ctx context.Context, accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
 	webhookResponse := &WebhookResponse{}
 
-	resp, err := s.client.post(context.TODO(), path, webhookAttributes, webhookResponse)
+	resp, err := s.client.post(ctx, path, webhookAttributes, webhookResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -74,11 +74,11 @@ func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webh
 // GetWebhook fetches a webhook.
 //
 // See https://developer.dnsimple.com/v2/webhooks#get
-func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*WebhookResponse, error) {
+func (s *WebhooksService) GetWebhook(ctx context.Context, accountID string, webhookID int64) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
 
-	resp, err := s.client.get(context.TODO(), path, webhookResponse)
+	resp, err := s.client.get(ctx, path, webhookResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -90,11 +90,11 @@ func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*Webhoo
 // DeleteWebhook PERMANENTLY deletes a webhook from the account.
 //
 // See https://developer.dnsimple.com/v2/webhooks#delete
-func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int64) (*WebhookResponse, error) {
+func (s *WebhooksService) DeleteWebhook(ctx context.Context, accountID string, webhookID int64) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
 	webhookResponse := &WebhookResponse{}
 
-	resp, err := s.client.delete(context.TODO(), path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

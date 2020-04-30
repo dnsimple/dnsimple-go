@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"reflect"
@@ -24,7 +25,7 @@ func TestZonesService_CheckZoneDistribution(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
 	}
@@ -56,7 +57,7 @@ func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
 	}
@@ -88,7 +89,7 @@ func TestZonesService_CheckZoneDistributionError(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(accountID, zoneName)
+	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
 	if err == nil {
 		t.Fatalf("Zones.CheckZoneDistribution() expected to return an error: %v", zoneDistributionResponse)
 	}
@@ -116,7 +117,7 @@ func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
 	}
@@ -149,7 +150,7 @@ func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
 	if err != nil {
 		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
 	}
@@ -182,7 +183,7 @@ func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
 	zoneName := "example.com"
 	recordID := int64(1)
 
-	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(accountID, zoneName, recordID)
+	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
 	if err == nil {
 		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return an error: %v", zoneDistributionResponse)
 	}
