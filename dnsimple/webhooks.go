@@ -26,14 +26,14 @@ func webhookPath(accountID string, webhookID int64) (path string) {
 	return
 }
 
-// webhookResponse represents a response from an API method that returns a Webhook struct.
-type webhookResponse struct {
+// WebhookResponse represents a response from an API method that returns a Webhook struct.
+type WebhookResponse struct {
 	Response
 	Data *Webhook `json:"data"`
 }
 
-// webhookResponse represents a response from an API method that returns a collection of Webhook struct.
-type webhooksResponse struct {
+// WebhooksResponse represents a response from an API method that returns a collection of Webhook struct.
+type WebhooksResponse struct {
 	Response
 	Data []Webhook `json:"data"`
 }
@@ -41,9 +41,9 @@ type webhooksResponse struct {
 // ListWebhooks lists the webhooks for an account.
 //
 // See https://developer.dnsimple.com/v2/webhooks#list
-func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*webhooksResponse, error) {
+func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*WebhooksResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
-	webhooksResponse := &webhooksResponse{}
+	webhooksResponse := &WebhooksResponse{}
 
 	resp, err := s.client.get(path, webhooksResponse)
 	if err != nil {
@@ -57,9 +57,9 @@ func (s *WebhooksService) ListWebhooks(accountID string, _ *ListOptions) (*webho
 // CreateWebhook creates a new webhook.
 //
 // See https://developer.dnsimple.com/v2/webhooks#create
-func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webhook) (*webhookResponse, error) {
+func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webhook) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, 0))
-	webhookResponse := &webhookResponse{}
+	webhookResponse := &WebhookResponse{}
 
 	resp, err := s.client.post(path, webhookAttributes, webhookResponse)
 	if err != nil {
@@ -73,9 +73,9 @@ func (s *WebhooksService) CreateWebhook(accountID string, webhookAttributes Webh
 // GetWebhook fetches a webhook.
 //
 // See https://developer.dnsimple.com/v2/webhooks#get
-func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*webhookResponse, error) {
+func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
-	webhookResponse := &webhookResponse{}
+	webhookResponse := &WebhookResponse{}
 
 	resp, err := s.client.get(path, webhookResponse)
 	if err != nil {
@@ -89,9 +89,9 @@ func (s *WebhooksService) GetWebhook(accountID string, webhookID int64) (*webhoo
 // DeleteWebhook PERMANENTLY deletes a webhook from the account.
 //
 // See https://developer.dnsimple.com/v2/webhooks#delete
-func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int64) (*webhookResponse, error) {
+func (s *WebhooksService) DeleteWebhook(accountID string, webhookID int64) (*WebhookResponse, error) {
 	path := versioned(webhookPath(accountID, webhookID))
-	webhookResponse := &webhookResponse{}
+	webhookResponse := &WebhookResponse{}
 
 	resp, err := s.client.delete(path, nil, nil)
 	if err != nil {
