@@ -10,6 +10,10 @@ Incompatible changes:
 - NEW: Added support for context (dnsimple/dnsimple-go#82, dnsimple/dnsimple-go#90)
 
 - CHANGED: Changed all method signatures so that the returned value is exported (dnsimple/dnsimple-go#91)
+- CHANGED: Renamed the following structs to clarify intent:
+    - DomainRegisterRequest -> RegisterDomainInput
+    - DomainTransferRequest -> TransferDomainInput
+    - DomainRenewRequest -> RenewDomainInput
 
 
 #### Release 0.40.0

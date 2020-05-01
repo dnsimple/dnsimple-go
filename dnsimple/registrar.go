@@ -111,9 +111,9 @@ type DomainRegistrationResponse struct {
 	Data *DomainRegistration `json:"data"`
 }
 
-// DomainRegisterRequest represents the attributes you can pass to a register API request.
+// RegisterDomainInput represents the attributes you can pass to a register API request.
 // Some attributes are mandatory.
-type DomainRegisterRequest struct {
+type RegisterDomainInput struct {
 	// The ID of the Contact to use as registrant for the domain
 	RegistrantID int `json:"registrant_id"`
 	// Set to true to enable the whois privacy service. An extra cost may apply.
@@ -131,13 +131,13 @@ type DomainRegisterRequest struct {
 // RegisterDomain registers a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string, domainName string, request *DomainRegisterRequest) (*DomainRegistrationResponse, error) {
+func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string, domainName string, input *RegisterDomainInput) (*DomainRegistrationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registrations", accountID, domainName))
 	registrationResponse := &DomainRegistrationResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(ctx, path, request, registrationResponse)
+	resp, err := s.client.post(ctx, path, input, registrationResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -164,9 +164,9 @@ type DomainTransferResponse struct {
 	Data *DomainTransfer `json:"data"`
 }
 
-// DomainTransferRequest represents the attributes you can pass to a transfer API request.
+// TransferDomainInput represents the attributes you can pass to a transfer API request.
 // Some attributes are mandatory.
-type DomainTransferRequest struct {
+type TransferDomainInput struct {
 	// The ID of the Contact to use as registrant for the domain
 	RegistrantID int `json:"registrant_id"`
 	// The Auth-Code required to transfer the domain.
@@ -187,13 +187,13 @@ type DomainTransferRequest struct {
 // TransferDomain transfers a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#transferDomain
-func (s *RegistrarService) TransferDomain(ctx context.Context, accountID string, domainName string, request *DomainTransferRequest) (*DomainTransferResponse, error) {
+func (s *RegistrarService) TransferDomain(ctx context.Context, accountID string, domainName string, input *TransferDomainInput) (*DomainTransferResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers", accountID, domainName))
 	transferResponse := &DomainTransferResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(ctx, path, request, transferResponse)
+	resp, err := s.client.post(ctx, path, input, transferResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -240,9 +240,9 @@ type DomainRenewalResponse struct {
 	Data *DomainRenewal `json:"data"`
 }
 
-// DomainRenewRequest represents the attributes you can pass to a renew API request.
+// RenewDomainInput represents the attributes you can pass to a renew API request.
 // Some attributes are mandatory.
-type DomainRenewRequest struct {
+type RenewDomainInput struct {
 	// The number of years
 	Period int `json:"period"`
 	// Required as confirmation of the price, only if the domain is premium.
@@ -252,11 +252,11 @@ type DomainRenewRequest struct {
 // RenewDomain renews a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, domainName string, request *DomainRenewRequest) (*DomainRenewalResponse, error) {
+func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, domainName string, input *RenewDomainInput) (*DomainRenewalResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewals", accountID, domainName))
 	renewalResponse := &DomainRenewalResponse{}
 
-	resp, err := s.client.post(ctx, path, request, renewalResponse)
+	resp, err := s.client.post(ctx, path, input, renewalResponse)
 	if err != nil {
 		return nil, err
 	}

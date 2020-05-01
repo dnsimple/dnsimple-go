@@ -100,7 +100,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	registerRequest := &DomainRegisterRequest{RegistrantID: 2}
+	registerRequest := &RegisterDomainInput{RegistrantID: 2}
 
 	registrationResponse, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
 	if err != nil {
@@ -133,7 +133,7 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	registerRequest := &DomainRegisterRequest{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
+	registerRequest := &RegisterDomainInput{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
 	if _, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest); err != nil {
 		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
@@ -157,7 +157,7 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3"}
+	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3"}
 
 	transferResponse, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
 	if err != nil {
@@ -190,7 +190,7 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	transferRequest := &DomainTransferRequest{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
+	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
 	if _, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest); err != nil {
 		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
