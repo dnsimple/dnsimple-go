@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -59,7 +60,7 @@ type ServicesResponse struct {
 // ListServices lists the one-click services available in DNSimple.
 //
 // See https://developer.dnsimple.com/v2/services/#list
-func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse, error) {
+func (s *ServicesService) ListServices(ctx context.Context, options *ListOptions) (*ServicesResponse, error) {
 	path := versioned(servicePath(""))
 	servicesResponse := &ServicesResponse{}
 
@@ -68,7 +69,7 @@ func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse,
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, servicesResponse)
+	resp, err := s.client.get(ctx, path, servicesResponse)
 	if err != nil {
 		return servicesResponse, err
 	}
@@ -80,11 +81,11 @@ func (s *ServicesService) ListServices(options *ListOptions) (*ServicesResponse,
 // GetService fetches a one-click service.
 //
 // See https://developer.dnsimple.com/v2/services/#get
-func (s *ServicesService) GetService(serviceIdentifier string) (*ServiceResponse, error) {
+func (s *ServicesService) GetService(ctx context.Context, serviceIdentifier string) (*ServiceResponse, error) {
 	path := versioned(servicePath(serviceIdentifier))
 	serviceResponse := &ServiceResponse{}
 
-	resp, err := s.client.get(path, serviceResponse)
+	resp, err := s.client.get(ctx, path, serviceResponse)
 	if err != nil {
 		return nil, err
 	}

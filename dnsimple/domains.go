@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -63,7 +64,7 @@ type DomainListOptions struct {
 // ListDomains lists the domains for an account.
 //
 // See https://developer.dnsimple.com/v2/domains/#list
-func (s *DomainsService) ListDomains(accountID string, options *DomainListOptions) (*DomainsResponse, error) {
+func (s *DomainsService) ListDomains(ctx context.Context, accountID string, options *DomainListOptions) (*DomainsResponse, error) {
 	path := versioned(domainPath(accountID, ""))
 	domainsResponse := &DomainsResponse{}
 
@@ -72,7 +73,7 @@ func (s *DomainsService) ListDomains(accountID string, options *DomainListOption
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, domainsResponse)
+	resp, err := s.client.get(ctx, path, domainsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -84,11 +85,11 @@ func (s *DomainsService) ListDomains(accountID string, options *DomainListOption
 // CreateDomain creates a new domain in the account.
 //
 // See https://developer.dnsimple.com/v2/domains/#create
-func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain) (*DomainResponse, error) {
+func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, domainAttributes Domain) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, ""))
 	domainResponse := &DomainResponse{}
 
-	resp, err := s.client.post(path, domainAttributes, domainResponse)
+	resp, err := s.client.post(ctx, path, domainAttributes, domainResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -100,11 +101,11 @@ func (s *DomainsService) CreateDomain(accountID string, domainAttributes Domain)
 // GetDomain fetches a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/#get
-func (s *DomainsService) GetDomain(accountID string, domainIdentifier string) (*DomainResponse, error) {
+func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &DomainResponse{}
 
-	resp, err := s.client.get(path, domainResponse)
+	resp, err := s.client.get(ctx, path, domainResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -116,11 +117,11 @@ func (s *DomainsService) GetDomain(accountID string, domainIdentifier string) (*
 // DeleteDomain PERMANENTLY deletes a domain from the account.
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
-func (s *DomainsService) DeleteDomain(accountID string, domainIdentifier string) (*DomainResponse, error) {
+func (s *DomainsService) DeleteDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &DomainResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

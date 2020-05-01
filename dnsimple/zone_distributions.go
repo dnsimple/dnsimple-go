@@ -1,6 +1,9 @@
 package dnsimple
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // ZoneDistribution is the result of the zone distribution check.
 type ZoneDistribution struct {
@@ -16,11 +19,11 @@ type ZoneDistributionResponse struct {
 // CheckZoneDistribution checks if a zone is fully distributed across DNSimple nodes.
 //
 // See https://developer.dnsimple.com/v2/zones/#checkZoneDistribution
-func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) (*ZoneDistributionResponse, error) {
+func (s *ZonesService) CheckZoneDistribution(ctx context.Context, accountID string, zoneName string) (*ZoneDistributionResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/distribution", accountID, zoneName))
 	zoneDistributionResponse := &ZoneDistributionResponse{}
 
-	resp, err := s.client.get(path, zoneDistributionResponse)
+	resp, err := s.client.get(ctx, path, zoneDistributionResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -32,11 +35,11 @@ func (s *ZonesService) CheckZoneDistribution(accountID string, zoneName string) 
 // CheckZoneRecordDistribution checks if a zone is fully distributed across DNSimple nodes.
 //
 // See https://developer.dnsimple.com/v2/zones/#checkZoneRecordDistribution
-func (s *ZonesService) CheckZoneRecordDistribution(accountID string, zoneName string, recordID int64) (*ZoneDistributionResponse, error) {
+func (s *ZonesService) CheckZoneRecordDistribution(ctx context.Context, accountID string, zoneName string, recordID int64) (*ZoneDistributionResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/records/%v/distribution", accountID, zoneName, recordID))
 	zoneDistributionResponse := &ZoneDistributionResponse{}
 
-	resp, err := s.client.get(path, zoneDistributionResponse)
+	resp, err := s.client.get(ctx, path, zoneDistributionResponse)
 	if err != nil {
 		return nil, err
 	}

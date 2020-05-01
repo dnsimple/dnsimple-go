@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"reflect"
@@ -31,7 +32,7 @@ func TestWebhooksService_ListWebhooks(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	webhooksResponse, err := client.Webhooks.ListWebhooks("1010", nil)
+	webhooksResponse, err := client.Webhooks.ListWebhooks(context.Background(), "1010", nil)
 	if err != nil {
 		t.Fatalf("Webhooks.List() returned error: %v", err)
 	}
@@ -68,7 +69,7 @@ func TestWebhooksService_CreateWebhook(t *testing.T) {
 
 	webhookAttributes := Webhook{URL: "https://webhook.test"}
 
-	webhookResponse, err := client.Webhooks.CreateWebhook("1010", webhookAttributes)
+	webhookResponse, err := client.Webhooks.CreateWebhook(context.Background(), "1010", webhookAttributes)
 	if err != nil {
 		t.Fatalf("Webhooks.Create() returned error: %v", err)
 	}
@@ -96,7 +97,7 @@ func TestWebhooksService_GetWebhook(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	webhookResponse, err := client.Webhooks.GetWebhook("1010", 1)
+	webhookResponse, err := client.Webhooks.GetWebhook(context.Background(), "1010", 1)
 	if err != nil {
 		t.Fatalf("Webhooks.Get() returned error: %v", err)
 	}
@@ -125,7 +126,7 @@ func TestWebhooksService_DeleteWebhook(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Webhooks.DeleteWebhook("1010", 1)
+	_, err := client.Webhooks.DeleteWebhook(context.Background(), "1010", 1)
 	if err != nil {
 		t.Fatalf("Webhooks.Delete() returned error: %v", err)
 	}

@@ -42,7 +42,7 @@ func TestLive_Whoami(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoamiResponse, err := dnsimpleClient.Identity.Whoami()
+	whoamiResponse, err := dnsimpleClient.Identity.Whoami(context.Background())
 	if err != nil {
 		t.Fatalf("Live Auth.Whoami() returned error: %v", err)
 	}
@@ -58,14 +58,14 @@ func TestLive_Domains(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, err := Whoami(dnsimpleClient)
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
 	if err != nil {
 		t.Fatalf("Live Whoami() returned error: %v", err)
 	}
 
 	accountID := whoami.Account.ID
 
-	domainsResponse, err := dnsimpleClient.Domains.ListDomains(fmt.Sprintf("%v", accountID), nil)
+	domainsResponse, err := dnsimpleClient.Domains.ListDomains(context.Background(), fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
 		t.Fatalf("Live Domains.List() returned error: %v", err)
 	}
@@ -79,7 +79,7 @@ func TestLive_Registration(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, err := Whoami(dnsimpleClient)
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
 	if err != nil {
 		t.Fatalf("Live Whoami() returned error: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestLive_Registration(t *testing.T) {
 
 	// TODO: fetch the registrant randomly
 	registerRequest := &DomainRegisterRequest{RegistrantID: 2}
-	registrationResponse, err := dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
+	registrationResponse, err := dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
 	if err != nil {
 		t.Fatalf("Live Registrar.Register() returned error: %v", err)
 	}
@@ -107,13 +107,13 @@ func TestLive_Webhooks(t *testing.T) {
 	var webhookResponse *WebhookResponse
 	var webhooksResponse *WebhooksResponse
 
-	whoami, err := Whoami(dnsimpleClient)
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
 	if err != nil {
 		t.Fatalf("Live Auth.Whoami()/Domains.List() returned error: %v", err)
 	}
 	accountID := whoami.Account.ID
 
-	webhooksResponse, err = dnsimpleClient.Webhooks.ListWebhooks(fmt.Sprintf("%v", accountID), nil)
+	webhooksResponse, err = dnsimpleClient.Webhooks.ListWebhooks(context.Background(), fmt.Sprintf("%v", accountID), nil)
 	if err != nil {
 		t.Fatalf("Live Webhooks.List() returned error: %v", err)
 	}
@@ -122,7 +122,7 @@ func TestLive_Webhooks(t *testing.T) {
 	fmt.Printf("Webhooks: %+v\n", webhooksResponse.Data)
 
 	webhookAttributes := Webhook{URL: "https://livetest.test"}
-	webhookResponse, err = dnsimpleClient.Webhooks.CreateWebhook(fmt.Sprintf("%v", accountID), webhookAttributes)
+	webhookResponse, err = dnsimpleClient.Webhooks.CreateWebhook(context.Background(), fmt.Sprintf("%v", accountID), webhookAttributes)
 	if err != nil {
 		t.Fatalf("Live Webhooks.Create() returned error: %v", err)
 	}
@@ -131,7 +131,7 @@ func TestLive_Webhooks(t *testing.T) {
 	fmt.Printf("Webhook: %+v\n", webhookResponse.Data)
 	webhook = webhookResponse.Data
 
-	webhookResponse, err = dnsimpleClient.Webhooks.DeleteWebhook(fmt.Sprintf("%v", accountID), webhook.ID)
+	webhookResponse, err = dnsimpleClient.Webhooks.DeleteWebhook(context.Background(), fmt.Sprintf("%v", accountID), webhook.ID)
 	if err != nil {
 		t.Fatalf("Live Webhooks.Delete(%v) returned error: %v", webhook.ID, err)
 	}
@@ -145,20 +145,20 @@ func TestLive_Zones(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, err := Whoami(dnsimpleClient)
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
 	if err != nil {
 		t.Fatalf("Live Zones/Whoami() returned error: %v", err)
 	}
 
 	accountID := fmt.Sprintf("%v", whoami.Account.ID)
 
-	domainResponse, err := dnsimpleClient.Domains.CreateDomain(accountID, Domain{Name: fmt.Sprintf("example-%v.test", time.Now().Unix())})
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(context.Background(), accountID, Domain{Name: fmt.Sprintf("example-%v.test", time.Now().Unix())})
 	if err != nil {
 		t.Fatalf("Live Zones/CreateZone() returned error: %v", err)
 	}
 
 	zoneName := domainResponse.Data.Name
-	recordResponse, err := dnsimpleClient.Zones.CreateRecord(accountID, zoneName, ZoneRecord{Name: fmt.Sprintf("%v", time.Now().Unix()), Type: "TXT", Content: "Test"})
+	recordResponse, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecord{Name: fmt.Sprintf("%v", time.Now().Unix()), Type: "TXT", Content: "Test"})
 	if err != nil {
 		t.Fatalf("Live Zones/CreateRecord() returned error: %v", err)
 	}
@@ -171,12 +171,12 @@ func TestLive_Error(t *testing.T) {
 		t.Skip("skipping live test")
 	}
 
-	whoami, err := Whoami(dnsimpleClient)
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
 	if err != nil {
 		t.Fatalf("Live Error/Whoami() returned error: %v", err)
 	}
 
-	_, err = dnsimpleClient.Registrar.RegisterDomain(fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.test", time.Now().Unix()), &DomainRegisterRequest{})
+	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.test", time.Now().Unix()), &DomainRegisterRequest{})
 	if err == nil {
 		t.Fatalf("Live Error/RegisterDomain() expected to return error")
 	}

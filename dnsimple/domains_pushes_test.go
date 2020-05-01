@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -37,7 +38,7 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 
 	pushAttributes := DomainPushAttributes{NewAccountEmail: "admin@target-account.test"}
 
-	pushResponse, err := client.Domains.InitiatePush("1010", "example.com", pushAttributes)
+	pushResponse, err := client.Domains.InitiatePush(context.Background(), "1010", "example.com", pushAttributes)
 	if err != nil {
 		t.Fatalf("Domains.InitiatePush() returned error: %v", err)
 	}
@@ -65,7 +66,7 @@ func TestDomainsService_DomainsPushesList(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	pushesResponse, err := client.Domains.ListPushes("2020", nil)
+	pushesResponse, err := client.Domains.ListPushes(context.Background(), "2020", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListPushes() returned error: %v", err)
 	}
@@ -100,7 +101,7 @@ func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListPushes("2020", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListPushes(context.Background(), "2020", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Domains.ListPushes() returned error: %v", err)
 	}
@@ -125,7 +126,7 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 
 	pushAttributes := DomainPushAttributes{ContactID: 2}
 
-	_, err := client.Domains.AcceptPush("2020", 1, pushAttributes)
+	_, err := client.Domains.AcceptPush(context.Background(), "2020", 1, pushAttributes)
 	if err != nil {
 		t.Fatalf("Domains.AcceptPush() returned error: %v", err)
 	}
@@ -145,7 +146,7 @@ func TestDomainsService_RejectPush(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.RejectPush("2020", 1)
+	_, err := client.Domains.RejectPush(context.Background(), "2020", 1)
 	if err != nil {
 		t.Fatalf("Domains.RejectPush() returned error: %v", err)
 	}

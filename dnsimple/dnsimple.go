@@ -4,7 +4,9 @@ package dnsimple
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -104,32 +106,6 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
-// NewRequest creates an API request.
-// The path is expected to be a relative path and will be resolved
-// according to the BaseURL of the Client. Paths should always be specified without a preceding slash.
-func (c *Client) NewRequest(method, path string, payload interface{}) (*http.Request, error) {
-	url := c.BaseURL + path
-
-	body := new(bytes.Buffer)
-	if payload != nil {
-		err := json.NewEncoder(body).Encode(payload)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	req, err := http.NewRequest(method, url, body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("User-Agent", formatUserAgent(c.UserAgent))
-
-	return req, nil
-}
-
 // SetUserAgent overrides the default UserAgent.
 //
 // When a custom user agent is provided, the final user agent is the combination of the custom user agent
@@ -164,71 +140,118 @@ func versioned(path string) string {
 	return fmt.Sprintf("/%s/%s", apiVersion, strings.Trim(path, "/"))
 }
 
-func (c *Client) get(path string, obj interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("GET", path, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.Do(req, obj)
+func (c *Client) get(ctx context.Context, path string, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodGet, path, nil, obj, nil)
 }
 
-func (c *Client) post(path string, payload, obj interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("POST", path, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.Do(req, obj)
+func (c *Client) post(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodPost, path, payload, obj, nil)
 }
 
-func (c *Client) put(path string, payload, obj interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("PUT", path, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.Do(req, obj)
+func (c *Client) put(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodPut, path, payload, obj, nil)
 }
 
-func (c *Client) patch(path string, payload, obj interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("PATCH", path, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.Do(req, obj)
+func (c *Client) patch(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodPatch, path, payload, obj, nil)
 }
 
-func (c *Client) delete(path string, payload interface{}, obj interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("DELETE", path, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.Do(req, obj)
+func (c *Client) delete(ctx context.Context, path string, payload, obj interface{}) (*http.Response, error) {
+	return c.makeRequest(ctx, http.MethodDelete, path, payload, obj, nil)
 }
 
-// Do sends an API request and returns the API response.
+// Request executes an API request with the current client scope, and returns the response.
+func (c *Client) Request(ctx context.Context, method, path string, payload, obj interface{}, headers http.Header) (*http.Response, error) {
+	return c.makeRequest(ctx, method, path, payload, obj, headers)
+}
+
+// makeRequest executes an API request and returns the HTTP response.
 //
-// The API response is JSON decoded and stored in the value pointed by obj,
+// The content pointed by payload is serialized and used as body of the request.
+// The HTTP response is JSON decoded and stored in the value pointed by obj.
+func (c *Client) makeRequest(ctx context.Context, method, path string, payload, obj interface{}, headers http.Header) (*http.Response, error) {
+	req, err := c.newRequestWithHeaders(method, path, payload, headers)
+	if err != nil {
+		return nil, err
+	}
+
+	if c.Debug {
+		log.Printf("Request (%v): %#v", req.URL, req)
+	}
+
+	resp, err := c.request(ctx, req, obj)
+	if err != nil {
+		return nil, err
+	}
+
+	if c.Debug {
+		log.Printf("Response: %#v", resp)
+	}
+
+	return resp, nil
+}
+
+// newRequest creates an API request.
+//
+// The path is expected to be a relative path and will be resolved according to the BaseURL of the Client.
+// Paths should always be specified without a preceding slash.
+func (c *Client) newRequest(method, path string, payload interface{}) (*http.Request, error) {
+	return c.newRequestWithHeaders(method, path, payload, nil)
+}
+
+// newRequestWithHeaders creates an API request, with custom headers.
+func (c *Client) newRequestWithHeaders(method, path string, payload interface{}, headers http.Header) (*http.Request, error) {
+	url := c.BaseURL + path
+
+	body := new(bytes.Buffer)
+	if payload != nil {
+		err := json.NewEncoder(body).Encode(payload)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	combinedHeaders := make(http.Header)
+	copyHeader(combinedHeaders, headers)
+	req.Header = combinedHeaders
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("User-Agent", formatUserAgent(c.UserAgent))
+
+	return req, err
+}
+
+// copyHeader copies all headers for `source` and sets them on `target`.
+// based on https://godoc.org/github.com/golang/gddo/httputil/header#Copy
+func copyHeader(target, source http.Header) {
+	for k, vs := range source {
+		target[k] = vs
+	}
+}
+
+// request sends the HTTP request and returns the HTTP response.
+//
+// The HTTP response is JSON decoded and stored in the value pointed by obj,
 // or returned as an error if an API error has occurred.
 // If obj implements the io.Writer interface, the raw response body will be written to obj,
 // without attempting to decode it.
-func (c *Client) Do(req *http.Request, obj interface{}) (*http.Response, error) {
-	if c.Debug {
-		log.Printf("Executing request (%v): %#v", req.URL, req)
+func (c *Client) request(ctx context.Context, req *http.Request, obj interface{}) (*http.Response, error) {
+	if ctx == nil {
+		return nil, errors.New("context must be non-nil")
 	}
+	req = req.WithContext(ctx)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if c.Debug {
-		log.Printf("Response received: %#v", resp)
-	}
 
 	err = CheckResponse(resp)
 	if err != nil {

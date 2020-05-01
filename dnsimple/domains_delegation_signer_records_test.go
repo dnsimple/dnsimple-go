@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -32,7 +33,7 @@ func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	dsRecordsResponse, err := client.Domains.ListDelegationSignerRecords("1010", "example.com", nil)
+	dsRecordsResponse, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", nil)
 	if err != nil {
 		t.Fatalf("Domains.ListDelegationSignerRecords() returned error: %v", err)
 	}
@@ -67,7 +68,7 @@ func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListDelegationSignerRecords("1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Domains.ListDelegationSignerRecords() returned error: %v", err)
 	}
@@ -92,7 +93,7 @@ func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
 
 	dsRecordAttributes := DelegationSignerRecord{Algorithm: "13", Digest: "ABC123", DigestType: "2", Keytag: "1234"}
 
-	dsRecordResponse, err := client.Domains.CreateDelegationSignerRecord("1010", "example.com", dsRecordAttributes)
+	dsRecordResponse, err := client.Domains.CreateDelegationSignerRecord(context.Background(), "1010", "example.com", dsRecordAttributes)
 	if err != nil {
 		t.Fatalf("Domains.CreateDelegationSignerRecord() returned error: %v", err)
 	}
@@ -120,7 +121,7 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	dsRecordResponse, err := client.Domains.GetDelegationSignerRecord("1010", "example.com", 2)
+	dsRecordResponse, err := client.Domains.GetDelegationSignerRecord(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Errorf("Domains.GetDelegationSignerRecord() returned error: %v", err)
 	}
@@ -155,7 +156,7 @@ func TestDomainsService_DeleteDelegationSignerRecord(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.DeleteDelegationSignerRecord("1010", "example.com", 2)
+	_, err := client.Domains.DeleteDelegationSignerRecord(context.Background(), "1010", "example.com", 2)
 	if err != nil {
 		t.Fatalf("Domains.DeleteDelegationSignerRecord() returned error: %v", err)
 	}

@@ -67,7 +67,7 @@ func (r *ExchangeAuthorizationError) Error() string {
 func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuthorizationRequest) (*AccessToken, error) {
 	path := versioned("/oauth/access_token")
 
-	req, err := s.client.NewRequest("POST", path, authorization)
+	req, err := s.client.newRequest("POST", path, authorization)
 	if err != nil {
 		return nil, err
 	}

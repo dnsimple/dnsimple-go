@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"reflect"
@@ -29,7 +30,7 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Domains.EnableDnssec(accountID, "example.com")
+	_, err := client.Domains.EnableDnssec(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Domains.EnableDnssec() returned error: %v", err)
 	}
@@ -50,7 +51,7 @@ func TestDomainsService_DisableDnssec(t *testing.T) {
 
 	accountID := "1010"
 
-	_, err := client.Domains.DisableDnssec(accountID, "example.com")
+	_, err := client.Domains.DisableDnssec(context.Background(), accountID, "example.com")
 	if err != nil {
 		t.Fatalf("Domains.DisableDnssec() returned error: %v", err)
 	}
@@ -70,14 +71,13 @@ func TestDomainsService_GetDnssec(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	dnssecResponse, err := client.Domains.GetDnssec("1010", "example.com")
+	dnssecResponse, err := client.Domains.GetDnssec(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Errorf("Domains.GetDnssec() returned error: %v", err)
 	}
 
 	dnssec := dnssecResponse.Data
-	wantSingle := &Dnssec{
-		Enabled: true}
+	wantSingle := &Dnssec{Enabled: true}
 
 	if !reflect.DeepEqual(dnssec, wantSingle) {
 		t.Fatalf("Domains.GetDnssec() returned %+v, want %+v", dnssec, wantSingle)

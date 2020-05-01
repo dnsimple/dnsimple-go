@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,7 +23,7 @@ func TestZonesService_ListZones(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	zonesResponse, err := client.Zones.ListZones("1010", nil)
+	zonesResponse, err := client.Zones.ListZones(context.Background(), "1010", nil)
 	if err != nil {
 		t.Fatalf("Zones.ListZones() returned error: %v", err)
 	}
@@ -62,7 +63,7 @@ func TestZonesService_ListZones_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListZones("1010", &ZoneListOptions{"example", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
+	_, err := client.Zones.ListZones(context.Background(), "1010", &ZoneListOptions{"example", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
 	if err != nil {
 		t.Fatalf("Zones.ListZones() returned error: %v", err)
 	}
@@ -85,7 +86,7 @@ func TestZonesService_GetZone(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneResponse, err := client.Zones.GetZone(accountID, zoneName)
+	zoneResponse, err := client.Zones.GetZone(context.Background(), accountID, zoneName)
 	if err != nil {
 		t.Fatalf("Zones.GetZone() returned error: %v", err)
 	}
@@ -121,7 +122,7 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneFileResponse, err := client.Zones.GetZoneFile(accountID, zoneName)
+	zoneFileResponse, err := client.Zones.GetZoneFile(context.Background(), accountID, zoneName)
 	if err != nil {
 		t.Fatalf("Zones.GetZoneFile() returned error: %v", err)
 	}

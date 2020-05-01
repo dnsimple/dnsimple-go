@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -46,7 +47,7 @@ type TemplatesResponse struct {
 // ListTemplates list the templates for an account.
 //
 // See https://developer.dnsimple.com/v2/templates/#list
-func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions) (*TemplatesResponse, error) {
+func (s *TemplatesService) ListTemplates(ctx context.Context, accountID string, options *ListOptions) (*TemplatesResponse, error) {
 	path := versioned(templatePath(accountID, ""))
 	templatesResponse := &TemplatesResponse{}
 
@@ -55,7 +56,7 @@ func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions)
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, templatesResponse)
+	resp, err := s.client.get(ctx, path, templatesResponse)
 	if err != nil {
 		return templatesResponse, err
 	}
@@ -67,11 +68,11 @@ func (s *TemplatesService) ListTemplates(accountID string, options *ListOptions)
 // CreateTemplate creates a new template.
 //
 // See https://developer.dnsimple.com/v2/templates/#create
-func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes Template) (*TemplateResponse, error) {
+func (s *TemplatesService) CreateTemplate(ctx context.Context, accountID string, templateAttributes Template) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, ""))
 	templateResponse := &TemplateResponse{}
 
-	resp, err := s.client.post(path, templateAttributes, templateResponse)
+	resp, err := s.client.post(ctx, path, templateAttributes, templateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -83,11 +84,11 @@ func (s *TemplatesService) CreateTemplate(accountID string, templateAttributes T
 // GetTemplate fetches a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#get
-func (s *TemplatesService) GetTemplate(accountID string, templateIdentifier string) (*TemplateResponse, error) {
+func (s *TemplatesService) GetTemplate(ctx context.Context, accountID string, templateIdentifier string) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
-	resp, err := s.client.get(path, templateResponse)
+	resp, err := s.client.get(ctx, path, templateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -99,11 +100,11 @@ func (s *TemplatesService) GetTemplate(accountID string, templateIdentifier stri
 // UpdateTemplate updates a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#update
-func (s *TemplatesService) UpdateTemplate(accountID string, templateIdentifier string, templateAttributes Template) (*TemplateResponse, error) {
+func (s *TemplatesService) UpdateTemplate(ctx context.Context, accountID string, templateIdentifier string, templateAttributes Template) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
-	resp, err := s.client.patch(path, templateAttributes, templateResponse)
+	resp, err := s.client.patch(ctx, path, templateAttributes, templateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -115,11 +116,11 @@ func (s *TemplatesService) UpdateTemplate(accountID string, templateIdentifier s
 // DeleteTemplate deletes a template.
 //
 // See https://developer.dnsimple.com/v2/templates/#delete
-func (s *TemplatesService) DeleteTemplate(accountID string, templateIdentifier string) (*TemplateResponse, error) {
+func (s *TemplatesService) DeleteTemplate(ctx context.Context, accountID string, templateIdentifier string) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

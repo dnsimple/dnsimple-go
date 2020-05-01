@@ -1,5 +1,9 @@
 package dnsimple
 
+import (
+	"context"
+)
+
 // IdentityService handles communication with several authentication identity
 // methods of the DNSimple API.
 //
@@ -24,11 +28,11 @@ type WhoamiResponse struct {
 // Whoami gets the current authenticate context.
 //
 // See https://developer.dnsimple.com/v2/whoami
-func (s *IdentityService) Whoami() (*WhoamiResponse, error) {
+func (s *IdentityService) Whoami(ctx context.Context) (*WhoamiResponse, error) {
 	path := versioned("/whoami")
 	whoamiResponse := &WhoamiResponse{}
 
-	resp, err := s.client.get(path, whoamiResponse)
+	resp, err := s.client.get(ctx, path, whoamiResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -37,10 +41,9 @@ func (s *IdentityService) Whoami() (*WhoamiResponse, error) {
 	return whoamiResponse, nil
 }
 
-// Whoami is a state-less shortcut to client.Whoami()
-// that returns only the relevant Data.
-func Whoami(c *Client) (data *WhoamiData, err error) {
-	resp, err := c.Identity.Whoami()
+// Whoami is a state-less shortcut to client.Whoami() that returns only the relevant Data.
+func Whoami(ctx context.Context, c *Client) (data *WhoamiData, err error) {
+	resp, err := c.Identity.Whoami(ctx)
 	if resp != nil {
 		data = resp.Data
 	}

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -37,7 +38,7 @@ type EmailForwardsResponse struct {
 // ListEmailForwards lists the email forwards for a domain.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#list
-func (s *DomainsService) ListEmailForwards(accountID string, domainIdentifier string, options *ListOptions) (*EmailForwardsResponse, error) {
+func (s *DomainsService) ListEmailForwards(ctx context.Context, accountID string, domainIdentifier string, options *ListOptions) (*EmailForwardsResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, 0))
 	forwardsResponse := &EmailForwardsResponse{}
 
@@ -46,7 +47,7 @@ func (s *DomainsService) ListEmailForwards(accountID string, domainIdentifier st
 		return nil, err
 	}
 
-	resp, err := s.client.get(path, forwardsResponse)
+	resp, err := s.client.get(ctx, path, forwardsResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -58,11 +59,11 @@ func (s *DomainsService) ListEmailForwards(accountID string, domainIdentifier st
 // CreateEmailForward creates a new email forward.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#create
-func (s *DomainsService) CreateEmailForward(accountID string, domainIdentifier string, forwardAttributes EmailForward) (*EmailForwardResponse, error) {
+func (s *DomainsService) CreateEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardAttributes EmailForward) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, 0))
 	forwardResponse := &EmailForwardResponse{}
 
-	resp, err := s.client.post(path, forwardAttributes, forwardResponse)
+	resp, err := s.client.post(ctx, path, forwardAttributes, forwardResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -74,11 +75,11 @@ func (s *DomainsService) CreateEmailForward(accountID string, domainIdentifier s
 // GetEmailForward fetches an email forward.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#get
-func (s *DomainsService) GetEmailForward(accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
+func (s *DomainsService) GetEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &EmailForwardResponse{}
 
-	resp, err := s.client.get(path, forwardResponse)
+	resp, err := s.client.get(ctx, path, forwardResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -90,11 +91,11 @@ func (s *DomainsService) GetEmailForward(accountID string, domainIdentifier stri
 // DeleteEmailForward PERMANENTLY deletes an email forward from the domain.
 //
 // See https://developer.dnsimple.com/v2/domains/email-forwards/#delete
-func (s *DomainsService) DeleteEmailForward(accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
+func (s *DomainsService) DeleteEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &EmailForwardResponse{}
 
-	resp, err := s.client.delete(path, nil, nil)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}

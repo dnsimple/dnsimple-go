@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -33,7 +34,7 @@ func TestContactsService_List(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	contactsResponse, err := client.Contacts.ListContacts("1010", nil)
+	contactsResponse, err := client.Contacts.ListContacts(context.Background(), "1010", nil)
 	if err != nil {
 		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
@@ -68,7 +69,7 @@ func TestContactsService_List_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Contacts.ListContacts("1010", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Contacts.ListContacts(context.Background(), "1010", &ListOptions{Page: 2, PerPage: 20})
 	if err != nil {
 		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
@@ -94,7 +95,7 @@ func TestContactsService_Create(t *testing.T) {
 	accountID := "1010"
 	contactAttributes := Contact{Label: "Default"}
 
-	contactResponse, err := client.Contacts.CreateContact(accountID, contactAttributes)
+	contactResponse, err := client.Contacts.CreateContact(context.Background(), accountID, contactAttributes)
 	if err != nil {
 		t.Fatalf("Contacts.CreateContact() returned error: %v", err)
 	}
@@ -125,7 +126,7 @@ func TestContactsService_Get(t *testing.T) {
 	accountID := "1010"
 	contactID := int64(1)
 
-	contactResponse, err := client.Contacts.GetContact(accountID, contactID)
+	contactResponse, err := client.Contacts.GetContact(context.Background(), accountID, contactID)
 	if err != nil {
 		t.Fatalf("Contacts.GetContact() returned error: %v", err)
 	}
@@ -176,7 +177,7 @@ func TestContactsService_Update(t *testing.T) {
 	accountID := "1010"
 	contactID := int64(1)
 
-	contactResponse, err := client.Contacts.UpdateContact(accountID, contactID, contactAttributes)
+	contactResponse, err := client.Contacts.UpdateContact(context.Background(), accountID, contactID, contactAttributes)
 	if err != nil {
 		t.Fatalf("Contacts.UpdateContact() returned error: %v", err)
 	}
@@ -207,7 +208,7 @@ func TestContactsService_Delete(t *testing.T) {
 	accountID := "1010"
 	contactID := int64(1)
 
-	_, err := client.Contacts.DeleteContact(accountID, contactID)
+	_, err := client.Contacts.DeleteContact(context.Background(), accountID, contactID)
 	if err != nil {
 		t.Fatalf("Contacts.DeleteContact() returned error: %v", err)
 	}

@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"reflect"
@@ -21,7 +22,7 @@ func TestRegistrarService_GetDomainDelegation(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	delegationResponse, err := client.Registrar.GetDomainDelegation("1010", "example.com")
+	delegationResponse, err := client.Registrar.GetDomainDelegation(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("Registrar.GetDomainDelegation() returned error: %v", err)
 	}
@@ -53,7 +54,7 @@ func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
 
 	newDelegation := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com"}
 
-	delegationResponse, err := client.Registrar.ChangeDomainDelegation("1010", "example.com", newDelegation)
+	delegationResponse, err := client.Registrar.ChangeDomainDelegation(context.Background(), "1010", "example.com", newDelegation)
 	if err != nil {
 		t.Fatalf("Registrar.ChangeDomainDelegation() returned error: %v", err)
 	}
@@ -85,7 +86,7 @@ func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
 
 	newDelegation := &Delegation{"ns1.example.com", "ns2.example.com"}
 
-	delegationResponse, err := client.Registrar.ChangeDomainDelegationToVanity("1010", "example.com", newDelegation)
+	delegationResponse, err := client.Registrar.ChangeDomainDelegationToVanity(context.Background(), "1010", "example.com", newDelegation)
 	if err != nil {
 		t.Fatalf("Registrar.ChangeDomainDelegationToVanity() returned error: %v", err)
 	}
@@ -112,7 +113,7 @@ func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Registrar.ChangeDomainDelegationFromVanity("1010", "example.com")
+	_, err := client.Registrar.ChangeDomainDelegationFromVanity(context.Background(), "1010", "example.com")
 	if err != nil {
 		t.Fatalf("Registrar.ChangeDomainDelegationFromVanity() returned error: %v", err)
 	}

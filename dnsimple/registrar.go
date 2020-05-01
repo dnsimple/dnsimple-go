@@ -1,6 +1,7 @@
 package dnsimple
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -28,11 +29,11 @@ type DomainCheckResponse struct {
 // CheckDomain checks a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#check
-func (s *RegistrarService) CheckDomain(accountID string, domainName string) (*DomainCheckResponse, error) {
+func (s *RegistrarService) CheckDomain(ctx context.Context, accountID string, domainName string) (*DomainCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
 	checkResponse := &DomainCheckResponse{}
 
-	resp, err := s.client.get(path, checkResponse)
+	resp, err := s.client.get(ctx, path, checkResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +71,7 @@ type DomainPremiumPriceOptions struct {
 // - renewal
 //
 // See https://developer.dnsimple.com/v2/registrar/#premium-price
-func (s *RegistrarService) GetDomainPremiumPrice(accountID string, domainName string, options *DomainPremiumPriceOptions) (*DomainPremiumPriceResponse, error) {
+func (s *RegistrarService) GetDomainPremiumPrice(ctx context.Context, accountID string, domainName string, options *DomainPremiumPriceOptions) (*DomainPremiumPriceResponse, error) {
 	var err error
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/premium_price", accountID, domainName))
 	priceResponse := &DomainPremiumPriceResponse{}
@@ -82,7 +83,7 @@ func (s *RegistrarService) GetDomainPremiumPrice(accountID string, domainName st
 		}
 	}
 
-	resp, err := s.client.get(path, priceResponse)
+	resp, err := s.client.get(ctx, path, priceResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -130,13 +131,13 @@ type DomainRegisterRequest struct {
 // RegisterDomain registers a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) RegisterDomain(accountID string, domainName string, request *DomainRegisterRequest) (*DomainRegistrationResponse, error) {
+func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string, domainName string, request *DomainRegisterRequest) (*DomainRegistrationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registrations", accountID, domainName))
 	registrationResponse := &DomainRegistrationResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(path, request, registrationResponse)
+	resp, err := s.client.post(ctx, path, request, registrationResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -186,13 +187,13 @@ type DomainTransferRequest struct {
 // TransferDomain transfers a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#transferDomain
-func (s *RegistrarService) TransferDomain(accountID string, domainName string, request *DomainTransferRequest) (*DomainTransferResponse, error) {
+func (s *RegistrarService) TransferDomain(ctx context.Context, accountID string, domainName string, request *DomainTransferRequest) (*DomainTransferResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers", accountID, domainName))
 	transferResponse := &DomainTransferResponse{}
 
 	// TODO: validate mandatory attributes RegistrantID
 
-	resp, err := s.client.post(path, request, transferResponse)
+	resp, err := s.client.post(ctx, path, request, transferResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -210,11 +211,11 @@ type DomainTransferOutResponse struct {
 // TransferDomainOut prepares a domain for outbound transfer.
 //
 // See https://developer.dnsimple.com/v2/registrar/#authorizeDomainTransferOut
-func (s *RegistrarService) TransferDomainOut(accountID string, domainName string) (*DomainTransferOutResponse, error) {
+func (s *RegistrarService) TransferDomainOut(ctx context.Context, accountID string, domainName string) (*DomainTransferOutResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/authorize_transfer_out", accountID, domainName))
 	transferResponse := &DomainTransferOutResponse{}
 
-	resp, err := s.client.post(path, nil, nil)
+	resp, err := s.client.post(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -251,11 +252,11 @@ type DomainRenewRequest struct {
 // RenewDomain renews a domain name.
 //
 // See https://developer.dnsimple.com/v2/registrar/#register
-func (s *RegistrarService) RenewDomain(accountID string, domainName string, request *DomainRenewRequest) (*DomainRenewalResponse, error) {
+func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, domainName string, request *DomainRenewRequest) (*DomainRenewalResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewals", accountID, domainName))
 	renewalResponse := &DomainRenewalResponse{}
 
-	resp, err := s.client.post(path, request, renewalResponse)
+	resp, err := s.client.post(ctx, path, request, renewalResponse)
 	if err != nil {
 		return nil, err
 	}
