@@ -1,7 +1,7 @@
 # CHANGELOG
 
 
-#### master
+#### Release 0.60.0
 
 - FIXED: A zone record can be updated without the risk of overriding the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92) 
 
