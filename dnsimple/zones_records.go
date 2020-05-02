@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// ZoneRecord represents a DNS record in DNSimple.
+// ZoneRecord represents a zone record in DNSimple.
 type ZoneRecord struct {
 	ID           int64    `json:"id,omitempty"`
 	ZoneID       string   `json:"zone_id,omitempty"`
@@ -19,6 +19,21 @@ type ZoneRecord struct {
 	Regions      []string `json:"regions,omitempty"`
 	CreatedAt    string   `json:"created_at,omitempty"`
 	UpdatedAt    string   `json:"updated_at,omitempty"`
+}
+
+// ZoneRecordAttributes represents the attributes you can send to create/update a zone record.
+//
+// Compared to most other calls in this library, you should not use ZoneRecord as payload for record calls.
+// This is because it can lead to side effects due to the inability of go to distinguish between a non-present string
+// and an empty string. Name can be both, therefore a specific struct is required.
+type ZoneRecordAttributes struct {
+	ZoneID   string   `json:"zone_id,omitempty"`
+	Type     string   `json:"type,omitempty"`
+	Name     *string  `json:"name"`
+	Content  string   `json:"content,omitempty"`
+	TTL      int      `json:"ttl,omitempty"`
+	Priority int      `json:"priority,omitempty"`
+	Regions  []string `json:"regions,omitempty"`
 }
 
 func zoneRecordPath(accountID string, zoneName string, recordID int64) (path string) {
@@ -81,7 +96,7 @@ func (s *ZonesService) ListRecords(ctx context.Context, accountID string, zoneNa
 // CreateRecord creates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/records/#createZoneRecord
-func (s *ZonesService) CreateRecord(ctx context.Context, accountID string, zoneName string, recordAttributes ZoneRecord) (*ZoneRecordResponse, error) {
+func (s *ZonesService) CreateRecord(ctx context.Context, accountID string, zoneName string, recordAttributes ZoneRecordAttributes) (*ZoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneName, 0))
 	recordResponse := &ZoneRecordResponse{}
 
@@ -113,7 +128,7 @@ func (s *ZonesService) GetRecord(ctx context.Context, accountID string, zoneName
 // UpdateRecord updates a zone record.
 //
 // See https://developer.dnsimple.com/v2/zones/records/#updateZoneRecord
-func (s *ZonesService) UpdateRecord(ctx context.Context, accountID string, zoneName string, recordID int64, recordAttributes ZoneRecord) (*ZoneRecordResponse, error) {
+func (s *ZonesService) UpdateRecord(ctx context.Context, accountID string, zoneName string, recordID int64, recordAttributes ZoneRecordAttributes) (*ZoneRecordResponse, error) {
 	path := versioned(zoneRecordPath(accountID, zoneName, recordID))
 	recordResponse := &ZoneRecordResponse{}
 	resp, err := s.client.patch(ctx, path, recordAttributes, recordResponse)

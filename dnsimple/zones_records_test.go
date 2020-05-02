@@ -102,7 +102,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	recordValues := ZoneRecord{Name: "foo", Content: "mxa.example.com", Type: "MX"}
+	recordValues := ZoneRecordAttributes{Name: StringP("foo"), Content: "mxa.example.com", Type: "MX"}
 
 	recordResponse, err := client.Zones.CreateRecord(context.Background(), accountID, "example.com", recordValues)
 	if err != nil {
@@ -141,7 +141,7 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues := ZoneRecord{Name: "", Content: "127.0.0.1", Type: "A"}
+	recordValues := ZoneRecordAttributes{Name: StringP(""), Content: "127.0.0.1", Type: "A"}
 
 	recordResponse, err := client.Zones.CreateRecord(context.Background(), "1010", "example.com", recordValues)
 	if err != nil {
@@ -161,7 +161,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	var recordValues ZoneRecord
+	var recordValues ZoneRecordAttributes
 
 	mux.HandleFunc("/v2/1/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
@@ -173,7 +173,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{}}
+
 	if _, err := client.Zones.CreateRecord(context.Background(), "1", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -188,7 +189,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{"global"}}
+
 	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -203,7 +205,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{"global"}}
+
 	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
 		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
 	}
@@ -268,7 +271,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	})
 
 	accountID := "1010"
-	recordValues := ZoneRecord{Name: "foo", Content: "127.0.0.1"}
+	recordValues := ZoneRecordAttributes{Name: StringP("foo"), Content: "127.0.0.1"}
 
 	recordResponse, err := client.Zones.UpdateRecord(context.Background(), accountID, "example.com", 5, recordValues)
 	if err != nil {
@@ -288,7 +291,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	var recordValues ZoneRecord
+	var recordValues ZoneRecordAttributes
 
 	mux.HandleFunc("/v2/1/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
@@ -300,7 +303,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{}}
+
 	if _, err := client.Zones.UpdateRecord(context.Background(), "1", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
@@ -315,7 +319,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{"global"}}
+
 	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}
@@ -330,7 +335,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	recordValues = ZoneRecord{Name: "foo", Regions: []string{"global"}}
+	recordValues = ZoneRecordAttributes{Name: StringP("foo"), Regions: []string{"global"}}
+
 	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
 		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
 	}

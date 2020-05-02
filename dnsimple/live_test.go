@@ -158,7 +158,8 @@ func TestLive_Zones(t *testing.T) {
 	}
 
 	zoneName := domainResponse.Data.Name
-	recordResponse, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecord{Name: fmt.Sprintf("%v", time.Now().Unix()), Type: "TXT", Content: "Test"})
+	recordName := fmt.Sprintf("%v", time.Now().Unix())
+	recordResponse, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: &recordName, Type: "TXT", Content: "Test"})
 	if err != nil {
 		t.Fatalf("Live Zones/CreateRecord() returned error: %v", err)
 	}
