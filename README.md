@@ -39,7 +39,7 @@ func main() {
     client := dnsimple.NewClient(tc)
 
     // get the current authenticated account (if you don't know who you are)
-    whoamiResponse, err := client.Identity.Whoami()
+    whoamiResponse, err := client.Identity.Whoami(context.Background())
     if err != nil {
         fmt.Printf("Whoami() returned error: %v\n", err)
         os.Exit(1)
@@ -50,10 +50,10 @@ func main() {
 
     // either assign the account ID or fetch it from the response
     // if you are authenticated with an account token
-    accountID := strconv.Itoa(whoamiResponse.Data.Account.ID)
+    accountID := strconv.FormatInt(whoamiResponse.Data.Account.ID, 60)
 
     // get the list of domains
-    domainsResponse, err := client.Domains.ListDomains(accountID, nil)
+    domainsResponse, err := client.Domains.ListDomains(context.Background(), accountID, nil)
     if err != nil {
         fmt.Printf("Domains.ListDomains() returned error: %v\n", err)
         os.Exit(1)
@@ -69,7 +69,7 @@ func main() {
     // Here's a few example:
 
     // get the list of domains filtered by name and sorted by expiration
-    client.Domains.ListDomains(accountID, &dnsimple.DomainListOptions{NameLike: "com", Sort: "expiration:DESC"})
+    client.Domains.ListDomains(context.Background(), accountID, &dnsimple.DomainListOptions{NameLike: "com", Sort: "expiration:DESC"})
 }
 ```
 
