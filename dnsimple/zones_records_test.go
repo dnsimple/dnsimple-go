@@ -287,6 +287,28 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	}
 }
 
+func TestZonesService_UpdateRecord_NameNotProvided(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/records/5", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
+
+		want := map[string]interface{}{"content": "127.0.0.1"}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues := ZoneRecordAttributes{Content: "127.0.0.1"}
+
+	_, err := client.Zones.UpdateRecord(context.Background(), "1010", "example.com", 5, recordValues)
+	if err != nil {
+		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
+	}
+}
+
 func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

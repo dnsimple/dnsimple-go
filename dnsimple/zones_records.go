@@ -29,7 +29,7 @@ type ZoneRecord struct {
 type ZoneRecordAttributes struct {
 	ZoneID   string   `json:"zone_id,omitempty"`
 	Type     string   `json:"type,omitempty"`
-	Name     *string  `json:"name"`
+	Name     *string  `json:"name,omitempty"`
 	Content  string   `json:"content,omitempty"`
 	TTL      int      `json:"ttl,omitempty"`
 	Priority int      `json:"priority,omitempty"`
