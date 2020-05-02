@@ -3,9 +3,9 @@
 
 #### master
 
-- FIXED: A zone record can be updated without the risk of overridig the name by mistake (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93) 
+- FIXED: A zone record can be updated without the risk of overriding the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92) 
 
-- FIXED: A zone record can be updated without the risk of overridig the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92) 
+- FIXED: Fixed a conflict where a Go zero-value would prevent sorting to work correctly (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93) 
 
 Incompatible changes:
 
