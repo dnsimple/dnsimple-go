@@ -3,11 +3,15 @@
 
 #### master
 
+- FIXED: A zone record can be updated without the risk of overridig the name by mistake (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93) 
+
 - FIXED: A zone record can be updated without the risk of overridig the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92) 
 
 Incompatible changes:
 
 - CHANGED: CreateZoneRecord and UpdateZoneRecord now requires to use ZoneRecordAttributes instead of ZoneRecord. This is required to avoid conflicts caused by blank record names (dnsimple/dnsimple-go#92)
+
+- CHANGED: ListOptions now use pointer values (dnsimple/dnsimple-go#93)
 
 
 #### Release 0.50.0

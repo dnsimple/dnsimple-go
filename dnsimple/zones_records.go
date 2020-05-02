@@ -60,14 +60,14 @@ type ZoneRecordsResponse struct {
 // to customize the ZonesService.ListZoneRecords method.
 type ZoneRecordListOptions struct {
 	// Select records where the name matches given string.
-	Name string `url:"name,omitempty"`
+	Name *string `url:"name,omitempty"`
 
 	// Select records where the name contains given string.
-	NameLike string `url:"name_like,omitempty"`
+	NameLike *string `url:"name_like,omitempty"`
 
 	// Select records of given type.
 	// Eg. TXT, A, NS.
-	Type string `url:"type,omitempty"`
+	Type *string `url:"type,omitempty"`
 
 	ListOptions
 }

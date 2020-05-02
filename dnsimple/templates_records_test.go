@@ -69,7 +69,7 @@ func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", &ListOptions{Page: IntP(2), PerPage: IntP(20)})
 	if err != nil {
 		t.Fatalf("Templates.ListTemplateRecords() returned error: %v", err)
 	}

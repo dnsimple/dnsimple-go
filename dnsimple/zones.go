@@ -50,7 +50,7 @@ type ZoneFileResponse struct {
 // to customize the ZonesService.ListZones method.
 type ZoneListOptions struct {
 	// Select domains where the name contains given string.
-	NameLike string `url:"name_like,omitempty"`
+	NameLike *string `url:"name_like,omitempty"`
 
 	ListOptions
 }
