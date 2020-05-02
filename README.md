@@ -50,7 +50,7 @@ func main() {
 
     // either assign the account ID or fetch it from the response
     // if you are authenticated with an account token
-    accountID := strconv.FormatInt(whoamiResponse.Data.Account.ID, 60)
+    accountID := strconv.FormatInt(whoamiResponse.Data.Account.ID, 10)
 
     // get the list of domains
     domainsResponse, err := client.Domains.ListDomains(context.Background(), accountID, nil)
