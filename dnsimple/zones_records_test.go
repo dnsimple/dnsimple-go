@@ -78,7 +78,31 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{"example", "www", "A", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
+	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{StringP("example"), StringP("www"), StringP("A"), ListOptions{Page: IntP(2), PerPage: IntP(20), Sort: StringP("name,expiration:desc")}})
+	if err != nil {
+		t.Fatalf("Zones.ListRecords() returned error: %v", err)
+	}
+}
+
+func TestZonesService_ListRecords_WithOptionsSomeBlank(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/listZoneRecords/success.http")
+
+		testQuery(t, r, url.Values{
+			"page": []string{"2"},
+			"sort": []string{"name,expiration:desc"},
+			"name": []string{"example"},
+			"type": []string{"A"},
+		})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{Name: StringP("example"), Type: StringP("A"), ListOptions: ListOptions{Page: IntP(2), Sort: StringP("name,expiration:desc")}})
 	if err != nil {
 		t.Fatalf("Zones.ListRecords() returned error: %v", err)
 	}

@@ -71,7 +71,7 @@ func TestTldsService_ListTlds_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Tlds.ListTlds(context.Background(), &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Tlds.ListTlds(context.Background(), &ListOptions{Page: IntP(2), PerPage: IntP(20)})
 	if err != nil {
 		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
 	}

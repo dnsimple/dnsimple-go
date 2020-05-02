@@ -63,7 +63,7 @@ func TestZonesService_ListZones_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Zones.ListZones(context.Background(), "1010", &ZoneListOptions{"example", ListOptions{Page: 2, PerPage: 20, Sort: "name,expiration:desc"}})
+	_, err := client.Zones.ListZones(context.Background(), "1010", &ZoneListOptions{StringP("example"), ListOptions{Page: IntP(2), PerPage: IntP(20), Sort: StringP("name,expiration:desc")}})
 	if err != nil {
 		t.Fatalf("Zones.ListZones() returned error: %v", err)
 	}

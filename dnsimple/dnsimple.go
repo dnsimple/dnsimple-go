@@ -73,15 +73,15 @@ type Client struct {
 // in order to control parameters such as pagination and page number.
 type ListOptions struct {
 	// The page to return
-	Page int `url:"page,omitempty"`
+	Page *int `url:"page,omitempty"`
 
 	// The number of entries to return per page
-	PerPage int `url:"per_page,omitempty"`
+	PerPage *int `url:"per_page,omitempty"`
 
 	// The order criteria to sort the results.
 	// The value is a comma-separated list of field[:direction],
 	// eg. name | name:desc | name:desc,expiration:desc
-	Sort string `url:"sort,omitempty"`
+	Sort *string `url:"sort,omitempty"`
 }
 
 // NewClient returns a new DNSimple API client.
@@ -370,6 +370,10 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 
 	return u.String(), nil
 }
+
+// IntP is a helper routine that allocates a new int value
+// to store v and returns a pointer to it.
+func IntP(v int) *int { return &v }
 
 // Int64P is a helper routine that allocates a new int64 value
 // to store v and returns a pointer to it.

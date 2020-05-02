@@ -71,7 +71,7 @@ func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", &ListOptions{Page: 2, PerPage: 20})
+	_, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", &ListOptions{Page: IntP(2), PerPage: IntP(20)})
 	if err != nil {
 		t.Fatalf("Domains.ListEmailForwards() returned error: %v", err)
 	}
