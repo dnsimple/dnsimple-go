@@ -75,7 +75,7 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Domains.ListDomains(context.Background(), "1010", &DomainListOptions{NameLike: StringP("example"), RegistrantID: IntP(10), ListOptions: ListOptions{Page: IntP(2), PerPage: IntP(20), Sort: StringP("name,expiration:desc")}})
+	_, err := client.Domains.ListDomains(context.Background(), "1010", &DomainListOptions{NameLike: String("example"), RegistrantID: Int(10), ListOptions: ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
 	if err != nil {
 		t.Fatalf("Domains.ListDomains() returned error: %v", err)
 	}

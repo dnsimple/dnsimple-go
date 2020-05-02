@@ -69,7 +69,7 @@ func TestContactsService_List_WithOptions(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	_, err := client.Contacts.ListContacts(context.Background(), "1010", &ListOptions{Page: IntP(2), PerPage: IntP(20)})
+	_, err := client.Contacts.ListContacts(context.Background(), "1010", &ListOptions{Page: Int(2), PerPage: Int(20)})
 	if err != nil {
 		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
 	}
