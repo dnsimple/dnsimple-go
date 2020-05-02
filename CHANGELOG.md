@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.50.0
 
 - NEW: Added Client.SetUserAgent() as a convenient helper to set a custom user agent.
 - NEW: Added support for Registration/Transfer extended attributes (dnsimple/dnsimple-go#86)
