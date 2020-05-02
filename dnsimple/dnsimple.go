@@ -370,3 +370,11 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 
 	return u.String(), nil
 }
+
+// Int64P is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it.
+func Int64P(v int64) *int64 { return &v }
+
+// StringP is a helper routine that allocates a new string value
+// to store v and returns a pointer to it.
+func StringP(v string) *string { return &v }
