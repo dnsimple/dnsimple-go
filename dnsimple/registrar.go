@@ -202,6 +202,38 @@ func (s *RegistrarService) TransferDomain(ctx context.Context, accountID string,
 	return transferResponse, nil
 }
 
+// GetDomainTransfer fetches a domain transfer.
+//
+// See https://developer.dnsimple.com/v2/registrar/#getDomainTransfer
+func (s *RegistrarService) GetDomainTransfer(ctx context.Context, accountID string, domainName string, domainTransferID int64) (*DomainTransferResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers/%v", accountID, domainName, domainTransferID))
+	transferResponse := &DomainTransferResponse{}
+
+	resp, err := s.client.get(ctx, path, transferResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	transferResponse.HTTPResponse = resp
+	return transferResponse, nil
+}
+
+// CancelDomainTransfer cancels an in progress domain transfer.
+//
+// See https://developer.dnsimple.com/v2/registrar/#cancelDomainTransfer
+func (s *RegistrarService) CancelDomainTransfer(ctx context.Context, accountID string, domainName string, domainTransferID int64) (*DomainTransferResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/transfers/%v", accountID, domainName, domainTransferID))
+	transferResponse := &DomainTransferResponse{}
+
+	resp, err := s.client.delete(ctx, path, nil, transferResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	transferResponse.HTTPResponse = resp
+	return transferResponse, nil
+}
+
 // DomainTransferOutResponse represents a response from an API method that results in a domain transfer out.
 type DomainTransferOutResponse struct {
 	Response
