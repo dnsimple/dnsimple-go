@@ -31,7 +31,7 @@ func TestDomainsService_ListDomains(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	domainsResponse, err := client.Domains.ListDomains(context.Background(), "1010", nil)
@@ -72,7 +72,7 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 		})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.ListDomains(context.Background(), "1010", &DomainListOptions{NameLike: String("example"), RegistrantID: Int(10), ListOptions: ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
@@ -95,7 +95,7 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1"
@@ -126,7 +126,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -166,7 +166,7 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

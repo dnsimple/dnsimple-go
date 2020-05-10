@@ -18,7 +18,7 @@ func TestTemplatesService_ApplyTemplate(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Templates.ApplyTemplate(context.Background(), "1010", "1", "example.com")

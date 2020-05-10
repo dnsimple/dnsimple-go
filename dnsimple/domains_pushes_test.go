@@ -33,7 +33,7 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	pushAttributes := DomainPushAttributes{NewAccountEmail: "admin@target-account.test"}
@@ -63,7 +63,7 @@ func TestDomainsService_DomainsPushesList(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	pushesResponse, err := client.Domains.ListPushes(context.Background(), "2020", nil)
@@ -98,7 +98,7 @@ func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.ListPushes(context.Background(), "2020", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -121,7 +121,7 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	pushAttributes := DomainPushAttributes{ContactID: 2}
@@ -143,7 +143,7 @@ func TestDomainsService_RejectPush(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.RejectPush(context.Background(), "2020", 1)

@@ -31,7 +31,7 @@ func TestTemplatesService_List(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templatesResponse, err := client.Templates.ListTemplates(context.Background(), "1010", nil)
@@ -66,7 +66,7 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Templates.ListTemplates(context.Background(), "1010", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -89,7 +89,7 @@ func TestTemplatesService_Create(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -120,7 +120,7 @@ func TestTemplatesService_Get(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templateResponse, err := client.Templates.GetTemplate(context.Background(), "1010", "1")
@@ -154,7 +154,7 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templateAttributes := Template{Name: "Alpha"}
@@ -189,7 +189,7 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Templates.DeleteTemplate(context.Background(), "1010", "1")

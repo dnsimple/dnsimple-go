@@ -31,7 +31,7 @@ func TestTemplatesService_ListTemplateRecords(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templatesRecordsResponse, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", nil)
@@ -66,7 +66,7 @@ func TestTemplatesService_ListTemplateRecords_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Templates.ListTemplateRecords(context.Background(), "1010", "1", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -89,7 +89,7 @@ func TestTemplatesService_CreateTemplateRecord(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templateRecordAttributes := TemplateRecord{Name: "Beta"}
@@ -119,7 +119,7 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	templateRecordResponse, err := client.Templates.GetTemplateRecord(context.Background(), "1010", "1", 2)
@@ -155,7 +155,7 @@ func TestTemplatesService_DeleteTemplateRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Templates.DeleteTemplateRecord(context.Background(), "1010", "1", 2)

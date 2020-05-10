@@ -33,7 +33,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	forwardsResponse, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", nil)
@@ -68,7 +68,7 @@ func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -91,7 +91,7 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	forwardAttributes := EmailForward{From: "me"}
@@ -121,7 +121,7 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	forwardResponse, err := client.Domains.GetEmailForward(context.Background(), "1010", "example.com", 2)
@@ -154,7 +154,7 @@ func TestDomainsService_DeleteEmailForward(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.DeleteEmailForward(context.Background(), "1010", "example.com", 2)

@@ -31,7 +31,7 @@ func TestServicesService_List(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	servicesResponse, err := client.Services.ListServices(context.Background(), nil)
@@ -66,7 +66,7 @@ func TestServicesService_List_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Services.ListServices(context.Background(), &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -86,7 +86,7 @@ func TestServicesService_Get(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	serviceID := "1"

@@ -30,7 +30,7 @@ func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	dsRecordsResponse, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", nil)
@@ -65,7 +65,7 @@ func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -88,7 +88,7 @@ func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	dsRecordAttributes := DelegationSignerRecord{Algorithm: "13", Digest: "ABC123", DigestType: "2", Keytag: "1234"}
@@ -118,7 +118,7 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	dsRecordResponse, err := client.Domains.GetDelegationSignerRecord(context.Background(), "1010", "example.com", 2)
@@ -153,7 +153,7 @@ func TestDomainsService_DeleteDelegationSignerRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.DeleteDelegationSignerRecord(context.Background(), "1010", "example.com", 2)

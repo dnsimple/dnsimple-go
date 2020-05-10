@@ -30,7 +30,7 @@ func TestDomainsService_ListCollaborators(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	collaboratorsResponse, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", nil)
@@ -71,7 +71,7 @@ func TestDomainsService_ListCollaborators_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -94,7 +94,7 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -135,7 +135,7 @@ func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -173,7 +173,7 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

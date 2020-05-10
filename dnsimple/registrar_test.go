@@ -20,7 +20,7 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	checkResponse, err := client.Registrar.CheckDomain(context.Background(), "1010", "example.com")
@@ -45,7 +45,7 @@ func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	priceResponse, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", nil)
@@ -74,7 +74,7 @@ func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
@@ -97,7 +97,7 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	registerRequest := &RegisterDomainInput{RegistrantID: 2}
@@ -130,7 +130,7 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 		}
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	registerRequest := &RegisterDomainInput{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
@@ -154,7 +154,7 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3"}
@@ -187,7 +187,7 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 		}
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
@@ -208,7 +208,7 @@ func TestRegistrarService_TransferDomainOut(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Registrar.TransferDomainOut(context.Background(), "1010", "example.com")
@@ -231,7 +231,7 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 		//testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	renewalResponse, err := client.Registrar.RenewDomain(context.Background(), "1010", "example.com", nil)

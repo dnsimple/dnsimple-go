@@ -29,7 +29,7 @@ func TestWebhooksService_ListWebhooks(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	webhooksResponse, err := client.Webhooks.ListWebhooks(context.Background(), "1010", nil)
@@ -64,7 +64,7 @@ func TestWebhooksService_CreateWebhook(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	webhookAttributes := Webhook{URL: "https://webhook.test"}
@@ -94,7 +94,7 @@ func TestWebhooksService_GetWebhook(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	webhookResponse, err := client.Webhooks.GetWebhook(context.Background(), "1010", 1)
@@ -123,7 +123,7 @@ func TestWebhooksService_DeleteWebhook(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Webhooks.DeleteWebhook(context.Background(), "1010", 1)
