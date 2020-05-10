@@ -80,8 +80,11 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 
 	if resp.StatusCode != 200 {
 		errorResponse := &ExchangeAuthorizationError{}
+		err = json.NewDecoder(resp.Body).Decode(errorResponse)
+		if err != nil {
+			return nil, err
+		}
 		errorResponse.HTTPResponse = resp
-		json.NewDecoder(resp.Body).Decode(errorResponse)
 		return nil, errorResponse
 	}
 
