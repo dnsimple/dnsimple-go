@@ -129,15 +129,15 @@ func TestLive_Webhooks(t *testing.T) {
 
 	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
 	fmt.Printf("Webhook: %+v\n", webhookResponse.Data)
-	webhook = webhookResponse.Data
 
+	webhook = webhookResponse.Data
 	webhookResponse, err = dnsimpleClient.Webhooks.DeleteWebhook(context.Background(), fmt.Sprintf("%v", accountID), webhook.ID)
 	if err != nil {
 		t.Fatalf("Live Webhooks.Delete(%v) returned error: %v", webhook.ID, err)
 	}
 
 	fmt.Printf("RateLimit: %v/%v until %v\n", webhooksResponse.RateLimitRemaining(), webhooksResponse.RateLimit(), webhooksResponse.RateLimitReset())
-	webhook = webhookResponse.Data
+	fmt.Printf("Webhook: %+v\n", webhookResponse.Data)
 }
 
 func TestLive_Zones(t *testing.T) {
