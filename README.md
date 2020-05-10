@@ -132,7 +132,7 @@ You can customize the `User-Agent` header for the calls made to the DNSimple API
 
 ```go
 client := dnsimple.NewClient(tc)
-client.SetUserAgent("my-app")
+client.SetUserAgent("my-app/1.0")
 ```
 
 The value you provide will be prepended to the default `User-Agent` the client uses. For example, if you use `my-app/1.0`, the final header value will be `my-app/1.0 dnsimple-go/0.14.0` (note that it will vary depending on the client version).
