@@ -7,14 +7,14 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// BasicAuthClient returns a client that authenticates via HTTP Basic Auth with given username and password.
-func BasicAuthClient(_ context.Context, username, password string) *http.Client {
+// BasicAuthHTTPClient returns a client that authenticates via HTTP Basic Auth with given username and password.
+func BasicAuthHTTPClient(_ context.Context, username, password string) *http.Client {
 	tp := BasicAuthTransport{Username: username, Password: password}
 	return tp.Client()
 }
 
-// BasicAuthClient returns a client that authenticates with a static OAuth token.
-func StaticTokenClient(ctx context.Context, token string) *http.Client {
+// StaticTokenHTTPClient returns a client that authenticates with a static OAuth token.
+func StaticTokenHTTPClient(ctx context.Context, token string) *http.Client {
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	return oauth2.NewClient(ctx, ts)
 }

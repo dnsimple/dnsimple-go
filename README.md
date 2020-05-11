@@ -31,7 +31,7 @@ import (
 )
 
 func main() {
-    tc := dnsimple.StaticTokenClient(context.Background(), "your-token")
+    tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
 
     // new client
     client := dnsimple.NewClient(tc)
@@ -82,7 +82,7 @@ Supported authentication mechanisms are OAuth and HTTP Digest. We provide conven
 **Authenticating with OAuth**
 
 ```go
-tc := dnsimple.StaticTokenClient(context.Background(), "your-token")
+tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
 
 // new client
 client := dnsimple.NewClient(tc)
@@ -91,7 +91,7 @@ client := dnsimple.NewClient(tc)
 **Authenticating with HTTP Basic Auth**
 
 ```go
-hc := dnsimple.BasicAuthClient(context.Background(), "your-user", "your-password")
+hc := dnsimple.BasicAuthHTTPClient(context.Background(), "your-user", "your-password")
 client := dnsimple.NewClient(hc)
 ```
 
