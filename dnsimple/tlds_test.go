@@ -20,7 +20,7 @@ func TestTldsService_ListTlds(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	tldsResponse, err := client.Tlds.ListTlds(context.Background(), nil)
@@ -68,7 +68,7 @@ func TestTldsService_ListTlds_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Tlds.ListTlds(context.Background(), &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -88,7 +88,7 @@ func TestTldsService_GetTld(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	tldResponse, err := client.Tlds.GetTld(context.Background(), "com")
@@ -116,7 +116,7 @@ func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	tldResponse, err := client.Tlds.GetTldExtendedAttributes(context.Background(), "com")

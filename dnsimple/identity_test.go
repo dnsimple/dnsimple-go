@@ -18,7 +18,7 @@ func TestAuthService_Whoami(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	whoamiResponse, err := client.Identity.Whoami(context.Background())

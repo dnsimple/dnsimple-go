@@ -19,7 +19,7 @@ func TestZonesService_CheckZoneDistribution(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -51,7 +51,7 @@ func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -83,7 +83,7 @@ func TestZonesService_CheckZoneDistributionError(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -110,7 +110,7 @@ func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -143,7 +143,7 @@ func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -176,7 +176,7 @@ func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

@@ -25,7 +25,7 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	token, err := client.Oauth.ExchangeAuthorizationForToken(&ExchangeAuthorizationRequest{Code: code, ClientID: clientID, ClientSecret: clientSecret, GrantType: AuthorizationCodeGrant})
@@ -47,7 +47,7 @@ func TestOauthService_ExchangeAuthorizationForToken_Error(t *testing.T) {
 		httpResponse := httpResponseFixture(t, "/api/oauthAccessToken/error-invalid-request.http")
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Oauth.ExchangeAuthorizationForToken(&ExchangeAuthorizationRequest{Code: "1234567890", ClientID: "a1b2c3", ClientSecret: "thisisasecret", GrantType: "authorization_code"})

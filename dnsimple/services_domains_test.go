@@ -31,7 +31,7 @@ func TestServicesService_AppliedServices(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	servicesResponse, err := client.Services.AppliedServices(context.Background(), "1010", "example.com", nil)
@@ -67,7 +67,7 @@ func TestServicesService_ApplyService(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	settings := DomainServiceSettings{Settings: map[string]string{"app": "foo"}}
@@ -89,7 +89,7 @@ func TestServicesService_UnapplyService(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Services.UnapplyService(context.Background(), "1010", "service1", "example.com")

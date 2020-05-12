@@ -24,7 +24,7 @@ func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	vanityNameServerResponse, err := client.VanityNameServers.EnableVanityNameServers(context.Background(), "1010", "example.com")
@@ -51,7 +51,7 @@ func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.VanityNameServers.DisableVanityNameServers(context.Background(), "1010", "example.com")

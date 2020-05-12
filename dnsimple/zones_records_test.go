@@ -30,7 +30,7 @@ func TestZonesService_ListRecords(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordsResponse, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", nil)
@@ -75,7 +75,7 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 		})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{String("example"), String("www"), String("A"), ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
@@ -99,7 +99,7 @@ func TestZonesService_ListRecords_WithOptionsSomeBlank(t *testing.T) {
 		})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{Name: String("example"), Type: String("A"), ListOptions: ListOptions{Page: Int(2), Sort: String("name,expiration:desc")}})
@@ -122,7 +122,7 @@ func TestZonesService_CreateRecord(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -162,7 +162,7 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues := ZoneRecordAttributes{Name: String(""), Content: "127.0.0.1", Type: "A"}
@@ -194,7 +194,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{}}
@@ -210,7 +210,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
@@ -226,7 +226,7 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
@@ -247,7 +247,7 @@ func TestZonesService_GetRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -291,7 +291,7 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -322,7 +322,7 @@ func TestZonesService_UpdateRecord_NameNotProvided(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues := ZoneRecordAttributes{Content: "127.0.0.1"}
@@ -346,7 +346,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{}}
@@ -362,7 +362,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
@@ -378,7 +378,7 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
@@ -399,7 +399,7 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

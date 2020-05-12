@@ -20,7 +20,7 @@ func TestAccountsService_List(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountsResponse, err := client.Accounts.ListAccounts(context.Background(), nil)

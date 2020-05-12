@@ -30,7 +30,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificatesResponse, err := client.Certificates.ListCertificates(context.Background(), "1010", "example.com", nil)
@@ -65,7 +65,7 @@ func TestCertificatesService_ListCertificates_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Certificates.ListCertificates(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -85,7 +85,7 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateResponse, err := client.Certificates.GetCertificate(context.Background(), "1010", "example.com", 2)
@@ -126,7 +126,7 @@ func TestCertificatesService_DownloadCertificate(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateBundleResponse, err := client.Certificates.DownloadCertificate(context.Background(), "1010", "example.com", 2)
@@ -159,7 +159,7 @@ func TestCertificatesService_GetCertificatePrivateKey(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateBundleResponse, err := client.Certificates.GetCertificatePrivateKey(context.Background(), "1010", "example.com", 2)
@@ -190,7 +190,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100}
@@ -220,7 +220,7 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100, Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
@@ -242,7 +242,7 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate(context.Background(), "1010", "example.com", 200)
@@ -270,7 +270,7 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateAttributes := LetsencryptCertificateAttributes{}
@@ -309,7 +309,7 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true}
@@ -345,7 +345,7 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, 999)

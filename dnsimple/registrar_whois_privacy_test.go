@@ -19,7 +19,7 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	privacyResponse, err := client.Registrar.GetWhoisPrivacy(context.Background(), "1010", "example.com")
@@ -55,7 +55,7 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 		//testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	privacyResponse, err := client.Registrar.EnableWhoisPrivacy(context.Background(), "1010", "example.com")
@@ -83,7 +83,7 @@ func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
 		//testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	privacyResponse, err := client.Registrar.DisableWhoisPrivacy(context.Background(), "1010", "example.com")
@@ -108,7 +108,7 @@ func TestRegistrarService_RenewWhoisPrivacy(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	privacyRenewalResponse, err := client.Registrar.RenewWhoisPrivacy(context.Background(), "1010", "example.com")

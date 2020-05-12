@@ -20,7 +20,7 @@ func TestZonesService_ListZones(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	zonesResponse, err := client.Zones.ListZones(context.Background(), "1010", nil)
@@ -60,7 +60,7 @@ func TestZonesService_ListZones_WithOptions(t *testing.T) {
 		})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Zones.ListZones(context.Background(), "1010", &ZoneListOptions{String("example"), ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
@@ -80,7 +80,7 @@ func TestZonesService_GetZone(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -116,7 +116,7 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

@@ -31,7 +31,7 @@ func TestContactsService_List(t *testing.T) {
 		testQuery(t, r, url.Values{})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	contactsResponse, err := client.Contacts.ListContacts(context.Background(), "1010", nil)
@@ -66,7 +66,7 @@ func TestContactsService_List_WithOptions(t *testing.T) {
 		testQuery(t, r, url.Values{"page": []string{"2"}, "per_page": []string{"20"}})
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Contacts.ListContacts(context.Background(), "1010", &ListOptions{Page: Int(2), PerPage: Int(20)})
@@ -89,7 +89,7 @@ func TestContactsService_Create(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -120,7 +120,7 @@ func TestContactsService_Get(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
@@ -170,7 +170,7 @@ func TestContactsService_Update(t *testing.T) {
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	contactAttributes := Contact{Label: "Default"}
@@ -202,7 +202,7 @@ func TestContactsService_Delete(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"

@@ -19,7 +19,7 @@ func TestRegistrarService_GetDomainDelegation(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	delegationResponse, err := client.Registrar.GetDomainDelegation(context.Background(), "1010", "example.com")
@@ -49,7 +49,7 @@ func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
 		testRequestJSONArray(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	newDelegation := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com"}
@@ -81,7 +81,7 @@ func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
 		testRequestJSONArray(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	newDelegation := &Delegation{"ns1.example.com", "ns2.example.com"}
@@ -110,7 +110,7 @@ func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	_, err := client.Registrar.ChangeDomainDelegationFromVanity(context.Background(), "1010", "example.com")
