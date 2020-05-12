@@ -237,14 +237,15 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:           1,
-		DomainID:     2,
-		RegistrantID: 3,
-		State:        "cancelled",
-		AutoRenew:    false,
-		WhoisPrivacy: false,
-		CreatedAt:    "2020-04-27T18:08:44Z",
-		UpdatedAt:    "2020-04-27T18:20:01Z"}
+		ID:                1,
+		DomainID:          2,
+		RegistrantID:      3,
+		State:             "cancelled",
+		AutoRenew:         false,
+		WhoisPrivacy:      false,
+    StatusDescription: "Canceled by customer",
+		CreatedAt:         "2020-04-27T18:08:44Z",
+		UpdatedAt:         "2020-04-27T18:20:01Z"}
 
 	if !reflect.DeepEqual(domainTransfer, wantSingle) {
 		t.Fatalf("Registrar.GetDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)
@@ -271,14 +272,15 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:           5,
-		DomainID:     6,
-		RegistrantID: 1,
-		State:        "transferring",
-		AutoRenew:    true,
-		WhoisPrivacy: false,
-		CreatedAt:    "2020-04-24T19:19:03Z",
-		UpdatedAt:    "2020-04-24T19:19:15Z"}
+		ID:                5,
+		DomainID:          6,
+		RegistrantID:      1,
+		State:             "transferring",
+		AutoRenew:         true,
+		WhoisPrivacy:      false,
+    StatusDescription: "",
+		CreatedAt:         "2020-04-24T19:19:03Z",
+		UpdatedAt:         "2020-04-24T19:19:15Z"}
 
 	if !reflect.DeepEqual(domainTransfer, wantSingle) {
 		t.Fatalf("Registrar.CancelDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)

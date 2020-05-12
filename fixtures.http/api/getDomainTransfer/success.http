@@ -23,6 +23,7 @@ Strict-Transport-Security: max-age=31536000
     "auto_renew": false,
     "whois_privacy": false,
     "premium_price": null,
+    "status_description": "Canceled by customer",
     "created_at": "2020-04-27T18:08:44Z",
     "updated_at": "2020-04-27T18:20:01Z"
   }
