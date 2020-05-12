@@ -243,7 +243,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		State:             "cancelled",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
-    StatusDescription: "Canceled by customer",
+		StatusDescription: "Canceled by customer",
 		CreatedAt:         "2020-04-27T18:08:44Z",
 		UpdatedAt:         "2020-04-27T18:20:01Z"}
 
@@ -278,7 +278,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		State:             "transferring",
 		AutoRenew:         true,
 		WhoisPrivacy:      false,
-    StatusDescription: "",
+		StatusDescription: "",
 		CreatedAt:         "2020-04-24T19:19:03Z",
 		UpdatedAt:         "2020-04-24T19:19:15Z"}
 
