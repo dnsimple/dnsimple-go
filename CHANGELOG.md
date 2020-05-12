@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.61.0
 
 - ADDED: Convenient helpers to inizialize a client with common authentication strategies
 
