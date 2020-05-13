@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### master
+#### Release 0.62.0
 
 - NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (dnsimple/dnsimple-go#94)
 - NEW: Added Registrar.CancelDomainTransfer() to cancel an in progress domain transfer. (dnsimple/dnsimple-go#94)
