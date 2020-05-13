@@ -1,15 +1,21 @@
 # CHANGELOG
 
+#### master
+
+- NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (dnsimple/dnsimple-go#94)
+- NEW: Added Registrar.CancelDomainTransfer() to cancel an in progress domain transfer. (dnsimple/dnsimple-go#94)
+
+
 #### Release 0.61.0
 
-- ADDED: Convenient helpers to inizialize a client with common authentication strategies
+- NEW: Added convenient helpers to inizialize a client with common authentication strategies
 
 
 #### Release 0.60.0
 
-- FIXED: A zone record can be updated without the risk of overriding the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92) 
+- FIXED: A zone record can be updated without the risk of overriding the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92)
 
-- FIXED: Fixed a conflict where a Go zero-value would prevent sorting to work correctly (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93) 
+- FIXED: Fixed a conflict where a Go zero-value would prevent sorting to work correctly (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93)
 
 Incompatible changes:
 
