@@ -31,9 +31,7 @@ import (
 )
 
 func main() {
-    oauthToken := "xxxxxxx"
-    ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: oauthToken})
-    tc := oauth2.NewClient(context.Background(), ts)
+    tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
 
     // new client
     client := dnsimple.NewClient(tc)
@@ -79,27 +77,22 @@ For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimp
 ## Authentication
 
 When creating a new client you are required to provide an `http.Client` to use for authenticating the requests.
-Currently supported authentication mechanisms are OAuth and HTTP Digest.
+Supported authentication mechanisms are OAuth and HTTP Digest. We provide convenient helpers to generate a preconfigured HTTP client.
 
-For OAuth we suggest to use the client provided by the `golang.org/x/oauth2` package:
+**Authenticating with OAuth**
 
 ```go
-ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: "XXX"})
-tc := oauth2.NewClient(context.Background(), ts)
+tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
 
 // new client
 client := dnsimple.NewClient(tc)
 ```
 
-For HTTP Digest you can use the client provided by this package:
+**Authenticating with HTTP Basic Auth**
 
 ```go
-tp := dnsimple.BasicAuthTransport{
-    Username: "XXX",
-    Password: "XXX",
-}
-
-client := dnsimple.NewClient(tp.Client())
+hc := dnsimple.BasicAuthHTTPClient(context.Background(), "your-user", "your-password")
+client := dnsimple.NewClient(hc)
 ```
 
 For requests made to authorize OAuth access, and to exchange the short lived authorization token for the OAuth token, use an HTTP client with a timeout:
