@@ -22,7 +22,6 @@ Strict-Transport-Security: max-age=31536000
     "state": "transferring",
     "auto_renew": true,
     "whois_privacy": false,
-    "premium_price": null,
     "status_description": null,
     "created_at": "2020-04-24T19:19:03Z",
     "updated_at": "2020-04-24T19:19:15Z"
