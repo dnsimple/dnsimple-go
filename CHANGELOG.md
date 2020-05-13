@@ -2,8 +2,14 @@
 
 #### master
 
-- NEW: Added Registrar.GetDomainTransfer() to retrieves a domain transfer. (dnsimple/dnsimple-go#94)
+- NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (dnsimple/dnsimple-go#94)
 - NEW: Added Registrar.CancelDomainTransfer() to cancel an in progress domain transfer. (dnsimple/dnsimple-go#94)
+
+
+#### Release 0.61.0
+
+- NEW: Added convenient helpers to inizialize a client with common authentication strategies
+
 
 #### Release 0.60.0
 
