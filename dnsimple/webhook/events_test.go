@@ -160,6 +160,50 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 	}
 }
 
+func TestParseAccountEvent_Account_UserInvitationRevoke(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.user_invitation_revoke/example.http")
+
+	event, err := ParseEvent(payload)
+	if err != nil {
+		t.Fatalf("ParseEvent returned error: %v", err)
+	}
+
+	if want, got := "account.user_invitation_revoke", event.Name; want != got {
+		t.Errorf("ParseEvent name expected to be %v, got %v", want, got)
+	}
+	if !regexpUUID.MatchString(event.RequestID) {
+		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
+	}
+
+	data, ok := event.GetData().(*AccountInvitationEventData)
+	if !ok {
+		t.Fatalf("ParseEvent type assertion failed")
+	}
+	expectedAccount := dnsimple.Account{
+		ID:             1111,
+		Email:          "xxxxx@xxxxxx.xxx",
+		CreatedAt:      "2012-03-16T16:02:54Z",
+		UpdatedAt:      "2020-05-10T18:11:03Z",
+		PlanIdentifier: "professional-v1-monthly",
+	}
+	if want, got := expectedAccount, *data.Account; !reflect.DeepEqual(want, got) {
+		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	}
+	expectedAccountInvitation := dnsimple.AccountInvitation{
+		ID:                   3522,
+		Email:                "xxxxxx@xxxxxx.xxx",
+		Token:                "be87d69b-a58a-43bd-9a21-aaf303829a60",
+		AccountID:            1111,
+		CreatedAt:            "2020-05-12T18:42:27Z",
+		UpdatedAt:            "2020-05-12T18:42:27Z",
+		InvitationSentAt:     "2020-05-12T18:42:27Z",
+		InvitationAcceptedAt: "",
+	}
+	if want, got := expectedAccountInvitation, *data.AccountInvitation; !reflect.DeepEqual(want, got) {
+		t.Errorf("ParseEvent AccountInvitation expected to be %v, got %v", want, got)
+	}
+}
+
 func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.user_invite/example.http")
 

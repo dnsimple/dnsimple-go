@@ -14,6 +14,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		data = &AccountEventData{}
 	case // account_invitation
 		"account.user_invitation_accept",
+		"account.user_invitation_revoke",
 		"account.user_invite":
 		data = &AccountInvitationEventData{}
 	case // certificate
