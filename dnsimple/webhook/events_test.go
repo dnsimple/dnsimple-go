@@ -296,8 +296,6 @@ func TestParseAccountEvent_Account_UserRemove(t *testing.T) {
 	expectedUser := dnsimple.User{
 		ID:    1120,
 		Email: "xxxxxx@xxxxxx.xxx",
-		//		CreatedAt:            "2011-03-17T21:30:25",
-		//		UpdatedAt:            "2018-11-16T12:38:34Z",
 	}
 	if want, got := expectedUser, *data.User; !reflect.DeepEqual(want, got) {
 		t.Errorf("ParseEvent User expected to be %v, got %v", want, got)
