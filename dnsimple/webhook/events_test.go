@@ -131,7 +131,7 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
-	data, ok := event.GetData().(*AccountInvitationEventData)
+	data, ok := event.GetData().(*AccountMembershipEventData)
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
@@ -179,7 +179,7 @@ func TestParseAccountEvent_Account_UserInvitationRevoke(t *testing.T) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
-	data, ok := event.GetData().(*AccountInvitationEventData)
+	data, ok := event.GetData().(*AccountMembershipEventData)
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
@@ -227,7 +227,7 @@ func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
-	data, ok := event.GetData().(*AccountInvitationEventData)
+	data, ok := event.GetData().(*AccountMembershipEventData)
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed: %v", ok)
 	}
@@ -275,7 +275,7 @@ func TestParseAccountEvent_Account_UserRemove(t *testing.T) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
-	data, ok := event.GetData().(*AccountInvitationEventData)
+	data, ok := event.GetData().(*AccountMembershipEventData)
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed: %v", ok)
 	}

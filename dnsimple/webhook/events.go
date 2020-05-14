@@ -17,7 +17,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"account.user_invitation_revoke",
 		"account.user_invite",
 		"account.user_remove":
-		data = &AccountInvitationEventData{}
+		data = &AccountMembershipEventData{}
 	case // certificate
 		"certificate.issue",
 		"certificate.remove_private_key":
@@ -106,14 +106,14 @@ func (d *AccountEventData) unmarshalEventData(payload []byte) error {
 // AccountInvitationEvent
 //
 
-// AccountInvitationEventData represents the data node for an Account event.
-type AccountInvitationEventData struct {
+// AccountMembershipEventData represents the data node for an Account event.
+type AccountMembershipEventData struct {
 	Account           *dnsimple.Account           `json:"account"`
 	AccountInvitation *dnsimple.AccountInvitation `json:"account_invitation"`
 	User              *dnsimple.User              `json:"user"`
 }
 
-func (d *AccountInvitationEventData) unmarshalEventData(payload []byte) error {
+func (d *AccountMembershipEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 
