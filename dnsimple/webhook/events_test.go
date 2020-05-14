@@ -158,6 +158,10 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 	if want, got := expectedAccountInvitation, *data.AccountInvitation; !reflect.DeepEqual(want, got) {
 		t.Errorf("ParseEvent AccountInvitation expected to be %v, got %v", want, got)
 	}
+	var expectedUser *dnsimple.User = nil
+	if want, got := expectedUser, data.User; want != got {
+		t.Errorf("ParseEvent User expected to be %v, got %v", want, got)
+	}
 }
 
 func TestParseAccountEvent_Account_UserInvitationRevoke(t *testing.T) {
@@ -202,6 +206,10 @@ func TestParseAccountEvent_Account_UserInvitationRevoke(t *testing.T) {
 	if want, got := expectedAccountInvitation, *data.AccountInvitation; !reflect.DeepEqual(want, got) {
 		t.Errorf("ParseEvent AccountInvitation expected to be %v, got %v", want, got)
 	}
+	var expectedUser *dnsimple.User = nil
+	if want, got := expectedUser, data.User; want != got {
+		t.Errorf("ParseEvent User expected to be %v, got %v", want, got)
+	}
 }
 
 func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
@@ -245,6 +253,10 @@ func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 	}
 	if want, got := expectedAccountInvitation, *data.AccountInvitation; !reflect.DeepEqual(want, got) {
 		t.Errorf("ParseEvent AccountInvitation expected to be %v, got %v", want, got)
+	}
+	var expectedUser *dnsimple.User = nil
+	if want, got := expectedUser, data.User; want != got {
+		t.Errorf("ParseEvent User expected to be %v, got %v", want, got)
 	}
 }
 
