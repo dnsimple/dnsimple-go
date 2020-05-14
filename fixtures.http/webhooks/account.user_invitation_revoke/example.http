@@ -1,0 +1,13 @@
+POST /170zjup1 HTTP/1.1
+Host: example.com
+Accept-Encoding: gzip
+X-Request-Id: ac676fe3-9009-4333-a1e2-06cbc0b78f11
+Content-Type: application/json
+User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
+Connect-Time: 1
+Total-Route-Time: 0
+Content-Length: 760
+Via: 1.1 vegur
+Connection: close
+
+{"data": {"account": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2020-05-10T18:11:03Z", "plan_identifier": "professional-v1-monthly"}, "account_invitation": {"id": 3522, "email": "xxxxxx@xxxxxx.xxx", "token": "be87d69b-a58a-43bd-9a21-aaf303829a60", "account_id": 1111, "created_at": "2020-05-12T18:42:27Z", "updated_at": "2020-05-12T18:42:27Z", "invitation_sent_at": "2020-05-12T18:42:27Z", "invitation_accepted_at": null}}, "name": "account.user_invitation_revoke", "actor": {"id": "88720", "entity": "user", "pretty": "xxxxxxxxxxxxxxxxx@xxxxxx.xxx"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "688bc70d-0e79-439a-bd2b-0d62cbfe56cc"}
