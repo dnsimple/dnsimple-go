@@ -10,10 +10,10 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 	switch event.Name {
 	case // account
 		"account.billing_settings_update",
-		"account.update",
-		"account.user_invitation_accept":
+		"account.update":
 		data = &AccountEventData{}
 	case // account_invitation
+		"account.user_invitation_accept",
 		"account.user_invite":
 		data = &AccountInvitationEventData{}
 	case // certificate

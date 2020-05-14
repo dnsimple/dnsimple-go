@@ -131,12 +131,32 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 		t.Errorf("ParseEvent requestID expected to be an UUID, got %v", event.RequestID)
 	}
 
-	data, ok := event.GetData().(*AccountEventData)
+	data, ok := event.GetData().(*AccountInvitationEventData)
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "xxxxx@xxxxxx.xxx", data.Account.Email; want != got {
-		t.Errorf("ParseEvent Account.Email expected to be %v, got %v", want, got)
+	expectedAccount := dnsimple.Account{
+		ID:             1111,
+		Email:          "xxxxx@xxxxxx.xxx",
+		CreatedAt:      "2012-03-16T16:02:54Z",
+		UpdatedAt:      "2020-05-10T18:11:03Z",
+		PlanIdentifier: "professional-v1-monthly",
+	}
+	if want, got := expectedAccount, *data.Account; !reflect.DeepEqual(want, got) {
+		t.Errorf("ParseEvent Account expected to be %v, got %v", want, got)
+	}
+	expectedAccountInvitation := dnsimple.AccountInvitation{
+		ID:                   3523,
+		Email:                "xxxxxx@xxxxxx.xxx",
+		Token:                "eb5763dc-0f24-420b-b7f6-c7355c8b8309",
+		AccountID:            1111,
+		CreatedAt:            "2020-05-12T18:42:44Z",
+		UpdatedAt:            "2020-05-12T18:43:44Z",
+		InvitationSentAt:     "2020-05-12T18:42:44Z",
+		InvitationAcceptedAt: "2020-05-12T18:43:44Z",
+	}
+	if want, got := expectedAccountInvitation, *data.AccountInvitation; !reflect.DeepEqual(want, got) {
+		t.Errorf("ParseEvent AccountInvitation expected to be %v, got %v", want, got)
 	}
 }
 
