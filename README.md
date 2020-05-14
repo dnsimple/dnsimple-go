@@ -27,7 +27,6 @@ import (
     "strconv"
 
     "github.com/dnsimple/dnsimple-go/dnsimple"
-    "golang.org/x/oauth2"
 )
 
 func main() {
