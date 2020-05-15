@@ -10,10 +10,14 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 	switch event.Name {
 	case // account
 		"account.billing_settings_update",
-		"account.update",
-		"account.user_invitation_accept",
-		"account.user_invite":
+		"account.update":
 		data = &AccountEventData{}
+	case // account_invitation
+		"account.user_invitation_accept",
+		"account.user_invitation_revoke",
+		"account.user_invite",
+		"account.user_remove":
+		data = &AccountMembershipEventData{}
 	case // certificate
 		"certificate.issue",
 		"certificate.remove_private_key":
@@ -95,6 +99,21 @@ type AccountEventData struct {
 }
 
 func (d *AccountEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
+// AccountInvitationEvent
+//
+
+// AccountMembershipEventData represents the data node for an Account event.
+type AccountMembershipEventData struct {
+	Account           *dnsimple.Account           `json:"account"`
+	AccountInvitation *dnsimple.AccountInvitation `json:"account_invitation"`
+	User              *dnsimple.User              `json:"user"`
+}
+
+func (d *AccountMembershipEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 

@@ -1,13 +1,13 @@
-POST /1djlwbe1 HTTP/1.1
+POST /170zjup1 HTTP/1.1
 Host: example.com
 Accept-Encoding: gzip
-Connect-Time: 1
-Via: 1.1 vegur
-Content-Length: 787
-Total-Route-Time: 0
-User-Agent: DNSimple-Webhook-Notifier/8b16040b4b0e3b18a84c6a300a85119cf638980a
 Content-Type: application/json
-X-Request-Id: 140a201e-ebfd-453d-b574-805b89723e1c
+User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
+X-Request-Id: 119842bf-d239-41a8-90ac-e8aa654ea64e
+Connect-Time: 1
+Content-Length: 766
+Total-Route-Time: 0
+Via: 1.1 vegur
 Connection: close
 
-{"data": {"account": {"id": 1111, "email": "xxxxx@xxxxx1.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2019-03-27T15:11:01Z", "plan_identifier": "professional-v1-monthly"}, "account_invitation": {"id": 1111, "email": "xxxxxxxxxxxxx@xxxxxxxxx.foo", "token": "2b01ec28-07c3-4080-884e-872ad7d873be", "account_id": 1111, "created_at": "2019-04-01T20:12:33Z", "updated_at": "2019-04-01T20:12:55Z", "invitation_sent_at": "2019-04-01T20:12:33Z", "invitation_accepted_at": "2019-04-01T20:12:55Z"}}, "name": "account.user_invitation_accept", "actor": {"id": "11111", "entity": "user", "pretty": "xxxxxxxxxxxxx@xxxxxxxxx.foo"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "3f3e19a1-0c63-4987-9202-1af3e207562f"}
+{"data": {"account": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2020-05-10T18:11:03Z", "plan_identifier": "professional-v1-monthly"}, "account_invitation": {"id": 3523, "email": "xxxxxx@xxxxxx.xxx", "token": "eb5763dc-0f24-420b-b7f6-c7355c8b8309", "account_id": 1111, "created_at": "2020-05-12T18:42:44Z", "updated_at": "2020-05-12T18:43:44Z", "invitation_sent_at": "2020-05-12T18:42:44Z", "invitation_accepted_at": "2020-05-12T18:43:44Z"}}, "name": "account.user_invitation_accept", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxxx@xxxxxx.xxx"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "2fab89c6-963b-47bf-a631-cfa15f06d21f"}
