@@ -1,5 +1,9 @@
 # CHANGELOG
 
+#### Master
+- NEW: Added types and parsing for account membership events. (dnsimple/dnsimple-go#97)
+
+
 #### Release 0.62.0
 
 - NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (dnsimple/dnsimple-go#94)
