@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### Master
+#### Release 0.63.0
 - NEW: Added types and parsing for account membership events. (dnsimple/dnsimple-go#97)
 
 
