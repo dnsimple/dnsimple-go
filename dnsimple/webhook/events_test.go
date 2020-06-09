@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"bufio"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
@@ -37,7 +36,6 @@ func getHTTPRequestFromFixture(t *testing.T, filename string) *http.Request {
 func getHTTPRequestBodyFromFixture(t *testing.T, filename string) []byte {
 	req := getHTTPRequestFromFixture(t, filename)
 	body, err := ioutil.ReadAll(req.Body)
-	fmt.Println(string(body))
 	if err != nil {
 		t.Fatalf("Error reading fixture: %v", err)
 	}
