@@ -221,7 +221,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers/361", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/getDomainTransfer/success.http")
 
 		testMethod(t, r, "GET")
@@ -231,21 +231,21 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	domainTransferResponse, err := client.Registrar.GetDomainTransfer(context.Background(), "1010", "example.com", 1)
+	domainTransferResponse, err := client.Registrar.GetDomainTransfer(context.Background(), "1010", "example.com", 361)
 	if err != nil {
 		t.Fatalf("Registrar.GetDomainTransfer() returned error: %v", err)
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:                1,
-		DomainID:          2,
-		RegistrantID:      3,
+		ID:                361,
+		DomainID:          182245,
+		RegistrantID:      2715,
 		State:             "cancelled",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
 		StatusDescription: "Canceled by customer",
-		CreatedAt:         "2020-04-27T18:08:44Z",
-		UpdatedAt:         "2020-04-27T18:20:01Z"}
+		CreatedAt:         "2020-06-05T18:08:00Z",
+		UpdatedAt:         "2020-06-05T18:10:01Z"}
 
 	if !reflect.DeepEqual(domainTransfer, wantSingle) {
 		t.Fatalf("Registrar.GetDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)
@@ -256,7 +256,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers/361", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/cancelDomainTransfer/success.http")
 
 		testMethod(t, r, "DELETE")
@@ -266,21 +266,21 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		io.Copy(w, httpResponse.Body)
 	})
 
-	domainTransferResponse, err := client.Registrar.CancelDomainTransfer(context.Background(), "1010", "example.com", 1)
+	domainTransferResponse, err := client.Registrar.CancelDomainTransfer(context.Background(), "1010", "example.com", 361)
 	if err != nil {
 		t.Fatalf("Registrar.CancelDomainTransfer() returned error: %v", err)
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:                5,
-		DomainID:          6,
-		RegistrantID:      1,
+		ID:                361,
+		DomainID:          182245,
+		RegistrantID:      2715,
 		State:             "transferring",
-		AutoRenew:         true,
+		AutoRenew:         false,
 		WhoisPrivacy:      false,
 		StatusDescription: "",
-		CreatedAt:         "2020-04-24T19:19:03Z",
-		UpdatedAt:         "2020-04-24T19:19:15Z"}
+		CreatedAt:         "2020-06-05T18:08:00Z",
+		UpdatedAt:         "2020-06-05T18:08:04Z"}
 
 	if !reflect.DeepEqual(domainTransfer, wantSingle) {
 		t.Fatalf("Registrar.CancelDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)
