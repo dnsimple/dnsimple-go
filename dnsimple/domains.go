@@ -80,7 +80,7 @@ func (s *DomainsService) ListDomains(ctx context.Context, accountID string, opti
 	}
 
 	for idx, _ := range domainsResponse.Data {
-		setExpiresAt(&domainsResponse.Data[idx])
+		setExpiresOn(&domainsResponse.Data[idx])
 	}
 
 	domainsResponse.HTTPResponse = resp
@@ -99,7 +99,7 @@ func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, dom
 		return nil, err
 	}
 
-	setExpiresAt(domainResponse.Data)
+	setExpiresOn(domainResponse.Data)
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
@@ -116,12 +116,12 @@ func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domain
 		return nil, err
 	}
 
-	setExpiresAt(domainResponse.Data)
+	setExpiresOn(domainResponse.Data)
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
 
-func setExpiresAt(domain *Domain) {
+func setExpiresOn(domain *Domain) {
 	if domain.ExpiresAt != "" {
 		domain.ExpiresOn = domain.ExpiresAt[:10]
 	}
