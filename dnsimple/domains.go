@@ -24,7 +24,7 @@ type Domain struct {
 	State        string `json:"state,omitempty"`
 	AutoRenew    bool   `json:"auto_renew,omitempty"`
 	PrivateWhois bool   `json:"private_whois,omitempty"`
-	ExpiresOn    string `json:"expires_on,omitempty"` // Deprecated: use ExpiresAt instead
+	ExpiresOn    string `json:"-"` // Deprecated: use ExpiresAt instead
 	ExpiresAt    string `json:"expires_at,omitempty"`
 	CreatedAt    string `json:"created_at,omitempty"`
 	UpdatedAt    string `json:"updated_at,omitempty"`
@@ -79,6 +79,10 @@ func (s *DomainsService) ListDomains(ctx context.Context, accountID string, opti
 		return nil, err
 	}
 
+	for idx, _ := range domainsResponse.Data {
+		setExpiresAt(&domainsResponse.Data[idx])
+	}
+
 	domainsResponse.HTTPResponse = resp
 	return domainsResponse, nil
 }
@@ -95,6 +99,7 @@ func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, dom
 		return nil, err
 	}
 
+	setExpiresAt(domainResponse.Data)
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
@@ -111,8 +116,15 @@ func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domain
 		return nil, err
 	}
 
+	setExpiresAt(domainResponse.Data)
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
+}
+
+func setExpiresAt(domain *Domain) {
+	if domain.ExpiresAt != "" {
+		domain.ExpiresOn = domain.ExpiresAt[:10]
+	}
 }
 
 // DeleteDomain PERMANENTLY deletes a domain from the account.

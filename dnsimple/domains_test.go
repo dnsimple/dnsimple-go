@@ -54,6 +54,10 @@ func TestDomainsService_ListDomains(t *testing.T) {
 	if want, got := "example-alpha.com", domains[0].Name; want != got {
 		t.Fatalf("Domains.ListDomains() returned Name expected to be `%v`, got `%v`", want, got)
 	}
+
+	if want, got := "2021-06-05", domains[0].ExpiresOn; want != got {
+		t.Fatalf("Domains.ListDomains() returned ExpiresAt expected to be `%v`, got `%v`", want, got)
+	}
 }
 
 func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
@@ -109,9 +113,6 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 	domain := domainResponse.Data
 	if want, got := int64(181985), domain.ID; want != got {
 		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example-beta.com", domain.Name; want != got {
-		t.Fatalf("Domains.Create() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 }
 
