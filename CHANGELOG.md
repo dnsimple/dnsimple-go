@@ -1,5 +1,8 @@
 # CHANGELOG
 
+#### master
+- CHANGED: Domain struct now has ExpiresAt attribute in favor of ExpiresOn. (dnsimple/dnsimple-go#98)
+
 #### Release 0.63.0
 - NEW: Added types and parsing for account membership events. (dnsimple/dnsimple-go#97)
 
