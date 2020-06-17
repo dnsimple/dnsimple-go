@@ -55,7 +55,7 @@ func TestDomainsService_ListDomains(t *testing.T) {
 		t.Fatalf("Domains.ListDomains() returned Name expected to be `%v`, got `%v`", want, got)
 	}
 
-	if want, got := "2021-06-05", domains[0].ExpiresOn; want != got {
+	if want, got := "2021-06-05T02:15:00Z", domains[0].ExpiresAt; want != got {
 		t.Fatalf("Domains.ListDomains() returned ExpiresAt expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -148,7 +148,6 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		State:        "registered",
 		AutoRenew:    false,
 		PrivateWhois: false,
-		ExpiresOn:    "2021-06-05",
 		ExpiresAt:    "2021-06-05T02:15:00Z",
 		CreatedAt:    "2020-06-04T19:15:14Z",
 		UpdatedAt:    "2020-06-04T19:15:21Z"}
