@@ -1,13 +1,9 @@
-POST /170zjup1 HTTP/1.1
+POST / HTTP/1.1
 Host: example.com
-Content-Type: application/json
 Accept-Encoding: gzip
-Content-Length: 750
-Via: 1.1 vegur
-Total-Route-Time: 0
-X-Request-Id: 931853aa-64e5-47ad-bf87-4cff0d091668
+Content-Type: application/json
 User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
-Connect-Time: 1
-Connection: close
+Content-Length: 837
+Connection: keep-alive
 
-{"data": {"domain": {"id": 235146, "name": "dnsimple.xyz", "state": "registered", "account_id": 1111, "auto_renew": true, "created_at": "2016-03-17T08:39:06Z", "expires_on": "2021-03-17", "updated_at": "2019-12-20T08:20:19Z", "unicode_name": "dnsimple.xyz", "private_whois": true, "registrant_id": 2511}, "whois_privacy": {"id": 45425, "enabled": true, "domain_id": 235146, "created_at": "2019-05-17T11:50:29Z", "expires_on": "2021-05-17", "updated_at": "2020-04-26T12:08:55Z"}}, "name": "whois_privacy.renew", "actor": {"id": "system", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "edefcd87-8cf8-41cb-86b4-9e67a62b04e7"}
+{"data": {"domain": {"id": 181984, "name": "example-alpha.com", "state": "registered", "account_id": 1385, "auto_renew": false, "created_at": "2020-06-04T19:15:14Z", "expires_at": "2021-06-05T02:15:00Z", "expires_on": "2021-06-05", "updated_at": "2020-06-04T19:15:21Z", "unicode_name": "example-alpha.com", "private_whois": true, "registrant_id": 2715}, "whois_privacy": {"id": 902, "enabled": true, "domain_id": 181984, "created_at": "2020-06-04T20:01:27Z", "expires_on": "2022-06-04", "updated_at": "2020-06-04T20:15:23Z"}}, "name": "whois_privacy.renew", "actor": {"id": "system", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 1385, "display": "xxxxxxx-xxxxxxx-xxxxxxx", "identifier": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "api_version": "v2", "request_identifier": "6164c3bb-f9df-4e00-b560-e122b19e25f7"}

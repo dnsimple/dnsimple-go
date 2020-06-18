@@ -531,7 +531,7 @@ func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "foobarbaz.online", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -555,7 +555,7 @@ func TestParseDomainEvent_Domain_AutoRenewalEnable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "foobarbaz.online", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -579,7 +579,7 @@ func TestParseDomainEvent_Domain_Create(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example.zone", data.Domain.Name; want != got {
+	if want, got := "example-beta.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -603,7 +603,7 @@ func TestParseDomainEvent_Domain_Delete(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example.zone", data.Domain.Name; want != got {
+	if want, got := "example-delta.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -627,7 +627,7 @@ func TestParseDomainEvent_Domain_Register(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example-20181109121341.com", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -654,7 +654,7 @@ func TestParseDomainEvent_Domain_Renew(t *testing.T) {
 	if data.Auto != true {
 		t.Errorf("ParseEvent auto expected to be %v", true)
 	}
-	if want, got := "example.test", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -678,10 +678,10 @@ func TestParseDomainEvent_Domain_DelegationChange(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "foo1bar2.cloud", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := (&dnsimple.Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}), data.Delegation; !reflect.DeepEqual(want, got) {
+	if want, got := (&dnsimple.Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com"}), data.Delegation; !reflect.DeepEqual(want, got) {
 		t.Errorf("ParseEvent Delegation expected to be %v, got %v", want, got)
 	}
 }
@@ -705,10 +705,10 @@ func TestParseDomainEvent_Domain_RegistrantChange(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example-20181109121341.com", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := "Test", data.Registrant.Label; want != got {
+	if want, got := "new_contact", data.Registrant.Label; want != got {
 		t.Errorf("ParseEvent Registrant.Label expected to be %v, got %v", want, got)
 	}
 }
@@ -732,7 +732,7 @@ func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example.zone", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -756,7 +756,7 @@ func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "example.zone", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
 }
@@ -925,10 +925,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Disable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "xxxxxxxx.email", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(39319), data.WhoisPrivacy.ID; want != got {
+	if want, got := int64(902), data.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 }
@@ -952,10 +952,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Enable(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "xxxxxxxx.email", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(39319), data.WhoisPrivacy.ID; want != got {
+	if want, got := int64(902), data.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 }
@@ -979,10 +979,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "xxxxxxxx.email", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(39319), data.WhoisPrivacy.ID; want != got {
+	if want, got := int64(902), data.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 }
@@ -1006,10 +1006,10 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := "dnsimple.xyz", data.Domain.Name; want != got {
+	if want, got := "example-alpha.com", data.Domain.Name; want != got {
 		t.Errorf("ParseEvent Domain.Name expected to be %v, got %v", want, got)
 	}
-	if want, got := int64(45425), data.WhoisPrivacy.ID; want != got {
+	if want, got := int64(902), data.WhoisPrivacy.ID; want != got {
 		t.Errorf("ParseEvent WhoisPrivacy.ID expected to be %v, got %v", want, got)
 	}
 }
