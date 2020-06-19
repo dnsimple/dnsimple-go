@@ -321,7 +321,7 @@ func TestParseCertificateEvent_Certificate_Issue(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := int64(86368), data.Certificate.ID; want != got {
+	if want, got := int64(101967), data.Certificate.ID; want != got {
 		t.Errorf("ParseEvent Certificate.ID expected to be %v, got %v", want, got)
 	}
 }
@@ -345,7 +345,7 @@ func TestParseCertificateEvent_Certificate_RemovePrivateKey(t *testing.T) {
 	if !ok {
 		t.Fatalf("ParseEvent type assertion failed")
 	}
-	if want, got := int64(41203), data.Certificate.ID; want != got {
+	if want, got := int64(101972), data.Certificate.ID; want != got {
 		t.Errorf("ParseEvent Certificate.ID expected to be %v, got %v", want, got)
 	}
 }

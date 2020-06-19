@@ -23,7 +23,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/dnsimple.us/certificates", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/listCertificates/success.http")
 
 		testMethod(t, r, "GET")
@@ -33,7 +33,7 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificatesResponse, err := client.Certificates.ListCertificates(context.Background(), "1010", "example.com", nil)
+	certificatesResponse, err := client.Certificates.ListCertificates(context.Background(), "1010", "dnsimple.us", nil)
 	if err != nil {
 		t.Fatalf("Certificates.ListCertificates() returned error: %v", err)
 	}
@@ -47,10 +47,10 @@ func TestCertificatesService_ListCertificates(t *testing.T) {
 		t.Errorf("Certificates.ListCertificates() expected to return %v contacts, got %v", want, got)
 	}
 
-	if want, got := int64(1), certificates[0].ID; want != got {
+	if want, got := int64(101973), certificates[0].ID; want != got {
 		t.Fatalf("Certificates.ListCertificates() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "www.weppos.net", certificates[0].CommonName; want != got {
+	if want, got := "www2.dnsimple.us", certificates[0].CommonName; want != got {
 		t.Fatalf("Certificates.ListCertificates() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -78,7 +78,7 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/2", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/101967", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/getCertificate/success.http")
 
 		testMethod(t, r, "GET")
@@ -88,27 +88,27 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.GetCertificate(context.Background(), "1010", "example.com", 2)
+	certificateResponse, err := client.Certificates.GetCertificate(context.Background(), "1010", "bingo.pizza", 101967)
 	if err != nil {
 		t.Errorf("Certificates.GetCertificate() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
 	wantSingle := &Certificate{
-		ID:                  1,
-		DomainID:            2,
-		ContactID:           3,
-		CommonName:          "www.weppos.net",
-		AlternateNames:      []string{"weppos.net", "www.weppos.net"},
+		ID:                  101967,
+		DomainID:            289333,
+		ContactID:           2511,
+		CommonName:          "www.bingo.pizza",
+		AlternateNames:      []string{},
 		Years:               1,
 		State:               "issued",
 		AuthorityIdentifier: "letsencrypt",
 		AutoRenew:           false,
-		CreatedAt:           "2016-06-11T18:47:08Z",
-		UpdatedAt:           "2016-06-11T18:47:37Z",
-		ExpiresOn:           "2016-09-09",
+		CreatedAt:           "2020-06-18T18:54:17Z",
+		UpdatedAt:           "2020-06-18T19:10:14Z",
+		ExpiresAt:           "2020-09-16T18:10:13Z",
 
-		CertificateRequest: "-----BEGIN CERTIFICATE REQUEST-----\nMIICljCCAX4CAQAwGTEXMBUGA1UEAwwOd3d3LndlcHBvcy5uZXQwggEiMA0GCSqG\nSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC3MJwx9ahBG3kAwRjQdRvYZqtovUaxY6jp\nhd09975gO+2eYPDbc1yhNftVJ4KBT0zdEqzX0CwIlxE1MsnZ2YOsC7IJO531hMBp\ndBxM4tSG07xPz70AVUi9rY6YCUoJHmxoFbclpHFbtXZocR393WyzUK8047uM2mlz\n03AZKcMdyfeuo2/9TcxpTSCkklGqwqS9wtTogckaDHJDoBunAkMioGfOSMe7Yi6E\nYRtG4yPJYsDaq2yPJWV8+i0PFR1Wi5RCnPt0YdQWstHuZrxABi45+XVkzKtz3TUc\nYxrvPBucVa6uzd953u8CixNFkiOefvb/dajsv1GIwH6/Cvc1ftz1AgMBAAGgODA2\nBgkqhkiG9w0BCQ4xKTAnMCUGA1UdEQQeMByCDnd3dy53ZXBwb3MubmV0ggp3ZXBw\nb3MubmV0MA0GCSqGSIb3DQEBCwUAA4IBAQCDnVBO9RdJX0eFeZzlv5c8yG8duhKP\nl0Vl+V88fJylb/cbNj9qFPkKTK0vTXmS2XUFBChKPtLucp8+Z754UswX+QCsdc7U\nTTSG0CkyilcSubdZUERGej1XfrVQhrokk7Fu0Jh3BdT6REP0SIDTpA8ku/aRQiAp\np+h19M37S7+w/DMGDAq2LSX8jOpJ1yIokRDyLZpmwyLxutC21DXMGoJ3xZeUFrUT\nqRNwzkn2dJzgTrPkzhaXalUBqv+nfXHqHaWljZa/O0NVCFrHCdTdd53/6EE2Yabv\nq5SFTkRCpaxrvM/7a8Tr4ixD1/VKD6rw3+WC00000000000000000000\n-----END CERTIFICATE REQUEST-----\n"}
+		CertificateRequest: "-----BEGIN CERTIFICATE REQUEST-----\nMIICmTCCAYECAQAwGjEYMBYGA1UEAwwPd3d3LmJpbmdvLnBpenphMIIBIjANBgkq\nhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw4+KoZ9IDCK2o5qAQpi+Icu5kksmjQzx\n5o5g4B6XhRxhsfHlK/i3iU5hc8CONjyVv8j82835RNsiKrflnxGa9SH68vbQfcn4\nIpbMz9c+Eqv5h0Euqlc3A4DBzp0unEu5QAUhR6Xu1TZIWDPjhrBOGiszRlLQcp4F\nzy6fD6j5/d/ylpzTp5v54j+Ey31Bz86IaBPtSpHI+Qk87Hs8DVoWxZk/6RlAkyur\nXDGWnPu9n3RMfs9ag5anFhggLIhCNtVN4+0vpgPQ59pqwYo8TfdYzK7WSKeL7geu\nCqVE3bHAqU6dLtgHOZfTkLwGycUh4p9aawuc6fsXHHYDpIL8s3vAvwIDAQABoDow\nOAYJKoZIhvcNAQkOMSswKTAnBgNVHREEIDAeggtiaW5nby5waXp6YYIPd3d3LmJp\nbmdvLnBpenphMA0GCSqGSIb3DQEBCwUAA4IBAQBwOLKv+PO5hSJkgqS6wL/wRqLh\nQ1zbcHRHAjRjnpRz06cDvN3X3aPI+lpKSNFCI0A1oKJG7JNtgxX3Est66cuO8ESQ\nPIb6WWN7/xlVlBCe7ZkjAFgN6JurFdclwCp/NI5wBCwj1yb3Ar5QQMFIZOezIgTI\nAWkQSfCmgkB96d6QlDWgidYDDjcsXugQveOQRPlHr0TsElu47GakxZdJCFZU+WPM\nodQQf5SaqiIK2YaH1dWO//4KpTS9QoTy1+mmAa27apHcmz6X6+G5dvpHZ1qH14V0\nJoMWIK+39HRPq6mDo1UMVet/xFUUrG/H7/tFlYIDVbSpVlpVAFITd/eQkaW/\n-----END CERTIFICATE REQUEST-----\n"}
 
 	if !reflect.DeepEqual(certificate, wantSingle) {
 		t.Fatalf("Certificates.GetCertificate() returned %+v, want %+v", certificate, wantSingle)
@@ -180,7 +180,7 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/letsencrypt", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/purchaseLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
@@ -195,13 +195,13 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100}
 
-	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "example.com", certificateAttributes)
+	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "bingo.pizza", certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned error: %v", err)
 	}
 
 	certificatePurchase := certificateResponse.Data
-	if want, got := int64(300), certificatePurchase.ID; want != got {
+	if want, got := int64(101967), certificatePurchase.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -235,7 +235,7 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/issue", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/letsencrypt/101967/issue", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/issueLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
@@ -245,16 +245,16 @@ func TestCertificates_LetsencryptIssue(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate(context.Background(), "1010", "example.com", 200)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificate(context.Background(), "1010", "bingo.pizza", 101967)
 	if err != nil {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
-	if want, got := int64(200), certificate.ID; want != got {
+	if want, got := int64(101967), certificate.ID; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "www.example.com", certificate.CommonName; want != got {
+	if want, got := "www.bingo.pizza", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificate() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -263,7 +263,7 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/letsencrypt/101967/renewals", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/purchaseRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
@@ -275,19 +275,19 @@ func TestCertificates_LetsencryptPurchaseRenewal(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{}
 
-	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "bingo.pizza", 101967, certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-	if want, got := int64(999), certificateRenewal.ID; want != got {
+	if want, got := int64(65082), certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := int64(200), certificateRenewal.OldCertificateID; want != got {
+	if want, got := int64(101967), certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := int64(300), certificateRenewal.NewCertificateID; want != got {
+	if want, got := int64(101972), certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
@@ -299,7 +299,7 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/letsencrypt/101967/renewals", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/purchaseRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
@@ -314,19 +314,19 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 
 	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true}
 
-	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, certificateAttributes)
+	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "bingo.pizza", 101967, certificateAttributes)
 	if err != nil {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificateRenewal := certificateRenewalResponse.Data
-	if want, got := int64(999), certificateRenewal.ID; want != got {
+	if want, got := int64(65082), certificateRenewal.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := int64(200), certificateRenewal.OldCertificateID; want != got {
+	if want, got := int64(101967), certificateRenewal.OldCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned OldCertificateID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := int64(300), certificateRenewal.NewCertificateID; want != got {
+	if want, got := int64(101972), certificateRenewal.NewCertificateID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificateRenewal() returned NewCertificateID expected to be `%v`, got `%v`", want, got)
 	}
 	if want, got := "new", certificateRenewal.State; want != got {
@@ -338,7 +338,7 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/1010/domains/example.com/certificates/letsencrypt/200/renewals/999/issue", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/1010/domains/bingo.pizza/certificates/letsencrypt/101967/renewals/65082/issue", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/issueRenewalLetsencryptCertificate/success.http")
 
 		testMethod(t, r, "POST")
@@ -348,16 +348,16 @@ func TestCertificates_LetsencryptIssueRenewal(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal(context.Background(), "1010", "example.com", 200, 999)
+	certificateResponse, err := client.Certificates.IssueLetsencryptCertificateRenewal(context.Background(), "1010", "bingo.pizza", 101967, 65082)
 	if err != nil {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned error: %v", err)
 	}
 
 	certificate := certificateResponse.Data
-	if want, got := int64(300), certificate.ID; want != got {
+	if want, got := int64(101972), certificate.ID; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := "www.example.com", certificate.CommonName; want != got {
+	if want, got := "www.bingo.pizza", certificate.CommonName; want != got {
 		t.Fatalf("Certificates.IssueLetsencryptCertificateRenewal() returned CommonName expected to be `%v`, got `%v`", want, got)
 	}
 }
