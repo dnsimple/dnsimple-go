@@ -94,9 +94,9 @@ func (s *RegistrarService) GetDomainPremiumPrice(ctx context.Context, accountID 
 
 // DomainRegistration represents the result of a domain renewal call.
 type DomainRegistration struct {
-	ID           int    `json:"id"`
-	DomainID     int    `json:"domain_id"`
-	RegistrantID int    `json:"registrant_id"`
+	ID           int64  `json:"id"`
+	DomainID     int64  `json:"domain_id"`
+	RegistrantID int64  `json:"registrant_id"`
 	Period       int    `json:"period"`
 	State        string `json:"state"`
 	AutoRenew    bool   `json:"auto_renew"`

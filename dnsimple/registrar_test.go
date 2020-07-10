@@ -108,10 +108,10 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	}
 
 	registration := registrationResponse.Data
-	if want, got := 1, registration.ID; want != got {
+	if want, got := int64(1), registration.ID; want != got {
 		t.Fatalf("Registrar.RegisterDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 999, registration.DomainID; want != got {
+	if want, got := int64(999), registration.DomainID; want != got {
 		t.Fatalf("Registrar.RegisterDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }
