@@ -310,10 +310,10 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	}
 
 	renewal := renewalResponse.Data
-	if want, got := 1, renewal.ID; want != got {
+	if want, got := int64(1), renewal.ID; want != got {
 		t.Fatalf("Registrar.RenewDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 999, renewal.DomainID; want != got {
+	if want, got := int64(999), renewal.DomainID; want != got {
 		t.Fatalf("Registrar.RenewDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }

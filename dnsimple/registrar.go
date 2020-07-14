@@ -259,8 +259,8 @@ func (s *RegistrarService) TransferDomainOut(ctx context.Context, accountID stri
 
 // DomainRenewal represents the result of a domain renewal call.
 type DomainRenewal struct {
-	ID        int    `json:"id"`
-	DomainID  int    `json:"domain_id"`
+	ID        int64  `json:"id"`
+	DomainID  int64  `json:"domain_id"`
 	Period    int    `json:"period"`
 	State     string `json:"state"`
 	CreatedAt string `json:"created_at,omitempty"`
