@@ -30,7 +30,7 @@ type OauthService struct {
 type AccessToken struct {
 	Token     string `json:"access_token"`
 	Type      string `json:"token_type"`
-	AccountID int    `json:"account_id"`
+	AccountID int64  `json:"account_id"`
 }
 
 // ExchangeAuthorizationRequest represents a request to exchange
