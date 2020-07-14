@@ -165,10 +165,10 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 	}
 
 	transfer := transferResponse.Data
-	if want, got := 1, transfer.ID; want != got {
+	if want, got := int64(1), transfer.ID; want != got {
 		t.Fatalf("Registrar.TransferDomain() returned ID expected to be `%v`, got `%v`", want, got)
 	}
-	if want, got := 999, transfer.DomainID; want != got {
+	if want, got := int64(999), transfer.DomainID; want != got {
 		t.Fatalf("Registrar.TransferDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
 	}
 }
@@ -237,9 +237,9 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:                361,
-		DomainID:          182245,
-		RegistrantID:      2715,
+		ID:                int64(361),
+		DomainID:          int64(182245),
+		RegistrantID:      int64(2715),
 		State:             "cancelled",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
@@ -272,9 +272,9 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 	}
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
-		ID:                361,
-		DomainID:          182245,
-		RegistrantID:      2715,
+		ID:                int64(361),
+		DomainID:          int64(182245),
+		RegistrantID:      int64(2715),
 		State:             "transferring",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,

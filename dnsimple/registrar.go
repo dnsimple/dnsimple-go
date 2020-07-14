@@ -148,9 +148,9 @@ func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string,
 
 // DomainTransfer represents the result of a domain renewal call.
 type DomainTransfer struct {
-	ID                int    `json:"id"`
-	DomainID          int    `json:"domain_id"`
-	RegistrantID      int    `json:"registrant_id"`
+	ID                int64  `json:"id"`
+	DomainID          int64  `json:"domain_id"`
+	RegistrantID      int64  `json:"registrant_id"`
 	State             string `json:"state"`
 	AutoRenew         bool   `json:"auto_renew"`
 	WhoisPrivacy      bool   `json:"whois_privacy"`
