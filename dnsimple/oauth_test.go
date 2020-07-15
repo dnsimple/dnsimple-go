@@ -33,7 +33,7 @@ func TestOauthService_ExchangeAuthorizationForToken(t *testing.T) {
 		t.Fatalf("Oauth.ExchangeAuthorizationForToken() returned error: %v", err)
 	}
 
-	want := &AccessToken{Token: "zKQ7OLqF5N1gylcJweA9WodA000BUNJD", Type: "Bearer", AccountID: 1}
+	want := &AccessToken{Token: "zKQ7OLqF5N1gylcJweA9WodA000BUNJD", Type: "Bearer", AccountID: int64(1)}
 	if !reflect.DeepEqual(token, want) {
 		t.Errorf("Oauth.ExchangeAuthorizationForToken() returned %+v, want %+v", token, want)
 	}
