@@ -83,6 +83,47 @@ func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
 	}
 }
 
+func TestRegistrarService_GetDomainPrices(t *testing.T)  {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/bingo.pizza/prices", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/getDomainPrices/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	checkResponse, err := client.Registrar.GetDomainPrices(context.Background(), "1010", "bingo.pizza")
+	if err != nil {
+		t.Fatalf("Registrar.GetDomainPrices() returned error: %v", err)
+	}
+
+	check := checkResponse.Data
+	if want, got := "bingo.pizza", check.Domain; want != got {
+		t.Fatalf("Registrar.GetDomainPrices() returned Domain expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := true, check.Premium; want != got {
+		t.Fatalf("Registrar.GetDomainPrices() returned Premium expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := float64(20.0), check.RegistrationPrice; want != got {
+		t.Fatalf("Registrar.GetDomainPrices() returned RegistrationPrice expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := float64(20.0), check.RenewalPrice; want != got {
+		t.Fatalf("Registrar.GetDomainPrices() returned RenewalPrice expected to be `%v`, got `%v`", want, got)
+	}
+
+	if want, got := float64(20.0), check.TransferPrice; want != got {
+		t.Fatalf("Registrar.GetDomainPrices() returned TransferPrice expected to be `%v`, got `%v`", want, got)
+	}
+}
+
 func TestRegistrarService_RegisterDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()

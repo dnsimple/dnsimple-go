@@ -92,7 +92,35 @@ func (s *RegistrarService) GetDomainPremiumPrice(ctx context.Context, accountID 
 	return priceResponse, nil
 }
 
-// DomainRegistration represents the result of a domain renewal call.
+// DomainPrice represents the result of a domain prices call.
+type DomainPrice struct {
+	Domain     	      string  `json:"domain"`
+	Premium           bool    `json:"premium"`
+	RegistrationPrice float64 `json:"registration_price"`
+	RenewalPrice      float64 `json:"renewal_price"`
+	TransferPrice     float64 `json:"transfer_price"`
+}
+
+// DomainPriceResponse represents a response from an API method that results in a domain price list.
+type DomainPriceResponse struct {
+	Response
+	Data *DomainPrice `json:"data"`
+}
+
+func (s *RegistrarService) GetDomainPrices(ctx context.Context, accountID string, domainName string) (*DomainPriceResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/prices", accountID, domainName))
+	pricesResponse := &DomainPriceResponse{}
+
+	resp, err := s.client.get(ctx, path, pricesResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	pricesResponse.HTTPResponse = resp
+	return pricesResponse, nil
+}
+
+// DomainRegistration represents the result of a domain registration call.
 type DomainRegistration struct {
 	ID           int64  `json:"id"`
 	DomainID     int64  `json:"domain_id"`
@@ -130,7 +158,7 @@ type RegisterDomainInput struct {
 
 // RegisterDomain registers a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#register
+// See https://developer.dnsimple.com/v2/registrar/#registerDomain
 func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string, domainName string, input *RegisterDomainInput) (*DomainRegistrationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/registrations", accountID, domainName))
 	registrationResponse := &DomainRegistrationResponse{}
@@ -146,7 +174,7 @@ func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string,
 	return registrationResponse, nil
 }
 
-// DomainTransfer represents the result of a domain renewal call.
+// DomainTransfer represents the result of a domain tranfer call.
 type DomainTransfer struct {
 	ID                int64  `json:"id"`
 	DomainID          int64  `json:"domain_id"`
@@ -284,7 +312,7 @@ type RenewDomainInput struct {
 
 // RenewDomain renews a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#register
+// See https://developer.dnsimple.com/v2/registrar/#renewDomain
 func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, domainName string, input *RenewDomainInput) (*DomainRenewalResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/renewals", accountID, domainName))
 	renewalResponse := &DomainRenewalResponse{}
