@@ -83,7 +83,7 @@ func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
 	}
 }
 
-func TestRegistrarService_GetDomainPrices(t *testing.T)  {
+func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 

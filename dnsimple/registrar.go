@@ -94,7 +94,7 @@ func (s *RegistrarService) GetDomainPremiumPrice(ctx context.Context, accountID 
 
 // DomainPrice represents the result of a domain prices call.
 type DomainPrice struct {
-	Domain     	      string  `json:"domain"`
+	Domain            string  `json:"domain"`
 	Premium           bool    `json:"premium"`
 	RegistrationPrice float64 `json:"registration_price"`
 	RenewalPrice      float64 `json:"renewal_price"`
