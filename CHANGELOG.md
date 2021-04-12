@@ -2,7 +2,7 @@
 
 #### master
 
-- NEW: Added Registrar.GetDomainPrices() to retrieve if domain is premium and prices to register, transfer, and renewal. (dnsimple/dnsimple-go#103)
+- NEW: Added Registrar.GetDomainPrices() to retrieve whether a domain is premium and the prices to register, transfer, and renew. (dnsimple/dnsimple-go#103)
 
 Incompatible changes:
 
