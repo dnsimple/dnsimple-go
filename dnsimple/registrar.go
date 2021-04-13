@@ -174,7 +174,7 @@ func (s *RegistrarService) RegisterDomain(ctx context.Context, accountID string,
 	return registrationResponse, nil
 }
 
-// DomainTransfer represents the result of a domain tranfer call.
+// DomainTransfer represents the result of a domain transfer call.
 type DomainTransfer struct {
 	ID                int64  `json:"id"`
 	DomainID          int64  `json:"domain_id"`
