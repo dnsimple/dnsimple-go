@@ -30,8 +30,8 @@ const (
 	// defaultBaseURL to the DNSimple production API.
 	defaultBaseURL = "https://api.dnsimple.com"
 
-	// userAgent represents the default user agent used
-	// when no other user agent is set.
+	// defaultUserAgent represents the base user agent
+	// and is appended to every request.
 	defaultUserAgent = "dnsimple-go/" + Version
 
 	apiVersion = "v2"
