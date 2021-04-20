@@ -990,7 +990,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Purchase(t *testing.T) {
 func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/whois_privacy.renew/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -1017,7 +1017,7 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 func TestParseZoneEvent_Zone_Create(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone.create/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -1041,7 +1041,7 @@ func TestParseZoneEvent_Zone_Create(t *testing.T) {
 func TestParseZoneEvent_Zone_Delete(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone.delete/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -1065,7 +1065,7 @@ func TestParseZoneEvent_Zone_Delete(t *testing.T) {
 func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.create/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -1089,7 +1089,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Create(t *testing.T) {
 func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.update/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
@@ -1113,7 +1113,7 @@ func TestParseZoneRecordEvent_ZoneRecord_Update(t *testing.T) {
 func TestParseZoneRecordEvent_ZoneRecord_Delete(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/zone_record.delete/example.http")
 
-	event, err := ParseEvent([]byte(payload))
+	event, err := ParseEvent(payload)
 	if err != nil {
 		t.Fatalf("ParseEvent returned error: %v", err)
 	}
