@@ -2,6 +2,8 @@
 
 #### master
 
+- NEW: Added Registrar.GetDomainPrices() to retrieve whether a domain is premium and the prices to register, transfer, and renew. (dnsimple/dnsimple-go#103)
+
 Incompatible changes:
 
 - CHANGED: Domain.ExpiresOn has been replaced by Domain.ExpiresAt. (dnsimple/dnsimple-go#98)
