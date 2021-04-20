@@ -78,7 +78,7 @@ func (s *OauthService) ExchangeAuthorizationForToken(authorization *ExchangeAuth
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		errorResponse := &ExchangeAuthorizationError{}
 		err = json.NewDecoder(resp.Body).Decode(errorResponse)
 		if err != nil {
