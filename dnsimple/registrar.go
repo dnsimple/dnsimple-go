@@ -107,6 +107,9 @@ type DomainPriceResponse struct {
 	Data *DomainPrice `json:"data"`
 }
 
+// GetDomainPrices get prices for a domain.
+//
+// See https://developer.dnsimple.com/v2/registrar/#getDomainPrices
 func (s *RegistrarService) GetDomainPrices(ctx context.Context, accountID string, domainName string) (*DomainPriceResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/prices", accountID, domainName))
 	pricesResponse := &DomainPriceResponse{}
