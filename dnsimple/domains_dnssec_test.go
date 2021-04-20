@@ -12,7 +12,6 @@ func TestDnssecPath(t *testing.T) {
 	if want, got := "/1010/domains/example.com/dnssec", dnssecPath("1010", "example.com"); want != got {
 		t.Errorf("dnssecPath(%v) = %v, want %v", "", got, want)
 	}
-
 }
 
 func TestDomainsService_EnableDnssec(t *testing.T) {
