@@ -101,7 +101,7 @@ type DomainPrice struct {
 	TransferPrice     float64 `json:"transfer_price"`
 }
 
-// DomainPriceResponse represents a response from an API method that results in a domain price list.
+// DomainPriceResponse represents a response from an API method that returns a DomainPrice struct.
 type DomainPriceResponse struct {
 	Response
 	Data *DomainPrice `json:"data"`
