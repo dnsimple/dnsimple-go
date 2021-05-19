@@ -65,6 +65,8 @@ type DomainPremiumPriceOptions struct {
 
 // GetDomainPremiumPrice gets the premium price for a domain.
 //
+// Deprecated: GetDomainPremiumPrice has been deprecated, use GetDomainPrices instead.
+//
 // You must specify an action to get the price for. Valid actions are:
 // - registration
 // - transfer
