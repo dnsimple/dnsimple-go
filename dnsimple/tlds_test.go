@@ -103,6 +103,9 @@ func TestTldsService_GetTld(t *testing.T) {
 	if want, got := 1, tld.MinimumRegistration; want != got {
 		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
+	if want, got := "ds", tld.DnssecInterfaceType; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.DnssecInterfaceType expected to be `%v`, got `%v`", want, got)
+	}
 }
 
 func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
