@@ -134,6 +134,7 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 		DigestType: "2",
 		Digest:     "C1F6E04A5A61FBF65BF9DC8294C363CF11C89E802D926BDAB79C55D27BEFA94F",
 		Keytag:     "44620",
+		PublicKey:  "",
 		CreatedAt:  "2017-03-03T13:49:58Z",
 		UpdatedAt:  "2017-03-03T13:49:58Z"}
 
