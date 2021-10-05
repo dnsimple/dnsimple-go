@@ -100,8 +100,29 @@ func TestTldsService_GetTld(t *testing.T) {
 	if want, got := "com", tld.Tld; want != got {
 		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
 	}
+	if want, got := 1, tld.TldType; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.TldType expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := true, tld.WhoisPrivacy; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.WhoisPrivacy expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := false, tld.AutoRenewOnly; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.AutoRenewOnly expected to be `%v`, got `%v`", want, got)
+	}
 	if want, got := 1, tld.MinimumRegistration; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
+		t.Fatalf("Tlds.GetTlds() returned Tld.MinimumRegistration expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := true, tld.RegistrationEnabled; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.RegistrationEnabled expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := true, tld.RenewalEnabled; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.RenewalEnabled expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := true, tld.TransferEnabled; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.TransferEnabled expected to be `%v`, got `%v`", want, got)
+	}
+	if want, got := "ds", tld.DnssecInterfaceType; want != got {
+		t.Fatalf("Tlds.GetTlds() returned Tld.DnssecInterfaceType expected to be `%v`, got `%v`", want, got)
 	}
 }
 

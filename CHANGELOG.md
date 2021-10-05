@@ -2,6 +2,8 @@
 
 #### main
 
+- CHANGED: Updated Tld and DelegationSignerRecord types to support DS record key-data interface (dnsimple/dnsimple-go#107)
+
 #### 0.70.1
 
 - DEPRECATED: Registrar.GetDomainPremiumPrice() has been deprecated, use Registrar.GetDomainPrices() instead.
