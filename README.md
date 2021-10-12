@@ -2,7 +2,7 @@
 
 A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 
-[![Build Status](https://travis-ci.com/dnsimple/dnsimple-go.svg?branch=master)](https://travis-ci.com/dnsimple/dnsimple-go)
+[![Build Status](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml/badge.svg)](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml)
 [![GoDoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple)
 
 ## Installation
