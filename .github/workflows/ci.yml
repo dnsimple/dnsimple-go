@@ -44,7 +44,8 @@ jobs:
           - "1.13"
           - "1.14"
           - "1.15"
-          - tip
+          # - tip disabled as not supported in GH Actions
+          # See: https://github.com/actions/setup-go/issues/21
     steps:
       - uses: actions/checkout@v2
       - name: Set up Go
