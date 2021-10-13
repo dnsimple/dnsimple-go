@@ -32,6 +32,11 @@ jobs:
     needs: [markdownlint-cli, yamllint]
     runs-on: ubuntu-latest
     name: Go ${{ matrix.go-version }}
+    env:
+      GOPATH: ${{ github.workspace }}
+    defaults:
+      run:
+        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
     strategy:
       matrix:
         go-version:
@@ -48,6 +53,8 @@ jobs:
           # See: https://github.com/actions/setup-go/issues/21
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
