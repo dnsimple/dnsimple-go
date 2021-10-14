@@ -36,7 +36,7 @@ jobs:
       GOPATH: ${{ github.workspace }}
     defaults:
       run:
-        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
+        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}  # yamllint disable-line rule:line-length
     strategy:
       matrix:
         go-version:
