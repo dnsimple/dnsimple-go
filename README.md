@@ -2,16 +2,14 @@
 
 A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 
-[![Build Status](https://travis-ci.com/dnsimple/dnsimple-go.svg?branch=master)](https://travis-ci.com/dnsimple/dnsimple-go)
+[![Build Status](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml/badge.svg)](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml)
 [![GoDoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple)
-
 
 ## Installation
 
-```
+```shell
 go get github.com/dnsimple/dnsimple-go/dnsimple
 ```
-
 
 ## Usage
 
@@ -72,13 +70,12 @@ func main() {
 
 For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple).
 
-
 ## Authentication
 
 When creating a new client you are required to provide an `http.Client` to use for authenticating the requests.
 Supported authentication mechanisms are OAuth and HTTP Digest. We provide convenient helpers to generate a preconfigured HTTP client.
 
-**Authenticating with OAuth**
+### Authenticating with OAuth
 
 ```go
 tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
@@ -87,7 +84,7 @@ tc := dnsimple.StaticTokenHTTPClient(context.Background(), "your-token")
 client := dnsimple.NewClient(tc)
 ```
 
-**Authenticating with HTTP Basic Auth**
+### Authenticating with HTTP Basic Auth
 
 ```go
 hc := dnsimple.BasicAuthHTTPClient(context.Background(), "your-user", "your-password")
@@ -103,7 +100,6 @@ client := dnsimple.NewClient(&http.Client{Timeout: time.Second * 10})
 For any other custom need you can define your own `http.RoundTripper` implementation and
 pass a client that authenticated with the custom round tripper.
 
-
 ## Sandbox Environment
 
 We highly recommend testing against our [sandbox environment](https://developer.dnsimple.com/sandbox/) before using our production environment. This will allow you to avoid real purchases, live charges on your credit card, and reduce the chance of your running up against rate limits.
@@ -116,7 +112,6 @@ client.BaseURL = "https://api.sandbox.dnsimple.com"
 ```
 
 You will need to ensure that you are using an access token created in the sandbox environment. Production tokens will *not* work in the sandbox environment.
-
 
 ## Setting a custom `User-Agent` header
 
@@ -131,11 +126,9 @@ The value you provide will be prepended to the default `User-Agent` the client u
 
 We recommend to customize the user agent. If you are building a library or integration on top of the official client, customizing the client will help us to understand what is this client used for, and allow to contribute back or get in touch.
 
-
 ## Contributing
 
 For instructions about contributing and testing, visit the [CONTRIBUTING](CONTRIBUTING.md) file.
-
 
 ## License
 

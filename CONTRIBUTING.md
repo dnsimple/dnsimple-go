@@ -4,7 +4,7 @@ The main `dnsimple` package is defined in the `/dnsimple` subfolder of the `dnsi
 
 For example, to get the dependencies you will have to run:
 
-```
+```shell
 # from $GOPATH/src/github.com/dnsimple/dnsimple-go directory
 cd dnsimple
 go get
@@ -12,20 +12,19 @@ go get
 
 Likewise, when you include this library as dependency, you will need to use
 
-```
+```go
 import "github.com/dnsimple/dnsimple-go/dnsimple"
 ```
 
 and not
 
-```
+```go
 import "github.com/dnsimple/dnsimple-go"
 ```
 
-
 ## Getting started
 
-#### 1. Clone the repository
+### 1. Clone the repository
 
 Clone the repository [in your workspace](https://golang.org/doc/code.html#Organization) and move into it:
 
@@ -35,10 +34,9 @@ git clone git@github.com:dnsimple/dnsimple-go.git
 cd dnsimple-go
 ```
 
-#### 2. Build and test
+### 2. Build and test
 
 [Run the test suite](#testing) to check everything works as expected.
-
 
 ## Releasing
 
@@ -49,7 +47,7 @@ The following instructions uses `$VERSION` as a placeholder, where `$VERSION` is
 1. Set the version in `dnsimple.go`:
 
     ```go
-	Version = "$VERSION"
+    Version = "$VERSION"
     ```
 
 1. Run the test suite and ensure all the tests pass.
@@ -72,12 +70,11 @@ The following instructions uses `$VERSION` as a placeholder, where `$VERSION` is
     git push origin --tags
     ```
 
-
 ## Testing
 
 Submit unit tests for your changes. You can test your changes on your machine by running the test suite (see below).
 
-When you submit a PR, tests will also be run on the [continuous integration environment via Travis](https://travis-ci.org/dnsimple/dnsimple-go).
+When you submit a PR, tests will also be run on the [continuous integration environment via GitHub Actions](https://github.com/dnsimple/dnsimple-go/actions).
 
 ### Test Suite
 
