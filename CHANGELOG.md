@@ -2,6 +2,8 @@
 
 ## main
 
+## 0.71.0
+
 - CHANGED: Updated Tld and DelegationSignerRecord types to support DS record key-data interface (dnsimple/dnsimple-go#107)
 
 ## 0.70.1
