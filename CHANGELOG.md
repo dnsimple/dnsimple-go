@@ -2,6 +2,8 @@
 
 ## main
 
+## 0.71.1
+
 - FIXED: When purchasing a certificate the certificate id is populated now (CertificatePurchase)
 
 ## 0.71.0
