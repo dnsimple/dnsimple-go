@@ -204,6 +204,9 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 	if want, got := int64(101967), certificatePurchase.ID; want != got {
 		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returned ID expected to be `%v`, got `%v`", want, got)
 	}
+	if want, got := int64(101967), certificatePurchase.CertificateID; want != got {
+		t.Fatalf("Certificates.PurchaseLetsencryptCertificate() returning certificate ID expected to be `%v`, got `%v`", want, got)
+	}
 }
 
 func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
