@@ -17,6 +17,7 @@ type CertificatesService struct {
 type Certificate struct {
 	ID                  int64    `json:"id,omitempty"`
 	DomainID            int64    `json:"domain_id,omitempty"`
+    // Deprecated: ContactID is deprecated and its value is ignored and will be removed in the next major version.
 	ContactID           int64    `json:"contact_id,omitempty"`
 	CommonName          string   `json:"common_name,omitempty"`
 	AlternateNames      []string `json:"alternate_names,omitempty"`
@@ -63,6 +64,7 @@ type CertificateRenewal struct {
 
 // LetsencryptCertificateAttributes is a set of attributes to purchase a Let's Encrypt certificate.
 type LetsencryptCertificateAttributes struct {
+    // Deprecated: ContactID is deprecated and its value is ignored and will be removed in the next major version.
 	ContactID      int64    `json:"contact_id,omitempty"`
 	Name           string   `json:"name,omitempty"`
 	AutoRenew      bool     `json:"auto_renew,omitempty"`
