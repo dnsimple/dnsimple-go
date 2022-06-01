@@ -186,14 +186,14 @@ func TestCertificates_LetsencryptPurchase(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"contact_id": float64(100)}
+		want := map[string]interface{}{}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100}
+	certificateAttributes := LetsencryptCertificateAttributes{}
 
 	certificateResponse, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "bingo.pizza", certificateAttributes)
 	if err != nil {
@@ -219,14 +219,14 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"contact_id": float64(100), "name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}}
+		want := map[string]interface{}{"name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{ContactID: 100, Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
+	certificateAttributes := LetsencryptCertificateAttributes{Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
 
 	_, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "example.com", certificateAttributes)
 	if err != nil {
