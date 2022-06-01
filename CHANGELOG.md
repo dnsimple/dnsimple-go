@@ -2,6 +2,8 @@
 
 ## main
 
+- CHANGED: Deprecate Certificate's `contact_id` (dnsimple/dnsimple-go#111)
+
 ## 0.71.1
 
 - FIXED: When purchasing a certificate the certificate id is populated now (CertificatePurchase)
