@@ -1,6 +1,6 @@
 module github.com/dnsimple/dnsimple-go
 
-go 1.12
+go 1.13
 
 require (
 	github.com/google/go-querystring v1.1.0

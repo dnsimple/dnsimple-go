@@ -3,6 +3,7 @@
 ## main
 
 - CHANGED: Deprecate Certificate's `contact_id` (dnsimple/dnsimple-go#111)
+- CHANGED: Dropped support for Go < 1.13
 
 ## 0.71.1
 
