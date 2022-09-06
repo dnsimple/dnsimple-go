@@ -1,1 +1,5 @@
-coverage.txt
+# ASDF
+.tool-versions
+
+# Build
+/coverage.txt
