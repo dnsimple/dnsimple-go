@@ -211,13 +211,9 @@ func TestClient_NotFound(t *testing.T) {
 
 	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
 
-	if err == nil {
-		t.Errorf("validation errors must respond an error")
-	}
-
 	var got *ErrorResponse
 	if !errors.As(err, &got) {
-		t.Errorf("validation errors must respond a validation error")
+		t.Errorf("errors must respond an ErrorResponse")
 	}
 
 	if got.Errors != nil {
@@ -238,13 +234,9 @@ func TestClient_ValidationError(t *testing.T) {
 
 	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
 
-	if err == nil {
-		t.Errorf("validation errors must respond an error")
-	}
-
 	var got *ErrorResponse
 	if !errors.As(err, &got) {
-		t.Errorf("validation errors must respond a validation error")
+		t.Errorf("validation errors must respond an ErrorResponse")
 	}
 
 	want := map[string][]string{
