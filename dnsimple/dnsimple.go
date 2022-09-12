@@ -312,6 +312,9 @@ type ErrorResponse struct {
 
 	// human-readable message
 	Message string `json:"message"`
+
+	// detailed validation errors
+	Errors map[string][]string `json:"errors"`
 }
 
 // Error implements the error interface.
