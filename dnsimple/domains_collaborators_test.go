@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCollaboratorPath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", 0); want != got {
-		t.Errorf("collaboratorPath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", 2); want != got {
-		t.Errorf("collaboratorPath(%v) = %v, want %v", "2", got, want)
-	}
+	assert.Equal(t, "/1010/domains/example.com/collaborators", collaboratorPath("1010", "example.com", 0))
+	assert.Equal(t, "/1010/domains/example.com/collaborators/2", collaboratorPath("1010", "example.com", 2))
 }
 
 func TestDomainsService_ListCollaborators(t *testing.T) {
@@ -34,31 +30,15 @@ func TestDomainsService_ListCollaborators(t *testing.T) {
 	})
 
 	collaboratorsResponse, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", nil)
-	if err != nil {
-		t.Fatalf("Domains.ListCollaborators() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), collaboratorsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Domains.ListCollaborators() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, collaboratorsResponse.Pagination)
 	collaborators := collaboratorsResponse.Data
-	if want, got := 2, len(collaborators); want != got {
-		t.Errorf("Domains.ListCollaborators() expected to return %v collaborators, got %v", want, got)
-	}
-
-	if want, got := int64(100), collaborators[0].ID; want != got {
-		t.Fatalf("Domains.ListCollaborators() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example.com", collaborators[0].DomainName; want != got {
-		t.Fatalf("Domains.ListCollaborators() returned DomainName expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(999), collaborators[0].UserID; want != got {
-		t.Fatalf("Domains.ListCollaborators() returned UserID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := false, collaborators[0].Invitation; want != got {
-		t.Fatalf("Domains.ListCollaborators() returned Invitation expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, collaborators, 2)
+	assert.Equal(t, int64(100), collaborators[0].ID)
+	assert.Equal(t, "example.com", collaborators[0].DomainName)
+	assert.Equal(t, int64(999), collaborators[0].UserID)
+	assert.False(t, collaborators[0].Invitation)
 }
 
 func TestDomainsService_ListCollaborators_WithOptions(t *testing.T) {
@@ -75,9 +55,8 @@ func TestDomainsService_ListCollaborators_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Domains.ListCollaborators(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Domains.ListCollaborators() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_AddCollaborator(t *testing.T) {
@@ -102,23 +81,13 @@ func TestDomainsService_AddCollaborator(t *testing.T) {
 	collaboratorAttributes := CollaboratorAttributes{Email: "existing-user@example.com"}
 
 	collaboratorResponse, err := client.Domains.AddCollaborator(context.Background(), accountID, domainID, collaboratorAttributes)
-	if err != nil {
-		t.Fatalf("Domains.AddCollaborator() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	collaborator := collaboratorResponse.Data
-	if want, got := int64(100), collaborator.ID; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example.com", collaborator.DomainName; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned DomainName expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := false, collaborator.Invitation; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned Invitation expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "2016-10-07T08:53:41Z", collaborator.AcceptedAt; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(100), collaborator.ID)
+	assert.Equal(t, "example.com", collaborator.DomainName)
+	assert.False(t, collaborator.Invitation)
+	assert.Equal(t, "2016-10-07T08:53:41Z", collaborator.AcceptedAt)
 }
 
 func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
@@ -143,23 +112,13 @@ func TestDomainsService_AddNonExistingCollaborator(t *testing.T) {
 	collaboratorAttributes := CollaboratorAttributes{Email: "invited-user@example.com"}
 
 	collaboratorResponse, err := client.Domains.AddCollaborator(context.Background(), accountID, domainID, collaboratorAttributes)
-	if err != nil {
-		t.Fatalf("Domains.AddCollaborator() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	collaborator := collaboratorResponse.Data
-	if want, got := int64(101), collaborator.ID; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example.com", collaborator.DomainName; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned DomainName expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := true, collaborator.Invitation; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned Invitation expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "", collaborator.AcceptedAt; want != got {
-		t.Fatalf("Domains.AddCollaborator() returned AcceptedAt expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(101), collaborator.ID)
+	assert.Equal(t, "example.com", collaborator.DomainName)
+	assert.True(t, collaborator.Invitation)
+	assert.Equal(t, "", collaborator.AcceptedAt)
 }
 
 func TestDomainsService_RemoveCollaborator(t *testing.T) {
@@ -181,7 +140,6 @@ func TestDomainsService_RemoveCollaborator(t *testing.T) {
 	collaboratorID := int64(100)
 
 	_, err := client.Domains.RemoveCollaborator(context.Background(), accountID, domainID, collaboratorID)
-	if err != nil {
-		t.Fatalf("Domains.RemoveCollaborator() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

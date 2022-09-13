@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccountsService_List(t *testing.T) {
@@ -24,19 +26,10 @@ func TestAccountsService_List(t *testing.T) {
 	})
 
 	accountsResponse, err := client.Accounts.ListAccounts(context.Background(), nil)
-	if err != nil {
-		t.Fatalf("Accounts.ListAccounts() returned error: %v", err)
-	}
+	assert.NoError(t, err)
 
 	accounts := accountsResponse.Data
-	if want, got := 2, len(accounts); want != got {
-		t.Errorf("Accounts.ListAccounts() expected to return %v accounts, got %v", want, got)
-	}
-
-	if want, got := int64(123), accounts[0].ID; want != got {
-		t.Fatalf("Accounts.ListAccounts() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "john@example.com", accounts[0].Email; want != got {
-		t.Fatalf("Accounts.ListAccounts() returned Email expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, accounts, 2)
+	assert.Equal(t, int64(123), accounts[0].ID)
+	assert.Equal(t, "john@example.com", accounts[0].Email)
 }

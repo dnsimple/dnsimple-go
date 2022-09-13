@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainPath(t *testing.T) {
-	if want, got := "/1010/domains", domainPath("1010", ""); want != got {
-		t.Errorf("domainPath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/1010/domains/example.com", domainPath("1010", "example.com"); want != got {
-		t.Errorf("domainPath(%v) = %v, want %v", "example.com", got, want)
-	}
+	assert.Equal(t, "/1010/domains", domainPath("1010", ""))
+	assert.Equal(t, "/1010/domains/example.com", domainPath("1010", "example.com"))
 }
 
 func TestDomainsService_ListDomains(t *testing.T) {
@@ -35,29 +31,14 @@ func TestDomainsService_ListDomains(t *testing.T) {
 	})
 
 	domainsResponse, err := client.Domains.ListDomains(context.Background(), "1385", nil)
-	if err != nil {
-		t.Fatalf("Domains.ListDomains() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), domainsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Domains.ListDomains() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, domainsResponse.Pagination)
 	domains := domainsResponse.Data
-	if want, got := 2, len(domains); want != got {
-		t.Errorf("Domains.ListDomains() expected to return %v contacts, got %v", want, got)
-	}
-
-	if want, got := int64(181984), domains[0].ID; want != got {
-		t.Fatalf("Domains.ListDomains() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example-alpha.com", domains[0].Name; want != got {
-		t.Fatalf("Domains.ListDomains() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "2021-06-05T02:15:00Z", domains[0].ExpiresAt; want != got {
-		t.Fatalf("Domains.ListDomains() returned ExpiresAt expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, domains, 2)
+	assert.Equal(t, int64(181984), domains[0].ID)
+	assert.Equal(t, "example-alpha.com", domains[0].Name)
+	assert.Equal(t, "2021-06-05T02:15:00Z", domains[0].ExpiresAt)
 }
 
 func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
@@ -80,9 +61,8 @@ func TestDomainsService_ListDomains_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Domains.ListDomains(context.Background(), "1010", &DomainListOptions{NameLike: String("example"), RegistrantID: Int(10), ListOptions: ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
-	if err != nil {
-		t.Fatalf("Domains.ListDomains() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_CreateDomain(t *testing.T) {
@@ -106,14 +86,10 @@ func TestDomainsService_CreateDomain(t *testing.T) {
 	domainAttributes := Domain{Name: "example-beta.com"}
 
 	domainResponse, err := client.Domains.CreateDomain(context.Background(), accountID, domainAttributes)
-	if err != nil {
-		t.Fatalf("Domains.Create() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	domain := domainResponse.Data
-	if want, got := int64(181985), domain.ID; want != got {
-		t.Fatalf("Domains.Create() returned ID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(181985), domain.ID)
 }
 
 func TestDomainsService_GetDomain(t *testing.T) {
@@ -133,10 +109,8 @@ func TestDomainsService_GetDomain(t *testing.T) {
 	accountID := "1010"
 
 	domainResponse, err := client.Domains.GetDomain(context.Background(), accountID, "example-alpha.com")
-	if err != nil {
-		t.Errorf("Domains.Get() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	domain := domainResponse.Data
 	wantSingle := &Domain{
 		ID:           181984,
@@ -151,10 +125,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		ExpiresAt:    "2021-06-05T02:15:00Z",
 		CreatedAt:    "2020-06-04T19:15:14Z",
 		UpdatedAt:    "2020-06-04T19:15:21Z"}
-
-	if !reflect.DeepEqual(domain, wantSingle) {
-		t.Fatalf("Domains.Get() returned %+v, want %+v", domain, wantSingle)
-	}
+	assert.Equal(t, wantSingle, domain)
 }
 
 func TestDomainsService_DeleteDomain(t *testing.T) {
@@ -174,7 +145,6 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Domains.DeleteDomain(context.Background(), accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Domains.Delete() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

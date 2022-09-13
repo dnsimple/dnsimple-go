@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestContactPath(t *testing.T) {
-	if want, got := "/1010/contacts", contactPath("1010", 0); want != got {
-		t.Errorf("contactPath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/1010/contacts/1", contactPath("1010", 1); want != got {
-		t.Errorf("contactPath(%v) = %v, want %v", "1", got, want)
-	}
+	assert.Equal(t, "/1010/contacts", contactPath("1010", 0))
+	assert.Equal(t, "/1010/contacts/1", contactPath("1010", 1))
 }
 
 func TestContactsService_List(t *testing.T) {
@@ -35,25 +31,13 @@ func TestContactsService_List(t *testing.T) {
 	})
 
 	contactsResponse, err := client.Contacts.ListContacts(context.Background(), "1010", nil)
-	if err != nil {
-		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), contactsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Contacts.ListContacts() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, contactsResponse.Pagination)
 	contacts := contactsResponse.Data
-	if want, got := 2, len(contacts); want != got {
-		t.Errorf("Contacts.ListContacts() expected to return %v contacts, got %v", want, got)
-	}
-
-	if want, got := int64(1), contacts[0].ID; want != got {
-		t.Fatalf("Contacts.ListContacts() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Default", contacts[0].Label; want != got {
-		t.Fatalf("Contacts.ListContacts() returned Label expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, contacts, 2)
+	assert.Equal(t, int64(1), contacts[0].ID)
+	assert.Equal(t, "Default", contacts[0].Label)
 }
 
 func TestContactsService_List_WithOptions(t *testing.T) {
@@ -70,9 +54,8 @@ func TestContactsService_List_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Contacts.ListContacts(context.Background(), "1010", &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Contacts.ListContacts() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestContactsService_Create(t *testing.T) {
@@ -96,17 +79,11 @@ func TestContactsService_Create(t *testing.T) {
 	contactAttributes := Contact{Label: "Default"}
 
 	contactResponse, err := client.Contacts.CreateContact(context.Background(), accountID, contactAttributes)
-	if err != nil {
-		t.Fatalf("Contacts.CreateContact() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	contact := contactResponse.Data
-	if want, got := int64(1), contact.ID; want != got {
-		t.Fatalf("Contacts.CreateContact() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Default", contact.Label; want != got {
-		t.Fatalf("Contacts.CreateContact() returned Label expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), contact.ID)
+	assert.Equal(t, "Default", contact.Label)
 }
 
 func TestContactsService_Get(t *testing.T) {
@@ -127,10 +104,8 @@ func TestContactsService_Get(t *testing.T) {
 	contactID := int64(1)
 
 	contactResponse, err := client.Contacts.GetContact(context.Background(), accountID, contactID)
-	if err != nil {
-		t.Fatalf("Contacts.GetContact() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	contact := contactResponse.Data
 	wantSingle := &Contact{
 		ID:            1,
@@ -150,10 +125,7 @@ func TestContactsService_Get(t *testing.T) {
 		Email:         "first@example.com",
 		CreatedAt:     "2016-01-19T20:50:26Z",
 		UpdatedAt:     "2016-01-19T20:50:26Z"}
-
-	if !reflect.DeepEqual(contact, wantSingle) {
-		t.Fatalf("Contacts.GetContact() returned %+v, want %+v", contact, wantSingle)
-	}
+	assert.Equal(t, wantSingle, contact)
 }
 
 func TestContactsService_Update(t *testing.T) {
@@ -178,17 +150,11 @@ func TestContactsService_Update(t *testing.T) {
 	contactID := int64(1)
 
 	contactResponse, err := client.Contacts.UpdateContact(context.Background(), accountID, contactID, contactAttributes)
-	if err != nil {
-		t.Fatalf("Contacts.UpdateContact() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	contact := contactResponse.Data
-	if want, got := int64(1), contact.ID; want != got {
-		t.Fatalf("Contacts.UpdateContact() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Default", contact.Label; want != got {
-		t.Fatalf("Contacts.UpdateContact() returned Label expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), contact.ID)
+	assert.Equal(t, "Default", contact.Label)
 }
 
 func TestContactsService_Delete(t *testing.T) {
@@ -209,7 +175,6 @@ func TestContactsService_Delete(t *testing.T) {
 	contactID := int64(1)
 
 	_, err := client.Contacts.DeleteContact(context.Background(), accountID, contactID)
-	if err != nil {
-		t.Fatalf("Contacts.DeleteContact() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

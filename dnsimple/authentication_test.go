@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"golang.org/x/oauth2"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBasicAuthHTTPClient(t *testing.T) {
@@ -15,15 +17,10 @@ func TestBasicAuthHTTPClient(t *testing.T) {
 	rt := h.Transport
 
 	ts, ok := rt.(*BasicAuthTransport)
-	if !ok {
-		t.Fatalf("Expected transport to be a dnsimple.BasicAuthTransport")
-	}
-	if ts.Username != x {
-		t.Fatalf("Username mismathing, expected `%v`, got `%v`", x, ts.Username)
-	}
-	if ts.Password != y {
-		t.Fatalf("Username mismathing, expected `%v`, got `%v`", y, ts.Password)
-	}
+
+	assert.True(t, ok)
+	assert.Equal(t, x, ts.Username)
+	assert.Equal(t, y, ts.Password)
 }
 
 func TestStaticTokenHTTPClient(t *testing.T) {
@@ -33,11 +30,8 @@ func TestStaticTokenHTTPClient(t *testing.T) {
 	rt := h.Transport
 
 	ts, ok := rt.(*oauth2.Transport)
-	if !ok {
-		t.Fatalf("Expected transport to be a oauth2.Transport")
-	}
+
+	assert.True(t, ok)
 	tk, _ := ts.Source.Token()
-	if tk.AccessToken != x {
-		t.Fatalf("Token mismathing, expected `%v`, got `%v`", x, tk.AccessToken)
-	}
+	assert.Equal(t, x, tk.AccessToken)
 }

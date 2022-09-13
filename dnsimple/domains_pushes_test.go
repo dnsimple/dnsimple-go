@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDomainPushPath(t *testing.T) {
-	if want, got := "/1010/pushes", domainPushPath("1010", 0); want != got {
-		t.Errorf("domainPushPath(%v) = %v, want %v", 0, got, want)
-	}
-
-	if want, got := "/1010/pushes/1", domainPushPath("1010", 1); want != got {
-		t.Errorf("domainPushPath(%v) = %v, want %v", 1, got, want)
-	}
+	assert.Equal(t, "/1010/pushes", domainPushPath("1010", 0))
+	assert.Equal(t, "/1010/pushes/1", domainPushPath("1010", 1))
 }
 
 func TestDomainsService_InitiatePush(t *testing.T) {
@@ -39,17 +35,11 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 	pushAttributes := DomainPushAttributes{NewAccountEmail: "admin@target-account.test"}
 
 	pushResponse, err := client.Domains.InitiatePush(context.Background(), "1010", "example.com", pushAttributes)
-	if err != nil {
-		t.Fatalf("Domains.InitiatePush() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	push := pushResponse.Data
-	if want, got := int64(1), push.ID; want != got {
-		t.Fatalf("Domains.InitiatePush() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(2020), push.AccountID; want != got {
-		t.Fatalf("Domains.InitiatePush() returned Account ID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), push.ID)
+	assert.Equal(t, int64(2020), push.AccountID)
 }
 
 func TestDomainsService_DomainsPushesList(t *testing.T) {
@@ -67,25 +57,13 @@ func TestDomainsService_DomainsPushesList(t *testing.T) {
 	})
 
 	pushesResponse, err := client.Domains.ListPushes(context.Background(), "2020", nil)
-	if err != nil {
-		t.Fatalf("Domains.ListPushes() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), pushesResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Domains.ListPushes() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, pushesResponse.Pagination)
 	pushes := pushesResponse.Data
-	if want, got := 2, len(pushes); want != got {
-		t.Errorf("Domains.ListPushes() expected to return %v pushes, got %v", want, got)
-	}
-
-	if want, got := int64(1), pushes[0].ID; want != got {
-		t.Fatalf("Domains.ListPushes() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(2020), pushes[0].AccountID; want != got {
-		t.Fatalf("Domains.ListPushes() returned Account ID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, pushes, 2)
+	assert.Equal(t, int64(1), pushes[0].ID)
+	assert.Equal(t, int64(2020), pushes[0].AccountID)
 }
 
 func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
@@ -102,9 +80,8 @@ func TestDomainsService_DomainsPushesList_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Domains.ListPushes(context.Background(), "2020", &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Domains.ListPushes() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_AcceptPush(t *testing.T) {
@@ -127,9 +104,8 @@ func TestDomainsService_AcceptPush(t *testing.T) {
 	pushAttributes := DomainPushAttributes{ContactID: 2}
 
 	_, err := client.Domains.AcceptPush(context.Background(), "2020", 1, pushAttributes)
-	if err != nil {
-		t.Fatalf("Domains.AcceptPush() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_RejectPush(t *testing.T) {
@@ -147,7 +123,6 @@ func TestDomainsService_RejectPush(t *testing.T) {
 	})
 
 	_, err := client.Domains.RejectPush(context.Background(), "2020", 1)
-	if err != nil {
-		t.Fatalf("Domains.RejectPush() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

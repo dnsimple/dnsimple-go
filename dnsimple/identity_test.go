@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAuthService_Whoami(t *testing.T) {
@@ -22,31 +24,13 @@ func TestAuthService_Whoami(t *testing.T) {
 	})
 
 	whoamiResponse, err := client.Identity.Whoami(context.Background())
-	if err != nil {
-		t.Fatalf("Identity.Whoami() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	whoami := whoamiResponse.Data
-
-	if whoami.User != nil {
-		t.Fatalf("Identity.Whoami() returned not null user: `%v`", whoami.User)
-	}
-
-	if whoami.Account == nil {
-		t.Fatalf("Identity.Whoami() returned null account")
-	}
-
+	assert.Nil(t, whoami.User)
+	assert.NotNil(t, whoami.Account)
 	account := whoami.Account
-
-	if want, got := int64(1), account.ID; want != got {
-		t.Fatalf("Identity.Whoami() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "example-account@example.com", account.Email; want != got {
-		t.Fatalf("Identity.Whoami() returned Email expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := "dnsimple-professional", account.PlanIdentifier; want != got {
-		t.Fatalf("Identity.Whoami() returned PlanIdentifier expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), account.ID)
+	assert.Equal(t, "example-account@example.com", account.Email)
+	assert.Equal(t, "dnsimple-professional", account.PlanIdentifier)
 }
