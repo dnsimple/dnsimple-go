@@ -5,12 +5,12 @@ import (
 	"io"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestVanityNameServers_vanityNameServerPath(t *testing.T) {
-	if want, got := "/1010/vanity/example.com", vanityNameServerPath("1010", "example.com"); want != got {
-		t.Errorf("vanity_name_serverPath(%v,  ) = %v, want %v", "1010", got, want)
-	}
+	assert.Equal(t, "/1010/vanity/example.com", vanityNameServerPath("1010", "example.com"))
 }
 
 func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
@@ -28,16 +28,11 @@ func TestVanityNameServersService_EnableVanityNameServers(t *testing.T) {
 	})
 
 	vanityNameServerResponse, err := client.VanityNameServers.EnableVanityNameServers(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("VanityNameServers.EnableVanityNameServers() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	delegation := vanityNameServerResponse.Data[0].Name
 	wantSingle := "ns1.example.com"
-
-	if delegation != wantSingle {
-		t.Fatalf("VanityNameServers.EnableVanityNameServers() returned %+v, want %+v", delegation, wantSingle)
-	}
+	assert.Equal(t, wantSingle, delegation)
 }
 
 func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
@@ -55,7 +50,6 @@ func TestVanityNameServersService_DisableVanityNameServers(t *testing.T) {
 	})
 
 	_, err := client.VanityNameServers.DisableVanityNameServers(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("VanityNameServers.DisableVanityNameServers() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

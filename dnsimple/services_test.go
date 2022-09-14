@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestServicePath(t *testing.T) {
-	if want, got := "/services", servicePath(""); want != got {
-		t.Errorf("servicePath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/services/name", servicePath("name"); want != got {
-		t.Errorf("servicePath(%v) = %v, want %v", "name", got, want)
-	}
+	assert.Equal(t, "/services", servicePath(""))
+	assert.Equal(t, "/services/name", servicePath("name"))
 }
 
 func TestServicesService_List(t *testing.T) {
@@ -35,25 +31,13 @@ func TestServicesService_List(t *testing.T) {
 	})
 
 	servicesResponse, err := client.Services.ListServices(context.Background(), nil)
-	if err != nil {
-		t.Fatalf("Services.ListServices() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), servicesResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Services.ListServices() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, servicesResponse.Pagination)
 	services := servicesResponse.Data
-	if want, got := 2, len(services); want != got {
-		t.Errorf("Services.ListServices() expected to return %v services, got %v", want, got)
-	}
-
-	if want, got := int64(1), services[0].ID; want != got {
-		t.Fatalf("Services.ListServices() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Service 1", services[0].Name; want != got {
-		t.Fatalf("Services.ListServices() returned Name expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, services, 2)
+	assert.Equal(t, int64(1), services[0].ID)
+	assert.Equal(t, "Service 1", services[0].Name)
 }
 
 func TestServicesService_List_WithOptions(t *testing.T) {
@@ -70,9 +54,8 @@ func TestServicesService_List_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Services.ListServices(context.Background(), &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Services.ListServices() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestServicesService_Get(t *testing.T) {
@@ -92,10 +75,8 @@ func TestServicesService_Get(t *testing.T) {
 	serviceID := "1"
 
 	serviceResponse, err := client.Services.GetService(context.Background(), serviceID)
-	if err != nil {
-		t.Fatalf("Services.GetService() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	service := serviceResponse.Data
 	wantSingle := &Service{
 		ID:               1,
@@ -118,8 +99,5 @@ func TestServicesService_Get(t *testing.T) {
 			},
 		},
 	}
-
-	if !reflect.DeepEqual(service, wantSingle) {
-		t.Fatalf("Services.GetService() returned %+v, want %+v", service, wantSingle)
-	}
+	assert.Equal(t, wantSingle, service)
 }

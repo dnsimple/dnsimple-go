@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTemplatePath(t *testing.T) {
-	if want, got := "/1010/templates", templatePath("1010", ""); want != got {
-		t.Errorf("templatePath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/1010/templates/1", templatePath("1010", "1"); want != got {
-		t.Errorf("templatePath(%v) = %v, want %v", "1", got, want)
-	}
+	assert.Equal(t, "/1010/templates", templatePath("1010", ""))
+	assert.Equal(t, "/1010/templates/1", templatePath("1010", "1"))
 }
 
 func TestTemplatesService_List(t *testing.T) {
@@ -35,25 +31,13 @@ func TestTemplatesService_List(t *testing.T) {
 	})
 
 	templatesResponse, err := client.Templates.ListTemplates(context.Background(), "1010", nil)
-	if err != nil {
-		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), templatesResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Templates.ListTemplates() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, templatesResponse.Pagination)
 	templates := templatesResponse.Data
-	if want, got := 2, len(templates); want != got {
-		t.Errorf("Templates.ListTemplates() expected to return %v templates, got %v", want, got)
-	}
-
-	if want, got := int64(1), templates[0].ID; want != got {
-		t.Fatalf("Templates.ListTemplates() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Alpha", templates[0].Name; want != got {
-		t.Fatalf("Templates.ListTemplates() returned Name expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, templates, 2)
+	assert.Equal(t, int64(1), templates[0].ID)
+	assert.Equal(t, "Alpha", templates[0].Name)
 }
 
 func TestTemplatesService_List_WithOptions(t *testing.T) {
@@ -70,9 +54,8 @@ func TestTemplatesService_List_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Templates.ListTemplates(context.Background(), "1010", &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Templates.ListTemplates() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestTemplatesService_Create(t *testing.T) {
@@ -96,17 +79,11 @@ func TestTemplatesService_Create(t *testing.T) {
 	templateAttributes := Template{Name: "Beta"}
 
 	templateResponse, err := client.Templates.CreateTemplate(context.Background(), accountID, templateAttributes)
-	if err != nil {
-		t.Fatalf("Templates.CreateTemplate() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	template := templateResponse.Data
-	if want, got := int64(1), template.ID; want != got {
-		t.Fatalf("Templates.CreateTemplate() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "Beta", template.Name; want != got {
-		t.Fatalf("Templates.CreateTemplate() returned Label expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), template.ID)
+	assert.Equal(t, "Beta", template.Name)
 }
 
 func TestTemplatesService_Get(t *testing.T) {
@@ -124,10 +101,8 @@ func TestTemplatesService_Get(t *testing.T) {
 	})
 
 	templateResponse, err := client.Templates.GetTemplate(context.Background(), "1010", "1")
-	if err != nil {
-		t.Fatalf("Templates.GetTemplate() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
@@ -137,10 +112,7 @@ func TestTemplatesService_Get(t *testing.T) {
 		Description: "An alpha template.",
 		CreatedAt:   "2016-03-22T11:08:58Z",
 		UpdatedAt:   "2016-03-22T11:08:58Z"}
-
-	if !reflect.DeepEqual(template, wantSingle) {
-		t.Fatalf("Templates.GetTemplate() returned %+v, want %+v", template, wantSingle)
-	}
+	assert.Equal(t, wantSingle, template)
 }
 
 func TestTemplatesService_UpdateTemplate(t *testing.T) {
@@ -159,10 +131,8 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 
 	templateAttributes := Template{Name: "Alpha"}
 	templateResponse, err := client.Templates.UpdateTemplate(context.Background(), "1010", "1", templateAttributes)
-	if err != nil {
-		t.Fatalf("Templates.UpdateTemplate() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	template := templateResponse.Data
 	wantSingle := &Template{
 		ID:          1,
@@ -172,10 +142,7 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 		Description: "An alpha template.",
 		CreatedAt:   "2016-03-22T11:08:58Z",
 		UpdatedAt:   "2016-03-22T11:08:58Z"}
-
-	if !reflect.DeepEqual(template, wantSingle) {
-		t.Fatalf("Templates.UpdateTemplate() returned %+v, want %+v", template, wantSingle)
-	}
+	assert.Equal(t, wantSingle, template)
 }
 
 func TestTemplatesService_DeleteTemplate(t *testing.T) {
@@ -193,7 +160,6 @@ func TestTemplatesService_DeleteTemplate(t *testing.T) {
 	})
 
 	_, err := client.Templates.DeleteTemplate(context.Background(), "1010", "1")
-	if err != nil {
-		t.Fatalf("Templates.DeleteTemplate() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

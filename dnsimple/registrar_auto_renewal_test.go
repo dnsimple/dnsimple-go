@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRegistrarService_EnableDomainAutoRenewal(t *testing.T) {
@@ -22,9 +24,8 @@ func TestRegistrarService_EnableDomainAutoRenewal(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Registrar.EnableDomainAutoRenewal(context.Background(), accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Registrars.EnableDomainAutoRenewal() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestRegistrarService_DisableDomainAutoRenewal(t *testing.T) {
@@ -43,7 +44,6 @@ func TestRegistrarService_DisableDomainAutoRenewal(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Registrar.DisableDomainAutoRenewal(context.Background(), accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Registrars.DisableDomainAutoRenewal() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

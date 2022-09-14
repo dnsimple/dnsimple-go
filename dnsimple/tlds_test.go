@@ -5,8 +5,9 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTldsService_ListTlds(t *testing.T) {
@@ -24,38 +25,16 @@ func TestTldsService_ListTlds(t *testing.T) {
 	})
 
 	tldsResponse, err := client.Tlds.ListTlds(context.Background(), nil)
-	if err != nil {
-		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 98, TotalEntries: 195}), tldsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Tlds.ListTlds() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 2, TotalPages: 98, TotalEntries: 195}, tldsResponse.Pagination)
 	tlds := tldsResponse.Data
-	if want, got := 2, len(tlds); want != got {
-		t.Errorf("Tlds.ListTlds() expected to return %v TLDs, got %v", want, got)
-	}
-
-	if want, got := "ac", tlds[0].Tld; want != got {
-		t.Fatalf("Tlds.ListTlds() returned Tld expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := 1, tlds[0].MinimumRegistration; want != got {
-		t.Fatalf("Tlds.ListTlds() returned MinimumRegistration expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := true, tlds[0].RegistrationEnabled; want != got {
-		t.Fatalf("Tlds.ListTlds() returned RegistrationEnabled expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := true, tlds[0].RenewalEnabled; want != got {
-		t.Fatalf("Tlds.ListTlds() returned RenewalEnabled expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := false, tlds[0].TransferEnabled; want != got {
-		t.Fatalf("Tlds.ListTlds() returned TransferEnabled expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, tlds, 2)
+	assert.Equal(t, "ac", tlds[0].Tld)
+	assert.Equal(t, 1, tlds[0].MinimumRegistration)
+	assert.True(t, tlds[0].RegistrationEnabled)
+	assert.True(t, tlds[0].RenewalEnabled)
+	assert.False(t, tlds[0].TransferEnabled)
 }
 
 func TestTldsService_ListTlds_WithOptions(t *testing.T) {
@@ -72,9 +51,8 @@ func TestTldsService_ListTlds_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Tlds.ListTlds(context.Background(), &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Tlds.ListTlds() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestTldsService_GetTld(t *testing.T) {
@@ -92,38 +70,18 @@ func TestTldsService_GetTld(t *testing.T) {
 	})
 
 	tldResponse, err := client.Tlds.GetTld(context.Background(), "com")
-	if err != nil {
-		t.Fatalf("Tlds.GetTlds() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	tld := tldResponse.Data
-	if want, got := "com", tld.Tld; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := 1, tld.TldType; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.TldType expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := true, tld.WhoisPrivacy; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.WhoisPrivacy expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := false, tld.AutoRenewOnly; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.AutoRenewOnly expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := 1, tld.MinimumRegistration; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.MinimumRegistration expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := true, tld.RegistrationEnabled; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.RegistrationEnabled expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := true, tld.RenewalEnabled; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.RenewalEnabled expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := true, tld.TransferEnabled; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.TransferEnabled expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "ds", tld.DnssecInterfaceType; want != got {
-		t.Fatalf("Tlds.GetTlds() returned Tld.DnssecInterfaceType expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, "com", tld.Tld)
+	assert.Equal(t, 1, tld.TldType)
+	assert.True(t, tld.WhoisPrivacy)
+	assert.False(t, tld.AutoRenewOnly)
+	assert.Equal(t, 1, tld.MinimumRegistration)
+	assert.True(t, tld.RegistrationEnabled)
+	assert.True(t, tld.RenewalEnabled)
+	assert.True(t, tld.TransferEnabled)
+	assert.Equal(t, "ds", tld.DnssecInterfaceType)
 }
 
 func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
@@ -141,16 +99,9 @@ func TestTldsService_GetTldExtendedAttributes(t *testing.T) {
 	})
 
 	tldResponse, err := client.Tlds.GetTldExtendedAttributes(context.Background(), "com")
-	if err != nil {
-		t.Fatalf("Tlds.GetTldExtendedAttributes() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	attributes := tldResponse.Data
-	if want, got := 4, len(attributes); want != got {
-		t.Errorf("Tlds.GetTldExtendedAttributes() expected to return %v TLDs, got %v", want, got)
-	}
-
-	if want, got := "uk_legal_type", attributes[0].Name; want != got {
-		t.Fatalf("Tlds.GetTldExtendedAttributes() returned Tld expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, attributes, 4)
+	assert.Equal(t, "uk_legal_type", attributes[0].Name)
 }
