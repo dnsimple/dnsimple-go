@@ -15,7 +15,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -212,13 +212,8 @@ func TestClient_NotFound(t *testing.T) {
 	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
 
 	var got *ErrorResponse
-	if !errors.As(err, &got) {
-		t.Errorf("errors must respond an ErrorResponse")
-	}
-
-	if got.Errors != nil {
-		t.Errorf("validation errors only happen on validation responses")
-	}
+	assert.ErrorAs(t, err, &got)
+	assert.Empty(t, got.Errors)
 }
 
 func TestClient_ValidationError(t *testing.T) {
@@ -235,10 +230,7 @@ func TestClient_ValidationError(t *testing.T) {
 	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
 
 	var got *ErrorResponse
-	if !errors.As(err, &got) {
-		t.Errorf("validation errors must respond an ErrorResponse")
-	}
-
+	assert.ErrorAs(t, err, &got)
 	want := map[string][]string{
 		"address1":       {"can't be blank"},
 		"city":           {"can't be blank"},
@@ -250,8 +242,5 @@ func TestClient_ValidationError(t *testing.T) {
 		"postal_code":    {"can't be blank"},
 		"state_province": {"can't be blank"},
 	}
-
-	if diff := cmp.Diff(want, got.Errors); diff != "" {
-		t.Errorf("validation responses mismatch (-want +got):\n%s", diff)
-	}
+	assert.Equal(t, want, got.Errors)
 }
