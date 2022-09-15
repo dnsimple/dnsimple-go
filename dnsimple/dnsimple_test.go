@@ -213,7 +213,7 @@ func TestClient_NotFound(t *testing.T) {
 
 	var got *ErrorResponse
 	assert.ErrorAs(t, err, &got)
-	assert.Empty(t, got.Errors)
+	assert.Empty(t, got.AttributeErrors)
 }
 
 func TestClient_ValidationError(t *testing.T) {
@@ -242,5 +242,5 @@ func TestClient_ValidationError(t *testing.T) {
 		"postal_code":    {"can't be blank"},
 		"state_province": {"can't be blank"},
 	}
-	assert.Equal(t, want, got.Errors)
+	assert.Equal(t, want, got.AttributeErrors)
 }
