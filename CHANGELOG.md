@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## main
+
+- NEW: Expose AttributeErrors in ErrorResponse for getting detailed information about validation errors
+
 ## 0.80.0
 
 - CHANGED: Deprecate Certificate's `contact_id` (dnsimple/dnsimple-go#111)

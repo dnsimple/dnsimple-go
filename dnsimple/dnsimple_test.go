@@ -2,9 +2,11 @@ package dnsimple
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +14,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -192,4 +196,51 @@ func TestClient_NewRequest_WithBody(t *testing.T) {
 	if err == nil {
 		t.Errorf("newRequest with body expected error with blank string")
 	}
+}
+
+func TestClient_NotFound(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/notfound-certificate.http")
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
+
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Empty(t, got.AttributeErrors)
+}
+
+func TestClient_ValidationError(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/validation-error.http")
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	_, err := client.makeRequest(context.Background(), "POST", "/", nil, nil, nil)
+
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	want := map[string][]string{
+		"address1":       {"can't be blank"},
+		"city":           {"can't be blank"},
+		"country":        {"can't be blank"},
+		"email":          {"can't be blank", "is an invalid email address"},
+		"first_name":     {"can't be blank"},
+		"last_name":      {"can't be blank"},
+		"phone":          {"can't be blank", "is probably not a phone number"},
+		"postal_code":    {"can't be blank"},
+		"state_province": {"can't be blank"},
+	}
+	assert.Equal(t, want, got.AttributeErrors)
 }

@@ -111,8 +111,7 @@ func NewClient(httpClient *http.Client) *Client {
 // When a custom user agent is provided, the final user agent is the combination of the custom user agent
 // prepended by the default user agent.
 //
-//     customAgentFlag dnsimple-go/1.0
-//
+//	customAgentFlag dnsimple-go/1.0
 func (c *Client) SetUserAgent(ua string) {
 	c.UserAgent = ua
 }
@@ -121,13 +120,12 @@ func (c *Client) SetUserAgent(ua string) {
 //
 // If no custom user agent is provided, the default user agent is used.
 //
-//     dnsimple-go/1.0
+//	dnsimple-go/1.0
 //
 // If a custom user agent is provided, the final user agent is the combination of the custom user agent
 // prepended by the default user agent.
 //
-//     customAgentFlag dnsimple-go/1.0
-//
+//	customAgentFlag dnsimple-go/1.0
 func formatUserAgent(customUserAgent string) string {
 	if customUserAgent == "" {
 		return defaultUserAgent
@@ -312,6 +310,9 @@ type ErrorResponse struct {
 
 	// human-readable message
 	Message string `json:"message"`
+
+	// detailed validation errors
+	AttributeErrors map[string][]string `json:"errors"`
 }
 
 // Error implements the error interface.
