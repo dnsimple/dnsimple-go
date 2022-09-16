@@ -9,9 +9,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -32,28 +33,17 @@ func teardownMockServer() {
 	server.Close()
 }
 
-// TODO(@appops) Remove auxiliary functions
 func testMethod(t *testing.T, r *http.Request, want string) {
-	if got := r.Method; want != got {
-		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, want, r.Method)
 }
 
 func testQuery(t *testing.T, r *http.Request, want url.Values) {
-	if got := r.URL.Query(); !reflect.DeepEqual(want, got) {
-		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
-	}
-}
-
-func testHeader(t *testing.T, r *http.Request, name, want string) {
-	if got := r.Header.Get(name); want != got {
-		t.Errorf("Request() %v expected to be `%#v`, got `%#v`", name, want, got)
-	}
+	assert.Equal(t, want, r.URL.Query())
 }
 
 func testHeaders(t *testing.T, r *http.Request) {
-	testHeader(t, r, "Accept", "application/json")
-	testHeader(t, r, "User-Agent", defaultUserAgent)
+	assert.Equal(t, "application/json", r.Header.Get("Accept"))
+	assert.Equal(t, defaultUserAgent, r.Header.Get("User-Agent"))
 }
 
 func getRequestJSON(r *http.Request) (map[string]interface{}, error) {
@@ -71,13 +61,8 @@ func getRequestJSON(r *http.Request) (map[string]interface{}, error) {
 func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{}) {
 	data, err := getRequestJSON(r)
 
-	if err != nil {
-		t.Fatalf("Could not decode json body: %v", err)
-	}
-
-	if !reflect.DeepEqual(values, data) {
-		t.Errorf("Request parameters = %#v, want %#v", data, values)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, data, values)
 }
 
 func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
@@ -85,20 +70,15 @@ func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 
 	body, _ := ioutil.ReadAll(r.Body)
 
-	if err := json.Unmarshal(body, &data); err != nil {
-		t.Fatalf("Could not decode json body: %v", err)
-	}
+	err := json.Unmarshal(body, &data)
 
-	if !reflect.DeepEqual(values, data) {
-		t.Errorf("Request parameters = %#v, want %#v", data, values)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, data, values)
 }
 
 func readHTTPFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../fixtures.http" + filename)
-	if err != nil {
-		t.Fatalf("Unable to read HTTP fixture: %v", err)
-	}
+	assert.NoError(t, err)
 
 	// Terrible hack
 	// Some fixtures have \n and not \r\n
@@ -113,9 +93,7 @@ func readHTTPFixture(t *testing.T, filename string) string {
 
 func httpResponseFixture(t *testing.T, filename string) *http.Response {
 	resp, err := http.ReadResponse(bufio.NewReader(strings.NewReader(readHTTPFixture(t, filename))), nil)
-	if err != nil {
-		t.Fatalf("Unable to create http.Response from fixture: %v", err)
-	}
+	assert.NoError(t, err)
 	// resp.Body.Close()
 	return resp
 }
@@ -123,9 +101,7 @@ func httpResponseFixture(t *testing.T, filename string) *http.Response {
 func TestNewClient(t *testing.T) {
 	c := NewClient(http.DefaultClient)
 
-	if c.BaseURL != defaultBaseURL {
-		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL, defaultBaseURL)
-	}
+	assert.Equal(t, defaultBaseURL, c.BaseURL)
 }
 
 func TestClient_SetUserAgent(t *testing.T) {
@@ -133,15 +109,11 @@ func TestClient_SetUserAgent(t *testing.T) {
 	customAgent := "custom-agent/0.1"
 
 	c.SetUserAgent(customAgent)
-	if want, got := "custom-agent/0.1", c.UserAgent; want != got {
-		t.Errorf("UserAgent not assigned, expected %v, got %v", want, got)
-	}
+	assert.Equal(t, "custom-agent/0.1", c.UserAgent)
 
 	req, _ := c.newRequest("GET", "/foo", nil)
 
-	if want, got := "custom-agent/0.1 "+defaultUserAgent, req.Header.Get("User-Agent"); want != got {
-		t.Errorf("Incorrect User-Agent Header, expected %v, got %v", want, got)
-	}
+	assert.Equal(t, "custom-agent/0.1 "+defaultUserAgent, req.Header.Get("User-Agent"))
 }
 
 func TestClient_NewRequest(t *testing.T) {
@@ -151,28 +123,17 @@ func TestClient_NewRequest(t *testing.T) {
 	inURL, outURL := "/foo", "https://go.example.com/foo"
 	req, _ := c.newRequest("GET", inURL, nil)
 
-	// test that relative URL was expanded with the proper BaseURL
-	if req.URL.String() != outURL {
-		t.Errorf("Incorrect request URL, expected %v, got %v", outURL, req.URL.String())
-	}
-
-	// test that default user-agent is attached to the request
-	ua := req.Header.Get("User-Agent")
-	if ua != defaultUserAgent {
-		t.Errorf("Incorrect request User-Agent, expected %v, got %v", defaultUserAgent, ua)
-	}
+	assert.Equal(t, outURL, req.URL.String())
+	assert.Equal(t, defaultUserAgent, req.Header.Get("User-Agent"))
 }
 
 func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 	c := NewClient(http.DefaultClient)
 	c.UserAgent = "AwesomeClient"
+
 	req, _ := c.newRequest("GET", "/", nil)
 
-	// test that default user-agent is attached to the request
-	ua := req.Header.Get("User-Agent")
-	if want := fmt.Sprintf("AwesomeClient %s", defaultUserAgent); ua != want {
-		t.Errorf("Incorrect request User-Agent, expected %v, got %v", want, ua)
-	}
+	assert.Equal(t, fmt.Sprintf("AwesomeClient %s", defaultUserAgent), req.Header.Get("User-Agent"))
 }
 
 type badObject struct {
@@ -190,7 +151,5 @@ func TestClient_NewRequest_WithBody(t *testing.T) {
 	badObject := badObject{}
 	_, err := c.newRequest("GET", inURL, &badObject)
 
-	if err == nil {
-		t.Errorf("newRequest with body expected error with blank string")
-	}
+	assert.Error(t, err)
 }
