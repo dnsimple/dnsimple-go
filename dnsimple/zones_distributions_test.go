@@ -4,8 +4,9 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestZonesService_CheckZoneDistribution(t *testing.T) {
@@ -26,18 +27,13 @@ func TestZonesService_CheckZoneDistribution(t *testing.T) {
 	zoneName := "example.com"
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
-	if err != nil {
-		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zone := zoneDistributionResponse.Data
 	wantSingle := &ZoneDistribution{
 		Distributed: true,
 	}
-
-	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.CheckZoneDistribution() returned %+v, want %+v", zone, wantSingle)
-	}
+	assert.Equal(t, wantSingle, zone)
 }
 
 func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
@@ -58,18 +54,13 @@ func TestZonesService_CheckZoneDistributionFailure(t *testing.T) {
 	zoneName := "example.com"
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
-	if err != nil {
-		t.Fatalf("Zones.CheckZoneDistribution() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zone := zoneDistributionResponse.Data
 	wantSingle := &ZoneDistribution{
 		Distributed: false,
 	}
-
-	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.CheckZoneDistribution() returned %+v, want %+v", zone, wantSingle)
-	}
+	assert.Equal(t, wantSingle, zone)
 }
 
 func TestZonesService_CheckZoneDistributionError(t *testing.T) {
@@ -90,13 +81,9 @@ func TestZonesService_CheckZoneDistributionError(t *testing.T) {
 	zoneName := "example.com"
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneDistribution(context.Background(), accountID, zoneName)
-	if err == nil {
-		t.Fatalf("Zones.CheckZoneDistribution() expected to return an error: %v", zoneDistributionResponse)
-	}
 
-	if zoneDistributionResponse != nil {
-		t.Fatalf("Zones.CheckZoneDistribution() expected to return a nil response: %v", zoneDistributionResponse)
-	}
+	assert.Error(t, err)
+	assert.Nil(t, zoneDistributionResponse)
 }
 
 func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
@@ -118,18 +105,10 @@ func TestZonesService_CheckZoneRecordDistribution(t *testing.T) {
 	recordID := int64(1)
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
-	if err != nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zone := zoneDistributionResponse.Data
-	wantSingle := &ZoneDistribution{
-		Distributed: true,
-	}
-
-	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() returned %+v, want %+v", zone, wantSingle)
-	}
+	assert.Equal(t, &ZoneDistribution{Distributed: true}, zone)
 }
 
 func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
@@ -151,18 +130,10 @@ func TestZonesService_CheckZoneRecordDistributionFailure(t *testing.T) {
 	recordID := int64(1)
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
-	if err != nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zone := zoneDistributionResponse.Data
-	wantSingle := &ZoneDistribution{
-		Distributed: false,
-	}
-
-	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() returned %+v, want %+v", zone, wantSingle)
-	}
+	assert.Equal(t, &ZoneDistribution{Distributed: false}, zone)
 }
 
 func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
@@ -184,11 +155,7 @@ func TestZonesService_CheckZoneRecordDistributionError(t *testing.T) {
 	recordID := int64(1)
 
 	zoneDistributionResponse, err := client.Zones.CheckZoneRecordDistribution(context.Background(), accountID, zoneName, recordID)
-	if err == nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return an error: %v", zoneDistributionResponse)
-	}
 
-	if zoneDistributionResponse != nil {
-		t.Fatalf("Zones.CheckZoneRecordDistribution() expected to return a nil response: %v", zoneDistributionResponse)
-	}
+	assert.Error(t, err)
+	assert.Nil(t, zoneDistributionResponse)
 }

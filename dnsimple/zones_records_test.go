@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestZoneRecordPath(t *testing.T) {
-	if want, got := "/1010/zones/example.com/records", zoneRecordPath("1010", "example.com", 0); want != got {
-		t.Errorf("zoneRecordPath(%v) = %v, want %v", 0, got, want)
-	}
-
-	if want, got := "/1010/zones/example.com/records/1", zoneRecordPath("1010", "example.com", 1); want != got {
-		t.Errorf("zoneRecordPath(%v) = %v, want %v", 1, got, want)
-	}
+	assert.Equal(t, "/1010/zones/example.com/records", zoneRecordPath("1010", "example.com", 0))
+	assert.Equal(t, "/1010/zones/example.com/records/1", zoneRecordPath("1010", "example.com", 1))
 }
 
 func TestZonesService_ListRecords(t *testing.T) {
@@ -34,28 +30,14 @@ func TestZonesService_ListRecords(t *testing.T) {
 	})
 
 	recordsResponse, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", nil)
-	if err != nil {
-		t.Fatalf("Zones.ListRecords() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 5}), recordsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Zones.ListRecords() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 5}, recordsResponse.Pagination)
 	records := recordsResponse.Data
-	if want, got := 5, len(records); want != got {
-		t.Errorf("Zones.ListRecords() expected to return %v contacts, got %v", want, got)
-	}
-
-	if want, got := int64(1), records[0].ID; want != got {
-		t.Fatalf("Zones.ListRecords() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "", records[0].Name; want != got {
-		t.Fatalf("Zones.ListRecords() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-	if !reflect.DeepEqual([]string{"global"}, records[0].Regions) {
-		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", records[0].Regions, []string{"global"})
-	}
+	assert.Len(t, records, 5)
+	assert.Equal(t, int64(1), records[0].ID)
+	assert.Equal(t, "", records[0].Name)
+	assert.Equal(t, []string{"global"}, records[0].Regions)
 }
 
 func TestZonesService_ListRecords_WithOptions(t *testing.T) {
@@ -79,9 +61,8 @@ func TestZonesService_ListRecords_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{String("example"), String("www"), String("A"), ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
-	if err != nil {
-		t.Fatalf("Zones.ListRecords() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestZonesService_ListRecords_WithOptionsSomeBlank(t *testing.T) {
@@ -103,9 +84,8 @@ func TestZonesService_ListRecords_WithOptionsSomeBlank(t *testing.T) {
 	})
 
 	_, err := client.Zones.ListRecords(context.Background(), "1010", "example.com", &ZoneRecordListOptions{Name: String("example"), Type: String("A"), ListOptions: ListOptions{Page: Int(2), Sort: String("name,expiration:desc")}})
-	if err != nil {
-		t.Fatalf("Zones.ListRecords() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestZonesService_CreateRecord(t *testing.T) {
@@ -129,23 +109,13 @@ func TestZonesService_CreateRecord(t *testing.T) {
 	recordValues := ZoneRecordAttributes{Name: String("foo"), Content: "mxa.example.com", Type: "MX"}
 
 	recordResponse, err := client.Zones.CreateRecord(context.Background(), accountID, "example.com", recordValues)
-	if err != nil {
-		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	record := recordResponse.Data
-	if want, got := int64(1), record.ID; want != got {
-		t.Fatalf("Zones.CreateRecord() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "www", record.Name; want != got {
-		t.Fatalf("Zones.CreateRecord() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "A", record.Type; want != got {
-		t.Fatalf("Zones.CreateRecord() returned Type expected to be `%v`, got `%v`", want, got)
-	}
-	if !reflect.DeepEqual([]string{"global"}, record.Regions) {
-		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", record.Regions, []string{"global"})
-	}
+	assert.Equal(t, int64(1), record.ID)
+	assert.Equal(t, "www", record.Name)
+	assert.Equal(t, "A", record.Type)
+	assert.Equal(t, []string{"global"}, record.Regions)
 }
 
 func TestZonesService_CreateRecord_BlankName(t *testing.T) {
@@ -168,17 +138,11 @@ func TestZonesService_CreateRecord_BlankName(t *testing.T) {
 	recordValues := ZoneRecordAttributes{Name: String(""), Content: "127.0.0.1", Type: "A"}
 
 	recordResponse, err := client.Zones.CreateRecord(context.Background(), "1010", "example.com", recordValues)
-	if err != nil {
-		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	record := recordResponse.Data
-	if want, got := "", record.Name; want != got {
-		t.Fatalf("Zones.CreateRecord() returned Name expected to be `%v`, got `%v`", want, got)
-	}
-	if !reflect.DeepEqual([]string{"global"}, record.Regions) {
-		t.Fatalf("Zones.ListRecords() returned %+v, want %+v", record.Regions, []string{"global"})
-	}
+	assert.Equal(t, "", record.Name)
+	assert.Equal(t, []string{"global"}, record.Regions)
 }
 
 func TestZonesService_CreateRecord_Regions(t *testing.T) {
@@ -199,9 +163,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{}}
 
-	if _, err := client.Zones.CreateRecord(context.Background(), "1", "example.com", recordValues); err != nil {
-		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
-	}
+	_, err := client.Zones.CreateRecord(context.Background(), "1", "example.com", recordValues)
+	assert.NoError(t, err)
 
 	mux.HandleFunc("/v2/2/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
@@ -215,9 +178,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
 
-	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
-		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
-	}
+	_, err = client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues)
+	assert.NoError(t, err)
 
 	mux.HandleFunc("/v2/3/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
@@ -231,9 +193,8 @@ func TestZonesService_CreateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
 
-	if _, err := client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues); err != nil {
-		t.Fatalf("Zones.CreateRecord() returned error: %v", err)
-	}
+	_, err = client.Zones.CreateRecord(context.Background(), "2", "example.com", recordValues)
+	assert.NoError(t, err)
 }
 
 func TestZonesService_GetRecord(t *testing.T) {
@@ -253,10 +214,8 @@ func TestZonesService_GetRecord(t *testing.T) {
 	accountID := "1010"
 
 	recordResponse, err := client.Zones.GetRecord(context.Background(), accountID, "example.com", 1539)
-	if err != nil {
-		t.Fatalf("Zones.GetRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	record := recordResponse.Data
 	wantSingle := &ZoneRecord{
 		ID:           5,
@@ -271,10 +230,7 @@ func TestZonesService_GetRecord(t *testing.T) {
 		Regions:      []string{"SV1", "IAD"},
 		CreatedAt:    "2016-10-05T09:51:35Z",
 		UpdatedAt:    "2016-10-05T09:51:35Z"}
-
-	if !reflect.DeepEqual(record, wantSingle) {
-		t.Fatalf("Zones.GetRecord() returned %+v, want %+v", record, wantSingle)
-	}
+	assert.Equal(t, wantSingle, record)
 }
 
 func TestZonesService_UpdateRecord(t *testing.T) {
@@ -298,17 +254,11 @@ func TestZonesService_UpdateRecord(t *testing.T) {
 	recordValues := ZoneRecordAttributes{Name: String("foo"), Content: "127.0.0.1"}
 
 	recordResponse, err := client.Zones.UpdateRecord(context.Background(), accountID, "example.com", 5, recordValues)
-	if err != nil {
-		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	record := recordResponse.Data
-	if want, got := int64(5), record.ID; want != got {
-		t.Fatalf("Zones.UpdateRecord() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "mxb.example.com", record.Content; want != got {
-		t.Fatalf("Zones.UpdateRecord() returned Label expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(5), record.ID)
+	assert.Equal(t, "mxb.example.com", record.Content)
 }
 
 func TestZonesService_UpdateRecord_NameNotProvided(t *testing.T) {
@@ -328,9 +278,8 @@ func TestZonesService_UpdateRecord_NameNotProvided(t *testing.T) {
 	recordValues := ZoneRecordAttributes{Content: "127.0.0.1"}
 
 	_, err := client.Zones.UpdateRecord(context.Background(), "1010", "example.com", 5, recordValues)
-	if err != nil {
-		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestZonesService_UpdateRecord_Regions(t *testing.T) {
@@ -351,9 +300,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{}}
 
-	if _, err := client.Zones.UpdateRecord(context.Background(), "1", "example.com", 1, recordValues); err != nil {
-		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
-	}
+	_, err := client.Zones.UpdateRecord(context.Background(), "1", "example.com", 1, recordValues)
+	assert.NoError(t, err)
 
 	mux.HandleFunc("/v2/2/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
@@ -367,9 +315,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
 
-	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
-		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
-	}
+	_, err = client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues)
+	assert.NoError(t, err)
 
 	mux.HandleFunc("/v2/3/zones/example.com/records/1", func(w http.ResponseWriter, r *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
@@ -383,9 +330,8 @@ func TestZonesService_UpdateRecord_Regions(t *testing.T) {
 
 	recordValues = ZoneRecordAttributes{Name: String("foo"), Regions: []string{"global"}}
 
-	if _, err := client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues); err != nil {
-		t.Fatalf("Zones.UpdateRecord() returned error: %v", err)
-	}
+	_, err = client.Zones.UpdateRecord(context.Background(), "2", "example.com", 1, recordValues)
+	assert.NoError(t, err)
 }
 
 func TestZonesService_DeleteRecord(t *testing.T) {
@@ -405,7 +351,6 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Zones.DeleteRecord(context.Background(), accountID, "example.com", 2)
-	if err != nil {
-		t.Fatalf("Zones.DeleteRecord() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

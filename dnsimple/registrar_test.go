@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRegistrarService_CheckDomain(t *testing.T) {
@@ -24,14 +26,10 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 	})
 
 	checkResponse, err := client.Registrar.CheckDomain(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("Registrar.CheckDomain() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	check := checkResponse.Data
-	if want, got := "ruby.codes", check.Domain; want != got {
-		t.Fatalf("Registrar.CheckDomain() returned Domain expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, "ruby.codes", check.Domain)
 }
 
 func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
@@ -49,14 +47,10 @@ func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
 	})
 
 	priceResponse, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", nil)
-	if err != nil {
-		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	price := priceResponse.Data
-	if want, got := "109.00", price.PremiumPrice; want != got {
-		t.Fatalf("Registrar.GetDomainPremiumPrice() returned Domain expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, "109.00", price.PremiumPrice)
 }
 
 func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
@@ -78,9 +72,8 @@ func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
-	if err != nil {
-		t.Fatalf("Registrar.GetDomainPremiumPrice() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestRegistrarService_GetDomainPrices(t *testing.T) {
@@ -98,30 +91,14 @@ func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	})
 
 	checkResponse, err := client.Registrar.GetDomainPrices(context.Background(), "1010", "bingo.pizza")
-	if err != nil {
-		t.Fatalf("Registrar.GetDomainPrices() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	check := checkResponse.Data
-	if want, got := "bingo.pizza", check.Domain; want != got {
-		t.Fatalf("Registrar.GetDomainPrices() returned Domain expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := true, check.Premium; want != got {
-		t.Fatalf("Registrar.GetDomainPrices() returned Premium expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := float64(20.0), check.RegistrationPrice; want != got {
-		t.Fatalf("Registrar.GetDomainPrices() returned RegistrationPrice expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := float64(20.0), check.RenewalPrice; want != got {
-		t.Fatalf("Registrar.GetDomainPrices() returned RenewalPrice expected to be `%v`, got `%v`", want, got)
-	}
-
-	if want, got := float64(20.0), check.TransferPrice; want != got {
-		t.Fatalf("Registrar.GetDomainPrices() returned TransferPrice expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, "bingo.pizza", check.Domain)
+	assert.True(t, check.Premium)
+	assert.Equal(t, float64(20.0), check.RegistrationPrice)
+	assert.Equal(t, float64(20.0), check.RenewalPrice)
+	assert.Equal(t, float64(20.0), check.TransferPrice)
 }
 
 func TestRegistrarService_RegisterDomain(t *testing.T) {
@@ -144,17 +121,11 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	registerRequest := &RegisterDomainInput{RegistrantID: 2}
 
 	registrationResponse, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
-	if err != nil {
-		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	registration := registrationResponse.Data
-	if want, got := int64(1), registration.ID; want != got {
-		t.Fatalf("Registrar.RegisterDomain() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(999), registration.DomainID; want != got {
-		t.Fatalf("Registrar.RegisterDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), registration.ID)
+	assert.Equal(t, int64(999), registration.DomainID)
 }
 
 func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
@@ -176,9 +147,9 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 
 	registerRequest := &RegisterDomainInput{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
-	if _, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest); err != nil {
-		t.Fatalf("Registrar.RegisterDomain() returned error: %v", err)
-	}
+	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
+
+	assert.NoError(t, err)
 }
 
 func TestRegistrarService_TransferDomain(t *testing.T) {
@@ -201,17 +172,11 @@ func TestRegistrarService_TransferDomain(t *testing.T) {
 	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3"}
 
 	transferResponse, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
-	if err != nil {
-		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	transfer := transferResponse.Data
-	if want, got := int64(1), transfer.ID; want != got {
-		t.Fatalf("Registrar.TransferDomain() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(999), transfer.DomainID; want != got {
-		t.Fatalf("Registrar.TransferDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), transfer.ID)
+	assert.Equal(t, int64(999), transfer.DomainID)
 }
 
 func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
@@ -233,9 +198,9 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 
 	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
 
-	if _, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest); err != nil {
-		t.Fatalf("Registrar.TransferDomain() returned error: %v", err)
-	}
+	_, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
+
+	assert.NoError(t, err)
 }
 
 func TestRegistrarService_TransferDomainOut(t *testing.T) {
@@ -253,9 +218,8 @@ func TestRegistrarService_TransferDomainOut(t *testing.T) {
 	})
 
 	_, err := client.Registrar.TransferDomainOut(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("Registrar.TransferOut() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestRegistrarService_GetDomainTransfer(t *testing.T) {
@@ -273,9 +237,8 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 	})
 
 	domainTransferResponse, err := client.Registrar.GetDomainTransfer(context.Background(), "1010", "example.com", 361)
-	if err != nil {
-		t.Fatalf("Registrar.GetDomainTransfer() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
 		ID:                int64(361),
@@ -287,10 +250,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		StatusDescription: "Canceled by customer",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:10:01Z"}
-
-	if !reflect.DeepEqual(domainTransfer, wantSingle) {
-		t.Fatalf("Registrar.GetDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)
-	}
+	assert.Equal(t, wantSingle, domainTransfer)
 }
 
 func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
@@ -308,9 +268,8 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 	})
 
 	domainTransferResponse, err := client.Registrar.CancelDomainTransfer(context.Background(), "1010", "example.com", 361)
-	if err != nil {
-		t.Fatalf("Registrar.CancelDomainTransfer() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 	domainTransfer := domainTransferResponse.Data
 	wantSingle := &DomainTransfer{
 		ID:                int64(361),
@@ -322,10 +281,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		StatusDescription: "",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:08:04Z"}
-
-	if !reflect.DeepEqual(domainTransfer, wantSingle) {
-		t.Fatalf("Registrar.CancelDomainTransfer() returned %+v, want %+v", domainTransfer, wantSingle)
-	}
+	assert.Equal(t, wantSingle, domainTransfer)
 }
 
 func TestRegistrarService_RenewDomain(t *testing.T) {
@@ -346,15 +302,9 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	})
 
 	renewalResponse, err := client.Registrar.RenewDomain(context.Background(), "1010", "example.com", nil)
-	if err != nil {
-		t.Fatalf("Registrar.RenewDomain() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	renewal := renewalResponse.Data
-	if want, got := int64(1), renewal.ID; want != got {
-		t.Fatalf("Registrar.RenewDomain() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := int64(999), renewal.DomainID; want != got {
-		t.Fatalf("Registrar.RenewDomain() returned DomainID expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), renewal.ID)
+	assert.Equal(t, int64(999), renewal.DomainID)
 }

@@ -4,8 +4,9 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRegistrarService_GetDomainDelegation(t *testing.T) {
@@ -23,16 +24,11 @@ func TestRegistrarService_GetDomainDelegation(t *testing.T) {
 	})
 
 	delegationResponse, err := client.Registrar.GetDomainDelegation(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("Registrar.GetDomainDelegation() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	delegation := delegationResponse.Data
 	wantSingle := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
-
-	if !reflect.DeepEqual(delegation, wantSingle) {
-		t.Fatalf("Registrar.GetDomainDelegation() returned %+v, want %+v", delegation, wantSingle)
-	}
+	assert.Equal(t, wantSingle, delegation)
 }
 
 func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
@@ -55,16 +51,11 @@ func TestRegistrarService_ChangeDomainDelegation(t *testing.T) {
 	newDelegation := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com"}
 
 	delegationResponse, err := client.Registrar.ChangeDomainDelegation(context.Background(), "1010", "example.com", newDelegation)
-	if err != nil {
-		t.Fatalf("Registrar.ChangeDomainDelegation() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	delegation := delegationResponse.Data
 	wantSingle := &Delegation{"ns1.dnsimple.com", "ns2.dnsimple.com", "ns3.dnsimple.com", "ns4.dnsimple.com"}
-
-	if !reflect.DeepEqual(delegation, wantSingle) {
-		t.Fatalf("Registrar.ChangeDomainDelegation() returned %+v, want %+v", delegation, wantSingle)
-	}
+	assert.Equal(t, wantSingle, delegation)
 }
 
 func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
@@ -87,16 +78,11 @@ func TestRegistrarService_ChangeDomainDelegationToVanity(t *testing.T) {
 	newDelegation := &Delegation{"ns1.example.com", "ns2.example.com"}
 
 	delegationResponse, err := client.Registrar.ChangeDomainDelegationToVanity(context.Background(), "1010", "example.com", newDelegation)
-	if err != nil {
-		t.Fatalf("Registrar.ChangeDomainDelegationToVanity() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	delegation := delegationResponse.Data[0].Name
 	wantSingle := "ns1.example.com"
-
-	if delegation != wantSingle {
-		t.Fatalf("Registrar.ChangeDomainDelegationToVanity() returned %+v, want %+v", delegation, wantSingle)
-	}
+	assert.Equal(t, wantSingle, delegation)
 }
 
 func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
@@ -114,7 +100,6 @@ func TestRegistrarService_ChangeDomainDelegationFromVanity(t *testing.T) {
 	})
 
 	_, err := client.Registrar.ChangeDomainDelegationFromVanity(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Fatalf("Registrar.ChangeDomainDelegationFromVanity() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTemplatesService_ApplyTemplate(t *testing.T) {
@@ -22,7 +24,6 @@ func TestTemplatesService_ApplyTemplate(t *testing.T) {
 	})
 
 	_, err := client.Templates.ApplyTemplate(context.Background(), "1010", "1", "example.com")
-	if err != nil {
-		t.Fatalf("Templates.ApplyTemplate() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

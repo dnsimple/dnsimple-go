@@ -4,18 +4,14 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWebhooks_webhookPath(t *testing.T) {
-	if want, got := "/1010/webhooks", webhookPath("1010", 0); want != got {
-		t.Errorf("webhookPath(%v,  ) = %v, want %v", "1010", got, want)
-	}
-
-	if want, got := "/1010/webhooks/1", webhookPath("1010", 1); want != got {
-		t.Errorf("webhookPath(%v, 1) = %v, want %v", "1010", got, want)
-	}
+	assert.Equal(t, "/1010/webhooks", webhookPath("1010", 0))
+	assert.Equal(t, "/1010/webhooks/1", webhookPath("1010", 1))
 }
 
 func TestWebhooksService_ListWebhooks(t *testing.T) {
@@ -33,21 +29,12 @@ func TestWebhooksService_ListWebhooks(t *testing.T) {
 	})
 
 	webhooksResponse, err := client.Webhooks.ListWebhooks(context.Background(), "1010", nil)
-	if err != nil {
-		t.Fatalf("Webhooks.List() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	webhooks := webhooksResponse.Data
-	if want, got := 2, len(webhooks); want != got {
-		t.Errorf("Webhooks.List() expected to return %v webhooks, got %v", want, got)
-	}
-
-	if want, got := int64(1), webhooks[0].ID; want != got {
-		t.Fatalf("Webhooks.List() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "https://webhook.test", webhooks[0].URL; want != got {
-		t.Fatalf("Webhooks.List() returned URL expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, webhooks, 2)
+	assert.Equal(t, int64(1), webhooks[0].ID)
+	assert.Equal(t, "https://webhook.test", webhooks[0].URL)
 }
 
 func TestWebhooksService_CreateWebhook(t *testing.T) {
@@ -70,17 +57,11 @@ func TestWebhooksService_CreateWebhook(t *testing.T) {
 	webhookAttributes := Webhook{URL: "https://webhook.test"}
 
 	webhookResponse, err := client.Webhooks.CreateWebhook(context.Background(), "1010", webhookAttributes)
-	if err != nil {
-		t.Fatalf("Webhooks.Create() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	webhook := webhookResponse.Data
-	if want, got := int64(1), webhook.ID; want != got {
-		t.Fatalf("Webhooks.Create() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "https://webhook.test", webhook.URL; want != got {
-		t.Fatalf("Webhooks.Create() returned URL expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Equal(t, int64(1), webhook.ID)
+	assert.Equal(t, "https://webhook.test", webhook.URL)
 }
 
 func TestWebhooksService_GetWebhook(t *testing.T) {
@@ -98,18 +79,13 @@ func TestWebhooksService_GetWebhook(t *testing.T) {
 	})
 
 	webhookResponse, err := client.Webhooks.GetWebhook(context.Background(), "1010", 1)
-	if err != nil {
-		t.Fatalf("Webhooks.Get() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	webhook := webhookResponse.Data
 	wantSingle := &Webhook{
 		ID:  1,
 		URL: "https://webhook.test"}
-
-	if !reflect.DeepEqual(webhook, wantSingle) {
-		t.Fatalf("Webhooks.Get() returned %+v, want %+v", webhook, wantSingle)
-	}
+	assert.Equal(t, wantSingle, webhook)
 }
 
 func TestWebhooksService_DeleteWebhook(t *testing.T) {
@@ -127,7 +103,6 @@ func TestWebhooksService_DeleteWebhook(t *testing.T) {
 	})
 
 	_, err := client.Webhooks.DeleteWebhook(context.Background(), "1010", 1)
-	if err != nil {
-		t.Fatalf("Webhooks.Delete() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

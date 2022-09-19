@@ -4,14 +4,13 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDnssecPath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/dnssec", dnssecPath("1010", "example.com"); want != got {
-		t.Errorf("dnssecPath(%v) = %v, want %v", "", got, want)
-	}
+	assert.Equal(t, "/1010/domains/example.com/dnssec", dnssecPath("1010", "example.com"))
 }
 
 func TestDomainsService_EnableDnssec(t *testing.T) {
@@ -30,9 +29,8 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Domains.EnableDnssec(context.Background(), accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Domains.EnableDnssec() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_DisableDnssec(t *testing.T) {
@@ -51,9 +49,8 @@ func TestDomainsService_DisableDnssec(t *testing.T) {
 	accountID := "1010"
 
 	_, err := client.Domains.DisableDnssec(context.Background(), accountID, "example.com")
-	if err != nil {
-		t.Fatalf("Domains.DisableDnssec() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_GetDnssec(t *testing.T) {
@@ -71,14 +68,7 @@ func TestDomainsService_GetDnssec(t *testing.T) {
 	})
 
 	dnssecResponse, err := client.Domains.GetDnssec(context.Background(), "1010", "example.com")
-	if err != nil {
-		t.Errorf("Domains.GetDnssec() returned error: %v", err)
-	}
 
-	dnssec := dnssecResponse.Data
-	wantSingle := &Dnssec{Enabled: true}
-
-	if !reflect.DeepEqual(dnssec, wantSingle) {
-		t.Fatalf("Domains.GetDnssec() returned %+v, want %+v", dnssec, wantSingle)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, &Dnssec{Enabled: true}, dnssecResponse.Data)
 }

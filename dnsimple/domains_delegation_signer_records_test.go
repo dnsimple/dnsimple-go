@@ -5,18 +5,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDelegationSignerRecordPath(t *testing.T) {
-	if want, got := "/1010/domains/example.com/ds_records", delegationSignerRecordPath("1010", "example.com", 0); want != got {
-		t.Errorf("delegationSignerRecordPath(%v) = %v, want %v", "", got, want)
-	}
-
-	if want, got := "/1010/domains/example.com/ds_records/2", delegationSignerRecordPath("1010", "example.com", 2); want != got {
-		t.Errorf("delegationSignerRecordPath(%v) = %v, want %v", "2", got, want)
-	}
+	assert.Equal(t, "/1010/domains/example.com/ds_records", delegationSignerRecordPath("1010", "example.com", 0))
+	assert.Equal(t, "/1010/domains/example.com/ds_records/2", delegationSignerRecordPath("1010", "example.com", 2))
 }
 
 func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
@@ -34,25 +30,13 @@ func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {
 	})
 
 	dsRecordsResponse, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", nil)
-	if err != nil {
-		t.Fatalf("Domains.ListDelegationSignerRecords() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 1}), dsRecordsResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Domains.ListDelegationSignerRecords() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 1}, dsRecordsResponse.Pagination)
 	dsRecords := dsRecordsResponse.Data
-	if want, got := 1, len(dsRecords); want != got {
-		t.Errorf("Domains.ListDelegationSignerRecords() expected to return %v delegation signer records, got %v", want, got)
-	}
-
-	if want, got := int64(24), dsRecords[0].ID; want != got {
-		t.Fatalf("Domains.ListDelegationSignerRecords() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "8", dsRecords[0].Algorithm; want != got {
-		t.Fatalf("Domains.ListDelegationSignerRecords() returned Algorithm expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, dsRecords, 1)
+	assert.Equal(t, int64(24), dsRecords[0].ID)
+	assert.Equal(t, "8", dsRecords[0].Algorithm)
 }
 
 func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
@@ -69,9 +53,8 @@ func TestDomainsService_ListDelegationSignerRecords_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Domains.ListDelegationSignerRecords(context.Background(), "1010", "example.com", &ListOptions{Page: Int(2), PerPage: Int(20)})
-	if err != nil {
-		t.Fatalf("Domains.ListDelegationSignerRecords() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
@@ -94,17 +77,11 @@ func TestDomainsService_CreateDelegationSignerRecord(t *testing.T) {
 	dsRecordAttributes := DelegationSignerRecord{Algorithm: "13", Digest: "ABC123", DigestType: "2", Keytag: "1234"}
 
 	dsRecordResponse, err := client.Domains.CreateDelegationSignerRecord(context.Background(), "1010", "example.com", dsRecordAttributes)
-	if err != nil {
-		t.Fatalf("Domains.CreateDelegationSignerRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	dsRecord := dsRecordResponse.Data
-	if want, got := int64(2), dsRecord.ID; want != got {
-		t.Fatalf("Domains.CreateDelegationSignerRecord() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "13", dsRecord.Algorithm; want != got {
-		t.Errorf("Domains.CreateDelegationSignerRecord() returned Algorithm expected to be `%v`, got %v", want, got)
-	}
+	assert.Equal(t, int64(2), dsRecord.ID)
+	assert.Equal(t, "13", dsRecord.Algorithm)
 }
 
 func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
@@ -122,10 +99,8 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 	})
 
 	dsRecordResponse, err := client.Domains.GetDelegationSignerRecord(context.Background(), "1010", "example.com", 2)
-	if err != nil {
-		t.Errorf("Domains.GetDelegationSignerRecord() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	dsRecord := dsRecordResponse.Data
 	wantSingle := &DelegationSignerRecord{
 		ID:         24,
@@ -137,10 +112,7 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 		PublicKey:  "",
 		CreatedAt:  "2017-03-03T13:49:58Z",
 		UpdatedAt:  "2017-03-03T13:49:58Z"}
-
-	if !reflect.DeepEqual(dsRecord, wantSingle) {
-		t.Fatalf("Domains.GetDelegationSignerRecord() returned %+v, want %+v", dsRecord, wantSingle)
-	}
+	assert.Equal(t, wantSingle, dsRecord)
 }
 
 func TestDomainsService_DeleteDelegationSignerRecord(t *testing.T) {
@@ -158,7 +130,6 @@ func TestDomainsService_DeleteDelegationSignerRecord(t *testing.T) {
 	})
 
 	_, err := client.Domains.DeleteDelegationSignerRecord(context.Background(), "1010", "example.com", 2)
-	if err != nil {
-		t.Fatalf("Domains.DeleteDelegationSignerRecord() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }

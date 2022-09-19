@@ -5,8 +5,9 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestZonesService_ListZones(t *testing.T) {
@@ -24,25 +25,13 @@ func TestZonesService_ListZones(t *testing.T) {
 	})
 
 	zonesResponse, err := client.Zones.ListZones(context.Background(), "1010", nil)
-	if err != nil {
-		t.Fatalf("Zones.ListZones() returned error: %v", err)
-	}
 
-	if want, got := (&Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}), zonesResponse.Pagination; !reflect.DeepEqual(want, got) {
-		t.Errorf("Zones.ListZones() pagination expected to be %v, got %v", want, got)
-	}
-
+	assert.NoError(t, err)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, zonesResponse.Pagination)
 	zones := zonesResponse.Data
-	if want, got := 2, len(zones); want != got {
-		t.Errorf("Zones.ListZones() expected to return %v zones, got %v", want, got)
-	}
-
-	if want, got := int64(1), zones[0].ID; want != got {
-		t.Fatalf("Zones.ListZones() returned ID expected to be `%v`, got `%v`", want, got)
-	}
-	if want, got := "example-alpha.com", zones[0].Name; want != got {
-		t.Fatalf("Zones.ListZones() returned Name expected to be `%v`, got `%v`", want, got)
-	}
+	assert.Len(t, zones, 2)
+	assert.Equal(t, int64(1), zones[0].ID)
+	assert.Equal(t, "example-alpha.com", zones[0].Name)
 }
 
 func TestZonesService_ListZones_WithOptions(t *testing.T) {
@@ -64,9 +53,8 @@ func TestZonesService_ListZones_WithOptions(t *testing.T) {
 	})
 
 	_, err := client.Zones.ListZones(context.Background(), "1010", &ZoneListOptions{String("example"), ListOptions{Page: Int(2), PerPage: Int(20), Sort: String("name,expiration:desc")}})
-	if err != nil {
-		t.Fatalf("Zones.ListZones() returned error: %v", err)
-	}
+
+	assert.NoError(t, err)
 }
 
 func TestZonesService_GetZone(t *testing.T) {
@@ -87,10 +75,8 @@ func TestZonesService_GetZone(t *testing.T) {
 	zoneName := "example.com"
 
 	zoneResponse, err := client.Zones.GetZone(context.Background(), accountID, zoneName)
-	if err != nil {
-		t.Fatalf("Zones.GetZone() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
 		ID:        1,
@@ -99,10 +85,7 @@ func TestZonesService_GetZone(t *testing.T) {
 		Reverse:   false,
 		CreatedAt: "2015-04-23T07:40:03Z",
 		UpdatedAt: "2015-04-23T07:40:03Z"}
-
-	if !reflect.DeepEqual(zone, wantSingle) {
-		t.Fatalf("Zones.GetZone() returned %+v, want %+v", zone, wantSingle)
-	}
+	assert.Equal(t, wantSingle, zone)
 }
 
 func TestZonesService_GetZoneFile(t *testing.T) {
@@ -123,16 +106,11 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 	zoneName := "example.com"
 
 	zoneFileResponse, err := client.Zones.GetZoneFile(context.Background(), accountID, zoneName)
-	if err != nil {
-		t.Fatalf("Zones.GetZoneFile() returned error: %v", err)
-	}
 
+	assert.NoError(t, err)
 	zoneFile := zoneFileResponse.Data
 	wantSingle := &ZoneFile{
 		Zone: "$ORIGIN example.com.\n$TTL 1h\nexample.com. 3600 IN SOA ns1.dnsimple.com. admin.dnsimple.com. 1453132552 86400 7200 604800 300\nexample.com. 3600 IN NS ns1.dnsimple.com.\nexample.com. 3600 IN NS ns2.dnsimple.com.\nexample.com. 3600 IN NS ns3.dnsimple.com.\nexample.com. 3600 IN NS ns4.dnsimple.com.\n",
 	}
-
-	if !reflect.DeepEqual(zoneFile, wantSingle) {
-		t.Fatalf("Zones.GetZoneFile() returned %+v, want %+v", zoneFile, wantSingle)
-	}
+	assert.Equal(t, wantSingle, zoneFile)
 }
