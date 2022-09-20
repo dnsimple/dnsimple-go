@@ -44,15 +44,9 @@ jobs:
     strategy:
       matrix:
         go-version:
-          - "1.13"
-          - "1.14"
-          - "1.15"
-          - "1.16"
-          - "1.17"
           - "1.18"
           - "1.19"
-          # - tip disabled as not supported in GH Actions
-          # See: https://github.com/actions/setup-go/issues/21
+          # Only support last 2 versions (https://go.dev/doc/devel/release#policy)
     steps:
       - uses: actions/checkout@v3
         with:
