@@ -3,6 +3,7 @@
 ## main
 
 - NEW: Expose AttributeErrors in ErrorResponse for getting detailed information about validation errors
+- CHANGED: Support only last two golang versions: 1.18 and 1.19 according Golang Release Policy.
 
 ## 0.80.0
 
