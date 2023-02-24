@@ -69,7 +69,7 @@ type LetsencryptCertificateAttributes struct {
 	Name               string   `json:"name,omitempty"`
 	AutoRenew          bool     `json:"auto_renew,omitempty"`
 	AlternateNames     []string `json:"alternate_names,omitempty"`
-	SignatureAlgorithm string `json:"signature_algorithm,omitempty"`
+	SignatureAlgorithm string   `json:"signature_algorithm,omitempty"`
 }
 
 func certificatePath(accountID, domainIdentifier string, certificateID int64) (path string) {
