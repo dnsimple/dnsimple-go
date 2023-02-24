@@ -253,14 +253,14 @@ func TestCertificates_LetsencryptPurchaseRenewalWithAttributes(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"auto_renew": true}
+		want := map[string]interface{}{"auto_renew": true, "signature_algorithm": "RSA"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true}
+	certificateAttributes := LetsencryptCertificateAttributes{AutoRenew: true, SignatureAlgorithm: "RSA"}
 
 	certificateRenewalResponse, err := client.Certificates.PurchaseLetsencryptCertificateRenewal(context.Background(), "1010", "bingo.pizza", 101967, certificateAttributes)
 
