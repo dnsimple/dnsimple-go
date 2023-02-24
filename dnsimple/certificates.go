@@ -65,10 +65,11 @@ type CertificateRenewal struct {
 // LetsencryptCertificateAttributes is a set of attributes to purchase a Let's Encrypt certificate.
 type LetsencryptCertificateAttributes struct {
     // Deprecated: ContactID is deprecated and its value is ignored and will be removed in the next major version.
-	ContactID      int64    `json:"contact_id,omitempty"`
-	Name           string   `json:"name,omitempty"`
-	AutoRenew      bool     `json:"auto_renew,omitempty"`
-	AlternateNames []string `json:"alternate_names,omitempty"`
+	ContactID          int64    `json:"contact_id,omitempty"`
+	Name               string   `json:"name,omitempty"`
+	AutoRenew          bool     `json:"auto_renew,omitempty"`
+	AlternateNames     []string `json:"alternate_names,omitempty"`
+	SignatureAlgorithm string `json:"signature_algorithm,omitempty"`
 }
 
 func certificatePath(accountID, domainIdentifier string, certificateID int64) (path string) {

@@ -181,14 +181,14 @@ func TestCertificates_LetsencryptPurchaseWithAttributes(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}}
+		want := map[string]interface{}{"name": "www", "auto_renew": true, "alternate_names": []interface{}{"api.example.com", "status.example.com"}, "signature_algorithm": "RSA"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	certificateAttributes := LetsencryptCertificateAttributes{Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}}
+	certificateAttributes := LetsencryptCertificateAttributes{Name: "www", AutoRenew: true, AlternateNames: []string{"api.example.com", "status.example.com"}, SignatureAlgorithm: "RSA"}
 
 	_, err := client.Certificates.PurchaseLetsencryptCertificate(context.Background(), "1010", "example.com", certificateAttributes)
 
