@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0
+
+- NEW: Support `signature_algorithm` in the `LetsencryptCertificateAttributes` struct (dnsimple/dnsimple-go#128)
+
 ## 1.0.1
 
 - CHANGED: Bump dependencies
