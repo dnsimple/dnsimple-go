@@ -13,9 +13,30 @@ import (
 
 var regexpEmail = regexp.MustCompile(`.+@.+`)
 
+func TestEmailForwardsPath(t *testing.T) {
+	t.Run("empty account id", func(t *testing.T) {
+		path, err := emailForwardsPath("", "example.com")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("empty domain identifier", func(t *testing.T) {
+		path, err := emailForwardsPath("1010", "")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		path, err := emailForwardsPath("1010", "example.com")
+		assert.NoError(t, err)
+		assert.Equal(t, "/1010/domains/example.com/email_forwards", path)
+	})
+}
+
 func TestEmailForwardPath(t *testing.T) {
-	assert.Equal(t, "/1010/domains/example.com/email_forwards", emailForwardPath("1010", "example.com", 0))
-	assert.Equal(t, "/1010/domains/example.com/email_forwards/2", emailForwardPath("1010", "example.com", 2))
+	path, err := emailForwardPath("1010", "example.com", 2)
+	assert.NoError(t, err)
+	assert.Equal(t, "/1010/domains/example.com/email_forwards/2", path)
 }
 
 func TestDomainsService_EmailForwardsList(t *testing.T) {

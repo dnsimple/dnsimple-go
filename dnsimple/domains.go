@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
@@ -29,12 +30,25 @@ type Domain struct {
 	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
-func domainPath(accountID string, domainIdentifier string) (path string) {
-	path = fmt.Sprintf("/%v/domains", accountID)
-	if domainIdentifier != "" {
-		path += fmt.Sprintf("/%v", domainIdentifier)
+func domainPath(accountID string, domainIdentifier string) (string, error) {
+	basePath, err := domainsPath(accountID)
+	if err != nil {
+		return "", err
 	}
-	return
+
+	if domainIdentifier == "" {
+		return "", errors.New("domain identifier parameter should not be empty")
+	}
+
+	return fmt.Sprintf("%v/%v", basePath, domainIdentifier), nil
+}
+
+func domainsPath(accountID string) (string, error) {
+	if accountID == "" {
+		return "", errors.New("account parameter should not be empty")
+	}
+
+	return fmt.Sprintf("/%v/domains", accountID), nil
 }
 
 // DomainResponse represents a response from an API method that returns a Domain struct.
@@ -65,10 +79,16 @@ type DomainListOptions struct {
 //
 // See https://developer.dnsimple.com/v2/domains/#list
 func (s *DomainsService) ListDomains(ctx context.Context, accountID string, options *DomainListOptions) (*DomainsResponse, error) {
-	path := versioned(domainPath(accountID, ""))
+	path, err := domainsPath(accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	domainsResponse := &DomainsResponse{}
 
-	path, err := addURLQueryOptions(path, options)
+	path, err = addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +106,13 @@ func (s *DomainsService) ListDomains(ctx context.Context, accountID string, opti
 //
 // See https://developer.dnsimple.com/v2/domains/#create
 func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, domainAttributes Domain) (*DomainResponse, error) {
-	path := versioned(domainPath(accountID, ""))
+	path, err := domainsPath(accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.post(ctx, path, domainAttributes, domainResponse)
@@ -102,7 +128,13 @@ func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, dom
 //
 // See https://developer.dnsimple.com/v2/domains/#get
 func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
-	path := versioned(domainPath(accountID, domainIdentifier))
+	path, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.get(ctx, path, domainResponse)
@@ -118,7 +150,13 @@ func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domain
 //
 // See https://developer.dnsimple.com/v2/domains/#delete
 func (s *DomainsService) DeleteDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
-	path := versioned(domainPath(accountID, domainIdentifier))
+	path, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	domainResponse := &DomainResponse{}
 
 	resp, err := s.client.delete(ctx, path, nil, nil)

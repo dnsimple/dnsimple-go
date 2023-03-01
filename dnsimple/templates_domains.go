@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
@@ -9,7 +10,17 @@ import (
 //
 // See https://developer.dnsimple.com/v2/templates/domains/#applyTemplateToDomain
 func (s *TemplatesService) ApplyTemplate(ctx context.Context, accountID string, templateIdentifier string, domainIdentifier string) (*TemplateResponse, error) {
-	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath(accountID, domainIdentifier), templateIdentifier))
+	if templateIdentifier == "" {
+		return nil, errors.New("empty path param")
+	}
+
+	domainPath, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path := versioned(fmt.Sprintf("%v/templates/%v", domainPath, templateIdentifier))
+
 	templateResponse := &TemplateResponse{}
 
 	resp, err := s.client.post(ctx, path, nil, nil)

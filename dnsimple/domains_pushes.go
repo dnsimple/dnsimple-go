@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
@@ -16,12 +17,31 @@ type DomainPush struct {
 	AcceptedAt string `json:"accepted_at,omitempty"`
 }
 
-func domainPushPath(accountID string, pushID int64) (path string) {
-	path = fmt.Sprintf("/%v/pushes", accountID)
-	if pushID != 0 {
-		path += fmt.Sprintf("/%v", pushID)
+func domainPushesPath(accountID string, domainIdentifier string) (string, error) {
+	basePath, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
 	}
-	return
+
+	return fmt.Sprintf("/%v/pushes", basePath), nil
+}
+
+func pushesPath(accountID string) (string, error) {
+	if accountID == "" {
+		return "", errors.New("account parameter should not be empty")
+	}
+
+	return fmt.Sprintf("/%v/pushes", accountID), nil
+
+}
+
+func pushPath(accountID string, pushID int64) (string, error) {
+	basePath, err := pushesPath(accountID)
+	if err != nil {
+		return "", nil
+	}
+
+	return fmt.Sprintf("%v/%v", basePath, pushID), nil
 }
 
 // DomainPushResponse represents a response from an API method that returns a DomainPush struct.
@@ -46,7 +66,13 @@ type DomainPushAttributes struct {
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#initiateDomainPush
 func (s *DomainsService) InitiatePush(ctx context.Context, accountID, domainID string, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
-	path := versioned(fmt.Sprintf("/%v/pushes", domainPath(accountID, domainID)))
+	path, err := domainPushesPath(accountID, domainID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	pushResponse := &DomainPushResponse{}
 
 	resp, err := s.client.post(ctx, path, pushAttributes, pushResponse)
@@ -62,13 +88,19 @@ func (s *DomainsService) InitiatePush(ctx context.Context, accountID, domainID s
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#listPushes
 func (s *DomainsService) ListPushes(ctx context.Context, accountID string, options *ListOptions) (*DomainPushesResponse, error) {
-	path := versioned(domainPushPath(accountID, 0))
-	pushesResponse := &DomainPushesResponse{}
-
-	path, err := addURLQueryOptions(path, options)
+	path, err := pushesPath(accountID)
 	if err != nil {
 		return nil, err
 	}
+
+	path = versioned(path)
+
+	path, err = addURLQueryOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
+
+	pushesResponse := &DomainPushesResponse{}
 
 	resp, err := s.client.get(ctx, path, pushesResponse)
 	if err != nil {
@@ -83,7 +115,13 @@ func (s *DomainsService) ListPushes(ctx context.Context, accountID string, optio
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#acceptPush
 func (s *DomainsService) AcceptPush(ctx context.Context, accountID string, pushID int64, pushAttributes DomainPushAttributes) (*DomainPushResponse, error) {
-	path := versioned(domainPushPath(accountID, pushID))
+	path, err := pushPath(accountID, pushID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	pushResponse := &DomainPushResponse{}
 
 	resp, err := s.client.post(ctx, path, pushAttributes, nil)
@@ -99,7 +137,13 @@ func (s *DomainsService) AcceptPush(ctx context.Context, accountID string, pushI
 //
 // See https://developer.dnsimple.com/v2/domains/pushes/#rejectPush
 func (s *DomainsService) RejectPush(ctx context.Context, accountID string, pushID int64) (*DomainPushResponse, error) {
-	path := versioned(domainPushPath(accountID, pushID))
+	path, err := pushPath(accountID, pushID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	pushResponse := &DomainPushResponse{}
 
 	resp, err := s.client.delete(ctx, path, nil, nil)

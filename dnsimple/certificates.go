@@ -72,20 +72,40 @@ type LetsencryptCertificateAttributes struct {
 	SignatureAlgorithm string   `json:"signature_algorithm,omitempty"`
 }
 
-func certificatePath(accountID, domainIdentifier string, certificateID int64) (path string) {
-	path = fmt.Sprintf("%v/certificates", domainPath(accountID, domainIdentifier))
-	if certificateID != 0 {
-		path += fmt.Sprintf("/%v", certificateID)
+func certificatesPath(accountID, domainIdentifier string) (string, error) {
+	basePath, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
 	}
-	return
+
+	return fmt.Sprintf("%v/certificates", basePath), nil
 }
 
-func letsencryptCertificatePath(accountID, domainIdentifier string, certificateID int64) (path string) {
-	path = fmt.Sprintf("%v/certificates/letsencrypt", domainPath(accountID, domainIdentifier))
-	if certificateID != 0 {
-		path += fmt.Sprintf("/%v", certificateID)
+func certificatePath(accountID, domainIdentifier string, certificateID int64) (string, error) {
+	basePath, err := certificatesPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
 	}
-	return
+
+	return fmt.Sprintf("%v/%v", basePath, certificateID), nil
+}
+
+func letsencryptCertificatesPath(accountID, domainIdentifier string) (string, error) {
+	basePath, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%v/certificates/letsencrypt", basePath), nil
+}
+
+func letsencryptCertificatePath(accountID, domainIdentifier string, certificateID int64) (string, error) {
+	basePath, err := letsencryptCertificatesPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%v/%v", basePath, certificateID), nil
 }
 
 // CertificateResponse represents a response from an API method that returns a Certificate struct.
@@ -122,13 +142,19 @@ type CertificateRenewalResponse struct {
 //
 // See https://developer.dnsimple.com/v2/certificates#listCertificates
 func (s *CertificatesService) ListCertificates(ctx context.Context, accountID, domainIdentifier string, options *ListOptions) (*CertificatesResponse, error) {
-	path := versioned(certificatePath(accountID, domainIdentifier, 0))
-	certificatesResponse := &CertificatesResponse{}
-
-	path, err := addURLQueryOptions(path, options)
+	path, err := certificatesPath(accountID, domainIdentifier)
 	if err != nil {
 		return nil, err
 	}
+
+	path = versioned(path)
+
+	path, err = addURLQueryOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
+
+	certificatesResponse := &CertificatesResponse{}
 
 	resp, err := s.client.get(ctx, path, certificatesResponse)
 	if err != nil {
@@ -143,7 +169,13 @@ func (s *CertificatesService) ListCertificates(ctx context.Context, accountID, d
 //
 // See https://developer.dnsimple.com/v2/certificates#getCertificate
 func (s *CertificatesService) GetCertificate(ctx context.Context, accountID, domainIdentifier string, certificateID int64) (*CertificateResponse, error) {
-	path := versioned(certificatePath(accountID, domainIdentifier, certificateID))
+	path, err := certificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	certificateResponse := &CertificateResponse{}
 
 	resp, err := s.client.get(ctx, path, certificateResponse)
@@ -160,7 +192,13 @@ func (s *CertificatesService) GetCertificate(ctx context.Context, accountID, dom
 //
 // See https://developer.dnsimple.com/v2/certificates#downloadCertificate
 func (s *CertificatesService) DownloadCertificate(ctx context.Context, accountID, domainIdentifier string, certificateID int64) (*CertificateBundleResponse, error) {
-	path := versioned(certificatePath(accountID, domainIdentifier, certificateID) + "/download")
+	path, err := certificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path + "/download")
+
 	certificateBundleResponse := &CertificateBundleResponse{}
 
 	resp, err := s.client.get(ctx, path, certificateBundleResponse)
@@ -176,7 +214,13 @@ func (s *CertificatesService) DownloadCertificate(ctx context.Context, accountID
 //
 // See https://developer.dnsimple.com/v2/certificates#getCertificatePrivateKey
 func (s *CertificatesService) GetCertificatePrivateKey(ctx context.Context, accountID, domainIdentifier string, certificateID int64) (*CertificateBundleResponse, error) {
-	path := versioned(certificatePath(accountID, domainIdentifier, certificateID) + "/private_key")
+	path, err := certificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path + "/private_key")
+
 	certificateBundleResponse := &CertificateBundleResponse{}
 
 	resp, err := s.client.get(ctx, path, certificateBundleResponse)
@@ -192,7 +236,13 @@ func (s *CertificatesService) GetCertificatePrivateKey(ctx context.Context, acco
 //
 // See https://developer.dnsimple.com/v2/certificates/#purchaseLetsencryptCertificate
 func (s *CertificatesService) PurchaseLetsencryptCertificate(ctx context.Context, accountID, domainIdentifier string, certificateAttributes LetsencryptCertificateAttributes) (*CertificatePurchaseResponse, error) {
-	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, 0))
+	path, err := letsencryptCertificatesPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	certificatePurchaseResponse := &CertificatePurchaseResponse{}
 
 	resp, err := s.client.post(ctx, path, certificateAttributes, certificatePurchaseResponse)
@@ -208,7 +258,13 @@ func (s *CertificatesService) PurchaseLetsencryptCertificate(ctx context.Context
 //
 // See https://developer.dnsimple.com/v2/certificates/#issueLetsencryptCertificate
 func (s *CertificatesService) IssueLetsencryptCertificate(ctx context.Context, accountID, domainIdentifier string, certificateID int64) (*CertificateResponse, error) {
-	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + "/issue")
+	path, err := letsencryptCertificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path + "/issue")
+
 	certificateResponse := &CertificateResponse{}
 
 	resp, err := s.client.post(ctx, path, nil, certificateResponse)
@@ -224,7 +280,13 @@ func (s *CertificatesService) IssueLetsencryptCertificate(ctx context.Context, a
 //
 // See https://developer.dnsimple.com/v2/certificates/#purchaseRenewalLetsencryptCertificate
 func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(ctx context.Context, accountID, domainIdentifier string, certificateID int64, certificateAttributes LetsencryptCertificateAttributes) (*CertificateRenewalResponse, error) {
-	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + "/renewals")
+	path, err := letsencryptCertificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path + "/renewals")
+
 	certificateRenewalResponse := &CertificateRenewalResponse{}
 
 	resp, err := s.client.post(ctx, path, certificateAttributes, certificateRenewalResponse)
@@ -240,7 +302,13 @@ func (s *CertificatesService) PurchaseLetsencryptCertificateRenewal(ctx context.
 //
 // See https://developer.dnsimple.com/v2/certificates/#issueRenewalLetsencryptCertificate
 func (s *CertificatesService) IssueLetsencryptCertificateRenewal(ctx context.Context, accountID, domainIdentifier string, certificateID, certificateRenewalID int64) (*CertificateResponse, error) {
-	path := versioned(letsencryptCertificatePath(accountID, domainIdentifier, certificateID) + fmt.Sprintf("/renewals/%d/issue", certificateRenewalID))
+	path, err := letsencryptCertificatePath(accountID, domainIdentifier, certificateID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path + fmt.Sprintf("/renewals/%d/issue", certificateRenewalID))
+
 	certificateResponse := &CertificateResponse{}
 
 	resp, err := s.client.post(ctx, path, nil, certificateResponse)

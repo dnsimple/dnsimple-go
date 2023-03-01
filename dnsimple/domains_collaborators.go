@@ -18,12 +18,22 @@ type Collaborator struct {
 	AcceptedAt string `json:"accepted_at,omitempty"`
 }
 
-func collaboratorPath(accountID, domainIdentifier string, collaboratorID int64) (path string) {
-	path = fmt.Sprintf("%v/collaborators", domainPath(accountID, domainIdentifier))
-	if collaboratorID != 0 {
-		path += fmt.Sprintf("/%v", collaboratorID)
+func collaboratorsPath(accountID, domainIdentifier string) (string, error) {
+	basePath, err := domainPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
 	}
-	return
+
+	return fmt.Sprintf("%v/collaborators", basePath), nil
+}
+
+func collaboratorPath(accountID, domainIdentifier string, collaboratorID int64) (string, error) {
+	basePath, err := collaboratorsPath(accountID, domainIdentifier)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%v/%v", basePath, collaboratorID), nil
 }
 
 // CollaboratorAttributes represents Collaborator attributes for AddCollaborator operation.
@@ -47,10 +57,16 @@ type CollaboratorsResponse struct {
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#list
 func (s *DomainsService) ListCollaborators(ctx context.Context, accountID, domainIdentifier string, options *ListOptions) (*CollaboratorsResponse, error) {
-	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
+	path, err := collaboratorsPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	collaboratorsResponse := &CollaboratorsResponse{}
 
-	path, err := addURLQueryOptions(path, options)
+	path, err = addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +84,13 @@ func (s *DomainsService) ListCollaborators(ctx context.Context, accountID, domai
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
 func (s *DomainsService) AddCollaborator(ctx context.Context, accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*CollaboratorResponse, error) {
-	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
+	path, err := collaboratorsPath(accountID, domainIdentifier)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	collaboratorResponse := &CollaboratorResponse{}
 
 	resp, err := s.client.post(ctx, path, attributes, collaboratorResponse)
@@ -84,7 +106,13 @@ func (s *DomainsService) AddCollaborator(ctx context.Context, accountID string, 
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#remove
 func (s *DomainsService) RemoveCollaborator(ctx context.Context, accountID string, domainIdentifier string, collaboratorID int64) (*CollaboratorResponse, error) {
-	path := versioned(collaboratorPath(accountID, domainIdentifier, collaboratorID))
+	path, err := collaboratorPath(accountID, domainIdentifier, collaboratorID)
+	if err != nil {
+		return nil, err
+	}
+
+	path = versioned(path)
+
 	collaboratorResponse := &CollaboratorResponse{}
 
 	resp, err := s.client.delete(ctx, path, nil, nil)

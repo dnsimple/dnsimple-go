@@ -10,7 +10,23 @@ import (
 )
 
 func TestDnssecPath(t *testing.T) {
-	assert.Equal(t, "/1010/domains/example.com/dnssec", dnssecPath("1010", "example.com"))
+	t.Run("empty account id", func(t *testing.T) {
+		path, err := dnssecPath("", "example.com")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("empty domain identifier", func(t *testing.T) {
+		path, err := dnssecPath("1010", "")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		path, err := dnssecPath("1010", "example.com")
+		assert.NoError(t, err)
+		assert.Equal(t, "/1010/domains/example.com/dnssec", path)
+	})
 }
 
 func TestDomainsService_EnableDnssec(t *testing.T) {

@@ -10,9 +10,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDomainPushesPath(t *testing.T) {
+	t.Run("empty account id", func(t *testing.T) {
+		path, err := pushesPath("")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		path, err := pushesPath("1010")
+		assert.NoError(t, err)
+		assert.Equal(t, "/1010/pushes", path)
+	})
+}
+
 func TestDomainPushPath(t *testing.T) {
-	assert.Equal(t, "/1010/pushes", domainPushPath("1010", 0))
-	assert.Equal(t, "/1010/pushes/1", domainPushPath("1010", 1))
+	path, err := pushPath("1010", 1)
+	assert.NoError(t, err)
+	assert.Equal(t, "/1010/pushes/1", path)
 }
 
 func TestDomainsService_InitiatePush(t *testing.T) {

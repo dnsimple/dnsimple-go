@@ -10,9 +10,30 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDelegationSignerRecordsPath(t *testing.T) {
+	t.Run("empty account id", func(t *testing.T) {
+		path, err := delegationSignerRecordsPath("", "example.com")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("empty domain identifier", func(t *testing.T) {
+		path, err := delegationSignerRecordsPath("1010", "")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		path, err := delegationSignerRecordsPath("1010", "example.com")
+		assert.NoError(t, err)
+		assert.Equal(t, "/1010/domains/example.com/ds_records", path)
+	})
+}
+
 func TestDelegationSignerRecordPath(t *testing.T) {
-	assert.Equal(t, "/1010/domains/example.com/ds_records", delegationSignerRecordPath("1010", "example.com", 0))
-	assert.Equal(t, "/1010/domains/example.com/ds_records/2", delegationSignerRecordPath("1010", "example.com", 2))
+	path, err := delegationSignerRecordPath("1010", "example.com", 2)
+	assert.NoError(t, err)
+	assert.Equal(t, "/1010/domains/example.com/ds_records/2", path)
 }
 
 func TestDomainsService_ListDelegationSignerRecords(t *testing.T) {

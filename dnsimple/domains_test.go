@@ -10,9 +10,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDomainsPath(t *testing.T) {
+	t.Run("empty account id", func(t *testing.T) {
+		path, err := domainsPath("")
+		assert.Error(t, err)
+		assert.Empty(t, path)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		path, err := domainsPath("1010")
+		assert.NoError(t, err)
+		assert.Equal(t, "/1010/domains", path)
+	})
+}
+
 func TestDomainPath(t *testing.T) {
-	assert.Equal(t, "/1010/domains", domainPath("1010", ""))
-	assert.Equal(t, "/1010/domains/example.com", domainPath("1010", "example.com"))
+	path, err := domainPath("1010", "example.com")
+	assert.NoError(t, err)
+	assert.Equal(t, "/1010/domains/example.com", path)
 }
 
 func TestDomainsService_ListDomains(t *testing.T) {
