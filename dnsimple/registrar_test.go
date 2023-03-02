@@ -101,6 +101,61 @@ func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	assert.Equal(t, float64(20.0), check.TransferPrice)
 }
 
+func TestRegistrarService_GetDomainRegistration(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/bingo.pizza/registrations/361", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/getDomainRegistration/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	checkResponse, err := client.Registrar.GetDomainRegistration(context.Background(), "1010", "bingo.pizza", "361")
+
+	assert.NoError(t, err)
+	check := checkResponse.Data
+	assert.Equal(t, check.ID, int64(361))
+	assert.Equal(t, check.DomainID, int64(104040))
+	assert.Equal(t, check.RegistrantID, int64(2715))
+	assert.Equal(t, check.Period, 1)
+	assert.Equal(t, check.State, "registering")
+	assert.Equal(t, check.AutoRenew, false)
+	assert.Equal(t, check.WhoisPrivacy, false)
+	assert.Equal(t, check.CreatedAt, "2023-01-27T17:44:32Z")
+	assert.Equal(t, check.UpdatedAt, "2023-01-27T17:44:40Z")
+}
+
+func TestRegistrarService_GetDomainRenewal(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/bingo.pizza/renewals/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/getDomainRenewal/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	checkResponse, err := client.Registrar.GetDomainRenewal(context.Background(), "1010", "bingo.pizza", "1")
+
+	assert.NoError(t, err)
+	check := checkResponse.Data
+	assert.Equal(t, check.ID, int64(1))
+	assert.Equal(t, check.DomainID, int64(999))
+	assert.Equal(t, check.Period, 1)
+	assert.Equal(t, check.State, "renewed")
+	assert.Equal(t, check.CreatedAt, "2016-12-09T19:46:45Z")
+	assert.Equal(t, check.UpdatedAt, "2016-12-12T19:46:45Z")
+}
+
 func TestRegistrarService_RegisterDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
