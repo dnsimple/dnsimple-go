@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.0
+
+- NEW: Support `GetDomainRegistration` and `GetDomainRenewal` APIs (dnsimple/dnsimple-go#132)
+
 ## 1.1.0
 
 - NEW: Support `signature_algorithm` in the `LetsencryptCertificateAttributes` struct (dnsimple/dnsimple-go#128)
