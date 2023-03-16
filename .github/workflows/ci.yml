@@ -52,7 +52,7 @@ jobs:
         with:
           path: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
       - name: Install dependencies
