@@ -4,8 +4,7 @@ updates:
   - package-ecosystem: gomod
     directory: /
     schedule:
-      interval: daily
-      time: '12:00'
+      interval: monthly
     open-pull-requests-limit: 10
     labels:
       - task
