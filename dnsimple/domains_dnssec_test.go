@@ -31,7 +31,7 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 	res, err := client.Domains.EnableDnssec(context.Background(), accountID, "example.com")
 
 	assert.NoError(t, err)
-	assert.Equal(t, &Dnssec{Enabled: false}, res.Data)
+	assert.Equal(t, &Dnssec{Enabled: true}, res.Data)
 }
 
 func TestDomainsService_DisableDnssec(t *testing.T) {
