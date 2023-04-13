@@ -24,6 +24,7 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
