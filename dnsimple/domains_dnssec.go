@@ -44,7 +44,7 @@ func (s *DomainsService) DisableDnssec(ctx context.Context, accountID string, do
 	path := versioned(dnssecPath(accountID, domainIdentifier))
 	dnssecResponse := &DnssecResponse{}
 
-	resp, err := s.client.delete(ctx, path, nil, dnssecResponse)
+	resp, err := s.client.delete(ctx, path, nil, nil)
 	if err != nil {
 		return nil, err
 	}
