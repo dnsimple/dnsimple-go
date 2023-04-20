@@ -24,13 +24,15 @@ func TestDomainsService_EnableDnssec(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
 
-	_, err := client.Domains.EnableDnssec(context.Background(), accountID, "example.com")
+	res, err := client.Domains.EnableDnssec(context.Background(), accountID, "example.com")
 
 	assert.NoError(t, err)
+	assert.Equal(t, &Dnssec{Enabled: true}, res.Data)
 }
 
 func TestDomainsService_DisableDnssec(t *testing.T) {
@@ -44,13 +46,16 @@ func TestDomainsService_DisableDnssec(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	accountID := "1010"
 
-	_, err := client.Domains.DisableDnssec(context.Background(), accountID, "example.com")
+	res, err := client.Domains.DisableDnssec(context.Background(), accountID, "example.com")
 
-	assert.NoError(t, err)
+	if assert.NoError(t, err) {
+		assert.Nil(t, res.Data)
+	}
 }
 
 func TestDomainsService_GetDnssec(t *testing.T) {
