@@ -137,10 +137,10 @@ func TestZonesService_ActivateZoneDns(t *testing.T) {
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
-		ID: 1,
+		ID:        1,
 		AccountID: 1010,
-		Name: "example.com",
-		Reverse: false,
+		Name:      "example.com",
+		Reverse:   false,
 		CreatedAt: "2015-04-23T07:40:03Z",
 		UpdatedAt: "2015-04-23T07:40:03Z",
 	}
@@ -169,10 +169,10 @@ func TestZonesService_DeactivateZoneDns(t *testing.T) {
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
-		ID: 1,
+		ID:        1,
 		AccountID: 1010,
-		Name: "example.com",
-		Reverse: false,
+		Name:      "example.com",
+		Reverse:   false,
 		CreatedAt: "2015-04-23T07:40:03Z",
 		UpdatedAt: "2015-04-23T07:40:03Z",
 	}
