@@ -108,7 +108,9 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		ID:        41872,
 		DomainID:  235146,
 		From:      "example@dnsimple.xyz",
+		AliasName: "example@dnsimple.xyz",
 		To:        "example@example.com",
+		DestinationEmail: "example@example.com",
 		CreatedAt: "2021-01-25T13:54:40Z",
 		UpdatedAt: "2021-01-25T13:54:40Z"}
 	assert.Equal(t, wantSingle, forward)
