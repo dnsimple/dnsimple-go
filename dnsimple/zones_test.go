@@ -164,7 +164,7 @@ func TestZonesService_DeactivateZoneDns(t *testing.T) {
 	accountID := "1010"
 	zoneName := "example.com"
 
-	zoneResponse, err := client.Zones.ActivateZoneDns(context.Background(), accountID, zoneName)
+	zoneResponse, err := client.Zones.DeactivateZoneDns(context.Background(), accountID, zoneName)
 
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
