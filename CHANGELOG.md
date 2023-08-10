@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## main
+
+## 1.2.1 (Unreleased)
+
+FEATURES:
+
+- NEW: Added `ActivateZoneDns` to activate DNS services (resolution) for a zone. (dnsimple/dnsimple-go#145)
+- NEW: Added `DeactivateZoneDns` to deactivate DNS services (resolution) for a zone. (dnsimple/dnsimple-go#145)
+
+IMPROVEMENTS:
+
+- `EmailForward` `From` is deprecated. Please use `AliasName` instead for creating email forwards. (dnsimple/dnsimple-go#145)
+- `EmailForward` `To` is deprecated. Please use `DestinationEmail` instead for creating email forwards. (dnsimple/dnsimple-go#145)
+
 ## 1.2.0
 
 - NEW: Support `GetDomainRegistration` and `GetDomainRenewal` APIs (dnsimple/dnsimple-go#132)

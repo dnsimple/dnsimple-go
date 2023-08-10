@@ -9,8 +9,12 @@ import (
 type EmailForward struct {
 	ID        int64  `json:"id,omitempty"`
 	DomainID  int64  `json:"domain_id,omitempty"`
+	// Deprecated: please use `AliasName` instead.
 	From      string `json:"from,omitempty"`
+	AliasName string `json:"alias_name,omitempty"`
+	// Deprecated: please use `DestinationEmail` instead.
 	To        string `json:"to,omitempty"`
+	DestinationEmail string `json:"destination_email,omitempty"`
 	CreatedAt string `json:"created_at,omitempty"`
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
