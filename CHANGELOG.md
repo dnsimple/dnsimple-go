@@ -11,7 +11,7 @@ FEATURES:
 
 IMPROVEMENTS:
 
-- `EmailForward` `From` is deprecated. Please use `AliasName` instead for creating email forwards. (dnsimple/dnsimple-go#145)
+- `EmailForward` `From` is deprecated. Please use `AliasName` instead for creating email forwards, and `AliasEmail` when retrieving email forwards. (dnsimple/dnsimple-go#145)
 - `EmailForward` `To` is deprecated. Please use `DestinationEmail` instead for creating email forwards. (dnsimple/dnsimple-go#145)
 
 ## 1.2.0
