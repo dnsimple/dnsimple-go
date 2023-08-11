@@ -109,6 +109,7 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		DomainID:         235146,
 		From:             "example@dnsimple.xyz",
 		AliasName:        "",
+		AliasEmail:       "example@dnsimple.xyz",
 		To:               "example@example.com",
 		DestinationEmail: "example@example.com",
 		CreatedAt:        "2021-01-25T13:54:40Z",
