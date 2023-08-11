@@ -114,3 +114,67 @@ func TestZonesService_GetZoneFile(t *testing.T) {
 	}
 	assert.Equal(t, wantSingle, zoneFile)
 }
+
+func TestZonesService_ActivateZoneDns(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/activation", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/activateZoneService/success.http")
+
+		testMethod(t, r, "PUT")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneResponse, err := client.Zones.ActivateZoneDns(context.Background(), accountID, zoneName)
+
+	assert.NoError(t, err)
+	zone := zoneResponse.Data
+	wantSingle := &Zone{
+		ID:        1,
+		AccountID: 1010,
+		Name:      "example.com",
+		Reverse:   false,
+		CreatedAt: "2015-04-23T07:40:03Z",
+		UpdatedAt: "2015-04-23T07:40:03Z",
+	}
+	assert.Equal(t, wantSingle, zone)
+}
+
+func TestZonesService_DeactivateZoneDns(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/activation", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/deactivateZoneService/success.http")
+
+		testMethod(t, r, "DELETE")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	zoneName := "example.com"
+
+	zoneResponse, err := client.Zones.DeactivateZoneDns(context.Background(), accountID, zoneName)
+
+	assert.NoError(t, err)
+	zone := zoneResponse.Data
+	wantSingle := &Zone{
+		ID:        1,
+		AccountID: 1010,
+		Name:      "example.com",
+		Reverse:   false,
+		CreatedAt: "2015-04-23T07:40:03Z",
+		UpdatedAt: "2015-04-23T07:40:03Z",
+	}
+	assert.Equal(t, wantSingle, zone)
+}

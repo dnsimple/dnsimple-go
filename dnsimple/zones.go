@@ -107,3 +107,35 @@ func (s *ZonesService) GetZoneFile(ctx context.Context, accountID string, zoneNa
 	zoneFileResponse.HTTPResponse = resp
 	return zoneFileResponse, nil
 }
+
+// ActivateZoneDns activates DNS services for a zone.
+//
+// See https://developer.dnsimple.com/v2/zones/#activateZoneService
+func (s *ZonesService) ActivateZoneDns(ctx context.Context, accountID string, zoneName string) (*ZoneResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/zones/%v/activation", accountID, zoneName))
+	zoneResponse := &ZoneResponse{}
+
+	resp, err := s.client.put(ctx, path, nil, zoneResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	zoneResponse.HTTPResponse = resp
+	return zoneResponse, nil
+}
+
+// DeactivateZoneDns deactivates DNS services for a zone.
+//
+// See https://developer.dnsimple.com/v2/zones/#deactivateZoneService
+func (s *ZonesService) DeactivateZoneDns(ctx context.Context, accountID string, zoneName string) (*ZoneResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/zones/%v/activation", accountID, zoneName))
+	zoneResponse := &ZoneResponse{}
+
+	resp, err := s.client.delete(ctx, path, nil, zoneResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	zoneResponse.HTTPResponse = resp
+	return zoneResponse, nil
+}
