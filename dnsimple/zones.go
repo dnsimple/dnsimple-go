@@ -108,7 +108,7 @@ func (s *ZonesService) GetZoneFile(ctx context.Context, accountID string, zoneNa
 	return zoneFileResponse, nil
 }
 
-// ActivateDns activates DNS services for a zone.
+// ActivateZoneDns activates DNS services for a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#activateZoneService
 func (s *ZonesService) ActivateZoneDns(ctx context.Context, accountID string, zoneName string) (*ZoneResponse, error) {
@@ -124,7 +124,7 @@ func (s *ZonesService) ActivateZoneDns(ctx context.Context, accountID string, zo
 	return zoneResponse, nil
 }
 
-// DeactivateDns deactivates DNS services for a zone.
+// DeactivateZoneDns deactivates DNS services for a zone.
 //
 // See https://developer.dnsimple.com/v2/zones/#deactivateZoneService
 func (s *ZonesService) DeactivateZoneDns(ctx context.Context, accountID string, zoneName string) (*ZoneResponse, error) {
