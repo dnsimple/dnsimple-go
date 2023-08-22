@@ -364,3 +364,46 @@ func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, do
 	renewalResponse.HTTPResponse = resp
 	return renewalResponse, nil
 }
+
+type CreateRegistrantChangeInput struct {
+	DomainId string `json:"domain_id"`
+	ContactId string `json:"contact_id"`
+	ExtendedAttributes map[string]string `json:"extended_attributes"`
+}
+
+type RegistrantChange struct {
+	Id int `json:"id"`
+	Type int `json:"type"`
+	AccountId int `json:"account_id"`
+	ContactId int `json:"contact_id"`
+	DomainId int `json:"domain_id"`
+	// One of: "new", "pending", "cancelling", "cancelled", "completed".
+	State string `json:"state"`
+	ExtendedAttributes map[string]string `json:"extended_attributes"`
+	RegistryOwnerChange bool `json:"registry_owner_change"`
+	IrtLockLiftedBy string `json:"irt_lock_lifted_by"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+// RegistrantChangeResponse represents a response from an API method that returns a registrant change.
+type RegistrantChangeResponse struct {
+	Response
+	Data *RegistrantChange `json:"data"`
+}
+
+// CreateRegistrantChange starts a registrant change.
+//
+// See https://developer.dnsimple.com/v2/registrar/#createRegistrantChange
+func (s *RegistrarService) CreateRegistrantChange(ctx context.Context, accountID string, input *CreateRegistrantChangeInput) (*RegistrantChangeResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes", accountID))
+	changeResponse := &RegistrantChangeResponse{}
+
+	resp, err := s.client.post(ctx, path, input, changeResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	changeResponse.HTTPResponse = resp
+	return changeResponse, nil
+}
