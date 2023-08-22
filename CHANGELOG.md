@@ -2,6 +2,12 @@
 
 ## main
 
+## 1.2.2 (Unreleased)
+
+FEATURES:
+
+- NEW: Added `CreateRegistrantChange` to start a registrant change. (dnsimple/dnsimple-go#146)
+
 ## 1.2.1
 
 FEATURES:
