@@ -13,7 +13,6 @@ type CreateRegistrantChangeInput struct {
 
 type RegistrantChange struct {
 	Id        int `json:"id"`
-	Type      int `json:"type"`
 	AccountId int `json:"account_id"`
 	ContactId int `json:"contact_id"`
 	DomainId  int `json:"domain_id"`
