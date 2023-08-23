@@ -1,4 +1,4 @@
-HTTP/1.1 200
+HTTP/1.1 404 
 server: nginx
 date: Tue, 22 Aug 2023 11:09:40 GMT
 content-type: application/json; charset=utf-8
@@ -12,4 +12,4 @@ x-request-id: 5b0d8bfb-7b6a-40b5-a079-b640fd817e34
 x-runtime: 3.066249
 strict-transport-security: max-age=63072000
 
-{"data":{"domain_id":101,"contact_id":101,"extended_attributes":[],"registry_owner_change":true}}
+{"message":"Domain `dnsimple-rraform.bio` not found"}

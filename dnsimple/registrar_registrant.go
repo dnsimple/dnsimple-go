@@ -28,6 +28,11 @@ type RegistrantChange struct {
 
 type RegistrantChangeResponse struct {
 	Response
+	Data *RegistrantChange `json:"data"`
+}
+
+type RegistrantChangesListResponse struct {
+	Response
 	Data []RegistrantChange `json:"data"`
 }
 
@@ -47,14 +52,29 @@ type CheckRegistrantChangeInput struct {
 	ContactId int `json:"contact_id"`
 }
 
+type ExtendedAttribute struct {
+	Name        string                    `json:"name"`
+	Description string                    `json:"description"`
+	Required    bool                      `json:"required"`
+	Options     []ExtendedAttributeOption `json:"options"`
+}
+
+type ExtendedAttributeOption struct {
+	Title       string `json:"title"`
+	Value       string `json:"value"`
+	Description string `json:"description"`
+}
+
 type RegistrantChangeCheck struct {
-	Response
-	Data []RegistrantChange `json:"data"`
+	DomainId            int                 `json:"domain_id"`
+	ContactId           int                 `json:"contact_id"`
+	ExtendedAttributes  []ExtendedAttribute `json:"extended_attributes"`
+	RegistryOwnerChange bool                `json:"registry_owner_change"`
 }
 
 type RegistrantChangeCheckResponse struct {
 	Response
-	Data []RegistrantChangeCheck `json:"data"`
+	Data *RegistrantChangeCheck `json:"data"`
 }
 
 type RegistrantChangeDeleteResponse struct {
@@ -64,9 +84,9 @@ type RegistrantChangeDeleteResponse struct {
 // ListRegistrantChange lists registrant changes in tthe account.
 //
 // See https://developer.dnsimple.com/v2/registrar/#listRegistrantChanges
-func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, options *RegistrantChangeListOptions) (*RegistrantChangeResponse, error) {
+func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, options *RegistrantChangeListOptions) (*RegistrantChangesListResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes", accountID))
-	changeResponse := &RegistrantChangeResponse{}
+	changeResponse := &RegistrantChangesListResponse{}
 
 	resp, err := s.client.get(ctx, path, changeResponse)
 	if err != nil {
@@ -96,9 +116,9 @@ func (s *RegistrarService) CreateRegistrantChange(ctx context.Context, accountID
 // CheckRegistrantChange retrieves the requirements of a registrant change.
 //
 // See https://developer.dnsimple.com/v2/registrar/#checkRegistrantChange
-func (s *RegistrarService) CheckRegistrantChange(ctx context.Context, accountID string, input *CheckRegistrantChangeInput) (*RegistrantChangeResponse, error) {
+func (s *RegistrarService) CheckRegistrantChange(ctx context.Context, accountID string, input *CheckRegistrantChangeInput) (*RegistrantChangeCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes/check", accountID))
-	checkResponse := &RegistrantChangeResponse{}
+	checkResponse := &RegistrantChangeCheckResponse{}
 
 	resp, err := s.client.post(ctx, path, input, checkResponse)
 	if err != nil {

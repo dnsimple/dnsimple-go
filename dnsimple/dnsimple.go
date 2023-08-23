@@ -262,7 +262,15 @@ func (c *Client) request(ctx context.Context, req *http.Request, obj interface{}
 		if w, ok := obj.(io.Writer); ok {
 			_, err = io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(resp.Body).Decode(obj)
+			var raw []byte
+			raw, err = io.ReadAll(resp.Body)
+			if err == nil {
+				if len(raw) == 0 {
+					// TODO Ignore empty body as temporary workaround for server sending Content-Type: application/json with an empty body.
+				} else {
+					err = json.Unmarshal(raw, obj)
+				}
+			}
 		}
 	}
 
