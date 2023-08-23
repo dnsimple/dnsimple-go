@@ -81,7 +81,7 @@ type RegistrantChangeDeleteResponse struct {
 	Response
 }
 
-// ListRegistrantChange lists registrant changes in tthe account.
+// ListRegistrantChange lists registrant changes in the account.
 //
 // See https://developer.dnsimple.com/v2/registrar/#listRegistrantChanges
 func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, options *RegistrantChangeListOptions) (*RegistrantChangesListResponse, error) {
