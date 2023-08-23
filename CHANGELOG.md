@@ -2,11 +2,11 @@
 
 ## main
 
-## 1.2.2 (Unreleased)
+## 1.3.0 (Unreleased)
 
 FEATURES:
 
-- NEW: Added `CreateRegistrantChange` to start a registrant change. (dnsimple/dnsimple-go#146)
+- NEW: Added `ListRegistrantChanges`, `CreateRegistrantChange`, `CheckRegistrantChange`, `GetRegistrantChange`, and `DeleteRegistrantChange` APIs to manage registrant changes. (dnsimple/dnsimple-go#146)
 
 ## 1.2.1
 
