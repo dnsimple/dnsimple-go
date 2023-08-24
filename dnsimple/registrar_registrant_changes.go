@@ -6,8 +6,8 @@ import (
 )
 
 type CreateRegistrantChangeInput struct {
-	DomainId           int               `json:"domain_id"`
-	ContactId          int               `json:"contact_id"`
+	DomainId           string            `json:"domain_id"`
+	ContactId          string            `json:"contact_id"`
 	ExtendedAttributes map[string]string `json:"extended_attributes"`
 }
 
@@ -47,8 +47,8 @@ type RegistrantChangeListOptions struct {
 }
 
 type CheckRegistrantChangeInput struct {
-	DomainId  int `json:"domain_id"`
-	ContactId int `json:"contact_id"`
+	DomainId  string `json:"domain_id"`
+	ContactId string `json:"contact_id"`
 }
 
 type ExtendedAttribute struct {

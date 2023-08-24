@@ -56,8 +56,8 @@ func TestRegistrarService_CreateRegistrantChange(t *testing.T) {
 	})
 
 	res, err := client.Registrar.CreateRegistrantChange(context.Background(), "1010", &CreateRegistrantChangeInput{
-		DomainId:           101,
-		ContactId:          101,
+		DomainId:           "example.com",
+		ContactId:          "101",
 		ExtendedAttributes: map[string]string{},
 	})
 
@@ -92,8 +92,8 @@ func TestRegistrarService_CheckRegistrantChange(t *testing.T) {
 	})
 
 	res, err := client.Registrar.CheckRegistrantChange(context.Background(), "1010", &CheckRegistrantChangeInput{
-		DomainId:  101,
-		ContactId: 101,
+		DomainId:  "example.com",
+		ContactId: "101",
 	})
 
 	assert.NoError(t, err)
