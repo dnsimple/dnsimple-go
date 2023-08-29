@@ -2,7 +2,7 @@
 
 ## main
 
-## 1.3.0 (Unreleased)
+## 1.3.0
 
 FEATURES:
 
