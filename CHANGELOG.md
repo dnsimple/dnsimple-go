@@ -2,6 +2,12 @@
 
 ## main
 
+## 1.4.0 (Unreleased)
+
+FEATURES:
+
+- NEW: Added `GetDomainTransferLock`, `EnableDomainTransferLock`, and `DisableDomainTransferLock` APIs to manage domain transfer locks. (dnsimple/dnsimple-go#147)
+
 ## 1.3.0
 
 FEATURES:
