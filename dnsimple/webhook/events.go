@@ -45,8 +45,8 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"domain.renew",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
-		"domain.unlock",
-		"domain.transfer": // TODO
+		"domain.transfer", // TODO
+		"domain.unlock":
 		data = &DomainEventData{}
 	case // email forward
 		"email_forward.create",
