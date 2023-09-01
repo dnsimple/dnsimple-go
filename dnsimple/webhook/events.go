@@ -174,6 +174,20 @@ func (d *DomainEventData) unmarshalEventData(payload []byte) error {
 }
 
 //
+// DomainRegistrantChangeEvent
+//
+
+// DomainRegistrantChangegEventData represents the data node for a DomainRegistrantChange event.
+type DomainRegistrantChangeEventData struct {
+	Domain     *dnsimple.Domain     `json:"domain"`
+	Registrant *dnsimple.Contact    `json:"registrant"`
+}
+
+func (d *DomainRegistrantChangeEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
 // EmailForwardEvent
 //
 
