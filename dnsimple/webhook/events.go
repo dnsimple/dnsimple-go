@@ -39,15 +39,17 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"domain.create",
 		"domain.delegation_change",
 		"domain.delete",
-		"domain.lock",
 		"domain.register",
 		"domain.registrant_change",
 		"domain.renew",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
-		"domain.transfer", // TODO
-		"domain.unlock":
+		"domain.transfer": // TODO
 		data = &DomainEventData{}
+	case // domain lock
+		"domain.lock",
+		"domain.unlock":
+		data =  &DomainLockEventData{}
 	case // email forward
 		"email_forward.create",
 		"email_forward.delete",
@@ -172,6 +174,32 @@ type DomainEventData struct {
 }
 
 func (d *DomainEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
+// DomainLockEvent
+//
+
+// DomainLockEventData represents the data node for a DomainLock event.
+type DomainLockEventData struct {
+	Domain     *dnsimple.Domain     `json:"domain"`
+}
+
+func (d *DomainLockEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
+// DomainUnlockEvent
+//
+
+// DomainUnlockEventData represents the data node for a DomainUnlock event.
+type DomainUnlockEventData struct {
+	Domain     *dnsimple.Domain     `json:"domain"`
+}
+
+func (d *DomainUnlockEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 
