@@ -181,7 +181,7 @@ func (d *DomainEventData) unmarshalEventData(payload []byte) error {
 // DomainLockEvent
 //
 
-// DomainLockEventData represents the data node for a DomainLock event.
+// DomainLockEventData represents the data node for a DomainLock or DomainUnlock event.
 type DomainLockEventData struct {
 	Domain     *dnsimple.Domain     `json:"domain"`
 }
