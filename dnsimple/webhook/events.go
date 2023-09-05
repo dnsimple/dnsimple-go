@@ -191,19 +191,6 @@ func (d *DomainLockEventData) unmarshalEventData(payload []byte) error {
 }
 
 //
-// DomainUnlockEvent
-//
-
-// DomainUnlockEventData represents the data node for a DomainUnlock event.
-type DomainUnlockEventData struct {
-	Domain     *dnsimple.Domain     `json:"domain"`
-}
-
-func (d *DomainUnlockEventData) unmarshalEventData(payload []byte) error {
-	return unmarshalEventData(payload, d)
-}
-
-//
 // EmailForwardEvent
 //
 
