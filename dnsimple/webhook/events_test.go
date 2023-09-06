@@ -500,6 +500,34 @@ func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
 	assert.Equal(t, "example.com", data.Domain.Name)
 }
 
+func TestParseDomainEvent_Domain_TransferLockEnable(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "account_id": 1010, "auto_renew": false, "created_at": "2023-03-02T02:39:18Z", "expires_at": "2024-03-02T02:39:22Z", "expires_on": "2024-03-02", "updated_at": "2023-08-31T06:46:48Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 101}}, "name": "domain.transfer_lock_enable", "actor": {"id": "1010", "entity": "account", "pretty": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "account": {"id": 1010, "display": "xxxxxxx-xxxxxxx-xxxxxxx", "identifier": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "api_version": "v2", "request_identifier": "0f31483c-c303-497b-8a88-2edb48aa111e"}`
+
+	event, err := ParseEvent([]byte(payload))
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.transfer_lock_enable", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainTransferLockEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example.com", data.Domain.Name)
+}
+
+func TestParseDomainEvent_Domain_TransferLockDisable(t *testing.T) {
+	payload := `{"data": {"domain": {"id": 1, "name": "example.com", "state": "registered", "account_id": 1010, "auto_renew": false, "created_at": "2023-03-02T02:39:18Z", "expires_at": "2024-03-02T02:39:22Z", "expires_on": "2024-03-02", "updated_at": "2023-08-31T06:46:48Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 101}}, "name": "domain.transfer_lock_disable", "actor": {"id": "1010", "entity": "account", "pretty": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "account": {"id": 1010, "display": "xxxxxxx-xxxxxxx-xxxxxxx", "identifier": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "api_version": "v2", "request_identifier": "0f31483c-c303-497b-8a88-2edb48aa111e"}`
+
+	event, err := ParseEvent([]byte(payload))
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.transfer_lock_disable", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainTransferLockEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example.com", data.Domain.Name)
+}
+
 func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.create/example.http")
 
