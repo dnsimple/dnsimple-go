@@ -178,7 +178,7 @@ func (d *DomainEventData) unmarshalEventData(payload []byte) error {
 }
 
 //
-// DomainLockEvent
+// DomainTransferLockEvent
 //
 
 // DomainTransferLockEventData represents the data node for a DomainTransferLockEnable or DomainTransferLockDisable event.
