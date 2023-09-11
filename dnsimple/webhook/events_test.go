@@ -458,6 +458,36 @@ func TestParseDomainEvent_Domain_RegistrantChange(t *testing.T) {
 	assert.Equal(t, "new_contact", data.Registrant.Label)
 }
 
+func TestParseDomainEvent_Domain_RegistrantChangeStarted(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.registrant_change/status-started.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.registrant_change:started", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example-alpha.com", data.Domain.Name)
+	assert.Equal(t, "new_contact", data.Registrant.Label)
+}
+
+func TestParseDomainEvent_Domain_RegistrantChangeCancelled(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.registrant_change/status-cancelled.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.registrant_change:cancelled", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example-alpha.com", data.Domain.Name)
+	assert.Equal(t, "new_contact", data.Registrant.Label)
+}
+
 func TestParseDomainEvent_Domain_ResolutionDisable(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.resolution_disable/example.http")
 
