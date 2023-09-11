@@ -41,6 +41,8 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"domain.delete",
 		"domain.register",
 		"domain.registrant_change",
+		"domain.registrant_change:started",
+		"domain.registrant_change:cancelled",
 		"domain.renew",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
@@ -187,6 +189,20 @@ type DomainTransferLockEventData struct {
 }
 
 func (d *DomainTransferLockEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
+// DomainRegistrantChangeEvent
+//
+
+// DomainRegistrantChangegEventData represents the data node for a DomainRegistrantChange event.
+type DomainRegistrantChangeEventData struct {
+	Domain     *dnsimple.Domain     `json:"domain"`
+	Registrant *dnsimple.Contact    `json:"registrant"`
+}
+
+func (d *DomainRegistrantChangeEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 
