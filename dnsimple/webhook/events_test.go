@@ -530,6 +530,34 @@ func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
 	assert.Equal(t, "example.com", data.Domain.Name)
 }
 
+func TestParseDomainEvent_Domain_TransferLockEnable(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.transfer_lock_enable/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.transfer_lock_enable", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainTransferLockEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example.com", data.Domain.Name)
+}
+
+func TestParseDomainEvent_Domain_TransferLockDisable(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.transfer_lock_disable/example.http")
+
+	event, err := ParseEvent([]byte(payload))
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.transfer_lock_disable", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainTransferLockEventData)
+	assert.True(t, ok)
+	assert.Equal(t, "example.com", data.Domain.Name)
+}
+
 func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.create/example.http")
 
