@@ -2,6 +2,12 @@
 
 ## main
 
+## 1.4.1
+
+ENHANCEMENTS:
+
+- NEW: Added events for `domain.transfer_lock_enable` and `domain.transfer_lock_disable` (dnsimple/dnsimple-go#149)
+
 ## 1.4.0
 
 FEATURES:
