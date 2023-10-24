@@ -53,6 +53,7 @@ type Client struct {
 	// Services used for talking to different parts of the DNSimple API.
 	Identity          *IdentityService
 	Accounts          *AccountsService
+	Billing           *BillingService
 	Certificates      *CertificatesService
 	Contacts          *ContactsService
 	Domains           *DomainsService
