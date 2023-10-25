@@ -93,6 +93,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c := &Client{httpClient: httpClient, BaseURL: defaultBaseURL}
 	c.Identity = &IdentityService{client: c}
 	c.Accounts = &AccountsService{client: c}
+	c.Billing = &BillingService{client: c}
 	c.Certificates = &CertificatesService{client: c}
 	c.Contacts = &ContactsService{client: c}
 	c.Domains = &DomainsService{client: c}

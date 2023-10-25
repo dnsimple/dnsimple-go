@@ -22,19 +22,19 @@ type ListChargesResponse struct {
 }
 
 type Charge struct {
-	InvoicedAt string `json:"invoiced_at,omitempty"`
-	TotalAmount string `json:"total_amount,omitempty"`
-	BalanceAmount string `json:"balance_amount,omitempty"`
-	Reference string `json:"reference,omitempty"`
-	State string `json:"state,omitempty"`
-	Items []ChargeItem `json:"items,omitempty"`
+	InvoicedAt    string       `json:"invoiced_at,omitempty"`
+	TotalAmount   string       `json:"total_amount,omitempty"`
+	BalanceAmount string       `json:"balance_amount,omitempty"`
+	Reference     string       `json:"reference,omitempty"`
+	State         string       `json:"state,omitempty"`
+	Items         []ChargeItem `json:"items,omitempty"`
 }
 
 type ChargeItem struct {
-	Description string `json:"description,omitempty"`
-	Amount string `json:"amount,omitempty"`
-	ProductId int64 `json:"product_id,omitempty"`
-	ProductType string `json:"product_type,omitempty"`
+	Description      string `json:"description,omitempty"`
+	Amount           string `json:"amount,omitempty"`
+	ProductId        int64  `json:"product_id,omitempty"`
+	ProductType      string `json:"product_type,omitempty"`
 	ProductReference string `json:"product_reference,omitempty"`
 }
 
@@ -47,7 +47,7 @@ type BillingService struct {
 // See https://developer.dnsimple.com/v2/billing/#listCharges
 func (s *BillingService) ListCharges(
 	ctx context.Context,
-	account int64,
+	account string,
 	options ListChargesOptions,
 ) (*ListChargesResponse, error) {
 	res := &ListChargesResponse{}
