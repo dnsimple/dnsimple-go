@@ -3,7 +3,8 @@ package dnsimple
 import (
 	"context"
 	"fmt"
-	"strconv"
+
+	"github.com/shopspring/decimal"
 )
 
 type ListChargesOptions struct {
@@ -23,63 +24,24 @@ type ListChargesResponse struct {
 }
 
 type Charge struct {
-	InvoicedAt    string       `json:"invoiced_at,omitempty"`
-	TotalAmount   string       `json:"total_amount,omitempty"`
-	BalanceAmount string       `json:"balance_amount,omitempty"`
-	Reference     string       `json:"reference,omitempty"`
-	State         string       `json:"state,omitempty"`
-	Items         []ChargeItem `json:"items,omitempty"`
+	InvoicedAt    string          `json:"invoiced_at,omitempty"`
+	TotalAmount   decimal.Decimal `json:"total_amount,omitempty"`
+	BalanceAmount decimal.Decimal `json:"balance_amount,omitempty"`
+	Reference     string          `json:"reference,omitempty"`
+	State         string          `json:"state,omitempty"`
+	Items         []ChargeItem    `json:"items,omitempty"`
 }
 
 type ChargeItem struct {
-	Description      string `json:"description,omitempty"`
-	Amount           string `json:"amount,omitempty"`
-	ProductId        int64  `json:"product_id,omitempty"`
-	ProductType      string `json:"product_type,omitempty"`
-	ProductReference string `json:"product_reference,omitempty"`
+	Description      string          `json:"description,omitempty"`
+	Amount           decimal.Decimal `json:"amount,omitempty"`
+	ProductId        int64           `json:"product_id,omitempty"`
+	ProductType      string          `json:"product_type,omitempty"`
+	ProductReference string          `json:"product_reference,omitempty"`
 }
 
 type BillingService struct {
 	client *Client
-}
-
-func (c *Charge) TotalAmountFloat() (float64, error) {
-	if c.TotalAmount == "" {
-		return 0.0, fmt.Errorf("total amount is empty")
-	}
-
-	totalAmount, err := strconv.ParseFloat(c.TotalAmount, 64)
-	if err != nil {
-		return 0.0, fmt.Errorf("error parsing total amount: %w", err)
-	}
-
-	return totalAmount, nil
-}
-
-func (c *Charge) BalanceAmountFloat() (float64, error) {
-	if c.BalanceAmount == "" {
-		return 0.0, fmt.Errorf("balance amount is empty")
-	}
-
-	balanceAmount, err := strconv.ParseFloat(c.BalanceAmount, 64)
-	if err != nil {
-		return 0.0, fmt.Errorf("error parsing balance amount: %w", err)
-	}
-
-	return balanceAmount, nil
-}
-
-func (c *ChargeItem) AmountFloat() (float64, error) {
-	if c.Amount == "" {
-		return 0.0, fmt.Errorf("total amount is empty")
-	}
-
-	amount, err := strconv.ParseFloat(c.Amount, 64)
-	if err != nil {
-		return 0.0, fmt.Errorf("error parsing total amount: %w", err)
-	}
-
-	return amount, nil
 }
 
 // Lists the billing charges for the account.

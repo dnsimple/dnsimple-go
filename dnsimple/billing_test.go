@@ -2,13 +2,24 @@ package dnsimple
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 )
+
+func toDecimal(t *testing.T, s string) decimal.Decimal {
+	d, err := decimal.NewFromString(s)
+	if err != nil {
+		assert.Nilf(t, err, "toDecimal() error = %v", err)
+	}
+
+	return d
+}
 
 func TestBillingService_ListCharges_Success(t *testing.T) {
 	setupMockServer()
@@ -32,14 +43,14 @@ func TestBillingService_ListCharges_Success(t *testing.T) {
 	assert.Equal(t, response.Data, []Charge{
 		{
 			InvoicedAt:    "2023-08-17T05:53:36Z",
-			TotalAmount:   "14.50",
-			BalanceAmount: "0.00",
+			TotalAmount:   toDecimal(t, "14.50"),
+			BalanceAmount: toDecimal(t, "0.00"),
 			Reference:     "1-2",
 			State:         "collected",
 			Items: []ChargeItem{
 				{
 					Description:      "Register bubble-registered.com",
-					Amount:           "14.50",
+					Amount:           toDecimal(t, "14.50"),
 					ProductId:        1,
 					ProductType:      "domain-registration",
 					ProductReference: "bubble-registered.com",
@@ -48,14 +59,14 @@ func TestBillingService_ListCharges_Success(t *testing.T) {
 		},
 		{
 			InvoicedAt:    "2023-08-17T05:57:53Z",
-			TotalAmount:   "14.50",
-			BalanceAmount: "0.00",
+			TotalAmount:   toDecimal(t, "14.50"),
+			BalanceAmount: toDecimal(t, "0.00"),
 			Reference:     "2-2",
 			State:         "refunded",
 			Items: []ChargeItem{
 				{
 					Description:      "Register example.com",
-					Amount:           "14.50",
+					Amount:           toDecimal(t, "14.50"),
 					ProductId:        2,
 					ProductType:      "domain-registration",
 					ProductReference: "example.com",
@@ -64,21 +75,21 @@ func TestBillingService_ListCharges_Success(t *testing.T) {
 		},
 		{
 			InvoicedAt:    "2023-10-24T07:49:05Z",
-			TotalAmount:   "1099999.99",
-			BalanceAmount: "0.00",
+			TotalAmount:   toDecimal(t, "1099999.99"),
+			BalanceAmount: toDecimal(t, "0.00"),
 			Reference:     "4-2",
 			State:         "collected",
 			Items: []ChargeItem{
 				{
 					Description:      "Test Line Item 1",
-					Amount:           "99999.99",
+					Amount:           toDecimal(t, "99999.99"),
 					ProductId:        0,
 					ProductType:      "manual",
 					ProductReference: "",
 				},
 				{
 					Description:      "Test Line Item 2",
-					Amount:           "1000000.00",
+					Amount:           toDecimal(t, "1000000.00"),
 					ProductId:        0,
 					ProductType:      "manual",
 					ProductReference: "",
@@ -128,125 +139,52 @@ func TestBillingService_ListCharges_Fail403(t *testing.T) {
 	assert.Equal(t, err.(*ErrorResponse).Message, "Permission Denied. Required Scope: billing:*:read")
 }
 
-func TestChargeTotalAmountFloat(t *testing.T) {
+func TestUnmarshalCharge(t *testing.T) {
 	tests := []struct {
 		name    string
-		charge  Charge
-		want    float64
+		jsonStr string
+		want    Charge
 		wantErr bool
 	}{
 		{
-			name:    "empty total amount",
-			charge:  Charge{TotalAmount: ""},
-			want:    0.0,
-			wantErr: true,
-		},
-		{
-			name:    "valid total amount",
-			charge:  Charge{TotalAmount: "123.45"},
-			want:    123.45,
+			name:    "valid json",
+			jsonStr: `{"total_amount": "123.45", "balance_amount": "67.89"}`,
+			want: Charge{
+				TotalAmount:   decimal.NewFromFloat(123.45),
+				BalanceAmount: decimal.NewFromFloat(67.89),
+			},
 			wantErr: false,
 		},
 		{
-			name:    "invalid total amount",
-			charge:  Charge{TotalAmount: "abc"},
-			want:    0.0,
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.charge.TotalAmountFloat()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("TotalAmountFloat() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("TotalAmountFloat() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestChargeBalanceAmountFloat(t *testing.T) {
-	tests := []struct {
-		name    string
-		charge  Charge
-		want    float64
-		wantErr bool
-	}{
-		{
-			name:    "empty total amount",
-			charge:  Charge{BalanceAmount: ""},
-			want:    0.0,
-			wantErr: true,
-		},
-		{
-			name:    "valid total amount",
-			charge:  Charge{BalanceAmount: "123.45"},
-			want:    123.45,
+			name:    "zero values",
+			jsonStr: `{"total_amount": "0.00", "balance_amount": "0.00"}`,
+			want: Charge{
+				TotalAmount:   decimal.NewFromFloat(0.00),
+				BalanceAmount: decimal.NewFromFloat(0.00),
+			},
 			wantErr: false,
 		},
 		{
-			name:    "invalid total amount",
-			charge:  Charge{BalanceAmount: "abc"},
-			want:    0.0,
+			name:    "invalid amount value",
+			jsonStr: `{"total_amount": "123.45", "balance_amount": "abc"}`,
+			want: Charge{
+				TotalAmount:   decimal.NewFromFloat(123.45),
+				BalanceAmount: decimal.Decimal{},
+			},
 			wantErr: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.charge.BalanceAmountFloat()
+			var got Charge
+			err := json.Unmarshal([]byte(tt.jsonStr), &got)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("BalanceAmountFloat() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Unmarshal() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got != tt.want {
-				t.Errorf("BalanceAmountFloat() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestChargeItemAmountFloat(t *testing.T) {
-	tests := []struct {
-		name       string
-		chargeItem ChargeItem
-		want       float64
-		wantErr    bool
-	}{
-		{
-			name:       "empty total amount",
-			chargeItem: ChargeItem{Amount: ""},
-			want:       0.0,
-			wantErr:    true,
-		},
-		{
-			name:       "valid total amount",
-			chargeItem: ChargeItem{Amount: "123.45"},
-			want:       123.45,
-			wantErr:    false,
-		},
-		{
-			name:       "invalid total amount",
-			chargeItem: ChargeItem{Amount: "abc"},
-			want:       0.0,
-			wantErr:    true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.chargeItem.AmountFloat()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("AmountFloat() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("AmountFloat() = %v, want %v", got, tt.want)
-			}
+			assert.Truef(t, got.TotalAmount.Equals(tt.want.TotalAmount), "TotalAmount: got %v, want %v\nTesting: %s\n%s", got.TotalAmount, tt.want.TotalAmount, tt.name, tt.jsonStr)
+			assert.Truef(t, got.BalanceAmount.Equals(tt.want.BalanceAmount), "BalanceAmount: got %v, want %v\nTesting: %s\n%s", got.BalanceAmount, tt.want.BalanceAmount, tt.name, tt.jsonStr)
 		})
 	}
 }
