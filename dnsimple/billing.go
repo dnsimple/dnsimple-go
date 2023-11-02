@@ -3,6 +3,7 @@ package dnsimple
 import (
 	"context"
 	"fmt"
+	"strconv"
 )
 
 type ListChargesOptions struct {
@@ -40,6 +41,32 @@ type ChargeItem struct {
 
 type BillingService struct {
 	client *Client
+}
+
+func (c *Charge) TotalAmountFloat() (float64, error) {
+	if c.TotalAmount == "" {
+		return 0.0, fmt.Errorf("total amount is empty")
+	}
+
+	totalAmount, err := strconv.ParseFloat(c.TotalAmount, 64)
+	if err != nil {
+		return 0.0, fmt.Errorf("error parsing total amount: %w", err)
+	}
+
+	return totalAmount, nil
+}
+
+func (c *Charge) BalanceAmountFloat() (float64, error) {
+	if c.BalanceAmount == "" {
+		return 0.0, fmt.Errorf("balance amount is empty")
+	}
+
+	balanceAmount, err := strconv.ParseFloat(c.BalanceAmount, 64)
+	if err != nil {
+		return 0.0, fmt.Errorf("error parsing balance amount: %w", err)
+	}
+
+	return balanceAmount, nil
 }
 
 // Lists the billing charges for the account.

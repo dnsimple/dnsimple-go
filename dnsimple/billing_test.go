@@ -127,3 +127,85 @@ func TestBillingService_ListCharges_Fail403(t *testing.T) {
 
 	assert.Equal(t, err.(*ErrorResponse).Message, "Permission Denied. Required Scope: billing:*:read")
 }
+
+func TestChargeTotalAmountFloat(t *testing.T) {
+	tests := []struct {
+		name    string
+		charge  Charge
+		want    float64
+		wantErr bool
+	}{
+		{
+			name:    "empty total amount",
+			charge:  Charge{TotalAmount: ""},
+			want:    0.0,
+			wantErr: true,
+		},
+		{
+			name:    "valid total amount",
+			charge:  Charge{TotalAmount: "123.45"},
+			want:    123.45,
+			wantErr: false,
+		},
+		{
+			name:    "invalid total amount",
+			charge:  Charge{TotalAmount: "abc"},
+			want:    0.0,
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.charge.TotalAmountFloat()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TotalAmountFloat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("TotalAmountFloat() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestChargeBalanceAmountFloat(t *testing.T) {
+	tests := []struct {
+		name    string
+		charge  Charge
+		want    float64
+		wantErr bool
+	}{
+		{
+			name:    "empty total amount",
+			charge:  Charge{BalanceAmount: ""},
+			want:    0.0,
+			wantErr: true,
+		},
+		{
+			name:    "valid total amount",
+			charge:  Charge{BalanceAmount: "123.45"},
+			want:    123.45,
+			wantErr: false,
+		},
+		{
+			name:    "invalid total amount",
+			charge:  Charge{BalanceAmount: "abc"},
+			want:    0.0,
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.charge.BalanceAmountFloat()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("BalanceAmountFloat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("BalanceAmountFloat() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
