@@ -69,6 +69,19 @@ func (c *Charge) BalanceAmountFloat() (float64, error) {
 	return balanceAmount, nil
 }
 
+func (c *ChargeItem) AmountFloat() (float64, error) {
+	if c.Amount == "" {
+		return 0.0, fmt.Errorf("total amount is empty")
+	}
+
+	amount, err := strconv.ParseFloat(c.Amount, 64)
+	if err != nil {
+		return 0.0, fmt.Errorf("error parsing total amount: %w", err)
+	}
+
+	return amount, nil
+}
+
 // Lists the billing charges for the account.
 //
 // See https://developer.dnsimple.com/v2/billing/#listCharges

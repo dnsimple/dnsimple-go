@@ -209,3 +209,44 @@ func TestChargeBalanceAmountFloat(t *testing.T) {
 		})
 	}
 }
+
+func TestChargeItemAmountFloat(t *testing.T) {
+	tests := []struct {
+		name       string
+		chargeItem ChargeItem
+		want       float64
+		wantErr    bool
+	}{
+		{
+			name:       "empty total amount",
+			chargeItem: ChargeItem{Amount: ""},
+			want:       0.0,
+			wantErr:    true,
+		},
+		{
+			name:       "valid total amount",
+			chargeItem: ChargeItem{Amount: "123.45"},
+			want:       123.45,
+			wantErr:    false,
+		},
+		{
+			name:       "invalid total amount",
+			chargeItem: ChargeItem{Amount: "abc"},
+			want:       0.0,
+			wantErr:    true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.chargeItem.AmountFloat()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AmountFloat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("AmountFloat() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
