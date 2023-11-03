@@ -2,6 +2,12 @@
 
 ## main
 
+## 1.5.0
+
+FEATURES:
+
+- NEW: Added `billing.ListCharges` to list charges for the account https://developer.dnsimple.com/v2/billing-charges/. (dnsimple/dnsimple-go#156)
+
 ## 1.4.1
 
 ENHANCEMENTS:
