@@ -6,7 +6,7 @@
 
 FEATURES:
 
-- NEW: Added `billing.ListCharges` to list charges for the account https://developer.dnsimple.com/v2/billing-charges/. (dnsimple/dnsimple-go#156)
+- NEW: Added `billing.ListCharges` to list charges for the account [learn more](https://developer.dnsimple.com/v2/billing-charges/). (dnsimple/dnsimple-go#156)
 
 ## 1.4.1
 
