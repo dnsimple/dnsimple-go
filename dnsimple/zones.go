@@ -15,12 +15,15 @@ type ZonesService struct {
 
 // Zone represents a Zone in DNSimple.
 type Zone struct {
-	ID        int64  `json:"id,omitempty"`
-	AccountID int64  `json:"account_id,omitempty"`
-	Name      string `json:"name,omitempty"`
-	Reverse   bool   `json:"reverse,omitempty"`
-	CreatedAt string `json:"created_at,omitempty"`
-	UpdatedAt string `json:"updated_at,omitempty"`
+	ID                int64  `json:"id,omitempty"`
+	AccountID         int64  `json:"account_id,omitempty"`
+	Name              string `json:"name,omitempty"`
+	Reverse           bool   `json:"reverse,omitempty"`
+	Secondary         bool   `json:"secondary,omitempty"`
+	LastTransferredAt string `json:"last_transferred_at,omitempty"`
+	Active            bool   `json:"active,omitempty"`
+	CreatedAt         string `json:"created_at,omitempty"`
+	UpdatedAt         string `json:"updated_at,omitempty"`
 }
 
 // ZoneFile represents a Zone File in DNSimple.

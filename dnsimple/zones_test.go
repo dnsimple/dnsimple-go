@@ -79,12 +79,15 @@ func TestZonesService_GetZone(t *testing.T) {
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
-		ID:        1,
-		AccountID: 1010,
-		Name:      "example-alpha.com",
-		Reverse:   false,
-		CreatedAt: "2015-04-23T07:40:03Z",
-		UpdatedAt: "2015-04-23T07:40:03Z"}
+		ID:                1,
+		AccountID:         1010,
+		Name:              "example-alpha.com",
+		Reverse:           false,
+		Secondary:         false,
+		LastTransferredAt: "",
+		Active:            true,
+		CreatedAt:         "2015-04-23T07:40:03Z",
+		UpdatedAt:         "2015-04-23T07:40:03Z"}
 	assert.Equal(t, wantSingle, zone)
 }
 
@@ -137,12 +140,15 @@ func TestZonesService_ActivateZoneDns(t *testing.T) {
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
-		ID:        1,
-		AccountID: 1010,
-		Name:      "example.com",
-		Reverse:   false,
-		CreatedAt: "2015-04-23T07:40:03Z",
-		UpdatedAt: "2015-04-23T07:40:03Z",
+		ID:                1,
+		AccountID:         1010,
+		Name:              "example.com",
+		Reverse:           false,
+		Secondary:         false,
+		LastTransferredAt: "",
+		Active:            true,
+		CreatedAt:         "2015-04-23T07:40:03Z",
+		UpdatedAt:         "2015-04-23T07:40:03Z",
 	}
 	assert.Equal(t, wantSingle, zone)
 }
@@ -169,12 +175,15 @@ func TestZonesService_DeactivateZoneDns(t *testing.T) {
 	assert.NoError(t, err)
 	zone := zoneResponse.Data
 	wantSingle := &Zone{
-		ID:        1,
-		AccountID: 1010,
-		Name:      "example.com",
-		Reverse:   false,
-		CreatedAt: "2015-04-23T07:40:03Z",
-		UpdatedAt: "2015-04-23T07:40:03Z",
+		ID:                1,
+		AccountID:         1010,
+		Name:              "example.com",
+		Reverse:           false,
+		Secondary:         false,
+		LastTransferredAt: "",
+		Active:            false,
+		CreatedAt:         "2015-04-23T07:40:03Z",
+		UpdatedAt:         "2015-04-23T07:40:03Z",
 	}
 	assert.Equal(t, wantSingle, zone)
 }
