@@ -2,6 +2,8 @@
 
 ## main
 
+## 1.5.1
+
 ENHANCEMENTS:
 
 - NEW: Added `Secondary`, `LastTransferredAt`, `Active` to `Zone` (dnsimple/dnsimple-go)
