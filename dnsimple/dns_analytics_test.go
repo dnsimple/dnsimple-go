@@ -28,7 +28,7 @@ func TestDnsAnalyticsService_Query(t *testing.T) {
 	dnsAnalyticsResponse, err := client.DnsAnalytics.Query(context.Background(), "1", nil)
 
 	assert.NoError(t, err)
-	//assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, dnsAnalyticsResponse.Pagination)
+	assert.Equal(t, &Pagination{CurrentPage: 0, PerPage: 100, TotalPages: 1, TotalEntries: 93}, dnsAnalyticsResponse.Pagination)
 	data := dnsAnalyticsResponse.Data
 	assert.Len(t, data, 12)
 	assert.Equal(t, int64(1200), data[0].Volume)
