@@ -39,7 +39,7 @@ type DnsAnalyticsResponse struct {
 	Query   DnsAnalyticsQueryParameters `json:"query"`
 }
 
-func (r *DnsAnalyticsResponse) marshallData() {
+func (r *DnsAnalyticsResponse) marshalData() {
 	list := make([]DnsAnalytics, len(r.Rows))
 
 	for i, row := range r.Rows {
@@ -78,6 +78,6 @@ func (s *DnsAnalyticsService) Query(ctx context.Context, accountID string, optio
 	}
 
 	dnsAnalyticsResponse.HTTPResponse = resp
-	dnsAnalyticsResponse.marshallData()
+	dnsAnalyticsResponse.marshalData()
 	return dnsAnalyticsResponse, nil
 }
