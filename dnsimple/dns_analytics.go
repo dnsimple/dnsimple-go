@@ -30,21 +30,26 @@ type DnsAnalyticsQueryParameters struct {
 	Groupings string `json:"groupings"`
 }
 
+// RowAndHeaderData represents the special payload of `data` when it includes lists of `rows` and `headers`.
+type RowAndHeaderData struct {
+	Rows    [][]interface{} `json:"rows"`
+	Headers []string        `json:"headers"`
+}
+
 // DnsAnalyticsResponse represents a response from an API method that returns DnsAnalytics data.
 type DnsAnalyticsResponse struct {
 	Response
-	Data    []DnsAnalytics
-	Rows    [][]interface{}             `json:"data"`
-	Headers []string                    `json:"headers"`
-	Query   DnsAnalyticsQueryParameters `json:"query"`
+	Data             []DnsAnalytics
+	RowAndHeaderData RowAndHeaderData            `json:"data"`
+	Query            DnsAnalyticsQueryParameters `json:"query"`
 }
 
 func (r *DnsAnalyticsResponse) marshalData() {
-	list := make([]DnsAnalytics, len(r.Rows))
+	list := make([]DnsAnalytics, len(r.RowAndHeaderData.Rows))
 
-	for i, row := range r.Rows {
+	for i, row := range r.RowAndHeaderData.Rows {
 		var dataEntry DnsAnalytics
-		for j, header := range r.Headers {
+		for j, header := range r.RowAndHeaderData.Headers {
 			switch header {
 			case "volume":
 				dataEntry.Volume = int64(row[j].(float64))
