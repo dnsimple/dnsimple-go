@@ -65,10 +65,25 @@ func (r *DnsAnalyticsResponse) marshalData() {
 	r.Data = list
 }
 
+// DnsAnalyticsOptions specifies the optional parameters you can provide
+// to customize the DnsAnalyticsService.Query method.
+type DnsAnalyticsOptions struct {
+	// Group results by the provided list of attributes separated by a comma
+	Groupings *string `url:"groupings,omitempty"`
+
+	// Only include results starting from the provided date in ISO8601 format
+	StartDate *string `url:"start_date,omitempty"`
+
+	// Only include results up to the provided date in ISO8601 format
+	EndDate *string `url:"end_date,omitempty"`
+
+	ListOptions
+}
+
 // Query gets DNS Analytics data for an account
 //
 // See https://developer.dnsimple.com/v2/dns_analytics/#query
-func (s *DnsAnalyticsService) Query(ctx context.Context, accountID string, options *ListOptions) (*DnsAnalyticsResponse, error) {
+func (s *DnsAnalyticsService) Query(ctx context.Context, accountID string, options *DnsAnalyticsOptions) (*DnsAnalyticsResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/dns_analytics", accountID))
 	dnsAnalyticsResponse := &DnsAnalyticsResponse{}
 
