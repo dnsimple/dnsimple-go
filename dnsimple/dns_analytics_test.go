@@ -33,7 +33,7 @@ func TestDnsAnalyticsService_Query(t *testing.T) {
 	assert.Len(t, data, 12)
 	assert.Equal(t, int64(1200), data[0].Volume)
 	assert.Equal(t, "2023-12-08", data[0].Date)
-	assert.Equal(t, "bar.com", data[0].Zone)
+	assert.Equal(t, "bar.com", data[0].ZoneName)
 }
 
 func TestDnsAnalyticsService_Query_SupportsFiltering(t *testing.T) {
@@ -67,7 +67,7 @@ func TestDnsAnalyticsService_Query_SupportsSorting(t *testing.T) {
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 		expectedQueryParameters := url.Values{}
-		expectedQueryParameters.Add("sort", "date:desc,zone:asc")
+		expectedQueryParameters.Add("sort", "date:desc,zone_name:asc")
 		testQuery(t, r, expectedQueryParameters)
 
 		w.WriteHeader(httpResponse.StatusCode)
@@ -75,7 +75,7 @@ func TestDnsAnalyticsService_Query_SupportsSorting(t *testing.T) {
 	})
 
 	options := DnsAnalyticsOptions{}
-	options.Sort = String("date:desc,zone:asc")
+	options.Sort = String("date:desc,zone_name:asc")
 	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &options)
 }
 
@@ -113,12 +113,12 @@ func TestDnsAnalyticsService_Query_SupportsGrouping(t *testing.T) {
 		testMethod(t, r, "GET")
 		testHeaders(t, r)
 		expectedQueryParameters := url.Values{}
-		expectedQueryParameters.Add("groupings", "zone,date")
+		expectedQueryParameters.Add("groupings", "zone_name,date")
 		testQuery(t, r, expectedQueryParameters)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &DnsAnalyticsOptions{Groupings: String("zone,date")})
+	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &DnsAnalyticsOptions{Groupings: String("zone_name,date")})
 }

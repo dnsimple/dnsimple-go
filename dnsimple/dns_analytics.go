@@ -15,9 +15,9 @@ type DnsAnalyticsService struct {
 
 // DnsAnalytics represents DNS Analytics data.
 type DnsAnalytics struct {
-	Volume int64
-	Zone   string
-	Date   string
+	Volume   int64
+	ZoneName string
+	Date     string
 }
 
 type DnsAnalyticsQueryParameters struct {
@@ -53,8 +53,8 @@ func (r *DnsAnalyticsResponse) marshalData() {
 			switch header {
 			case "volume":
 				dataEntry.Volume = int64(row[j].(float64))
-			case "zone":
-				dataEntry.Zone = row[j].(string)
+			case "zone_name":
+				dataEntry.ZoneName = row[j].(string)
 			case "date":
 				dataEntry.Date = row[j].(string)
 			}
