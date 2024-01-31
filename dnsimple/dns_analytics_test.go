@@ -25,7 +25,7 @@ func TestDnsAnalyticsService_Query(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	dnsAnalyticsResponse, err := client.DnsAnalytics.Query(context.Background(), "1", nil)
+	dnsAnalyticsResponse, err := client.DnsAnalytics.Query(context.Background(), 1, nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, &Pagination{CurrentPage: 0, PerPage: 100, TotalPages: 1, TotalEntries: 93}, dnsAnalyticsResponse.Pagination)
@@ -54,7 +54,7 @@ func TestDnsAnalyticsService_Query_SupportsFiltering(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &DnsAnalyticsOptions{StartDate: String("2023-10-01"), EndDate: String("2023-11-01")})
+	_, _ = client.DnsAnalytics.Query(context.Background(), 1, &DnsAnalyticsOptions{StartDate: String("2023-10-01"), EndDate: String("2023-11-01")})
 }
 
 func TestDnsAnalyticsService_Query_SupportsSorting(t *testing.T) {
@@ -76,7 +76,7 @@ func TestDnsAnalyticsService_Query_SupportsSorting(t *testing.T) {
 
 	options := DnsAnalyticsOptions{}
 	options.Sort = String("date:desc,zone_name:asc")
-	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &options)
+	_, _ = client.DnsAnalytics.Query(context.Background(), 1, &options)
 }
 
 func TestDnsAnalyticsService_Query_SupportsPagination(t *testing.T) {
@@ -100,7 +100,7 @@ func TestDnsAnalyticsService_Query_SupportsPagination(t *testing.T) {
 	options := DnsAnalyticsOptions{}
 	options.Page = Int(33)
 	options.PerPage = Int(200)
-	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &options)
+	_, _ = client.DnsAnalytics.Query(context.Background(), 1, &options)
 }
 
 func TestDnsAnalyticsService_Query_SupportsGrouping(t *testing.T) {
@@ -120,5 +120,5 @@ func TestDnsAnalyticsService_Query_SupportsGrouping(t *testing.T) {
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	_, _ = client.DnsAnalytics.Query(context.Background(), "1", &DnsAnalyticsOptions{Groupings: String("zone_name,date")})
+	_, _ = client.DnsAnalytics.Query(context.Background(), 1, &DnsAnalyticsOptions{Groupings: String("zone_name,date")})
 }

@@ -21,13 +21,13 @@ type DnsAnalytics struct {
 }
 
 type DnsAnalyticsQueryParameters struct {
-	AccountId int64  `json:"account_id"`
-	StartDate string `json:"start_date"`
-	EndDate   string `json:"end_date"`
-	Sort      string `json:"sort"`
-	Page      int64  `json:"page"`
-	PerPage   int64  `json:"per_page"`
-	Groupings string `json:"groupings"`
+	AccountId interface{} `json:"account_id"`
+	StartDate string      `json:"start_date"`
+	EndDate   string      `json:"end_date"`
+	Sort      string      `json:"sort"`
+	Page      int64       `json:"page"`
+	PerPage   int64       `json:"per_page"`
+	Groupings string      `json:"groupings"`
 }
 
 // RowAndHeaderData represents the special payload of `data` when it includes lists of `rows` and `headers`.
@@ -83,7 +83,7 @@ type DnsAnalyticsOptions struct {
 // Query gets DNS Analytics data for an account
 //
 // See https://developer.dnsimple.com/v2/dns_analytics/#query
-func (s *DnsAnalyticsService) Query(ctx context.Context, accountID string, options *DnsAnalyticsOptions) (*DnsAnalyticsResponse, error) {
+func (s *DnsAnalyticsService) Query(ctx context.Context, accountID int64, options *DnsAnalyticsOptions) (*DnsAnalyticsResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/dns_analytics", accountID))
 	dnsAnalyticsResponse := &DnsAnalyticsResponse{}
 
