@@ -8,7 +8,7 @@ import (
 // DnsAnalyticsService handles communication with the DNS Analytics related
 // methods of the DNSimple API.
 //
-// See https://developer.dnsimple.com/v2/dns_analytics/
+// See https://developer.dnsimple.com/v2/dns-analytics/
 type DnsAnalyticsService struct {
 	client *Client
 }
@@ -82,7 +82,7 @@ type DnsAnalyticsOptions struct {
 
 // Query gets DNS Analytics data for an account
 //
-// See https://developer.dnsimple.com/v2/dns_analytics/#query
+// See https://developer.dnsimple.com/v2/dns-analytics/#query
 func (s *DnsAnalyticsService) Query(ctx context.Context, accountID int64, options *DnsAnalyticsOptions) (*DnsAnalyticsResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/dns_analytics", accountID))
 	dnsAnalyticsResponse := &DnsAnalyticsResponse{}
