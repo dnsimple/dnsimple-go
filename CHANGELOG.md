@@ -2,6 +2,10 @@
 
 ## main
 
+## 1.6.0
+
+- NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint(dnsimple/dnsimple-go#164)
+
 ## 1.5.1
 
 ENHANCEMENTS:
