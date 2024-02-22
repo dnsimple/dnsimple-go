@@ -395,3 +395,20 @@ func (s *RegistrarService) RestoreDomain(ctx context.Context, accountID string, 
 	renewalResponse.HTTPResponse = resp
 	return renewalResponse, nil
 }
+
+// GetDomainRestore gets the details of an existing domain restore.
+//
+// See https://developer.dnsimple.com/v2/registrar/#getDomainRestore
+func (s *RegistrarService) GetDomainRestore(ctx context.Context, accountID string, domainName string, domainRestoreID string) (*DomainRestoreResponse, error) {
+	var err error
+	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/restores/%v", accountID, domainName, domainRestoreID))
+	res := &DomainRestoreResponse{}
+
+	resp, err := s.client.get(ctx, path, res)
+	if err != nil {
+		return nil, err
+	}
+
+	res.HTTPResponse = resp
+	return res, nil
+}
