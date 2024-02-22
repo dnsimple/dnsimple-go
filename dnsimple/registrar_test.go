@@ -363,3 +363,28 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	assert.Equal(t, int64(1), renewal.ID)
 	assert.Equal(t, int64(999), renewal.DomainID)
 }
+
+func TestRegistrarService_RestoreDomain(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/restores", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/restoreDomain/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		//want := map[string]interface{}{}
+		//testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	restoreResponse, err := client.Registrar.RestoreDomain(context.Background(), "1010", "example.com", nil)
+
+	assert.NoError(t, err)
+	restore := restoreResponse.Data
+	assert.Equal(t, int64(43), restore.ID)
+	assert.Equal(t, int64(214), restore.DomainID)
+}
