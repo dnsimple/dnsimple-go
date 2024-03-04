@@ -363,3 +363,53 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 	assert.Equal(t, int64(1), renewal.ID)
 	assert.Equal(t, int64(999), renewal.DomainID)
 }
+
+func TestRegistrarService_RestoreDomain(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/restores", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/restoreDomain/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		//want := map[string]interface{}{}
+		//testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	restoreResponse, err := client.Registrar.RestoreDomain(context.Background(), "1010", "example.com", nil)
+
+	assert.NoError(t, err)
+	restore := restoreResponse.Data
+	assert.Equal(t, int64(43), restore.ID)
+	assert.Equal(t, int64(214), restore.DomainID)
+}
+
+func TestRegistrarService_GetDomainRestore(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/bingo.pizza/restores/1", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/getDomainRestore/success.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	checkResponse, err := client.Registrar.GetDomainRestore(context.Background(), "1010", "bingo.pizza", "1")
+
+	assert.NoError(t, err)
+	check := checkResponse.Data
+	assert.Equal(t, check.ID, int64(1))
+	assert.Equal(t, check.DomainID, int64(999))
+	assert.Equal(t, check.State, "restored")
+	assert.Equal(t, check.CreatedAt, "2016-12-09T19:46:45Z")
+	assert.Equal(t, check.UpdatedAt, "2016-12-12T19:46:45Z")
+}
