@@ -2,6 +2,10 @@
 
 ## main
 
+- CHANGED: Bump dependencies
+- CHANGED: Dropped support for Go < 1.20
+- CHANGED: Added support for Go >= 1.22
+
 ## 1.6.0
 
 - NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint(dnsimple/dnsimple-go#164)
