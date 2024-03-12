@@ -7,7 +7,7 @@ For example, to get the dependencies you will have to run:
 ```shell
 git clone git@github.com:dnsimple/dnsimple-go.git
 cd dnsimple
-go get
+go get ./...
 ```
 
 Likewise, when you include this library as dependency, you will need to use
