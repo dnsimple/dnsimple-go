@@ -2,6 +2,8 @@
 
 ## main
 
+- CHANGED: Deprecated `AliasName` in `EmailForward
+
 ## 2.0.0
 
 - CHANGED: Bump dependencies
