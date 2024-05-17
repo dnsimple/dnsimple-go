@@ -9,11 +9,10 @@ import (
 type EmailForward struct {
 	ID       int64 `json:"id,omitempty"`
 	DomainID int64 `json:"domain_id,omitempty"`
-	// Deprecated: for requests, please use `AliasName` instead; for responses, please use `AliasEmail` instead.
+	// Deprecated: use `AliasEmail` instead.
 	From string `json:"from,omitempty"`
-	// WARNING: This is not set in responses, please use `AliasEmail` instead.
-	AliasName string `json:"alias_name,omitempty"`
-	// WARNING: This is not used by requests, please use `AliasName` instead.
+	// Deprecated: use `AliasEmail` instead.
+	AliasName  string `json:"alias_name,omitempty"`
 	AliasEmail string `json:"alias_email,omitempty"`
 	// Deprecated: please use `DestinationEmail` instead.
 	To               string `json:"to,omitempty"`
