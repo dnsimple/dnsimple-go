@@ -82,7 +82,7 @@ type DnsAnalyticsOptions struct {
 
 // Query gets DNS Analytics data for an account
 //
-// See https://developer.dnsimple.com/v2/dns-analytics/#query
+// See https://developer.dnsimple.com/v2/dns-analytics/#queryDnsAnalytics
 func (s *DnsAnalyticsService) Query(ctx context.Context, accountID int64, options *DnsAnalyticsOptions) (*DnsAnalyticsResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/dns_analytics", accountID))
 	dnsAnalyticsResponse := &DnsAnalyticsResponse{}
