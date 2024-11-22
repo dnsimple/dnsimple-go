@@ -18,6 +18,7 @@ type EmailForward struct {
 	// Deprecated: please use `DestinationEmail` instead.
 	To               string `json:"to,omitempty"`
 	DestinationEmail string `json:"destination_email,omitempty"`
+	Active           bool   `json:"active,omitempty"`
 	CreatedAt        string `json:"created_at,omitempty"`
 	UpdatedAt        string `json:"updated_at,omitempty"`
 }
