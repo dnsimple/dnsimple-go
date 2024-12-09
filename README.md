@@ -132,4 +132,4 @@ For instructions about contributing and testing, visit the [CONTRIBUTING](CONTRI
 
 ## License
 
-Copyright (c) 2014-2022 DNSimple Corporation. This is Free Software distributed under the MIT license.
+Copyright (c) 2014-2024 DNSimple Corporation. This is Free Software distributed under the MIT license.
