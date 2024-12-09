@@ -2,6 +2,7 @@
 
 ## main
 
+- NEW: Added alias_email and destination_email to EmailForward
 - CHANGED: Added support for Go >= 1.23
 - CHANGED: `DomainCollaborators` have been deprecated and will be removed in the next major version. Please use our Domain Access Control feature.
 - CHANGED: Bump dependencies
