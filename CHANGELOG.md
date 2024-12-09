@@ -2,6 +2,8 @@
 
 ## main
 
+- CHANGED: Added support for Go >= 1.23
+
 ## 2.0.0
 
 - CHANGED: Bump dependencies
