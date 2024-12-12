@@ -2,6 +2,8 @@
 
 ## main
 
+## 3.0.0
+
 - NEW: Added `active` attribute to EmailForward
 - CHANGED: Added support for Go >= 1.23
 - CHANGED: `DomainCollaborators` have been deprecated and will be removed in the next major version. Please use our Domain Access Control feature.
