@@ -45,6 +45,8 @@ type CollaboratorsResponse struct {
 
 // ListCollaborators list the collaborators for a domain.
 //
+// Deprecated: Domain collaborators have been deprecated and will be removed in the next major version. Please use our Domain Access Control feature.
+//
 // See https://developer.dnsimple.com/v2/domains/collaborators#list
 func (s *DomainsService) ListCollaborators(ctx context.Context, accountID, domainIdentifier string, options *ListOptions) (*CollaboratorsResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
@@ -66,6 +68,8 @@ func (s *DomainsService) ListCollaborators(ctx context.Context, accountID, domai
 
 // AddCollaborator adds a new collaborator to the domain in the account.
 //
+// Deprecated: Domain collaborators have been deprecated and will be removed in the next major version. Please use our Domain Access Control feature.
+//
 // See https://developer.dnsimple.com/v2/domains/collaborators#add
 func (s *DomainsService) AddCollaborator(ctx context.Context, accountID string, domainIdentifier string, attributes CollaboratorAttributes) (*CollaboratorResponse, error) {
 	path := versioned(collaboratorPath(accountID, domainIdentifier, 0))
@@ -81,6 +85,8 @@ func (s *DomainsService) AddCollaborator(ctx context.Context, accountID string, 
 }
 
 // RemoveCollaborator PERMANENTLY deletes a domain from the account.
+//
+// Deprecated: Domain collaborators have been deprecated and will be removed in the next major version. Please use our Domain Access Control feature.
 //
 // See https://developer.dnsimple.com/v2/domains/collaborators#remove
 func (s *DomainsService) RemoveCollaborator(ctx context.Context, accountID string, domainIdentifier string, collaboratorID int64) (*CollaboratorResponse, error) {
