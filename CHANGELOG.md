@@ -2,6 +2,15 @@
 
 ## main
 
+## 4.0.0
+
+- FIXED: Installation via Go Modules (dnsimple/dnsimple-go#184)
+- CHANGED: Added support for Go >= 1.24
+- CHANGED: Bump dependencies
+
+Incompatible changes:
+- CHANGED: Dropped support for installing via [GOPATH mode](https://go.dev/wiki/GOPATH#gopath-development-mode)
+
 ## 3.0.0
 
 - NEW: Added `active` attribute to EmailForward
