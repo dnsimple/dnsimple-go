@@ -9,7 +9,7 @@
 - CHANGED: Bump dependencies
 
 Incompatible changes:
-- CHANGED: Dropped support for installing via [GOPATH mode](https://go.dev/wiki/GOPATH#gopath-development-mode)
+- REMOVED: Dropped support for installing via [GOPATH mode](https://go.dev/wiki/GOPATH#gopath-development-mode)
 
 ## 3.0.0
 
