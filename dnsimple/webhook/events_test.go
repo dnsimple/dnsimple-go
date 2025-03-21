@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dnsimple/dnsimple-go/dnsimple"
+	"github.com/dnsimple/dnsimple-go/v4/dnsimple"
 	"github.com/stretchr/testify/assert"
 )
 

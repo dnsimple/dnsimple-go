@@ -13,7 +13,7 @@ go get ./...
 Likewise, when you include this library as dependency, you will need to use
 
 ```go
-import "github.com/dnsimple/dnsimple-go/dnsimple"
+import "github.com/dnsimple/dnsimple-go/v4/dnsimple"
 ```
 
 and not

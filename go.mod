@@ -1,4 +1,4 @@
-module github.com/dnsimple/dnsimple-go
+module github.com/dnsimple/dnsimple-go/v4
 
 go 1.21
 toolchain go1.24.1
