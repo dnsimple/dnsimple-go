@@ -207,6 +207,30 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+
+func TestRegistrarService_RegisterDomain_ExtendedAttributesError(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registrations", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/registerDomain/error-extended-attributes.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{"registrant_id": float64(2)}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	registerRequest := &RegisterDomainInput{RegistrantID: 2}
+
+	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
+	assert.Equal(t, err.(*ErrorResponse).Message, "Invalid extended attributes")
+}
+
 func TestRegistrarService_TransferDomain(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
