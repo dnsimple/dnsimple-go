@@ -324,7 +324,7 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 
 	// detailed validation errors
-	AttributeErrors map[string][]string `json:"errors"`
+	AttributeErrors map[string][]string `json:"errors,omitempty"`
 }
 
 // Error implements the error interface.
