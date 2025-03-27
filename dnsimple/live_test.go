@@ -72,6 +72,45 @@ func TestLive_Domains(t *testing.T) {
 	fmt.Printf("Domains: %+v\n", domainsResponse.Data)
 }
 
+func TestLive_Registration_ValidationError(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := whoami.Account.ID
+
+	registerRequest := &RegisterDomainInput{RegistrantID: -1}
+	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
+
+	assert.Equal(t, err.(*ErrorResponse).Message, "Validation failed")
+}
+
+func TestLive_Registration_ExtendedAttributesValidationError(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := whoami.Account.ID
+
+	contactsResponse, err := dnsimpleClient.Contacts.ListContacts(context.Background(), fmt.Sprintf("%v", accountID), nil)
+	assert.NoError(t, err)
+	assert.GreaterOrEqual(t, len(contactsResponse.Data), 1, "At least one contact is required for this live test")
+	registrantID := contactsResponse.Data[0].ID
+	registerRequest := &RegisterDomainInput{RegistrantID: int(registrantID)}
+	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.app", time.Now().Unix()), registerRequest)
+
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Contains(t, got.AttributeErrors["x-accept-ssl-requirement"], "it's required")
+	assert.Equal(t, "Invalid extended attributes", got.Message)
+}
+
 func TestLive_Registration(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")
@@ -82,8 +121,11 @@ func TestLive_Registration(t *testing.T) {
 
 	accountID := whoami.Account.ID
 
-	// TODO: fetch the registrant randomly
-	registerRequest := &RegisterDomainInput{RegistrantID: 2}
+	contactsResponse, err := dnsimpleClient.Contacts.ListContacts(context.Background(), fmt.Sprintf("%v", accountID), nil)
+	assert.NoError(t, err)
+	assert.GreaterOrEqual(t, len(contactsResponse.Data), 1, "At least one contact is required for this live test")
+	registrantID := contactsResponse.Data[0].ID
+	registerRequest := &RegisterDomainInput{RegistrantID: int(registrantID)}
 	registrationResponse, err := dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
 	assert.NoError(t, err)
 
@@ -157,7 +199,6 @@ func TestLive_Error(t *testing.T) {
 	assert.NoError(t, err)
 
 	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.test", time.Now().Unix()), &RegisterDomainInput{})
-	assert.NoError(t, err)
 
 	e := err.(*ErrorResponse)
 	fmt.Println(e.Message)
