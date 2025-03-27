@@ -342,11 +342,37 @@ func CheckResponse(resp *http.Response) error {
 		return nil
 	}
 
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
 	errorResponse := &ErrorResponse{}
 	errorResponse.HTTPResponse = resp
+	err = json.NewDecoder(resp.Body).Decode(errorResponse)
 
-	err := json.NewDecoder(resp.Body).Decode(errorResponse)
+	// Handle the case where the errors field is a map of strings
 	if err != nil {
+		var typeErr *json.UnmarshalTypeError
+		if errors.As(err, &typeErr) && typeErr.Field == "errors" {
+			resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+			
+			var alternateResp struct {
+				Message string `json:"message"`
+				AttributeErrors  map[string]string `json:"errors"`
+			}
+			
+			if jsonErr := json.NewDecoder(resp.Body).Decode(&alternateResp); jsonErr == nil {
+				errorResponse.Message = alternateResp.Message
+				errorResponse.AttributeErrors = make(map[string][]string)
+				for k, v := range alternateResp.AttributeErrors {
+					errorResponse.AttributeErrors[k] = []string{v}
+				}
+				
+				return errorResponse
+			}
+		}
 		return err
 	}
 
