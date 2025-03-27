@@ -328,7 +328,7 @@ type ErrorResponse struct {
 }
 
 // An alternate type of ErrorResponse, used internally.
-type InternalAltErrorResponse struct {
+type internalAltErrorResponse struct {
 	// human-readable message
 	Message string `json:"message"`
 
@@ -369,7 +369,7 @@ func CheckResponse(resp *http.Response) error {
 	if errors.As(err, &typeErr) && typeErr.Field == "errors" {
 		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		alternateResponse := &InternalAltErrorResponse{}
+		alternateResponse := &internalAltErrorResponse{}
 
 		if jsonErr := json.NewDecoder(resp.Body).Decode(alternateResponse); jsonErr == nil {
 			errorResponse.Message = alternateResponse.Message
