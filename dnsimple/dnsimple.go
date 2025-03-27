@@ -327,6 +327,15 @@ type ErrorResponse struct {
 	AttributeErrors map[string][]string `json:"errors"`
 }
 
+// An alternate type of ErrorResponse, used internally.
+type internalAltErrorResponse struct {
+	// human-readable message
+	Message string `json:"message"`
+
+	// detailed validation errors
+	AttributeErrors map[string]string `json:"errors"`
+}
+
 // Error implements the error interface.
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %v %v",
@@ -342,15 +351,37 @@ func CheckResponse(resp *http.Response) error {
 		return nil
 	}
 
-	errorResponse := &ErrorResponse{}
-	errorResponse.HTTPResponse = resp
-
-	err := json.NewDecoder(resp.Body).Decode(errorResponse)
+	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
+	resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-	return errorResponse
+	errorResponse := &ErrorResponse{}
+	errorResponse.HTTPResponse = resp
+	err = json.NewDecoder(resp.Body).Decode(errorResponse)
+	if err == nil {
+		return errorResponse
+	}
+
+	// Handle the case where the errors field is a map of strings
+	var typeErr *json.UnmarshalTypeError
+	if errors.As(err, &typeErr) && typeErr.Field == "errors" {
+		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+		alternateResponse := &internalAltErrorResponse{}
+
+		if jsonErr := json.NewDecoder(resp.Body).Decode(alternateResponse); jsonErr == nil {
+			errorResponse.Message = alternateResponse.Message
+			errorResponse.AttributeErrors = make(map[string][]string)
+			for k, v := range alternateResponse.AttributeErrors {
+				errorResponse.AttributeErrors[k] = []string{v}
+			}
+
+			return errorResponse
+		}
+	}
+	return fmt.Errorf("Error parsing error response: %w", err)
 }
 
 // addOptions adds the parameters in opt as URL query parameters to s.  opt
