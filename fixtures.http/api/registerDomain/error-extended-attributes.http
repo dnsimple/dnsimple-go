@@ -15,4 +15,4 @@ X-Frame-Options: DENY
 X-Permitted-Cross-Domain-Policies: none
 X-XSS-Protection: 1; mode=block
 
-{"message":"Invalid extended attributes","errors":{"x-accept-ssl-requirement":"it's required"}}
+{"message":"Invalid extended attributes","errors":{"x-accept-ssl-requirement": "it's required", "x-id-number": "invalid number"}}
