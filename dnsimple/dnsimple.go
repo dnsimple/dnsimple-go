@@ -381,7 +381,7 @@ func CheckResponse(resp *http.Response) error {
 			return errorResponse
 		}
 	}
-	return err
+	return fmt.Errorf("Error parsing error response: %w", err)
 }
 
 // addOptions adds the parameters in opt as URL query parameters to s.  opt
