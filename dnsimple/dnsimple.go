@@ -327,6 +327,15 @@ type ErrorResponse struct {
 	AttributeErrors map[string][]string `json:"errors"`
 }
 
+// An alternate type of ErrorResponse, used internally.
+type InternalAltErrorResponse struct {
+	// human-readable message
+	Message string `json:"message"`
+
+	// detailed validation errors
+	AttributeErrors map[string]string `json:"errors"`
+}
+
 // Error implements the error interface.
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %v %v",
@@ -360,15 +369,12 @@ func CheckResponse(resp *http.Response) error {
 	if errors.As(err, &typeErr) && typeErr.Field == "errors" {
 		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		var alternateResp struct {
-			Message         string            `json:"message"`
-			AttributeErrors map[string]string `json:"errors"`
-		}
+		alternateResponse := &InternalAltErrorResponse{}
 
-		if jsonErr := json.NewDecoder(resp.Body).Decode(&alternateResp); jsonErr == nil {
-			errorResponse.Message = alternateResp.Message
+		if jsonErr := json.NewDecoder(resp.Body).Decode(alternateResponse); jsonErr == nil {
+			errorResponse.Message = alternateResponse.Message
 			errorResponse.AttributeErrors = make(map[string][]string)
-			for k, v := range alternateResp.AttributeErrors {
+			for k, v := range alternateResponse.AttributeErrors {
 				errorResponse.AttributeErrors[k] = []string{v}
 			}
 
