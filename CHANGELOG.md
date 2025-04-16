@@ -25,15 +25,19 @@ Incompatible changes:
 - CHANGED: Dropped support for Go < 1.20
 - CHANGED: Added support for Go >= 1.22
 
+## 1.7.0
+
+- NEW: Added support for domain restore (dnsimple/dnsimple-go#166)
+
 ## 1.6.0
 
-- NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint(dnsimple/dnsimple-go#164)
+- NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint (dnsimple/dnsimple-go#164)
 
 ## 1.5.1
 
 ENHANCEMENTS:
 
-- NEW: Added `Secondary`, `LastTransferredAt`, `Active` to `Zone` (dnsimple/dnsimple-go)
+- NEW: Added `Secondary`, `LastTransferredAt`, `Active` to `Zone`
 
 ## 1.5.0
 
