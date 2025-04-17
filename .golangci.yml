@@ -9,7 +9,7 @@ linters:
     - misspell
     - prealloc
     - predeclared
-    - revive
+    # - revive # All name lints will require a breaking change
     # - testpackage
     - wastedassign
     - whitespace
