@@ -116,7 +116,7 @@ func TestBillingService_ListCharges_Fail400BadFilter(t *testing.T) {
 
 	_, err := client.Billing.ListCharges(context.Background(), "1010", ListChargesOptions{})
 
-	assert.Equal(t, err.(*ErrorResponse).Message, "Invalid date format must be ISO8601 (YYYY-MM-DD)")
+	assert.Equal(t, "Invalid date format must be ISO8601 (YYYY-MM-DD)", err.(*ErrorResponse).Message)
 }
 
 func TestBillingService_ListCharges_Fail403(t *testing.T) {
@@ -136,7 +136,7 @@ func TestBillingService_ListCharges_Fail403(t *testing.T) {
 
 	_, err := client.Billing.ListCharges(context.Background(), "1010", ListChargesOptions{})
 
-	assert.Equal(t, err.(*ErrorResponse).Message, "Permission Denied. Required Scope: billing:*:read")
+	assert.Equal(t, "Permission Denied. Required Scope: billing:*:read", err.(*ErrorResponse).Message)
 }
 
 func TestUnmarshalCharge(t *testing.T) {

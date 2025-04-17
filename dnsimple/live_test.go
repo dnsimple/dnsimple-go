@@ -85,7 +85,7 @@ func TestLive_Registration_ValidationError(t *testing.T) {
 	registerRequest := &RegisterDomainInput{RegistrantID: -1}
 	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
 
-	assert.Equal(t, err.(*ErrorResponse).Message, "Validation failed")
+	assert.Equal(t, "Validation failed", err.(*ErrorResponse).Message)
 }
 
 func TestLive_Registration_ExtendedAttributesValidationError(t *testing.T) {
