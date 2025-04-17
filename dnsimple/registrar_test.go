@@ -227,14 +227,15 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributesError(t *testing.T) {
 	registerRequest := &RegisterDomainInput{RegistrantID: 2}
 
 	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
+
 	var got *ErrorResponse
 	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Invalid extended attributes", got.Message)
 	want := map[string][]string{
 		"x-accept-ssl-requirement": {"it's required"},
 		"x-id-number":              {"invalid number"},
 	}
 	assert.Equal(t, want, got.AttributeErrors)
-	assert.Equal(t, "Invalid extended attributes", got.Message)
 }
 
 func TestRegistrarService_TransferDomain(t *testing.T) {
