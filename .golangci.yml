@@ -10,7 +10,7 @@ linters:
     - prealloc
     - predeclared
     - revive
-    - testpackage
+    # - testpackage
     - wastedassign
     - whitespace
   exclusions:
