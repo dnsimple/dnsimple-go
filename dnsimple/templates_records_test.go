@@ -112,7 +112,8 @@ func TestTemplatesService_GetTemplateRecord(t *testing.T) {
 		Priority:   10,
 		Type:       "MX",
 		CreatedAt:  "2016-05-03T08:03:26Z",
-		UpdatedAt:  "2016-05-03T08:03:26Z"}
+		UpdatedAt:  "2016-05-03T08:03:26Z",
+	}
 	assert.Equal(t, wantSingle, templateRecord)
 }
 

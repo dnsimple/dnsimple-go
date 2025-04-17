@@ -87,8 +87,8 @@ func readHTTPFixture(t *testing.T, filename string) string {
 
 	// Terrible hack
 	s := string(data)
-	s = strings.Replace(s, "Transfer-Encoding: chunked\n", "", -1)
-	s = strings.Replace(s, "Transfer-Encoding: chunked\r\n", "", -1)
+	s = strings.ReplaceAll(s, "Transfer-Encoding: chunked\n", "")
+	s = strings.ReplaceAll(s, "Transfer-Encoding: chunked\r\n", "")
 
 	return s
 }
@@ -138,8 +138,7 @@ func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("AwesomeClient %s", defaultUserAgent), req.Header.Get("User-Agent"))
 }
 
-type badObject struct {
-}
+type badObject struct{}
 
 func (o *badObject) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("Bad object is bad")

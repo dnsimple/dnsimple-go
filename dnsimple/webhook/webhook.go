@@ -4,6 +4,7 @@ package webhook
 
 import (
 	"encoding/json"
+
 	"github.com/dnsimple/dnsimple-go/v4/dnsimple"
 )
 

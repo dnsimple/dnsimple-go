@@ -51,7 +51,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 	case // domain transfer lock
 		"domain.transfer_lock_enable",
 		"domain.transfer_lock_disable":
-		data =  &DomainTransferLockEventData{}
+		data = &DomainTransferLockEventData{}
 	case // email forward
 		"email_forward.create",
 		"email_forward.delete",
@@ -156,7 +156,7 @@ func (d *ContactEventData) unmarshalEventData(payload []byte) error {
 // DNSSECEventData represents the data node for a DNSSEC event.
 type DNSSECEventData struct {
 	DelegationSignerRecord *dnsimple.DelegationSignerRecord `json:"delegation_signer_record"`
-	//DNSSECConfig           *dnsimple.DNSSECConfig           `json:"dnssec"`
+	// DNSSECConfig           *dnsimple.DNSSECConfig           `json:"dnssec"`
 }
 
 func (d *DNSSECEventData) unmarshalEventData(payload []byte) error {
@@ -185,7 +185,7 @@ func (d *DomainEventData) unmarshalEventData(payload []byte) error {
 
 // DomainTransferLockEventData represents the data node for a DomainTransferLockEnable or DomainTransferLockDisable event.
 type DomainTransferLockEventData struct {
-	Domain     *dnsimple.Domain     `json:"domain"`
+	Domain *dnsimple.Domain `json:"domain"`
 }
 
 func (d *DomainTransferLockEventData) unmarshalEventData(payload []byte) error {
@@ -198,8 +198,8 @@ func (d *DomainTransferLockEventData) unmarshalEventData(payload []byte) error {
 
 // DomainRegistrantChangegEventData represents the data node for a DomainRegistrantChange event.
 type DomainRegistrantChangeEventData struct {
-	Domain     *dnsimple.Domain     `json:"domain"`
-	Registrant *dnsimple.Contact    `json:"registrant"`
+	Domain     *dnsimple.Domain  `json:"domain"`
+	Registrant *dnsimple.Contact `json:"registrant"`
 }
 
 func (d *DomainRegistrantChangeEventData) unmarshalEventData(payload []byte) error {

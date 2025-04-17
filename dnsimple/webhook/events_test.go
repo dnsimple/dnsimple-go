@@ -18,7 +18,7 @@ func readHTTPRequestFixture(t *testing.T, filename string) string {
 	data, err := ioutil.ReadFile("../../fixtures.http" + filename)
 	assert.NoError(t, err)
 
-	s := string(data[:])
+	s := string(data)
 
 	return s
 }

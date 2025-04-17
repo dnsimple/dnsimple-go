@@ -87,7 +87,8 @@ func TestZonesService_GetZone(t *testing.T) {
 		LastTransferredAt: "",
 		Active:            true,
 		CreatedAt:         "2015-04-23T07:40:03Z",
-		UpdatedAt:         "2015-04-23T07:40:03Z"}
+		UpdatedAt:         "2015-04-23T07:40:03Z",
+	}
 	assert.Equal(t, wantSingle, zone)
 }
 
