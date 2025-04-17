@@ -28,14 +28,14 @@ When you submit a PR, tests will also be run on the [continuous integration envi
 To run the test suite:
 
 ```shell
-go test ./... -v
+go test -v ./...
 ```
 
 To run the test suite in a live environment (integration):
 
 ```shell
 export DNSIMPLE_TOKEN="some-token"
-go test ./... -v
+go test -v ./...
 ```
 
 ## Releasing
