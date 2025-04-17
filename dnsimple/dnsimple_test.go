@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -51,7 +51,7 @@ func testHeaders(t *testing.T, r *http.Request) {
 func getRequestJSON(r *http.Request) (map[string]interface{}, error) {
 	var data map[string]interface{}
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	if err := json.Unmarshal(body, &data); err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 	var data []interface{}
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	err := json.Unmarshal(body, &data)
 
@@ -79,7 +79,7 @@ func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 }
 
 func readHTTPFixture(t *testing.T, filename string) string {
-	data, err := ioutil.ReadFile("../fixtures.http" + filename)
+	data, err := os.ReadFile("../fixtures.http" + filename)
 	assert.NoError(t, err)
 
 	// Terrible hack
