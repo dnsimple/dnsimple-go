@@ -141,7 +141,7 @@ func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 type badObject struct{}
 
 func (o *badObject) MarshalJSON() ([]byte, error) {
-	return nil, errors.New("Bad object is bad")
+	return nil, errors.New("bad object is bad")
 }
 
 func TestClient_NewRequest_WithBody(t *testing.T) {
