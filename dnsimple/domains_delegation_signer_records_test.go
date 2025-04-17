@@ -111,7 +111,8 @@ func TestDomainsService_GetDelegationSignerRecord(t *testing.T) {
 		Keytag:     "44620",
 		PublicKey:  "",
 		CreatedAt:  "2017-03-03T13:49:58Z",
-		UpdatedAt:  "2017-03-03T13:49:58Z"}
+		UpdatedAt:  "2017-03-03T13:49:58Z",
+	}
 	assert.Equal(t, wantSingle, dsRecord)
 }
 

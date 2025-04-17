@@ -47,28 +47,20 @@ type BillingService struct {
 // Lists the billing charges for the account.
 //
 // See https://developer.dnsimple.com/v2/billing/#listCharges
-func (s *BillingService) ListCharges(
-	ctx context.Context,
-	account string,
-	options ListChargesOptions,
-) (*ListChargesResponse, error) {
-	res := &ListChargesResponse{}
+func (s *BillingService) ListCharges(ctx context.Context, account string, options ListChargesOptions) (*ListChargesResponse, error) {
 	path := fmt.Sprintf("/v2/%v/billing/charges", account)
+	listResponse := &ListChargesResponse{}
 
 	path, err := addURLQueryOptions(path, options)
 	if err != nil {
 		return nil, err
 	}
 
-	httpRes, err := s.client.get(
-		ctx,
-		path,
-		res,
-	)
+	resp, err := s.client.get(ctx, path, listResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	res.HTTPResponse = httpRes
-	return res, nil
+	listResponse.HTTPResponse = resp
+	return listResponse, nil
 }

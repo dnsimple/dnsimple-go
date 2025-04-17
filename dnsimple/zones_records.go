@@ -132,7 +132,6 @@ func (s *ZonesService) UpdateRecord(ctx context.Context, accountID string, zoneN
 	path := versioned(zoneRecordPath(accountID, zoneName, recordID))
 	recordResponse := &ZoneRecordResponse{}
 	resp, err := s.client.patch(ctx, path, recordAttributes, recordResponse)
-
 	if err != nil {
 		return nil, err
 	}

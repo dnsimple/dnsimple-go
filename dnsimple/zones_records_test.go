@@ -229,7 +229,8 @@ func TestZonesService_GetRecord(t *testing.T) {
 		SystemRecord: false,
 		Regions:      []string{"SV1", "IAD"},
 		CreatedAt:    "2016-10-05T09:51:35Z",
-		UpdatedAt:    "2016-10-05T09:51:35Z"}
+		UpdatedAt:    "2016-10-05T09:51:35Z",
+	}
 	assert.Equal(t, wantSingle, record)
 }
 

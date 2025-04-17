@@ -1,0 +1,37 @@
+---
+version: '2'
+linters:
+  enable:
+    # - bodyclose # Too many false positives
+    - copyloopvar
+    - errorlint
+    - gocritic
+    - misspell
+    - prealloc
+    - predeclared
+    # - revive # All name lints will require a breaking change
+    # - testpackage
+    - wastedassign
+    - whitespace
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

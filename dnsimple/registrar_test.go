@@ -207,7 +207,6 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-
 func TestRegistrarService_RegisterDomain_ExtendedAttributesError(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
@@ -228,14 +227,15 @@ func TestRegistrarService_RegisterDomain_ExtendedAttributesError(t *testing.T) {
 	registerRequest := &RegisterDomainInput{RegistrantID: 2}
 
 	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
+
 	var got *ErrorResponse
 	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Invalid extended attributes", got.Message)
 	want := map[string][]string{
 		"x-accept-ssl-requirement": {"it's required"},
-		"x-id-number": {"invalid number"},
+		"x-id-number":              {"invalid number"},
 	}
 	assert.Equal(t, want, got.AttributeErrors)
-	assert.Equal(t, "Invalid extended attributes", got.Message)
 }
 
 func TestRegistrarService_TransferDomain(t *testing.T) {
@@ -319,7 +319,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	domainTransferResponse, err := client.Registrar.GetDomainTransfer(context.Background(), "1010", "example.com", 361)
@@ -335,7 +335,8 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		WhoisPrivacy:      false,
 		StatusDescription: "Canceled by customer",
 		CreatedAt:         "2020-06-05T18:08:00Z",
-		UpdatedAt:         "2020-06-05T18:10:01Z"}
+		UpdatedAt:         "2020-06-05T18:10:01Z",
+	}
 	assert.Equal(t, wantSingle, domainTransfer)
 }
 
@@ -350,7 +351,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		testHeaders(t, r)
 
 		w.WriteHeader(httpResponse.StatusCode)
-		io.Copy(w, httpResponse.Body)
+		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
 	domainTransferResponse, err := client.Registrar.CancelDomainTransfer(context.Background(), "1010", "example.com", 361)
@@ -366,7 +367,8 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		WhoisPrivacy:      false,
 		StatusDescription: "",
 		CreatedAt:         "2020-06-05T18:08:00Z",
-		UpdatedAt:         "2020-06-05T18:08:04Z"}
+		UpdatedAt:         "2020-06-05T18:08:04Z",
+	}
 	assert.Equal(t, wantSingle, domainTransfer)
 }
 
@@ -380,8 +382,8 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		//want := map[string]interface{}{}
-		//testRequestJSON(t, r, want)
+		// want := map[string]interface{}{}
+		// testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
@@ -405,8 +407,8 @@ func TestRegistrarService_RestoreDomain(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		//want := map[string]interface{}{}
-		//testRequestJSON(t, r, want)
+		// want := map[string]interface{}{}
+		// testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
