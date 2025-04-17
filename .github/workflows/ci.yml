@@ -24,15 +24,30 @@ jobs:
           files: .
           config_file: ".markdownlint.yaml"
 
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.0
+
   test:
-    needs: [markdownlint-cli]
     runs-on: ubuntu-latest
     name: Go ${{ matrix.go-version }}
+    needs:
+      - golangci-lint
+      - markdownlint-cli
     env:
       GOPATH: ${{ github.workspace }}
     defaults:
       run:
-        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}  # yamllint disable-line rule:line-length
+        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
     strategy:
       matrix:
         go-version:
