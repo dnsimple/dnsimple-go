@@ -2,26 +2,6 @@
 
 The main `dnsimple` package is defined in the `/dnsimple` subfolder of the `dnsimple/dnsimple-go` repository. Therefore, please note that you will need to move into the subfolder to run any `go` command that assumes the current directory to be the package root.
 
-For example, to get the dependencies you will have to run:
-
-```shell
-git clone git@github.com:dnsimple/dnsimple-go.git
-cd dnsimple
-go get ./...
-```
-
-Likewise, when you include this library as dependency, you will need to use
-
-```go
-import "github.com/dnsimple/dnsimple-go/v4/dnsimple"
-```
-
-and not
-
-```go
-import "github.com/dnsimple/dnsimple-go"
-```
-
 ## Getting started
 
 ### 1. Clone the repository
