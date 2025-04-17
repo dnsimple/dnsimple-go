@@ -2,7 +2,7 @@
 version: '2'
 linters:
   enable:
-    - bodyclose
+    # - bodyclose # Too many false positives
     - copyloopvar
     - errorlint
     - gocritic
