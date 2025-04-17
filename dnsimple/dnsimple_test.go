@@ -159,7 +159,7 @@ func TestClient_NotFound(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/notfound-certificate.http")
 
 		w.WriteHeader(httpResponse.StatusCode)
@@ -177,7 +177,7 @@ func TestClient_ValidationError(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/validation-error.http")
 
 		w.WriteHeader(httpResponse.StatusCode)
