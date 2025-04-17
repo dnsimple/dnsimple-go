@@ -183,8 +183,8 @@ func TestUnmarshalCharge(t *testing.T) {
 				t.Errorf("Unmarshal() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			assert.Truef(t, got.TotalAmount.Equals(tt.want.TotalAmount), "TotalAmount: got %v, want %v\nTesting: %s\n%s", got.TotalAmount, tt.want.TotalAmount, tt.name, tt.jsonStr)
-			assert.Truef(t, got.BalanceAmount.Equals(tt.want.BalanceAmount), "BalanceAmount: got %v, want %v\nTesting: %s\n%s", got.BalanceAmount, tt.want.BalanceAmount, tt.name, tt.jsonStr)
+			assert.Truef(t, got.TotalAmount.Equal(tt.want.TotalAmount), "TotalAmount: got %v, want %v\nTesting: %s\n%s", got.TotalAmount, tt.want.TotalAmount, tt.name, tt.jsonStr)
+			assert.Truef(t, got.BalanceAmount.Equal(tt.want.BalanceAmount), "BalanceAmount: got %v, want %v\nTesting: %s\n%s", got.BalanceAmount, tt.want.BalanceAmount, tt.name, tt.jsonStr)
 		})
 	}
 }
