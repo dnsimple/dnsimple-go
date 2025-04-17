@@ -569,7 +569,7 @@ func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
-	assert.Equal(t, "example@example.zone", data.EmailForward.From)
+	assert.EqualValues(t, 30187, data.EmailForward.ID)
 }
 
 func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
@@ -583,7 +583,7 @@ func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
 
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
-	assert.Equal(t, ".*@example.zone", data.EmailForward.From)
+	assert.EqualValues(t, 30187, data.EmailForward.ID)
 }
 
 func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
@@ -597,7 +597,7 @@ func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
 
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
-	assert.Equal(t, ".*@example.zone", data.EmailForward.From)
+	assert.EqualValues(t, 30187, data.EmailForward.ID)
 }
 
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {
