@@ -86,7 +86,7 @@ func readHTTPFixture(t *testing.T, filename string) string {
 	// Some fixtures have \n and not \r\n
 
 	// Terrible hack
-	s := string(data[:])
+	s := string(data)
 	s = strings.Replace(s, "Transfer-Encoding: chunked\n", "", -1)
 	s = strings.Replace(s, "Transfer-Encoding: chunked\r\n", "", -1)
 
