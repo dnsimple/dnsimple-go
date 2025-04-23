@@ -111,7 +111,8 @@ func TestTemplatesService_Get(t *testing.T) {
 		Name:        "Alpha",
 		Description: "An alpha template.",
 		CreatedAt:   "2016-03-22T11:08:58Z",
-		UpdatedAt:   "2016-03-22T11:08:58Z"}
+		UpdatedAt:   "2016-03-22T11:08:58Z",
+	}
 	assert.Equal(t, wantSingle, template)
 }
 
@@ -141,7 +142,8 @@ func TestTemplatesService_UpdateTemplate(t *testing.T) {
 		Name:        "Alpha",
 		Description: "An alpha template.",
 		CreatedAt:   "2016-03-22T11:08:58Z",
-		UpdatedAt:   "2016-03-22T11:08:58Z"}
+		UpdatedAt:   "2016-03-22T11:08:58Z",
+	}
 	assert.Equal(t, wantSingle, template)
 }
 

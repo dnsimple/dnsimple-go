@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -51,7 +51,7 @@ func testHeaders(t *testing.T, r *http.Request) {
 func getRequestJSON(r *http.Request) (map[string]interface{}, error) {
 	var data map[string]interface{}
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	if err := json.Unmarshal(body, &data); err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func testRequestJSON(t *testing.T, r *http.Request, values map[string]interface{
 func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 	var data []interface{}
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	err := json.Unmarshal(body, &data)
 
@@ -79,16 +79,16 @@ func testRequestJSONArray(t *testing.T, r *http.Request, values []interface{}) {
 }
 
 func readHTTPFixture(t *testing.T, filename string) string {
-	data, err := ioutil.ReadFile("../fixtures.http" + filename)
+	data, err := os.ReadFile("../fixtures.http" + filename)
 	assert.NoError(t, err)
 
 	// Terrible hack
 	// Some fixtures have \n and not \r\n
 
 	// Terrible hack
-	s := string(data[:])
-	s = strings.Replace(s, "Transfer-Encoding: chunked\n", "", -1)
-	s = strings.Replace(s, "Transfer-Encoding: chunked\r\n", "", -1)
+	s := string(data)
+	s = strings.ReplaceAll(s, "Transfer-Encoding: chunked\n", "")
+	s = strings.ReplaceAll(s, "Transfer-Encoding: chunked\r\n", "")
 
 	return s
 }
@@ -138,11 +138,10 @@ func TestClient_NewRequest_CustomUserAgent(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("AwesomeClient %s", defaultUserAgent), req.Header.Get("User-Agent"))
 }
 
-type badObject struct {
-}
+type badObject struct{}
 
 func (o *badObject) MarshalJSON() ([]byte, error) {
-	return nil, errors.New("Bad object is bad")
+	return nil, errors.New("bad object is bad")
 }
 
 func TestClient_NewRequest_WithBody(t *testing.T) {
@@ -160,7 +159,7 @@ func TestClient_NotFound(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/notfound-certificate.http")
 
 		w.WriteHeader(httpResponse.StatusCode)
@@ -178,7 +177,7 @@ func TestClient_ValidationError(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/validation-error.http")
 
 		w.WriteHeader(httpResponse.StatusCode)

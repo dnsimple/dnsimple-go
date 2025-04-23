@@ -124,7 +124,8 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		PrivateWhois: false,
 		ExpiresAt:    "2021-06-05T02:15:00Z",
 		CreatedAt:    "2020-06-04T19:15:14Z",
-		UpdatedAt:    "2020-06-04T19:15:21Z"}
+		UpdatedAt:    "2020-06-04T19:15:21Z",
+	}
 	assert.Equal(t, wantSingle, domain)
 }
 

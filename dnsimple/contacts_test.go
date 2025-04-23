@@ -124,7 +124,8 @@ func TestContactsService_Get(t *testing.T) {
 		Fax:           "+18011234567",
 		Email:         "first@example.com",
 		CreatedAt:     "2016-01-19T20:50:26Z",
-		UpdatedAt:     "2016-01-19T20:50:26Z"}
+		UpdatedAt:     "2016-01-19T20:50:26Z",
+	}
 	assert.Equal(t, wantSingle, contact)
 }
 

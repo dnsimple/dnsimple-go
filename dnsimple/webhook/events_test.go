@@ -2,8 +2,9 @@ package webhook
 
 import (
 	"bufio"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 	"testing"
@@ -15,10 +16,10 @@ import (
 var regexpUUID = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
 
 func readHTTPRequestFixture(t *testing.T, filename string) string {
-	data, err := ioutil.ReadFile("../../fixtures.http" + filename)
+	data, err := os.ReadFile("../../fixtures.http" + filename)
 	assert.NoError(t, err)
 
-	s := string(data[:])
+	s := string(data)
 
 	return s
 }
@@ -32,7 +33,7 @@ func getHTTPRequestFromFixture(t *testing.T, filename string) *http.Request {
 
 func getHTTPRequestBodyFromFixture(t *testing.T, filename string) []byte {
 	req := getHTTPRequestFromFixture(t, filename)
-	body, err := ioutil.ReadAll(req.Body)
+	body, err := io.ReadAll(req.Body)
 	assert.NoError(t, err)
 
 	return body

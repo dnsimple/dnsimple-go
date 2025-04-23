@@ -85,7 +85,9 @@ func TestLive_Registration_ValidationError(t *testing.T) {
 	registerRequest := &RegisterDomainInput{RegistrantID: -1}
 	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", accountID), fmt.Sprintf("example-%v.com", time.Now().Unix()), registerRequest)
 
-	assert.Equal(t, err.(*ErrorResponse).Message, "Validation failed")
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Validation failed", got.Message)
 }
 
 func TestLive_Registration_ExtendedAttributesValidationError(t *testing.T) {
@@ -107,8 +109,8 @@ func TestLive_Registration_ExtendedAttributesValidationError(t *testing.T) {
 
 	var got *ErrorResponse
 	assert.ErrorAs(t, err, &got)
-	assert.Contains(t, got.AttributeErrors["x-accept-ssl-requirement"], "it's required")
 	assert.Equal(t, "Invalid extended attributes", got.Message)
+	assert.Contains(t, got.AttributeErrors["x-accept-ssl-requirement"], "it's required")
 }
 
 func TestLive_Registration(t *testing.T) {
@@ -200,6 +202,8 @@ func TestLive_Error(t *testing.T) {
 
 	_, err = dnsimpleClient.Registrar.RegisterDomain(context.Background(), fmt.Sprintf("%v", whoami.Account.ID), fmt.Sprintf("example-%v.test", time.Now().Unix()), &RegisterDomainInput{})
 
-	e := err.(*ErrorResponse)
-	fmt.Println(e.Message)
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+
+	fmt.Println(got.Message)
 }

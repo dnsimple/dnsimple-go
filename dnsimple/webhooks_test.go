@@ -84,7 +84,8 @@ func TestWebhooksService_GetWebhook(t *testing.T) {
 	webhook := webhookResponse.Data
 	wantSingle := &Webhook{
 		ID:  1,
-		URL: "https://webhook.test"}
+		URL: "https://webhook.test",
+	}
 	assert.Equal(t, wantSingle, webhook)
 }
 

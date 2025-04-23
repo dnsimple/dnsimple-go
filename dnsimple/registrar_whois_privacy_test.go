@@ -33,7 +33,8 @@ func TestRegistrarService_GetWhoisPrivacy(t *testing.T) {
 		Enabled:   true,
 		ExpiresOn: "2017-02-13",
 		CreatedAt: "2016-02-13T14:34:50Z",
-		UpdatedAt: "2016-02-13T14:34:52Z"}
+		UpdatedAt: "2016-02-13T14:34:52Z",
+	}
 	assert.Equal(t, wantSingle, privacy)
 }
 
@@ -47,8 +48,8 @@ func TestRegistrarService_EnableWhoisPrivacy(t *testing.T) {
 		testMethod(t, r, "PUT")
 		testHeaders(t, r)
 
-		//want := map[string]interface{}{}
-		//testRequestJSON(t, r, want)
+		// want := map[string]interface{}{}
+		// testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
@@ -71,8 +72,8 @@ func TestRegistrarService_DisableWhoisPrivacy(t *testing.T) {
 		testMethod(t, r, "DELETE")
 		testHeaders(t, r)
 
-		//want := map[string]interface{}{}
-		//testRequestJSON(t, r, want)
+		// want := map[string]interface{}{}
+		// testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)

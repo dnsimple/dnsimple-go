@@ -40,7 +40,7 @@ func TestOauthService_ExchangeAuthorizationForToken_Error(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
-	mux.HandleFunc("/v2/oauth/access_token", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v2/oauth/access_token", func(w http.ResponseWriter, _ *http.Request) {
 		httpResponse := httpResponseFixture(t, "/api/oauthAccessToken/error-invalid-request.http")
 
 		w.WriteHeader(httpResponse.StatusCode)

@@ -114,7 +114,8 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 		DestinationEmail: "example@example.com",
 		Active:           true,
 		CreatedAt:        "2021-01-25T13:54:40Z",
-		UpdatedAt:        "2021-01-25T13:54:40Z"}
+		UpdatedAt:        "2021-01-25T13:54:40Z",
+	}
 	assert.Equal(t, wantSingle, forward)
 }
 

@@ -270,7 +270,7 @@ func (c *Client) request(ctx context.Context, req *http.Request, obj interface{}
 			raw, err = io.ReadAll(resp.Body)
 			if err == nil {
 				if len(raw) == 0 {
-					// TODO Ignore empty body as temporary workaround for server sending Content-Type: application/json with an empty body.
+					// Ignore empty body as temporary workaround for server sending Content-Type: application/json with an empty body.
 				} else {
 					err = json.Unmarshal(raw, obj)
 				}
