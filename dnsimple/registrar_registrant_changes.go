@@ -83,9 +83,14 @@ type RegistrantChangeDeleteResponse struct {
 // ListRegistrantChange lists registrant changes in the account.
 //
 // See https://developer.dnsimple.com/v2/registrar/#listRegistrantChanges
-func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, _ *RegistrantChangeListOptions) (*RegistrantChangesListResponse, error) {
+func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, options *RegistrantChangeListOptions) (*RegistrantChangesListResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes", accountID))
 	changeResponse := &RegistrantChangesListResponse{}
+
+	path, err := addURLQueryOptions(path, options)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := s.client.get(ctx, path, changeResponse)
 	if err != nil {
