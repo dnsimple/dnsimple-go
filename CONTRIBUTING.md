@@ -44,7 +44,7 @@ The following instructions uses `$VERSION` as a placeholder, where `$VERSION` is
 
 1. Run the test suite and ensure all the tests pass.
 
-2. Set the version in `dnsimple.go`:
+2. Set the version in `dnsimple.go`. The major part of the version number should match the version in the module path in `go.mod` (e.g., if module path is `github.com/dnsimple/dnsimple-go/v5`, the version should be `5.y.z`).
 
     ```go
     Version = "$VERSION"
