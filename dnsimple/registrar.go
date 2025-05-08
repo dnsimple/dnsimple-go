@@ -100,6 +100,7 @@ type DomainPrice struct {
 	Premium           bool    `json:"premium"`
 	RegistrationPrice float64 `json:"registration_price"`
 	RenewalPrice      float64 `json:"renewal_price"`
+	RestorePrice      float64 `json:"restore_price"`
 	TransferPrice     float64 `json:"transfer_price"`
 }
 

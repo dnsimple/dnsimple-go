@@ -98,6 +98,7 @@ func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	assert.True(t, check.Premium)
 	assert.Equal(t, float64(20.0), check.RegistrationPrice)
 	assert.Equal(t, float64(20.0), check.RenewalPrice)
+	assert.Equal(t, float64(20.0), check.RestorePrice)
 	assert.Equal(t, float64(20.0), check.TransferPrice)
 }
 
