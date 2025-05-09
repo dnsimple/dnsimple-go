@@ -2,6 +2,17 @@
 
 ## main
 
+- FIXED: Missing restore_price field in DomainPrice struct (dnsimple/dnsimple-go#192)
+- FIXED: Pass in options when making ListRegistrantChange API call (dnsimple/dnsimple-go#195)
+- FIXED: Handle error responses for registerDomain endpoint action (dnsimple/dnsimple-go#140)
+- CHANGED: Bump dependencies
+- CHANGED: Dropped support for Go < 1.23
+- HOUSEKEEPING: Add golangci-lint (dnsimple/dnsimple-go#190)
+
+Incompatible changes:
+
+- REMOVED: Removed deprecated `DomainCollaborators`. Please use our Domain Access Control feature.
+
 ## 4.0.0
 
 - FIXED: Installation via Go Modules (dnsimple/dnsimple-go#184)

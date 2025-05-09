@@ -1,4 +1,4 @@
-module github.com/dnsimple/dnsimple-go/v4
+module github.com/dnsimple/dnsimple-go/v5
 
 go 1.23.0
 
