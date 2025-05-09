@@ -2,6 +2,8 @@
 
 ## main
 
+## 5.0.0
+
 - FIXED: Missing restore_price field in DomainPrice struct (dnsimple/dnsimple-go#192)
 - FIXED: Pass in options when making ListRegistrantChange API call (dnsimple/dnsimple-go#195)
 - FIXED: Handle error responses for registerDomain endpoint action (dnsimple/dnsimple-go#140)
