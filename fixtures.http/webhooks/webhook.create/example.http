@@ -8,6 +8,6 @@ Content-Type: application/json
 Via: 1.1 vegur
 Total-Route-Time: 0
 Connect-Time: 0
-Connection: close
+Connection: keep-alive
 
 {"data": {"webhook": {"id": 274, "url": "https://xxxxxx-xxxxxxx-00000.herokuapp.com/xxxxxxxx"}}, "name": "webhook.create", "actor": {"id": "1120", "entity": "user", "pretty": "hello@example.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "f8330285-724f-4395-84ee-063e390d8162"}
