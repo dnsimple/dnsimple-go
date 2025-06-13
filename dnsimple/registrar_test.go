@@ -184,29 +184,29 @@ func TestRegistrarService_RegisterDomain(t *testing.T) {
 	assert.Equal(t, int64(999), registration.DomainID)
 }
 
-//func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
-//	setupMockServer()
-//	defer teardownMockServer()
-//
-//	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registrations", func(w http.ResponseWriter, r *http.Request) {
-//		httpResponse := httpResponseFixture(t, "/api/registerDomain/success.http")
-//
-//		data, _ := getRequestJSON(r)
-//
-//		if want, got := map[string]interface{}{"att1": "val1", "att2": "val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
-//			t.Errorf("RegisterDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
-//		}
-//
-//		w.WriteHeader(httpResponse.StatusCode)
-//		_, _ = io.Copy(w, httpResponse.Body)
-//	})
-//
-//	registerRequest := &RegisterDomainInput{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
-//
-//	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
-//
-//	assert.NoError(t, err)
-//}
+func TestRegistrarService_RegisterDomain_ExtendedAttributes(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/registrations", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/registerDomain/success.http")
+
+		data, _ := getRequestJSON(r)
+
+		if want, got := map[string]interface{}{"att1": "val1", "att2": "val2"}, data["extended_attributes"]; !reflect.DeepEqual(want, got) {
+			t.Errorf("RegisterDomain() incorrect extended attributes payload, expected `%v`, got `%v`", want, got)
+		}
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	registerRequest := &RegisterDomainInput{RegistrantID: 2, ExtendedAttributes: map[string]string{"att1": "val1", "att2": "val2"}}
+
+	_, err := client.Registrar.RegisterDomain(context.Background(), "1010", "example.com", registerRequest)
+
+	assert.NoError(t, err)
+}
 
 func TestRegistrarService_RegisterDomain_ExtendedAttributesError(t *testing.T) {
 	setupMockServer()
