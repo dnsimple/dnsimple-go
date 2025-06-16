@@ -35,10 +35,10 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 	forwardsResponse, err := client.Domains.ListEmailForwards(context.Background(), "1010", "example.com", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 2}, forwardsResponse.Pagination)
+	assert.Equal(t, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 1}, forwardsResponse.Pagination)
 	forwards := forwardsResponse.Data
-	assert.Len(t, forwards, 2)
-	assert.Equal(t, int64(17702), forwards[0].ID)
+	assert.Len(t, forwards, 1)
+	assert.Equal(t, int64(24809), forwards[0].ID)
 	assert.Regexp(t, regexpEmail, forwards[0].From)
 }
 

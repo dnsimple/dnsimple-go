@@ -3,11 +3,7 @@ Host: example.com
 Accept-Encoding: gzip
 Content-Type: application/json
 User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
-X-Request-Id: 119842bf-d239-41a8-90ac-e8aa654ea64e
-Connect-Time: 1
-Content-Length: 766
-Total-Route-Time: 0
-Via: 1.1 vegur
-Connection: close
+Content-Length: 759
+Connection: keep-alive
 
-{"data": {"account": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2020-05-10T18:11:03Z", "plan_identifier": "professional-v1-monthly"}, "account_invitation": {"id": 3523, "email": "xxxxxx@xxxxxx.xxx", "token": "eb5763dc-0f24-420b-b7f6-c7355c8b8309", "account_id": 1111, "created_at": "2020-05-12T18:42:44Z", "updated_at": "2020-05-12T18:43:44Z", "invitation_sent_at": "2020-05-12T18:42:44Z", "invitation_accepted_at": "2020-05-12T18:43:44Z"}}, "name": "account.user_invitation_accept", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxxx@xxxxxx.xxx"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "2fab89c6-963b-47bf-a631-cfa15f06d21f"}
+{"data": {"account": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2020-05-10T18:11:03Z", "plan_identifier": "teams-v1-monthly"}, "account_invitation": {"id": 3523, "email": "xxxxxx@xxxxxx.xxx", "token": "eb5763dc-0f24-420b-b7f6-c7355c8b8309", "account_id": 1111, "created_at": "2020-05-12T18:42:44Z", "updated_at": "2020-05-12T18:43:44Z", "invitation_sent_at": "2020-05-12T18:42:44Z", "invitation_accepted_at": "2020-05-12T18:43:44Z"}}, "name": "account.user_invitation_accept", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxxx@xxxxxx.xxx"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "2fab89c6-963b-47bf-a631-cfa15f06d21f"}

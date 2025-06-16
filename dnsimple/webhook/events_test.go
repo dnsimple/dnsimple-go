@@ -99,7 +99,7 @@ func TestParseAccountEvent_Account_UserInvitationAccept(t *testing.T) {
 		Email:          "xxxxx@xxxxxx.xxx",
 		CreatedAt:      "2012-03-16T16:02:54Z",
 		UpdatedAt:      "2020-05-10T18:11:03Z",
-		PlanIdentifier: "professional-v1-monthly",
+		PlanIdentifier: "teams-v1-monthly",
 	}
 	assert.Equal(t, expectedAccount, *data.Account)
 
@@ -135,7 +135,7 @@ func TestParseAccountEvent_Account_UserInvitationRevoke(t *testing.T) {
 		Email:          "xxxxx@xxxxxx.xxx",
 		CreatedAt:      "2012-03-16T16:02:54Z",
 		UpdatedAt:      "2020-05-10T18:11:03Z",
-		PlanIdentifier: "professional-v1-monthly",
+		PlanIdentifier: "teams-v1-monthly",
 	}
 	assert.Equal(t, expectedAccount, *data.Account)
 
@@ -171,7 +171,7 @@ func TestParseAccountEvent_Account_UserInvite(t *testing.T) {
 		Email:          "xxxxx@xxxxxx.xxx",
 		CreatedAt:      "2012-03-16T16:02:54Z",
 		UpdatedAt:      "2020-05-10T18:11:03Z",
-		PlanIdentifier: "professional-v1-monthly",
+		PlanIdentifier: "teams-v1-monthly",
 	}
 	assert.Equal(t, expectedAccount, *data.Account)
 
@@ -207,7 +207,7 @@ func TestParseAccountEvent_Account_UserRemove(t *testing.T) {
 		Email:          "xxxxx@xxxxxx.xxx",
 		CreatedAt:      "2012-03-16T16:02:54Z",
 		UpdatedAt:      "2020-05-10T18:11:03Z",
-		PlanIdentifier: "professional-v1-monthly",
+		PlanIdentifier: "teams-v1-monthly",
 	}
 	assert.Equal(t, expectedAccount, *data.Account)
 

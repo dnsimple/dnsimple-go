@@ -8,6 +8,6 @@ Content-Length: 350
 Via: 1.1 vegur
 Total-Route-Time: 0
 Connect-Time: 0
-Connection: close
+Connection: keep-alive
 
 {"data": {"webhook": {"id": 215, "url": "https://xxxxxx-xxxxxxx-00000.herokuapp.com/xxxxxxxx"}}, "name": "webhook.delete", "actor": {"id": "1120", "entity": "user", "pretty": "hello@example.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "4d6f9084-850d-444d-a998-455a59f830d5"}

@@ -32,5 +32,5 @@ func TestAuthService_Whoami(t *testing.T) {
 	account := whoami.Account
 	assert.Equal(t, int64(1), account.ID)
 	assert.Equal(t, "example-account@example.com", account.Email)
-	assert.Equal(t, "dnsimple-professional", account.PlanIdentifier)
+	assert.Equal(t, "teams-v1-monthly", account.PlanIdentifier)
 }

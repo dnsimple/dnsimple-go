@@ -1,13 +1,9 @@
 POST /1djlwbe1 HTTP/1.1
 Host: example.com
-Content-Type: application/json
-User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
-Total-Route-Time: 0
-Connect-Time: 0
-Via: 1.1 vegur
-X-Request-Id: 820e9b9f-3312-4afc-b384-898eefa87e88
-Content-Length: 662
 Accept-Encoding: gzip
-Connection: close
+Content-Type: application/json
+User-Agent: DNSimple-Webhook-Notifier/46408cbfd86e25e0a375a09353a73c55a4825a28
+Content-Length: 682
+Connection: keep-alive
 
-{"data": {"dnssec": {"enabled": true, "created_at": "2017-07-19T18:52:55Z", "updated_at": "2017-07-19T18:52:55Z"}, "delegation_signer_record": {"id": 4662, "digest": "EF1D343203E03F1C98120646971F7B96806B759B66622F0A224551DA1A1EFC9A", "keytag": "51364", "algorithm": "8", "domain_id": 252645, "created_at": "2018-07-02T22:00:00Z", "updated_at": "2018-07-02T22:00:00Z", "digest_type": "2"}}, "name": "dnssec.rotation_complete", "actor": {"id": "system", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "efae385b-2caa-4861-848a-55d0c5a72e26"}
+{"data": {"dnssec": {"enabled": true, "created_at": "2017-07-19T18:52:55Z", "updated_at": "2017-07-19T18:52:55Z"}, "delegation_signer_record": {"id": 4662, "digest": "EF1D343203E03F1C98120646971F7B96806B759B66622F0A224551DA1A1EFC9A", "keytag": "51364", "algorithm": "8", "domain_id": 252645, "created_at": "2018-07-02T22:00:00Z", "updated_at": "2018-07-02T22:00:00Z", "digest_type": "2", "public_key": null}}, "name": "dnssec.rotation_complete", "actor": {"id": "system", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "efae385b-2caa-4861-848a-55d0c5a72e26"}

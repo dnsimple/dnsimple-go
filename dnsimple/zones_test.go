@@ -148,8 +148,8 @@ func TestZonesService_ActivateZoneDns(t *testing.T) {
 		Secondary:         false,
 		LastTransferredAt: "",
 		Active:            true,
-		CreatedAt:         "2015-04-23T07:40:03Z",
-		UpdatedAt:         "2015-04-23T07:40:03Z",
+		CreatedAt:         "2022-09-28T04:45:24Z",
+		UpdatedAt:         "2023-07-06T11:19:48Z",
 	}
 	assert.Equal(t, wantSingle, zone)
 }
@@ -183,8 +183,8 @@ func TestZonesService_DeactivateZoneDns(t *testing.T) {
 		Secondary:         false,
 		LastTransferredAt: "",
 		Active:            false,
-		CreatedAt:         "2015-04-23T07:40:03Z",
-		UpdatedAt:         "2015-04-23T07:40:03Z",
+		CreatedAt:         "2022-09-28T04:45:24Z",
+		UpdatedAt:         "2023-08-08T04:19:52Z",
 	}
 	assert.Equal(t, wantSingle, zone)
 }

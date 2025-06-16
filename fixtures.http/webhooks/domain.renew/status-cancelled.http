@@ -1,0 +1,8 @@
+POST /test HTTP/1.1
+Host: dnsimple.requestcatcher.com
+Accept-Encoding: gzip
+Content-Length: 671
+Content-Type: application/json
+User-Agent: DNSimple-Webhook-Notifier/d75a7ee112449b681673d7b088bdd7dae30cc176
+
+{"data": {"domain": {"id": 965, "name": "example-alpha.com", "state": "registered", "account_id": 682, "auto_renew": true, "created_at": "2022-10-12T21:53:01Z", "expires_at": "2024-10-12T21:53:04Z", "expires_on": "2024-10-12", "updated_at": "2023-02-13T16:04:05Z", "unicode_name": "example-alpha.com", "private_whois": false, "registrant_id": 167}}, "name": "domain.renew:cancelled", "actor": {"id": "682", "entity": "account", "pretty": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "account": {"id": 682, "display": "xxxxxxx-xxxxxxx-xxxxxxx", "identifier": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "api_version": "v2", "request_identifier": "4b2394b1-236b-42e8-859f-6952f2c222a7"}
