@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run markdownlint-cli
         uses: nosborn/github-action-markdown-cli@v3.4.0
         with:
@@ -28,7 +28,7 @@ jobs:
   golangci-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
@@ -55,7 +55,7 @@ jobs:
           - "1.23"
           - "1.24"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
       - name: Set up Go
