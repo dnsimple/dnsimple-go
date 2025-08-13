@@ -1,6 +1,9 @@
 name: Sync test fixtures
 
 on:
+  push:
+    branches:
+      - "add-fixtures-sync-workflow"
   workflow_dispatch:
 
 jobs:
