@@ -10,4 +10,4 @@ Via: 1.1 vegur
 Total-Route-Time: 1
 Connection: keep-alive
 
-{"data": {"email_forward": {"id": 30187, "to": "example@example.com", "from": ".*@example.zone", "domain_id": 415995, "created_at": "2018-11-07T17:20:39Z", "updated_at": "2018-11-07T17:20:53Z"}}, "name": "email_forward.update", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "83a53e35-9277-493f-af4d-a06a35167412"}
+{"data": {"email_forward": {"id": 30187, "to": "example@example.com", "from": ".*@example.zone", "active": true, "domain_id": 415995, "created_at": "2018-11-07T17:20:39Z", "updated_at": "2018-11-07T17:20:53Z", "alias_email": ".*@example.zone", "destination_email": "example@example.com"}}, "name": "email_forward.update", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "83a53e35-9277-493f-af4d-a06a35167412"}

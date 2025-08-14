@@ -10,4 +10,4 @@ Via: 1.1 vegur
 Total-Route-Time: 1
 Connection: keep-alive
 
-{"data": {"email_forward": {"id": 11587, "to": "test@example.com", "from": "test@hostedzone.com", "domain_id": 322675, "created_at": "2024-11-21T13:21:45Z", "updated_at": "2024-11-21T13:25:51Z", "alias_email": "test@hostedzone.com", "destination_email": "test@example.com"}}, "name": "email_forward.activate", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "1c15eea2-cf3e-4613-9f35-3f4bdd79d231"}
+{"data": {"email_forward": {"id": 11587, "to": "test@example.com", "from": "test@hostedzone.com", "active": true, "domain_id": 322675, "created_at": "2024-11-21T13:21:45Z", "updated_at": "2024-11-21T13:25:51Z", "alias_email": "test@hostedzone.com", "destination_email": "test@example.com"}}, "name": "email_forward.activate", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "1c15eea2-cf3e-4613-9f35-3f4bdd79d231"}

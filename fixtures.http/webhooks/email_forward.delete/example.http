@@ -10,4 +10,4 @@ Content-Type: application/json
 Connect-Time: 0
 Connection: keep-alive
 
-{"data": {"email_forward": {"id": 30187, "to": "example@example.com", "from": ".*@example.zone", "domain_id": 415995, "created_at": "2018-11-07T17:20:39Z", "updated_at": "2018-11-07T17:20:53Z"}}, "name": "email_forward.delete", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "8ab69f9d-1de9-4425-9755-50cc4f10f5a8"}
+{"data": {"email_forward": {"id": 30187, "to": "example@example.com", "from": ".*@example.zone", "active": true, "domain_id": 415995, "created_at": "2018-11-07T17:20:39Z", "updated_at": "2018-11-07T17:20:53Z", "alias_email": ".*@example.zone", "destination_email": "example@example.com"}}, "name": "email_forward.delete", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "8ab69f9d-1de9-4425-9755-50cc4f10f5a8"}
