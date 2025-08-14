@@ -48,7 +48,8 @@ jobs:
               --title "chore: Sync fixtures as of $NOW" \
               --body-file pr_body.md \
               --base main \
-              --head "$BRANCH"
+              --head "$BRANCH" \
+              --label "task"
           else
             echo "No fixture changes detected; nothing to do"
           fi
