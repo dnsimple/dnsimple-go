@@ -39,7 +39,7 @@ func TestDomainsService_EmailForwardsList(t *testing.T) {
 	forwards := forwardsResponse.Data
 	assert.Len(t, forwards, 1)
 	assert.Equal(t, int64(24809), forwards[0].ID)
-	assert.Regexp(t, regexpEmail, forwards[0].From)
+	assert.Regexp(t, regexpEmail, forwards[0].AliasEmail)
 }
 
 func TestDomainsService_EmailForwardsList_WithOptions(t *testing.T) {
