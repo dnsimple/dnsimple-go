@@ -571,6 +571,8 @@ func TestParseEmailForwardEvent_EmailForward_Create(t *testing.T) {
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
 	assert.EqualValues(t, 30187, data.EmailForward.ID)
+	assert.True(t, data.EmailForward.Active)
+	assert.EqualValues(t, "example@example.zone", data.EmailForward.AliasEmail)
 }
 
 func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
@@ -585,6 +587,8 @@ func TestParseEmailForwardEvent_EmailForward_Delete(t *testing.T) {
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
 	assert.EqualValues(t, 30187, data.EmailForward.ID)
+	assert.True(t, data.EmailForward.Active)
+	assert.EqualValues(t, "example@example.com", data.EmailForward.DestinationEmail)
 }
 
 func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
@@ -599,6 +603,40 @@ func TestParseEmailForwardEvent_EmailForward_Update(t *testing.T) {
 	data, ok := event.GetData().(*EmailForwardEventData)
 	assert.True(t, ok)
 	assert.EqualValues(t, 30187, data.EmailForward.ID)
+	assert.True(t, data.EmailForward.Active)
+	assert.EqualValues(t, "example@example.com", data.EmailForward.DestinationEmail)
+}
+
+func TestParseEmailForwardEvent_EmailForward_Activate(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.activate/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "email_forward.activate", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*EmailForwardEventData)
+	assert.True(t, ok)
+	assert.EqualValues(t, 11587, data.EmailForward.ID)
+	assert.True(t, data.EmailForward.Active)
+	assert.EqualValues(t, "test@hostedzone.com", data.EmailForward.AliasEmail)
+}
+
+func TestParseEmailForwardEvent_EmailForward_Deactivate(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/email_forward.deactivate/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "email_forward.deactivate", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*EmailForwardEventData)
+	assert.True(t, ok)
+	assert.EqualValues(t, 11587, data.EmailForward.ID)
+	assert.False(t, data.EmailForward.Active)
+	assert.EqualValues(t, "test@hostedzone.com", data.EmailForward.AliasEmail)
 }
 
 func TestParseWebhookEvent_Webhook_Create(t *testing.T) {

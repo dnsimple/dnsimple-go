@@ -55,7 +55,9 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 	case // email forward
 		"email_forward.create",
 		"email_forward.delete",
-		"email_forward.update":
+		"email_forward.update",
+		"email_forward.activate",
+		"email_forward.deactivate":
 		data = &EmailForwardEventData{}
 	case // webhook
 		"webhook.create",
