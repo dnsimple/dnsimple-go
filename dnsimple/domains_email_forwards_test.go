@@ -70,20 +70,20 @@ func TestDomainsService_CreateEmailForward(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"from": "me"}
+		want := map[string]interface{}{"alias_name": "me"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	forwardAttributes := EmailForward{From: "me"}
+	forwardAttributes := EmailForward{AliasName: "me"}
 
 	forwardResponse, err := client.Domains.CreateEmailForward(context.Background(), "1010", "example.com", forwardAttributes)
 	assert.NoError(t, err)
 	forward := forwardResponse.Data
 	assert.Equal(t, int64(41872), forward.ID)
-	assert.Regexp(t, regexpEmail, forward.From)
+	assert.Regexp(t, regexpEmail, forward.AliasEmail)
 }
 
 func TestDomainsService_GetEmailForward(t *testing.T) {
@@ -107,10 +107,8 @@ func TestDomainsService_GetEmailForward(t *testing.T) {
 	wantSingle := &EmailForward{
 		ID:               41872,
 		DomainID:         235146,
-		From:             "example@dnsimple.xyz",
 		AliasName:        "",
 		AliasEmail:       "example@dnsimple.xyz",
-		To:               "example@example.com",
 		DestinationEmail: "example@example.com",
 		Active:           true,
 		CreatedAt:        "2021-01-25T13:54:40Z",
