@@ -13,4 +13,3 @@ X-Runtime: 0.141588
 Strict-Transport-Security: max-age=31536000
 
 {"data":{"user":null,"account":{"id":1,"email":"example-account@example.com","plan_identifier":"teams-v1-monthly","created_at":"2015-09-18T23:04:37Z","updated_at":"2016-06-09T20:03:39Z"}}}
-
