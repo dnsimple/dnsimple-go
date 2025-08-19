@@ -12,7 +12,7 @@ type EmailForward struct {
 	// WARNING: This is not set in responses, please use `AliasEmail` instead.
 	AliasName string `json:"alias_name,omitempty"`
 	// WARNING: This is not used by requests, please use `AliasName` instead.
-	AliasEmail string `json:"alias_email,omitempty"`
+	AliasEmail       string `json:"alias_email,omitempty"`
 	DestinationEmail string `json:"destination_email,omitempty"`
 	Active           bool   `json:"active,omitempty"`
 	CreatedAt        string `json:"created_at,omitempty"`
