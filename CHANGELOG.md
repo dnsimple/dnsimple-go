@@ -2,6 +2,13 @@
 
 ## main
 
+## 6.0.0
+
+- CHANGED: Remove from and to from EmailForwards (dnsimple/dnsimple-go#212)
+- CHANGED: Add support for email_forward.activate and deactivate webhook events (dnsimple/dnsimple-go#207)
+- CHANGED: Added support for Go 1.25
+- CHANGED: Bumped dependencies
+
 ## 5.0.0
 
 - FIXED: Missing restore_price field in DomainPrice struct (dnsimple/dnsimple-go#192)
