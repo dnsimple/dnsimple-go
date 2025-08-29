@@ -299,8 +299,9 @@ func TestParseDNSSECEvent_DNSSEC_Create(t *testing.T) {
 	assert.Equal(t, "dnssec.create", event.Name)
 	assert.Regexp(t, regexpUUID, event.RequestID)
 
-	_, ok := event.GetData().(*DNSSECEventData)
+	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
+	assert.Equal(t, "example-20230920163010.com", data.Zone.Name)
 }
 
 func TestParseDNSSECEvent_DNSSEC_Delete(t *testing.T) {
@@ -312,8 +313,9 @@ func TestParseDNSSECEvent_DNSSEC_Delete(t *testing.T) {
 	assert.Equal(t, "dnssec.delete", event.Name)
 	assert.Regexp(t, regexpUUID, event.RequestID)
 
-	_, ok := event.GetData().(*DNSSECEventData)
+	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
+	assert.Equal(t, "example-20230920163010.com", data.Zone.Name)
 }
 
 func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
@@ -327,6 +329,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
 
 	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
+	assert.Equal(t, "example-20230920163010.com", data.Zone.Name)
 	assert.Equal(t, "42AEE231E98FECE484E9FA983CEF28AFFA56E99AD26347806BC6AF291F67DE83", data.DelegationSignerRecord.Digest)
 }
 
@@ -341,6 +344,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
 
 	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
+	assert.Equal(t, "example-20230920163010.com", data.Zone.Name)
 	assert.Equal(t, "992059C73169F2D049377884F210F893CF19CB56A4F8198B6424FF3D9BA1B4AA", data.DelegationSignerRecord.Digest)
 }
 
