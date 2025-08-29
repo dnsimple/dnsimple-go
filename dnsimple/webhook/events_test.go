@@ -327,7 +327,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationStart(t *testing.T) {
 
 	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
-	assert.Equal(t, "BD9D898E92D0F668E6BDBC5E79D52E5C3BAB12823A6EEE8C8B6DC633007DFABC", data.DelegationSignerRecord.Digest)
+	assert.Equal(t, "42AEE231E98FECE484E9FA983CEF28AFFA56E99AD26347806BC6AF291F67DE83", data.DelegationSignerRecord.Digest)
 }
 
 func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
@@ -341,7 +341,7 @@ func TestParseDNSSECEvent_DNSSEC_RotationComplete(t *testing.T) {
 
 	data, ok := event.GetData().(*DNSSECEventData)
 	assert.True(t, ok)
-	assert.Equal(t, "EF1D343203E03F1C98120646971F7B96806B759B66622F0A224551DA1A1EFC9A", data.DelegationSignerRecord.Digest)
+	assert.Equal(t, "992059C73169F2D049377884F210F893CF19CB56A4F8198B6424FF3D9BA1B4AA", data.DelegationSignerRecord.Digest)
 }
 
 func TestParseDomainEvent_Domain_AutoRenewalDisable(t *testing.T) {
