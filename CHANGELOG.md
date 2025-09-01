@@ -2,6 +2,8 @@
 
 ## main
 
+- NEW: Expanded DNSSEC event payload (dnsimple/dnsimple-go#214)
+
 ## 6.0.0
 
 - CHANGED: Remove from and to from EmailForwards (dnsimple/dnsimple-go#212)
