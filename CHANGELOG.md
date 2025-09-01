@@ -2,23 +2,23 @@
 
 ## main
 
-- NEW: Expanded DNSSEC event payload (dnsimple/dnsimple-go#214)
+- NEW: Expanded DNSSEC event payload (GH-214)
 
 ## 6.0.0
 
-- CHANGED: Remove from and to from EmailForwards (dnsimple/dnsimple-go#212)
-- CHANGED: Add support for email_forward.activate and deactivate webhook events (dnsimple/dnsimple-go#207)
+- CHANGED: Remove from and to from EmailForwards (GH-212)
+- CHANGED: Add support for email_forward.activate and deactivate webhook events (GH-207)
 - CHANGED: Added support for Go 1.25
 - CHANGED: Bumped dependencies
 
 ## 5.0.0
 
-- FIXED: Missing restore_price field in DomainPrice struct (dnsimple/dnsimple-go#192)
-- FIXED: Pass in options when making ListRegistrantChange API call (dnsimple/dnsimple-go#195)
-- FIXED: Handle error responses for registerDomain endpoint action (dnsimple/dnsimple-go#140)
+- FIXED: Missing restore_price field in DomainPrice struct (GH-192)
+- FIXED: Pass in options when making ListRegistrantChange API call (GH-195)
+- FIXED: Handle error responses for registerDomain endpoint action (GH-140)
 - CHANGED: Bump dependencies
 - CHANGED: Dropped support for Go < 1.23
-- HOUSEKEEPING: Add golangci-lint (dnsimple/dnsimple-go#190)
+- HOUSEKEEPING: Add golangci-lint (GH-190)
 
 Incompatible changes:
 
@@ -26,7 +26,7 @@ Incompatible changes:
 
 ## 4.0.0
 
-- FIXED: Installation via Go Modules (dnsimple/dnsimple-go#184)
+- FIXED: Installation via Go Modules (GH-184)
 - CHANGED: Added support for Go >= 1.24
 - CHANGED: Bump dependencies
 
@@ -49,11 +49,11 @@ Incompatible changes:
 
 ## 1.7.0
 
-- NEW: Added support for domain restore (dnsimple/dnsimple-go#166)
+- NEW: Added support for domain restore (GH-166)
 
 ## 1.6.0
 
-- NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint (dnsimple/dnsimple-go#164)
+- NEW: Added `DnsAnalytics` to query and pull data from the DNS Analytics API endpoint (GH-164)
 
 ## 1.5.1
 
@@ -65,45 +65,45 @@ ENHANCEMENTS:
 
 FEATURES:
 
-- NEW: Added `billing.ListCharges` to list charges for the account [learn more](https://developer.dnsimple.com/v2/billing-charges/). (dnsimple/dnsimple-go#156)
+- NEW: Added `billing.ListCharges` to list charges for the account [learn more](https://developer.dnsimple.com/v2/billing-charges/). (GH-156)
 
 ## 1.4.1
 
 ENHANCEMENTS:
 
-- NEW: Added events for `domain.transfer_lock_enable` and `domain.transfer_lock_disable` (dnsimple/dnsimple-go#149)
+- NEW: Added events for `domain.transfer_lock_enable` and `domain.transfer_lock_disable` (GH-149)
 
 ## 1.4.0
 
 FEATURES:
 
-- NEW: Added `GetDomainTransferLock`, `EnableDomainTransferLock`, and `DisableDomainTransferLock` APIs to manage domain transfer locks. (dnsimple/dnsimple-go#147)
+- NEW: Added `GetDomainTransferLock`, `EnableDomainTransferLock`, and `DisableDomainTransferLock` APIs to manage domain transfer locks. (GH-147)
 
 ## 1.3.0
 
 FEATURES:
 
-- NEW: Added `ListRegistrantChanges`, `CreateRegistrantChange`, `CheckRegistrantChange`, `GetRegistrantChange`, and `DeleteRegistrantChange` APIs to manage registrant changes. (dnsimple/dnsimple-go#146)
+- NEW: Added `ListRegistrantChanges`, `CreateRegistrantChange`, `CheckRegistrantChange`, `GetRegistrantChange`, and `DeleteRegistrantChange` APIs to manage registrant changes. (GH-146)
 
 ## 1.2.1
 
 FEATURES:
 
-- NEW: Added `ActivateZoneDns` to activate DNS services (resolution) for a zone. (dnsimple/dnsimple-go#145)
-- NEW: Added `DeactivateZoneDns` to deactivate DNS services (resolution) for a zone. (dnsimple/dnsimple-go#145)
+- NEW: Added `ActivateZoneDns` to activate DNS services (resolution) for a zone. (GH-145)
+- NEW: Added `DeactivateZoneDns` to deactivate DNS services (resolution) for a zone. (GH-145)
 
 IMPROVEMENTS:
 
-- `EmailForward` `From` is deprecated. Please use `AliasName` instead for creating email forwards, and `AliasEmail` when retrieving email forwards. (dnsimple/dnsimple-go#145)
-- `EmailForward` `To` is deprecated. Please use `DestinationEmail` instead for creating email forwards. (dnsimple/dnsimple-go#145)
+- `EmailForward` `From` is deprecated. Please use `AliasName` instead for creating email forwards, and `AliasEmail` when retrieving email forwards. (GH-145)
+- `EmailForward` `To` is deprecated. Please use `DestinationEmail` instead for creating email forwards. (GH-145)
 
 ## 1.2.0
 
-- NEW: Support `GetDomainRegistration` and `GetDomainRenewal` APIs (dnsimple/dnsimple-go#132)
+- NEW: Support `GetDomainRegistration` and `GetDomainRenewal` APIs (GH-132)
 
 ## 1.1.0
 
-- NEW: Support `signature_algorithm` in the `LetsencryptCertificateAttributes` struct (dnsimple/dnsimple-go#128)
+- NEW: Support `signature_algorithm` in the `LetsencryptCertificateAttributes` struct (GH-128)
 
 ## 1.0.1
 
@@ -117,7 +117,7 @@ IMPROVEMENTS:
 
 ## 0.80.0
 
-- CHANGED: Deprecate Certificate's `contact_id` (dnsimple/dnsimple-go#111)
+- CHANGED: Deprecate Certificate's `contact_id` (GH-111)
 - CHANGED: Dropped support for Go < 1.13
 
 ## 0.71.1
@@ -126,7 +126,7 @@ IMPROVEMENTS:
 
 ## 0.71.0
 
-- CHANGED: Updated Tld and DelegationSignerRecord types to support DS record key-data interface (dnsimple/dnsimple-go#107)
+- CHANGED: Updated Tld and DelegationSignerRecord types to support DS record key-data interface (GH-107)
 
 ## 0.70.1
 
@@ -134,21 +134,21 @@ IMPROVEMENTS:
 
 ## 0.70.0
 
-- NEW: Added Registrar.GetDomainPrices() to retrieve whether a domain is premium and the prices to register, transfer, and renew. (dnsimple/dnsimple-go#103)
+- NEW: Added Registrar.GetDomainPrices() to retrieve whether a domain is premium and the prices to register, transfer, and renew. (GH-103)
 
 Incompatible changes:
 
-- CHANGED: Domain.ExpiresOn has been replaced by Domain.ExpiresAt. (dnsimple/dnsimple-go#98)
-- CHANGED: Certificate.ExpiresOn has been replaced by Certificate.ExpiresAt. (dnsimple/dnsimple-go#99)
+- CHANGED: Domain.ExpiresOn has been replaced by Domain.ExpiresAt. (GH-98)
+- CHANGED: Certificate.ExpiresOn has been replaced by Certificate.ExpiresAt. (GH-99)
 
 ## Release 0.63.0
 
-- NEW: Added types and parsing for account membership events. (dnsimple/dnsimple-go#97)
+- NEW: Added types and parsing for account membership events. (GH-97)
 
 ## Release 0.62.0
 
-- NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (dnsimple/dnsimple-go#94)
-- NEW: Added Registrar.CancelDomainTransfer() to cancel an in progress domain transfer. (dnsimple/dnsimple-go#94)
+- NEW: Added Registrar.GetDomainTransfer() to retrieve a domain transfer. (GH-94)
+- NEW: Added Registrar.CancelDomainTransfer() to cancel an in progress domain transfer. (GH-94)
 
 ## Release 0.61.0
 
@@ -156,23 +156,23 @@ Incompatible changes:
 
 ## Release 0.60.0
 
-- FIXED: A zone record can be updated without the risk of overriding the name by mistake (dnsimple/dnsimple-go#33, dnsimple/dnsimple-go#92)
-- FIXED: Fixed a conflict where a Go zero-value would prevent sorting to work correctly (dnsimple/dnsimple-go#88, dnsimple/dnsimple-go#93)
+- FIXED: A zone record can be updated without the risk of overriding the name by mistake (GH-33, GH-92)
+- FIXED: Fixed a conflict where a Go zero-value would prevent sorting to work correctly (GH-88, GH-93)
 
 Incompatible changes:
 
-- CHANGED: CreateZoneRecord and UpdateZoneRecord now requires to use ZoneRecordAttributes instead of ZoneRecord. This is required to avoid conflicts caused by blank record names (dnsimple/dnsimple-go#92)
-- CHANGED: ListOptions now use pointer values (dnsimple/dnsimple-go#93)
+- CHANGED: CreateZoneRecord and UpdateZoneRecord now requires to use ZoneRecordAttributes instead of ZoneRecord. This is required to avoid conflicts caused by blank record names (GH-92)
+- CHANGED: ListOptions now use pointer values (GH-93)
 
 ## Release 0.50.0
 
 - NEW: Added Client.SetUserAgent() as a convenient helper to set a custom user agent.
-- NEW: Added support for Registration/Transfer extended attributes (dnsimple/dnsimple-go#86)
+- NEW: Added support for Registration/Transfer extended attributes (GH-86)
 
 Incompatible changes:
 
-- NEW: Added support for context (dnsimple/dnsimple-go#82, dnsimple/dnsimple-go#90)
-- CHANGED: Changed all method signatures so that the returned value is exported (dnsimple/dnsimple-go#91)
+- NEW: Added support for context (GH-82, GH-90)
+- CHANGED: Changed all method signatures so that the returned value is exported (GH-91)
 - CHANGED: Renamed the following structs to clarify intent:
   - DomainRegisterRequest -> RegisterDomainInput
   - DomainTransferRequest -> TransferDomainInput
@@ -188,19 +188,19 @@ Incompatible changes:
 
 ## Release 0.31.0
 
-- CHANGED: User-agent format has been changed to prepend custom token before default token. (dnsimple/dnsimple-go#87)
+- CHANGED: User-agent format has been changed to prepend custom token before default token. (GH-87)
 
 ## Release 0.30.0
 
 - NEW: Added webhook event parser for dnssec.create, dnssec.delete
-- CHANGE: Redesigned webhook event parsing to avoid event/data conflicts (dnsimple/dnsimple-go#85)
+- CHANGE: Redesigned webhook event parsing to avoid event/data conflicts (GH-85)
 
 IMPORTANT: This release introduce breaking changes compared to the previous one,
 as the webhook even parsing has been significantly reworked.
 
 ## Release 0.23.0
 
-- NEW: Added WHOIS privacy renewal (dnsimple/dnsimple-go#78)
+- NEW: Added WHOIS privacy renewal (GH-78)
 
 ## Release 0.22.0
 
@@ -208,17 +208,17 @@ as the webhook even parsing has been significantly reworked.
 
 ## Release 0.21.0
 
-- NEW: Added zone distribution and zone record distribution (dnsimple/dnsimple-go#64)
+- NEW: Added zone distribution and zone record distribution (GH-64)
 
 ## Release 0.20.0
 
 - CHANGED: Renamed `Event_Header` to `EventHeader` as it's more go-style. The Event interface has been updated accordingly.
-- CHANGED: Removed custom code for getting OAuth token. We now use RoundTripper for authentication (and pass an http.Client to create a new Client) (dnsimple/dnsimple-go#15, dnsimple/dnsimple-go#69).
+- CHANGED: Removed custom code for getting OAuth token. We now use RoundTripper for authentication (and pass an http.Client to create a new Client) (GH-15, GH-69).
 
 ## Release 0.16.0
 
-- NEW: Added Let's Encrypt certificate methods (dnsimple/dnsimple-go#63)
-- REMOVED: Removed premium_price attribute from registrar order responses (dnsimple/dnsimple-go#67). Please do not rely on that attribute, as it returned an incorrect value. The attribute is going to be removed, and the API now returns a null value.
+- NEW: Added Let's Encrypt certificate methods (GH-63)
+- REMOVED: Removed premium_price attribute from registrar order responses (GH-67). Please do not rely on that attribute, as it returned an incorrect value. The attribute is going to be removed, and the API now returns a null value.
 
 ## Release 0.15.0
 
