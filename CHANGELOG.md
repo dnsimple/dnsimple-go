@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## main
+## 6.0.1
 
 - NEW: Expanded DNSSEC event payload (GH-214)
 
