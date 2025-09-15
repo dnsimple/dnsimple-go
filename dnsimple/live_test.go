@@ -192,6 +192,68 @@ func TestLive_Zones(t *testing.T) {
 	fmt.Printf("ZoneRecord: %+v\n", recordResponse.Data)
 }
 
+func TestLive_BatchChangeZoneRecords(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := fmt.Sprintf("%v", whoami.Account.ID)
+
+	// Create a test domain
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(context.Background(), accountID, Domain{Name: fmt.Sprintf("batch-test-%v.test", time.Now().Unix())})
+	assert.NoError(t, err)
+
+	zoneName := domainResponse.Data.Name
+	timestamp := fmt.Sprintf("%v", time.Now().Unix())
+
+	// Create some initial records to update and delete later
+	record1, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("update1-%v", timestamp)), Type: "A", Content: "1.2.3.4"})
+	assert.NoError(t, err)
+
+	record2, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("update2-%v", timestamp)), Type: "A", Content: "1.2.3.5"})
+	assert.NoError(t, err)
+
+	record3, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("delete1-%v", timestamp)), Type: "TXT", Content: "to-be-deleted"})
+	assert.NoError(t, err)
+
+	// Perform batch operations
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Type: "A", Content: "3.2.3.4", Name: String(fmt.Sprintf("create1-%v", timestamp))},
+			{Type: "A", Content: "4.2.3.4", Name: String(fmt.Sprintf("create2-%v", timestamp))},
+		},
+		Updates: []ZoneRecordUpdateRequest{
+			{ID: record1.Data.ID, Content: "3.2.3.40", Name: String(fmt.Sprintf("updated1-%v", timestamp))},
+			{ID: record2.Data.ID, Content: "5.2.3.40", Name: String(fmt.Sprintf("updated2-%v", timestamp))},
+		},
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: record3.Data.ID},
+		},
+	}
+
+	batchResponse, err := dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, batchRequest)
+	assert.NoError(t, err)
+
+	data := batchResponse.Data
+
+	// Verify creates
+	assert.Len(t, data.Creates, 2)
+	fmt.Printf("Created records: %+v\n", data.Creates)
+
+	// Verify updates
+	assert.Len(t, data.Updates, 2)
+	fmt.Printf("Updated records: %+v\n", data.Updates)
+
+	// Verify deletes
+	assert.Len(t, data.Deletes, 1)
+	fmt.Printf("Deleted record IDs: %+v\n", data.Deletes)
+
+	fmt.Printf("Batch operation completed successfully for zone: %v\n", zoneName)
+}
+
 func TestLive_Error(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")

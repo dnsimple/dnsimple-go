@@ -155,3 +155,60 @@ func (s *ZonesService) DeleteRecord(ctx context.Context, accountID string, zoneN
 	recordResponse.HTTPResponse = resp
 	return recordResponse, nil
 }
+
+// BatchChangeZoneRecordsRequest represents the request payload for batch operations on zone records.
+type BatchChangeZoneRecordsRequest struct {
+	Creates []ZoneRecordAttributes      `json:"creates,omitempty"`
+	Updates []ZoneRecordUpdateRequest   `json:"updates,omitempty"`
+	Deletes []ZoneRecordDeleteRequest   `json:"deletes,omitempty"`
+}
+
+// ZoneRecordUpdateRequest represents an update request for a zone record in a batch operation.
+type ZoneRecordUpdateRequest struct {
+	ID       int64    `json:"id"`
+	Type     string   `json:"type,omitempty"`
+	Name     *string  `json:"name,omitempty"`
+	Content  string   `json:"content,omitempty"`
+	TTL      int      `json:"ttl,omitempty"`
+	Priority int      `json:"priority,omitempty"`
+	Regions  []string `json:"regions,omitempty"`
+}
+
+// ZoneRecordDeleteRequest represents a delete request for a zone record in a batch operation.
+type ZoneRecordDeleteRequest struct {
+	ID int64 `json:"id"`
+}
+
+// BatchChangeZoneRecordsResponse represents a response from the batch change zone records API.
+type BatchChangeZoneRecordsResponse struct {
+	Response
+	Data *BatchChangeZoneRecordsData `json:"data"`
+}
+
+// BatchChangeZoneRecordsData represents the data returned from batch operations.
+type BatchChangeZoneRecordsData struct {
+	Creates []ZoneRecord              `json:"creates,omitempty"`
+	Updates []ZoneRecord              `json:"updates,omitempty"`
+	Deletes []ZoneRecordDeleteResult  `json:"deletes,omitempty"`
+}
+
+// ZoneRecordDeleteResult represents the result of a delete operation in a batch.
+type ZoneRecordDeleteResult struct {
+	ID int64 `json:"id"`
+}
+
+// BatchChangeZoneRecords performs batch operations on zone records (create, update, delete).
+//
+// See https://developer.dnsimple.com/v2/zones/records/#batchChangeZoneRecords
+func (s *ZonesService) BatchChangeZoneRecords(ctx context.Context, accountID string, zoneName string, request BatchChangeZoneRecordsRequest) (*BatchChangeZoneRecordsResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/zones/%v/batch", accountID, zoneName))
+	batchResponse := &BatchChangeZoneRecordsResponse{}
+
+	resp, err := s.client.post(ctx, path, request, batchResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	batchResponse.HTTPResponse = resp
+	return batchResponse, nil
+}
