@@ -254,6 +254,41 @@ func TestLive_BatchChangeZoneRecords(t *testing.T) {
 	fmt.Printf("Batch operation completed successfully for zone: %v\n", zoneName)
 }
 
+func TestLive_BatchChangeZoneRecords_BatchError(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := fmt.Sprintf("%v", whoami.Account.ID)
+
+	// Create a test domain
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(context.Background(), accountID, Domain{Name: fmt.Sprintf("batch-error-test-%v.test", time.Now().Unix())})
+	assert.NoError(t, err)
+
+	zoneName := domainResponse.Data.Name
+
+	// Test batch-specific error by trying to update non-existent records
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: 88888888}, // Non-existent record ID
+		},
+	}
+
+	_, err = dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, batchRequest)
+
+	assert.Error(t, err)
+	var errorResp *ErrorResponse
+	if assert.ErrorAs(t, err, &errorResp) {
+		assert.Equal(t, "Validation failed", errorResp.Message)
+		assert.Contains(t, errorResp.AttributeErrors, "deletes[0]", "Expected delete error for non-existent record")
+		assert.Equal(t, []string{"Record not found ID=88888888"}, errorResp.AttributeErrors["deletes[0]"])
+		assert.Len(t, errorResp.AttributeErrors, 1, "Expected exactly 1 batch error")
+	}
+}
+
 func TestLive_Error(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")
