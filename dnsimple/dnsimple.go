@@ -343,9 +343,8 @@ func (r *ErrorResponse) Error() string {
 		r.HTTPResponse.StatusCode, r.Message)
 }
 
-// tryParseBatchChangeError attempts to parse batch change zone records error format
+// tryParseBatchChangeError attempts to parse the batch change zone records error format
 func tryParseBatchChangeError(resp *http.Response, bodyBytes []byte) error {
-	// Import the batch error types from zones_records
 	type batchOperationError struct {
 		Index   int    `json:"index"`
 		Message string `json:"message"`

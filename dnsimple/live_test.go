@@ -209,15 +209,23 @@ func TestLive_BatchChangeZoneRecords(t *testing.T) {
 	zoneName := domainResponse.Data.Name
 	timestamp := fmt.Sprintf("%v", time.Now().Unix())
 
-	// Create some initial records to update and delete later
-	record1, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("update1-%v", timestamp)), Type: "A", Content: "1.2.3.4"})
-	assert.NoError(t, err)
+	// Create some initial records using batch API for testing updates and deletes
+	setupRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Name: String(fmt.Sprintf("update1-%v", timestamp)), Type: "A", Content: "1.2.3.4"},
+			{Name: String(fmt.Sprintf("update2-%v", timestamp)), Type: "A", Content: "1.2.3.5"},
+			{Name: String(fmt.Sprintf("delete1-%v", timestamp)), Type: "TXT", Content: "to-be-deleted"},
+		},
+	}
 
-	record2, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("update2-%v", timestamp)), Type: "A", Content: "1.2.3.5"})
+	setupResponse, err := dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, setupRequest)
 	assert.NoError(t, err)
+	assert.Len(t, setupResponse.Data.Creates, 3, "Expected 3 records to be created in setup")
 
-	record3, err := dnsimpleClient.Zones.CreateRecord(context.Background(), accountID, zoneName, ZoneRecordAttributes{Name: String(fmt.Sprintf("delete1-%v", timestamp)), Type: "TXT", Content: "to-be-deleted"})
-	assert.NoError(t, err)
+	// Extract record IDs for later operations
+	record1 := setupResponse.Data.Creates[0]
+	record2 := setupResponse.Data.Creates[1]
+	record3 := setupResponse.Data.Creates[2]
 
 	// Perform batch operations
 	batchRequest := BatchChangeZoneRecordsRequest{
@@ -226,11 +234,11 @@ func TestLive_BatchChangeZoneRecords(t *testing.T) {
 			{Type: "A", Content: "4.2.3.4", Name: String(fmt.Sprintf("create2-%v", timestamp))},
 		},
 		Updates: []ZoneRecordUpdateRequest{
-			{ID: record1.Data.ID, Content: "3.2.3.40", Name: String(fmt.Sprintf("updated1-%v", timestamp))},
-			{ID: record2.Data.ID, Content: "5.2.3.40", Name: String(fmt.Sprintf("updated2-%v", timestamp))},
+			{ID: record1.ID, Content: "3.2.3.40", Name: String(fmt.Sprintf("updated1-%v", timestamp))},
+			{ID: record2.ID, Content: "5.2.3.40", Name: String(fmt.Sprintf("updated2-%v", timestamp))},
 		},
 		Deletes: []ZoneRecordDeleteRequest{
-			{ID: record3.Data.ID},
+			{ID: record3.ID},
 		},
 	}
 
