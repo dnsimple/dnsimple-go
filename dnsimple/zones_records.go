@@ -158,9 +158,9 @@ func (s *ZonesService) DeleteRecord(ctx context.Context, accountID string, zoneN
 
 // BatchChangeZoneRecordsRequest represents the request payload for batch operations on zone records.
 type BatchChangeZoneRecordsRequest struct {
-	Creates []ZoneRecordAttributes      `json:"creates,omitempty"`
-	Updates []ZoneRecordUpdateRequest   `json:"updates,omitempty"`
-	Deletes []ZoneRecordDeleteRequest   `json:"deletes,omitempty"`
+	Creates []ZoneRecordAttributes    `json:"creates,omitempty"`
+	Updates []ZoneRecordUpdateRequest `json:"updates,omitempty"`
+	Deletes []ZoneRecordDeleteRequest `json:"deletes,omitempty"`
 }
 
 // ZoneRecordUpdateRequest represents an update request for a zone record in a batch operation.
@@ -187,9 +187,9 @@ type BatchChangeZoneRecordsResponse struct {
 
 // BatchChangeZoneRecordsData represents the data returned from batch operations.
 type BatchChangeZoneRecordsData struct {
-	Creates []ZoneRecord              `json:"creates,omitempty"`
-	Updates []ZoneRecord              `json:"updates,omitempty"`
-	Deletes []ZoneRecordDeleteResult  `json:"deletes,omitempty"`
+	Creates []ZoneRecord             `json:"creates,omitempty"`
+	Updates []ZoneRecord             `json:"updates,omitempty"`
+	Deletes []ZoneRecordDeleteResult `json:"deletes,omitempty"`
 }
 
 // ZoneRecordDeleteResult represents the result of a delete operation in a batch.
