@@ -355,3 +355,160 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 
 	assert.NoError(t, err)
 }
+
+func TestZonesService_BatchChangeZoneRecords(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/batch", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/batchChangeZoneRecords/success.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		want := map[string]interface{}{
+			"creates": []interface{}{
+				map[string]interface{}{"type": "A", "content": "3.2.3.4", "name": "ab"},
+				map[string]interface{}{"type": "A", "content": "4.2.3.4", "name": "ab"},
+			},
+			"updates": []interface{}{
+				map[string]interface{}{"id": float64(67622534), "content": "3.2.3.40", "name": "update1-1757049890"},
+				map[string]interface{}{"id": float64(67622537), "content": "5.2.3.40", "name": "update2-1757049890"},
+			},
+			"deletes": []interface{}{
+				map[string]interface{}{"id": float64(67622509)},
+				map[string]interface{}{"id": float64(67622527)},
+			},
+		}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Type: "A", Content: "3.2.3.4", Name: String("ab")},
+			{Type: "A", Content: "4.2.3.4", Name: String("ab")},
+		},
+		Updates: []ZoneRecordUpdateRequest{
+			{ID: 67622534, Content: "3.2.3.40", Name: String("update1-1757049890")},
+			{ID: 67622537, Content: "5.2.3.40", Name: String("update2-1757049890")},
+		},
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: 67622509},
+			{ID: 67622527},
+		},
+	}
+
+	batchResponse, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
+
+	assert.NoError(t, err)
+	data := batchResponse.Data
+
+	// Test creates
+	assert.Len(t, data.Creates, 2)
+	assert.Equal(t, int64(67623409), data.Creates[0].ID)
+	assert.Equal(t, "ab", data.Creates[0].Name)
+	assert.Equal(t, "3.2.3.4", data.Creates[0].Content)
+	assert.Equal(t, "A", data.Creates[0].Type)
+	assert.Equal(t, "example.com", data.Creates[0].ZoneID)
+
+	assert.Equal(t, int64(67623410), data.Creates[1].ID)
+	assert.Equal(t, "ab", data.Creates[1].Name)
+	assert.Equal(t, "4.2.3.4", data.Creates[1].Content)
+
+	// Test updates
+	assert.Len(t, data.Updates, 2)
+	assert.Equal(t, int64(67622534), data.Updates[0].ID)
+	assert.Equal(t, "update1-1757049890", data.Updates[0].Name)
+	assert.Equal(t, "3.2.3.40", data.Updates[0].Content)
+
+	assert.Equal(t, int64(67622537), data.Updates[1].ID)
+	assert.Equal(t, "update2-1757049890", data.Updates[1].Name)
+	assert.Equal(t, "5.2.3.40", data.Updates[1].Content)
+
+	// Test deletes
+	assert.Len(t, data.Deletes, 2)
+	assert.Equal(t, int64(67622509), data.Deletes[0].ID)
+	assert.Equal(t, int64(67622527), data.Deletes[1].ID)
+}
+
+func TestZonesService_BatchChangeZoneRecords_CreateValidationFailed(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/batch", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/batchChangeZoneRecords/error_400_create_validation_failed.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Type: "SPF", Content: "v=spf1 -all", Name: String("test")},
+		},
+	}
+
+	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
+
+	assert.Error(t, err)
+}
+
+func TestZonesService_BatchChangeZoneRecords_UpdateValidationFailed(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/batch", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/batchChangeZoneRecords/error_400_update_validation_failed.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Updates: []ZoneRecordUpdateRequest{
+			{ID: 99999999, Content: "1.2.3.4", Name: String("nonexistent")},
+		},
+	}
+
+	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
+
+	assert.Error(t, err)
+}
+
+func TestZonesService_BatchChangeZoneRecords_DeleteValidationFailed(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/batch", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/batchChangeZoneRecords/error_400_delete_validation_failed.http")
+
+		testMethod(t, r, "POST")
+		testHeaders(t, r)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: 67622509},
+		},
+	}
+
+	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
+
+	assert.Error(t, err)
+}
