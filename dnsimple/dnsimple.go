@@ -343,6 +343,53 @@ func (r *ErrorResponse) Error() string {
 		r.HTTPResponse.StatusCode, r.Message)
 }
 
+// tryParseBatchChangeError attempts to parse batch change zone records error format
+func tryParseBatchChangeError(resp *http.Response, bodyBytes []byte) error {
+	// Import the batch error types from zones_records
+	type batchOperationError struct {
+		Index   int    `json:"index"`
+		Message string `json:"message"`
+	}
+
+	type batchChangeZoneRecordsErrors struct {
+		Creates []batchOperationError `json:"creates,omitempty"`
+		Updates []batchOperationError `json:"updates,omitempty"`
+		Deletes []batchOperationError `json:"deletes,omitempty"`
+	}
+
+	type batchChangeZoneRecordsErrorResponse struct {
+		Message string                       `json:"message"`
+		Errors  batchChangeZoneRecordsErrors `json:"errors"`
+	}
+
+	var batchError batchChangeZoneRecordsErrorResponse
+	if err := json.Unmarshal(bodyBytes, &batchError); err != nil {
+		return nil // Not batch error format
+	}
+
+	// Convert to standard ErrorResponse format for consistency
+	errorResponse := &ErrorResponse{}
+	errorResponse.HTTPResponse = resp
+	errorResponse.Message = batchError.Message
+	errorResponse.AttributeErrors = make(map[string][]string)
+
+	// Convert batch errors to standard format
+	for _, createErr := range batchError.Errors.Creates {
+		key := fmt.Sprintf("creates[%d]", createErr.Index)
+		errorResponse.AttributeErrors[key] = []string{createErr.Message}
+	}
+	for _, updateErr := range batchError.Errors.Updates {
+		key := fmt.Sprintf("updates[%d]", updateErr.Index)
+		errorResponse.AttributeErrors[key] = []string{updateErr.Message}
+	}
+	for _, deleteErr := range batchError.Errors.Deletes {
+		key := fmt.Sprintf("deletes[%d]", deleteErr.Index)
+		errorResponse.AttributeErrors[key] = []string{deleteErr.Message}
+	}
+
+	return errorResponse
+}
+
 // CheckResponse checks the API response for errors, and returns them if present.
 // A response is considered an error if the status code is different than 2xx. Specific requests
 // may have additional requirements, but this is sufficient in most of the cases.
@@ -379,6 +426,12 @@ func CheckResponse(resp *http.Response) error {
 			}
 
 			return errorResponse
+		}
+
+		// Try to parse as batch change zone records error format
+		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		if batchErr := tryParseBatchChangeError(resp, bodyBytes); batchErr != nil {
+			return batchErr
 		}
 	}
 	return fmt.Errorf("Error parsing error response: %w", err)

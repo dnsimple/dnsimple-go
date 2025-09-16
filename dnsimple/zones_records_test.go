@@ -458,7 +458,11 @@ func TestZonesService_BatchChangeZoneRecords_CreateValidationFailed(t *testing.T
 
 	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
 
-	assert.Error(t, err)
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Validation failed", got.Message)
+	assert.Contains(t, got.AttributeErrors, "creates[1]")
+	assert.Equal(t, []string{"The SPF record type has been discontinued"}, got.AttributeErrors["creates[1]"])
 }
 
 func TestZonesService_BatchChangeZoneRecords_UpdateValidationFailed(t *testing.T) {
@@ -484,7 +488,11 @@ func TestZonesService_BatchChangeZoneRecords_UpdateValidationFailed(t *testing.T
 
 	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
 
-	assert.Error(t, err)
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Validation failed", got.Message)
+	assert.Contains(t, got.AttributeErrors, "updates[0]")
+	assert.Equal(t, []string{"Record not found ID=99999999"}, got.AttributeErrors["updates[0]"])
 }
 
 func TestZonesService_BatchChangeZoneRecords_DeleteValidationFailed(t *testing.T) {
@@ -510,5 +518,9 @@ func TestZonesService_BatchChangeZoneRecords_DeleteValidationFailed(t *testing.T
 
 	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), accountID, "example.com", batchRequest)
 
-	assert.Error(t, err)
+	var got *ErrorResponse
+	assert.ErrorAs(t, err, &got)
+	assert.Equal(t, "Validation failed", got.Message)
+	assert.Contains(t, got.AttributeErrors, "deletes[0]")
+	assert.Equal(t, []string{"Record not found ID=67622509"}, got.AttributeErrors["deletes[0]"])
 }
