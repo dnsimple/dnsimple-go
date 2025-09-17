@@ -192,6 +192,111 @@ func TestLive_Zones(t *testing.T) {
 	fmt.Printf("ZoneRecord: %+v\n", recordResponse.Data)
 }
 
+func TestLive_BatchChangeZoneRecords(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := fmt.Sprintf("%v", whoami.Account.ID)
+
+	// Create a test domain
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(context.Background(), accountID, Domain{Name: fmt.Sprintf("batch-test-%v.test", time.Now().Unix())})
+	assert.NoError(t, err)
+
+	zoneName := domainResponse.Data.Name
+	timestamp := fmt.Sprintf("%v", time.Now().Unix())
+
+	// Create some initial records using batch API for testing updates and deletes
+	setupRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Name: String(fmt.Sprintf("update1-%v", timestamp)), Type: "A", Content: "1.2.3.4"},
+			{Name: String(fmt.Sprintf("update2-%v", timestamp)), Type: "A", Content: "1.2.3.5"},
+			{Name: String(fmt.Sprintf("delete1-%v", timestamp)), Type: "TXT", Content: "to-be-deleted"},
+		},
+	}
+
+	setupResponse, err := dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, setupRequest)
+	assert.NoError(t, err)
+	assert.Len(t, setupResponse.Data.Creates, 3, "Expected 3 records to be created in setup")
+
+	// Extract record IDs for later operations
+	record1 := setupResponse.Data.Creates[0]
+	record2 := setupResponse.Data.Creates[1]
+	record3 := setupResponse.Data.Creates[2]
+
+	// Perform batch operations
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Creates: []ZoneRecordAttributes{
+			{Type: "A", Content: "3.2.3.4", Name: String(fmt.Sprintf("create1-%v", timestamp))},
+			{Type: "A", Content: "4.2.3.4", Name: String(fmt.Sprintf("create2-%v", timestamp))},
+		},
+		Updates: []ZoneRecordUpdateRequest{
+			{ID: record1.ID, Content: "3.2.3.40", Name: String(fmt.Sprintf("updated1-%v", timestamp))},
+			{ID: record2.ID, Content: "5.2.3.40", Name: String(fmt.Sprintf("updated2-%v", timestamp))},
+		},
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: record3.ID},
+		},
+	}
+
+	batchResponse, err := dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, batchRequest)
+	assert.NoError(t, err)
+
+	data := batchResponse.Data
+
+	// Verify creates
+	assert.Len(t, data.Creates, 2)
+	fmt.Printf("Created records: %+v\n", data.Creates)
+
+	// Verify updates
+	assert.Len(t, data.Updates, 2)
+	fmt.Printf("Updated records: %+v\n", data.Updates)
+
+	// Verify deletes
+	assert.Len(t, data.Deletes, 1)
+	fmt.Printf("Deleted record IDs: %+v\n", data.Deletes)
+
+	fmt.Printf("Batch operation completed successfully for zone: %v\n", zoneName)
+}
+
+func TestLive_BatchChangeZoneRecords_BatchError(t *testing.T) {
+	if !dnsimpleLiveTest {
+		t.Skip("skipping live test")
+	}
+
+	whoami, err := Whoami(context.Background(), dnsimpleClient)
+	assert.NoError(t, err)
+
+	accountID := fmt.Sprintf("%v", whoami.Account.ID)
+
+	// Create a test domain
+	domainResponse, err := dnsimpleClient.Domains.CreateDomain(context.Background(), accountID, Domain{Name: fmt.Sprintf("batch-error-test-%v.test", time.Now().Unix())})
+	assert.NoError(t, err)
+
+	zoneName := domainResponse.Data.Name
+
+	// Test batch-specific error by trying to update non-existent records
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Deletes: []ZoneRecordDeleteRequest{
+			{ID: 88888888}, // Non-existent record ID
+		},
+	}
+
+	_, err = dnsimpleClient.Zones.BatchChangeZoneRecords(context.Background(), accountID, zoneName, batchRequest)
+
+	assert.Error(t, err)
+	var errorResp *ErrorResponse
+	if assert.ErrorAs(t, err, &errorResp) {
+		assert.Equal(t, "Validation failed", errorResp.Message)
+		assert.Contains(t, errorResp.AttributeErrors, "deletes[0]", "Expected delete error for non-existent record")
+		assert.Equal(t, []string{"Record not found ID=88888888"}, errorResp.AttributeErrors["deletes[0]"])
+		assert.Len(t, errorResp.AttributeErrors, 1, "Expected exactly 1 batch error")
+	}
+}
+
 func TestLive_Error(t *testing.T) {
 	if !dnsimpleLiveTest {
 		t.Skip("skipping live test")
