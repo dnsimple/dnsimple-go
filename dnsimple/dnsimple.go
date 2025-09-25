@@ -346,9 +346,9 @@ func (r *ErrorResponse) Error() string {
 // tryParseBatchChangeError attempts to parse the batch change zone records error format
 func tryParseBatchChangeError(resp *http.Response, bodyBytes []byte) error {
 	type batchOperationError struct {
-		Index   int                    `json:"index"`
-		Message string                 `json:"message"`
-		Errors  map[string][]string    `json:"errors,omitempty"`
+		Index   int                 `json:"index"`
+		Message string              `json:"message"`
+		Errors  map[string][]string `json:"errors,omitempty"`
 	}
 
 	type batchChangeZoneRecordsErrors struct {
