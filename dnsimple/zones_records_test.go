@@ -464,8 +464,6 @@ func TestZonesService_BatchChangeZoneRecords_CreateValidationFailed(t *testing.T
 
 	assert.Contains(t, got.AttributeErrors, "creates[0]")
 	assert.Equal(t, []string{"Validation failed"}, got.AttributeErrors["creates[0]"])
-
-	assert.Contains(t, got.AttributeErrors, "creates[0].record_type")
 	assert.Equal(t, []string{"unsupported"}, got.AttributeErrors["creates[0].record_type"])
 }
 
