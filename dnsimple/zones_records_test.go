@@ -461,8 +461,10 @@ func TestZonesService_BatchChangeZoneRecords_CreateValidationFailed(t *testing.T
 	var got *ErrorResponse
 	assert.ErrorAs(t, err, &got)
 	assert.Equal(t, "Validation failed", got.Message)
-	assert.Contains(t, got.AttributeErrors, "creates[1]")
-	assert.Equal(t, []string{"The SPF record type has been discontinued"}, got.AttributeErrors["creates[1]"])
+
+	assert.Contains(t, got.AttributeErrors, "creates[0]")
+	assert.Equal(t, []string{"Validation failed"}, got.AttributeErrors["creates[0]"])
+	assert.Equal(t, []string{"unsupported"}, got.AttributeErrors["creates[0].record_type"])
 }
 
 func TestZonesService_BatchChangeZoneRecords_UpdateValidationFailed(t *testing.T) {
