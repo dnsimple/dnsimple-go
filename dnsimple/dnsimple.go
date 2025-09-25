@@ -346,8 +346,9 @@ func (r *ErrorResponse) Error() string {
 // tryParseBatchChangeError attempts to parse the batch change zone records error format
 func tryParseBatchChangeError(resp *http.Response, bodyBytes []byte) error {
 	type batchOperationError struct {
-		Index   int    `json:"index"`
-		Message string `json:"message"`
+		Index   int                    `json:"index"`
+		Message string                 `json:"message"`
+		Errors  map[string][]string    `json:"errors,omitempty"`
 	}
 
 	type batchChangeZoneRecordsErrors struct {
@@ -374,16 +375,31 @@ func tryParseBatchChangeError(resp *http.Response, bodyBytes []byte) error {
 
 	// Convert batch errors to standard format
 	for _, createErr := range batchError.Errors.Creates {
-		key := fmt.Sprintf("creates[%d]", createErr.Index)
-		errorResponse.AttributeErrors[key] = []string{createErr.Message}
+		baseKey := fmt.Sprintf("creates[%d]", createErr.Index)
+		errorResponse.AttributeErrors[baseKey] = []string{createErr.Message}
+
+		for field, messages := range createErr.Errors {
+			detailKey := fmt.Sprintf("creates[%d].%s", createErr.Index, field)
+			errorResponse.AttributeErrors[detailKey] = messages
+		}
 	}
 	for _, updateErr := range batchError.Errors.Updates {
-		key := fmt.Sprintf("updates[%d]", updateErr.Index)
-		errorResponse.AttributeErrors[key] = []string{updateErr.Message}
+		baseKey := fmt.Sprintf("updates[%d]", updateErr.Index)
+		errorResponse.AttributeErrors[baseKey] = []string{updateErr.Message}
+
+		for field, messages := range updateErr.Errors {
+			detailKey := fmt.Sprintf("updates[%d].%s", updateErr.Index, field)
+			errorResponse.AttributeErrors[detailKey] = messages
+		}
 	}
 	for _, deleteErr := range batchError.Errors.Deletes {
-		key := fmt.Sprintf("deletes[%d]", deleteErr.Index)
-		errorResponse.AttributeErrors[key] = []string{deleteErr.Message}
+		baseKey := fmt.Sprintf("deletes[%d]", deleteErr.Index)
+		errorResponse.AttributeErrors[baseKey] = []string{deleteErr.Message}
+
+		for field, messages := range deleteErr.Errors {
+			detailKey := fmt.Sprintf("deletes[%d].%s", deleteErr.Index, field)
+			errorResponse.AttributeErrors[detailKey] = messages
+		}
 	}
 
 	return errorResponse
