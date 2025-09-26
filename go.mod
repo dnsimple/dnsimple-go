@@ -1,6 +1,6 @@
 module github.com/dnsimple/dnsimple-go/v6
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
 
@@ -8,7 +8,7 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/oauth2 v0.30.0
+	golang.org/x/oauth2 v0.31.0
 )
 
 require (
