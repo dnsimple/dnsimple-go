@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 7.0.0
+
 - NEW: Added support for Batch Change Zone Records API (GH-221)
 - CHANGED: Dropped support for Go < 1.24
 - CHANGED: Bump dependencies
