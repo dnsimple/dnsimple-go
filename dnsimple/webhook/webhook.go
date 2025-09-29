@@ -5,7 +5,7 @@ package webhook
 import (
 	"encoding/json"
 
-	"github.com/dnsimple/dnsimple-go/v6/dnsimple"
+	"github.com/dnsimple/dnsimple-go/v7/dnsimple"
 )
 
 // Actor represents the entity that triggered the event. It can be either an user,
