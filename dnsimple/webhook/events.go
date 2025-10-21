@@ -20,7 +20,7 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		data = &AccountMembershipEventData{}
 	case // sso
 		"account.sso_user_add":
-		data = &SsoEventData{}
+		data = &AccountSsoEventData{}
 	case // certificate
 		"certificate.issue",
 		"certificate.remove_private_key":
@@ -132,14 +132,14 @@ func (d *AccountMembershipEventData) unmarshalEventData(payload []byte) error {
 // SsoEvent
 //
 
-// SsoEventData represents the data node for an single sign-on (SSO) event.
-type SsoEventData struct {
+// AccountSsoEventData represents the data node for an single sign-on (SSO) event.
+type AccountSsoEventData struct {
 	Account                 *dnsimple.Account                 `json:"account"`
 	User                    *dnsimple.User                    `json:"user"`
 	AccountIdentityProvider *dnsimple.AccountIdentityProvider `json:"account_identity_provider"`
 }
 
-func (d *SsoEventData) unmarshalEventData(payload []byte) error {
+func (d *AccountSsoEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 

@@ -229,7 +229,7 @@ func TestParseAccountEvent_Account_SsoUserAdd(t *testing.T) {
 	assert.Equal(t, "account.sso_user_add", event.Name)
 	assert.Regexp(t, regexpUUID, event.RequestID)
 
-	data, ok := event.GetData().(*SsoEventData)
+	data, ok := event.GetData().(*AccountSsoEventData)
 	assert.True(t, ok)
 
 	expectedAccount := dnsimple.Account{
