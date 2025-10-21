@@ -21,12 +21,6 @@ type Account struct {
 	UpdatedAt      string `json:"updated_at,omitempty"`
 }
 
-// AccountsResponse represents a response from an API method that returns a collection of Account struct.
-type AccountsResponse struct {
-	Response
-	Data []Account `json:"data"`
-}
-
 // AccountInvitation represents an invitation to a DNSimple account.
 type AccountInvitation struct {
 	ID                   int64  `json:"id,omitempty"`
@@ -37,6 +31,17 @@ type AccountInvitation struct {
 	UpdatedAt            string `json:"updated_at,omitempty"`
 	InvitationSentAt     string `json:"invitation_sent_at,omitempty"`
 	InvitationAcceptedAt string `json:"invitation_accepted_at,omitempty"`
+}
+
+// AccountIdentityProvider represents an account identity provider for SSO.
+type AccountIdentityProvider struct {
+	OrganizationIdentifier string `json:"organization_identifier"`
+}
+
+// AccountsResponse represents a response from an API method that returns a collection of Account struct.
+type AccountsResponse struct {
+	Response
+	Data []Account `json:"data"`
 }
 
 // ListAccounts list the accounts for an user.

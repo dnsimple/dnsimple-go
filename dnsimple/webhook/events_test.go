@@ -220,6 +220,39 @@ func TestParseAccountEvent_Account_UserRemove(t *testing.T) {
 	assert.Equal(t, expectedUser, *data.User)
 }
 
+func TestParseAccountEvent_Account_SsoUserAdd(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/account.sso_user_add/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "account.sso_user_add", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*SsoEventData)
+	assert.True(t, ok)
+
+	expectedAccount := dnsimple.Account{
+		ID:             4,
+		Email:          "yyyyy@yyyyyy.yyy",
+		CreatedAt:      "2025-08-13T23:09:47Z",
+		UpdatedAt:      "2025-08-13T23:10:05Z",
+		PlanIdentifier: "teams-v2-monthly",
+	}
+	assert.Equal(t, expectedAccount, *data.Account)
+
+	expectedUser := dnsimple.User{
+		ID:    1111,
+		Email: "xxxxx@xxxxxx.xxx",
+	}
+	assert.Equal(t, expectedUser, *data.User)
+
+	expectedAccountIdentityProvider := dnsimple.AccountIdentityProvider{
+		OrganizationIdentifier: "51fae1e9-ce56-4df2-8364-cdab573027aa",
+	}
+	assert.Equal(t, expectedAccountIdentityProvider, *data.AccountIdentityProvider)
+}
+
 func TestParseCertificateEvent_Certificate_Issue(t *testing.T) {
 	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/certificate.issue/example.http")
 
