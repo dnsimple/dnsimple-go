@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## main
+## 7.0.1
 
 - NEW: Added support for "account.sso_user_add" event (GH-227)
 
