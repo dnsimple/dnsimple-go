@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## main
+
+- NEW: Added support for "account.sso_user_add" event (GH-227)
+
 ## 7.0.0
 
 - NEW: Added support for Batch Change Zone Records API (GH-221)
