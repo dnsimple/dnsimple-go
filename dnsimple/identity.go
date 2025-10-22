@@ -47,5 +47,5 @@ func Whoami(ctx context.Context, c *Client) (data *WhoamiData, err error) {
 	if resp != nil {
 		data = resp.Data
 	}
-	return
+	return data, err
 }

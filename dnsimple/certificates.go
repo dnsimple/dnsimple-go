@@ -77,7 +77,7 @@ func certificatePath(accountID, domainIdentifier string, certificateID int64) (p
 	if certificateID != 0 {
 		path += fmt.Sprintf("/%v", certificateID)
 	}
-	return
+	return path
 }
 
 func letsencryptCertificatePath(accountID, domainIdentifier string, certificateID int64) (path string) {
@@ -85,7 +85,7 @@ func letsencryptCertificatePath(accountID, domainIdentifier string, certificateI
 	if certificateID != 0 {
 		path += fmt.Sprintf("/%v", certificateID)
 	}
-	return
+	return path
 }
 
 // CertificateResponse represents a response from an API method that returns a Certificate struct.

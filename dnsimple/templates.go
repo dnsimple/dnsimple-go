@@ -29,7 +29,7 @@ func templatePath(accountID string, templateIdentifier string) (path string) {
 	if templateIdentifier != "" {
 		path += fmt.Sprintf("/%v", templateIdentifier)
 	}
-	return
+	return path
 }
 
 // TemplateResponse represents a response from an API method that returns a Template struct.

@@ -23,7 +23,7 @@ func delegationSignerRecordPath(accountID string, domainIdentifier string, dsRec
 	if dsRecordID != 0 {
 		path += fmt.Sprintf("/%v", dsRecordID)
 	}
-	return
+	return path
 }
 
 // DelegationSignerRecordResponse represents a response from an API method that returns a DelegationSignerRecord struct.

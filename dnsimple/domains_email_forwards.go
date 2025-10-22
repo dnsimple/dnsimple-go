@@ -24,7 +24,7 @@ func emailForwardPath(accountID string, domainIdentifier string, forwardID int64
 	if forwardID != 0 {
 		path += fmt.Sprintf("/%v", forwardID)
 	}
-	return
+	return path
 }
 
 // EmailForwardResponse represents a response from an API method that returns an EmailForward struct.

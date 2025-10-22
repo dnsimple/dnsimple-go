@@ -41,7 +41,7 @@ func zoneRecordPath(accountID string, zoneName string, recordID int64) (path str
 	if recordID != 0 {
 		path += fmt.Sprintf("/%v", recordID)
 	}
-	return
+	return path
 }
 
 // ZoneRecordResponse represents a response from an API method that returns a ZoneRecord struct.

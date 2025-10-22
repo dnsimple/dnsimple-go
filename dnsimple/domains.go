@@ -34,7 +34,7 @@ func domainPath(accountID string, domainIdentifier string) (path string) {
 	if domainIdentifier != "" {
 		path += fmt.Sprintf("/%v", domainIdentifier)
 	}
-	return
+	return path
 }
 
 // DomainResponse represents a response from an API method that returns a Domain struct.

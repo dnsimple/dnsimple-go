@@ -12,7 +12,7 @@ type Dnssec struct {
 
 func dnssecPath(accountID string, domainIdentifier string) (path string) {
 	path = fmt.Sprintf("%v/dnssec", domainPath(accountID, domainIdentifier))
-	return
+	return path
 }
 
 // DnssecResponse represents a response from an API method that returns a Dnssec struct.

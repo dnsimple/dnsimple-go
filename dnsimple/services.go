@@ -42,7 +42,7 @@ func servicePath(serviceIdentifier string) (path string) {
 	if serviceIdentifier != "" {
 		path += fmt.Sprintf("/%v", serviceIdentifier)
 	}
-	return
+	return path
 }
 
 // ServiceResponse represents a response from an API method that returns a Service struct.

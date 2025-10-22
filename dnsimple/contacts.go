@@ -40,7 +40,7 @@ func contactPath(accountID string, contactID int64) (path string) {
 	if contactID != 0 {
 		path += fmt.Sprintf("/%v", contactID)
 	}
-	return
+	return path
 }
 
 // ContactResponse represents a response from an API method that returns a Contact struct.

@@ -24,7 +24,7 @@ func webhookPath(accountID string, webhookID int64) (path string) {
 	if webhookID != 0 {
 		path = fmt.Sprintf("%v/%v", path, webhookID)
 	}
-	return
+	return path
 }
 
 // WebhookResponse represents a response from an API method that returns a Webhook struct.

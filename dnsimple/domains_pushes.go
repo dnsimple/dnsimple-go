@@ -21,7 +21,7 @@ func domainPushPath(accountID string, pushID int64) (path string) {
 	if pushID != 0 {
 		path += fmt.Sprintf("/%v", pushID)
 	}
-	return
+	return path
 }
 
 // DomainPushResponse represents a response from an API method that returns a DomainPush struct.
