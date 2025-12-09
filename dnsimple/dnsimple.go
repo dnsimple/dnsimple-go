@@ -182,12 +182,13 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 	}
 
 	resp, err := c.request(ctx, req, obj)
-	if err != nil {
-		return nil, err
+
+	if c.Debug && resp != nil {
+		log.Printf("Response: %#v", resp)
 	}
 
-	if c.Debug {
-		log.Printf("Response: %#v", resp)
+	if err != nil {
+		return resp, err
 	}
 
 	return resp, nil
@@ -254,6 +255,20 @@ func (c *Client) request(ctx context.Context, req *http.Request, obj interface{}
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	// Read the raw response body for debug logging
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return resp, err
+	}
+
+	// Log raw response body if debug is enabled
+	if c.Debug {
+		log.Printf("Response body: %s", string(bodyBytes))
+	}
+
+	// Replace the body so it can be read again
+	resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
 	err = CheckResponse(resp)
 	if err != nil {
