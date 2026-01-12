@@ -128,7 +128,11 @@ We recommend to customize the user agent. If you are building a library or integ
 
 ## Contributing
 
-For instructions about contributing and testing, visit the [CONTRIBUTING](CONTRIBUTING.md) file.
+Contributions are welcome! Please feel free to submit issues and pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for details.
 
 ## License
 
