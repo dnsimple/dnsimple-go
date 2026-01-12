@@ -558,6 +558,21 @@ func TestParseDomainEvent_Domain_ResolutionEnable(t *testing.T) {
 	assert.Equal(t, "example-alpha.com", data.Domain.Name)
 }
 
+func TestParseDomainEvent_Domain_Restore(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.restore/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "domain.restore", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*DomainEventData)
+	assert.True(t, ok)
+	assert.True(t, data.Auto)
+	assert.Equal(t, "example-alpha.com", data.Domain.Name)
+}
+
 func TestParseDomainEvent_Domain_Transfer(t *testing.T) {
 	payload := `{"data": {"domain": {"id": 6637, "name": "example.com", "state": "hosted", "token": "domain-token", "account_id": 24, "auto_renew": false, "created_at": "2016-03-24T21:03:49.392Z", "expires_on": null, "updated_at": "2016-03-24T21:03:49.392Z", "unicode_name": "example.com", "private_whois": false, "registrant_id": 409}}, "name": "domain.transfer", "actor": {"id": "1", "entity": "user", "pretty": "example@example.com"}, "account": {"id": 1010, "display": "User", "identifier": "user"}, "api_version": "v2", "request_identifier": "49901af0-569e-4acd-900f-6edf0ebc123c"}`
 
@@ -766,6 +781,38 @@ func TestParseWhoisPrivacyEvent_WhoisPrivacy_Renew(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, "example-alpha.com", data.Domain.Name)
 	assert.Equal(t, int64(902), data.WhoisPrivacy.ID)
+}
+
+func TestParseSubscriptionEvent_Subscription_Renew(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/subscription.renew/example.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "subscription.renew", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*SubscriptionEventData)
+	assert.True(t, ok)
+	assert.Equal(t, int64(11111), data.Subscription.ID)
+	assert.Equal(t, "subscribed", data.Subscription.State)
+	assert.Equal(t, "Teams", data.Subscription.PlanName)
+}
+
+func TestParseSubscriptionEvent_Subscription_RenewFailed(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/subscription.renew/state-failed.http")
+
+	event, err := ParseEvent(payload)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "subscription.renew:failed", event.Name)
+	assert.Regexp(t, regexpUUID, event.RequestID)
+
+	data, ok := event.GetData().(*SubscriptionEventData)
+	assert.True(t, ok)
+	assert.Equal(t, int64(11111), data.Subscription.ID)
+	assert.Equal(t, "subscribed", data.Subscription.State)
+	assert.Equal(t, "Teams", data.Subscription.PlanName)
 }
 
 func TestParseZoneEvent_Zone_Create(t *testing.T) {

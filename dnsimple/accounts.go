@@ -38,6 +38,15 @@ type AccountIdentityProvider struct {
 	OrganizationIdentifier string `json:"organization_identifier"`
 }
 
+// Subscription represents a DNSimple subscription.
+type Subscription struct {
+	ID        int64  `json:"id,omitempty"`
+	State     string `json:"state,omitempty"`
+	PlanName  string `json:"plan_name,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	UpdatedAt string `json:"updated_at,omitempty"`
+}
+
 // AccountsResponse represents a response from an API method that returns a collection of Account struct.
 type AccountsResponse struct {
 	Response
