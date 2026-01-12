@@ -38,34 +38,3 @@ export DNSIMPLE_TOKEN="some-token"
 go test -v ./...
 ```
 
-## Releasing
-
-The following instructions uses `$VERSION` as a placeholder, where `$VERSION` is a `MAJOR.MINOR.BUGFIX` release such as `1.2.0`.
-
-1. Run the test suite and ensure all the tests pass.
-
-2. Set the version in `dnsimple.go`. The major part of the version number should match the version in the module path in `go.mod` (e.g., if module path is `github.com/dnsimple/dnsimple-go/v5`, the version should be `5.y.z`).
-
-    ```go
-    Version = "$VERSION"
-    ```
-
-3. Run the test suite and ensure all the tests pass.
-
-4. Finalize the `## main` section in `CHANGELOG.md` assigning the version.
-
-5. Commit and push the changes
-
-    ```shell
-    git commit -a -m "Release $VERSION"
-    git push origin main
-    ```
-
-6. Wait for CI to complete.
-
-7. Create a signed tag.
-
-    ```shell
-    git tag -a v$VERSION -s -m "Release $VERSION"
-    git push origin --tags
-    ```
