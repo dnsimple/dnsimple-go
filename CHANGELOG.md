@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## main
+
+- REMOVED: Removed deprecated `GetDomainPremiumPrice`. Use `GetDomainPrices` instead.
+
 ## 7.0.1 - 2025-10-22
 
 - NEW: Added support for "account.sso_user_add" event (GH-227)

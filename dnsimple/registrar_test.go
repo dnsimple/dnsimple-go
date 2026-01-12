@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"net/url"
 	"reflect"
 	"testing"
 
@@ -30,50 +29,6 @@ func TestRegistrarService_CheckDomain(t *testing.T) {
 	assert.NoError(t, err)
 	check := checkResponse.Data
 	assert.Equal(t, "ruby.codes", check.Domain)
-}
-
-func TestRegistrarService_GetDomainPremiumPrice(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/premium_price", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/api/getDomainPremiumPrice/success.http")
-
-		testMethod(t, r, "GET")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		_, _ = io.Copy(w, httpResponse.Body)
-	})
-
-	priceResponse, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", nil)
-
-	assert.NoError(t, err)
-	price := priceResponse.Data
-	assert.Equal(t, "109.00", price.PremiumPrice)
-}
-
-func TestRegistrarService_GetDomainPremiumPrice_WithOptions(t *testing.T) {
-	setupMockServer()
-	defer teardownMockServer()
-
-	mux.HandleFunc("/v2/1010/registrar/domains/example.com/premium_price", func(w http.ResponseWriter, r *http.Request) {
-		httpResponse := httpResponseFixture(t, "/api/getDomainPremiumPrice/success.http")
-
-		testQuery(t, r, url.Values{
-			"action": []string{"registration"},
-		})
-
-		testMethod(t, r, "GET")
-		testHeaders(t, r)
-
-		w.WriteHeader(httpResponse.StatusCode)
-		_, _ = io.Copy(w, httpResponse.Body)
-	})
-
-	_, err := client.Registrar.GetDomainPremiumPrice(context.Background(), "1010", "example.com", &DomainPremiumPriceOptions{Action: "registration"})
-
-	assert.NoError(t, err)
 }
 
 func TestRegistrarService_GetDomainPrices(t *testing.T) {
