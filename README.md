@@ -5,6 +5,11 @@ A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 [![Build Status](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml/badge.svg)](https://github.com/dnsimple/dnsimple-go/actions/workflows/ci.yml)
 [![GoDoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple?status.svg)](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple)
 
+## Requirements
+
+- Go 1.21+
+- An activated DNSimple account
+
 ## Installation
 
 ```shell
@@ -70,6 +75,34 @@ func main() {
 
 For more complete documentation, see [godoc](https://godoc.org/github.com/dnsimple/dnsimple-go/dnsimple).
 
+## Configuration
+
+### Sandbox Environment
+
+We highly recommend testing against our [sandbox environment](https://developer.dnsimple.com/sandbox/) before using our production environment. This will allow you to avoid real purchases, live charges on your credit card, and reduce the chance of your running up against rate limits.
+
+The client supports both the production and sandbox environment. To switch to sandbox pass the sandbox API host using the `base_url` option when you construct the client:
+
+```go
+client := dnsimple.NewClient(tc)
+client.BaseURL = "https://api.sandbox.dnsimple.com"
+```
+
+You will need to ensure that you are using an access token created in the sandbox environment. Production tokens will *not* work in the sandbox environment.
+
+### Setting a custom `User-Agent` header
+
+You can customize the `User-Agent` header for the calls made to the DNSimple API:
+
+```go
+client := dnsimple.NewClient(tc)
+client.SetUserAgent("my-app/1.0")
+```
+
+The value you provide will be prepended to the default `User-Agent` the client uses. For example, if you use `my-app/1.0`, the final header value will be `my-app/1.0 dnsimple-go/0.14.0` (note that it will vary depending on the client version).
+
+We recommend to customize the user agent. If you are building a library or integration on top of the official client, customizing the client will help us to understand what is this client used for, and allow to contribute back or get in touch.
+
 ## Authentication
 
 When creating a new client you are required to provide an `http.Client` to use for authenticating the requests.
@@ -99,32 +132,6 @@ client := dnsimple.NewClient(&http.Client{Timeout: time.Second * 10})
 
 For any other custom need you can define your own `http.RoundTripper` implementation and
 pass a client that authenticated with the custom round tripper.
-
-## Sandbox Environment
-
-We highly recommend testing against our [sandbox environment](https://developer.dnsimple.com/sandbox/) before using our production environment. This will allow you to avoid real purchases, live charges on your credit card, and reduce the chance of your running up against rate limits.
-
-The client supports both the production and sandbox environment. To switch to sandbox pass the sandbox API host using the `base_url` option when you construct the client:
-
-```go
-client := dnsimple.NewClient(tc)
-client.BaseURL = "https://api.sandbox.dnsimple.com"
-```
-
-You will need to ensure that you are using an access token created in the sandbox environment. Production tokens will *not* work in the sandbox environment.
-
-## Setting a custom `User-Agent` header
-
-You can customize the `User-Agent` header for the calls made to the DNSimple API:
-
-```go
-client := dnsimple.NewClient(tc)
-client.SetUserAgent("my-app/1.0")
-```
-
-The value you provide will be prepended to the default `User-Agent` the client uses. For example, if you use `my-app/1.0`, the final header value will be `my-app/1.0 dnsimple-go/0.14.0` (note that it will vary depending on the client version).
-
-We recommend to customize the user agent. If you are building a library or integration on top of the official client, customizing the client will help us to understand what is this client used for, and allow to contribute back or get in touch.
 
 ## Contributing
 
