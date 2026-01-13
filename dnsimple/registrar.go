@@ -42,58 +42,6 @@ func (s *RegistrarService) CheckDomain(ctx context.Context, accountID string, do
 	return checkResponse, nil
 }
 
-// DomainPremiumPrice represents the premium price for a premium domain.
-type DomainPremiumPrice struct {
-	// The domain premium price
-	PremiumPrice string `json:"premium_price"`
-	// The registrar action.
-	// Possible values are registration|transfer|renewal
-	Action string `json:"action"`
-}
-
-// DomainPremiumPriceResponse represents a response from a domain premium price request.
-type DomainPremiumPriceResponse struct {
-	Response
-	Data *DomainPremiumPrice `json:"data"`
-}
-
-// DomainPremiumPriceOptions specifies the optional parameters you can provide
-// to customize the RegistrarService.GetDomainPremiumPrice method.
-type DomainPremiumPriceOptions struct {
-	Action string `url:"action,omitempty"`
-}
-
-// GetDomainPremiumPrice gets the premium price for a domain.
-//
-// Deprecated: GetDomainPremiumPrice has been deprecated, use GetDomainPrices instead.
-//
-// You must specify an action to get the price for. Valid actions are:
-// - registration
-// - transfer
-// - renewal
-//
-// See https://developer.dnsimple.com/v2/registrar/#premium-price
-func (s *RegistrarService) GetDomainPremiumPrice(ctx context.Context, accountID string, domainName string, options *DomainPremiumPriceOptions) (*DomainPremiumPriceResponse, error) {
-	var err error
-	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/premium_price", accountID, domainName))
-	priceResponse := &DomainPremiumPriceResponse{}
-
-	if options != nil {
-		path, err = addURLQueryOptions(path, options)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	resp, err := s.client.get(ctx, path, priceResponse)
-	if err != nil {
-		return nil, err
-	}
-
-	priceResponse.HTTPResponse = resp
-	return priceResponse, nil
-}
-
 // DomainPrice represents the result of a domain prices call.
 type DomainPrice struct {
 	Domain            string  `json:"domain"`
