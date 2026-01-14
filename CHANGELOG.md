@@ -9,7 +9,10 @@
 
 ### Removed
 
-- Deprecated `GetDomainPremiumPrice`. Use `GetDomainPrices` instead.
+- Removed deprecated `GetDomainPremiumPrice`. Use `GetDomainPrices` instead.
+- Removed deprecated `GetDomainPremiumPrice`. Use `GetDomainPrices` instead.
+- Removed deprecated `GetWhoisPrivacy` (dnsimple/dnsimple-developer#919)
+- Removed deprecated `RenewWhoisPrivacy` (dnsimple/dnsimple-developer#919)
 
 ## 7.0.1 - 2025-10-22
 
