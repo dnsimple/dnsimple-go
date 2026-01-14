@@ -13,10 +13,6 @@ cd dnsimple-go
 
 Then [run the test suite](#testing) to check everything works as expected.
 
-## Changelog
-
-We follow the [Common Changelog](https://common-changelog.org/) format for changelog entries.
-
 ## Testing
 
 Submit unit tests for your changes. You can test your changes on your machine by running the test suite.
@@ -36,3 +32,6 @@ export DNSIMPLE_TOKEN="some-token"
 go test -v ./...
 ```
 
+## Changelog
+
+We follow the [Common Changelog](https://common-changelog.org/) format for changelog entries.
