@@ -1,4 +1,9 @@
-# CHANGELOG
+# Changelog
+
+## main
+
+- NEW: Added support for subscription webhook events (`subscription.migrate`, `subscription.renew`, `subscription.renew:failed`, `subscription.subscribe`, `subscription.unsubscribe`)
+- NEW: Added support for `domain.restore` event
 
 ## main
 

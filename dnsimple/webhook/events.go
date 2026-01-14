@@ -49,7 +49,8 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"domain.renew",
 		"domain.resolution_disable",
 		"domain.resolution_enable",
-		"domain.transfer": // TODO
+		"domain.restore",
+		"domain.transfer":
 		data = &DomainEventData{}
 	case // domain transfer lock
 		"domain.transfer_lock_enable",
@@ -72,6 +73,13 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"whois_privacy.purchase",
 		"whois_privacy.renew":
 		data = &WhoisPrivacyEventData{}
+	case // subscription
+		"subscription.migrate",
+		"subscription.renew",
+		"subscription.renew:failed",
+		"subscription.subscribe",
+		"subscription.unsubscribe":
+		data = &SubscriptionEventData{}
 	case // zone
 		"zone.create",
 		"zone.delete":
@@ -264,6 +272,19 @@ type WhoisPrivacyEventData struct {
 }
 
 func (d *WhoisPrivacyEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+//
+// SubscriptionEvent
+//
+
+// SubscriptionEventData represents the data node for a Subscription event.
+type SubscriptionEventData struct {
+	Subscription *dnsimple.Subscription `json:"subscription"`
+}
+
+func (d *SubscriptionEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 
