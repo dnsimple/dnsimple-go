@@ -4,8 +4,6 @@ The main `dnsimple` package is defined in the `/dnsimple` subfolder of the `dnsi
 
 ## Getting started
 
-### 1. Clone the repository
-
 Clone the repository [in your workspace](https://go.dev/doc/code#Organization) and move into it:
 
 ```shell
@@ -13,21 +11,13 @@ git clone git@github.com:dnsimple/dnsimple-go.git
 cd dnsimple-go
 ```
 
-### 2. Build and test
-
-[Run the test suite](#testing) to check everything works as expected.
-
-## Changelog
-
-We follow the [Common Changelog](https://common-changelog.org/) format for changelog entries.
+Then [run the test suite](#testing) to check everything works as expected.
 
 ## Testing
 
-Submit unit tests for your changes. You can test your changes on your machine by running the test suite (see below).
+Submit unit tests for your changes. You can test your changes on your machine by running the test suite.
 
 When you submit a PR, tests will also be run on the [continuous integration environment via GitHub Actions](https://github.com/dnsimple/dnsimple-go/actions).
-
-### Test Suite
 
 To run the test suite:
 
@@ -42,3 +32,6 @@ export DNSIMPLE_TOKEN="some-token"
 go test -v ./...
 ```
 
+## Changelog
+
+We follow the [Common Changelog](https://common-changelog.org/) format for changelog entries.
