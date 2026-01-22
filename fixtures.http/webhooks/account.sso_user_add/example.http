@@ -1,9 +1,9 @@
 POST /170zjup1 HTTP/1.1
-Host: example.com
-Accept-Encoding: gzip
-Content-Type: application/json
-User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
-Content-Length: 662
-Connection: keep-alive
+host: example.com
+accept-encoding: gzip
+content-type: application/json
+user-agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
+content-length: 662
+connection: keep-alive
 
 {"data": {"user": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2025-09-16T22:12:34Z", "updated_at": "2025-09-18T10:46:19Z"}, "account": {"id": 4, "email": "yyyyy@yyyyyy.yyy", "created_at": "2025-08-13T23:09:47Z", "updated_at": "2025-08-13T23:10:05Z", "plan_identifier": "teams-v2-monthly"}, "account_identity_provider": {"organization_identifier": "51fae1e9-ce56-4df2-8364-cdab573027aa"}}, "name": "account.sso_user_add", "actor": {"id": "", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 4, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "4aedf8d3-f93d-4a42-99d9-ec20c9349358"}

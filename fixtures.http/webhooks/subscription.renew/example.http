@@ -1,13 +1,13 @@
 POST /1djlwbe1 HTTP/1.1
-Host: example.com
-Content-Type: application/json
-Total-Route-Time: 7210
-Content-Length: 432
-X-Request-Id: e15222f0-83fd-48ae-ab6f-67c8f3198dcc
-Via: 1.1 vegur
-Connect-Time: 1
-Accept-Encoding: gzip
-User-Agent: DNSimple-Webhook-Notifier/8b16040b4b0e3b18a84c6a300a85119cf638980a
-Connection: keep-alive
+host: example.com
+content-type: application/json
+total-route-time: 7210
+content-length: 432
+x-request-id: e15222f0-83fd-48ae-ab6f-67c8f3198dcc
+via: 1.1 vegur
+connect-time: 1
+accept-encoding: gzip
+user-agent: DNSimple-Webhook-Notifier/8b16040b4b0e3b18a84c6a300a85119cf638980a
+connection: keep-alive
 
 {"data": {"subscription": {"id": 11111, "state": "subscribed", "plan_name": "Teams", "created_at": "2018-12-20T13:40:26Z", "updated_at": "2019-04-06T08:57:01Z"}}, "name": "subscription.renew", "actor": {"id": "system", "entity": "dnsimple", "pretty": "support@dnsimple.com"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "e08f7b64-81b2-454c-a090-ee012cbf2141"}
