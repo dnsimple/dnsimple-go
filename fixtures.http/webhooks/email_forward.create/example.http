@@ -6,7 +6,7 @@ user-agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
 content-type: application/json
 connect-time: 1
 via: 1.1 vegur
-content-length: 561
+content-length: 560
 total-route-time: 0
 connection: keep-alive
 
