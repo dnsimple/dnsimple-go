@@ -1,13 +1,13 @@
 POST /1djlwbe1 HTTP/1.1
-Host: example.com
-Content-Length: 551
-Accept-Encoding: gzip
-X-Request-Id: 42f14e6a-21e4-4942-9556-682298b5a852
-User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
-Content-Type: application/json
-Connect-Time: 0
-Via: 1.1 vegur
-Total-Route-Time: 1
-Connection: keep-alive
+host: example.com
+content-length: 550
+accept-encoding: gzip
+x-request-id: 42f14e6a-21e4-4942-9556-682298b5a852
+user-agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
+content-type: application/json
+connect-time: 0
+via: 1.1 vegur
+total-route-time: 1
+connection: keep-alive
 
 {"data": {"email_forward": {"id": 30187, "to": "example@example.com", "from": ".*@example.zone", "active": true, "domain_id": 415995, "created_at": "2018-11-07T17:20:39Z", "updated_at": "2018-11-07T17:20:53Z", "alias_email": ".*@example.zone", "destination_email": "example@example.com"}}, "name": "email_forward.update", "actor": {"id": "1120", "entity": "user", "pretty": "xxxxx@xxxxxxx.xxx"}, "account": {"id": 111, "display": "Personal", "identifier": "xxxxxx"}, "api_version": "v2", "request_identifier": "83a53e35-9277-493f-af4d-a06a35167412"}

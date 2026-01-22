@@ -1,9 +1,9 @@
 POST /170zjup1 HTTP/1.1
-Host: example.com
-Accept-Encoding: gzip
-Connection: keep-alive
-Content-Length: 581
-Content-Type: application/json
-User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
+host: example.com
+accept-encoding: gzip
+connection: keep-alive
+content-length: 581
+content-type: application/json
+user-agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
 
 {"data": {"user": {"id": 1120, "email": "xxxxxx@xxxxxx.xxx", "created_at": "2011-03-17T21:30:25Z", "updated_at": "2018-11-16T12:38:34Z"}, "account": {"id": 1111, "email": "xxxxx@xxxxxx.xxx", "created_at": "2012-03-16T16:02:54Z", "updated_at": "2020-05-10T18:11:03Z", "plan_identifier": "teams-v1-monthly"}}, "name": "account.user_remove", "actor": {"id": "88720", "entity": "user", "pretty": "xxxxxxxxxxxxxxxxx@xxxxxx.xxx"}, "account": {"id": 1111, "display": "xxxxxxxx", "identifier": "xxxxxxxx"}, "api_version": "v2", "request_identifier": "c60473f0-bbed-4858-84f9-5766c8227447"}

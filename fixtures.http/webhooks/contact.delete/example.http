@@ -1,13 +1,13 @@
 POST /1djlwbe1 HTTP/1.1
-Host: example.com
-Accept-Encoding: gzip
-X-Request-Id: 36df2ab6-8108-42e4-8689-ababd10ea3a6
-User-Agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
-Content-Type: application/json
-Content-Length: 680
-Via: 1.1 vegur
-Total-Route-Time: 0
-Connect-Time: 0
-Connection: keep-alive
+host: example.com
+accept-encoding: gzip
+x-request-id: 36df2ab6-8108-42e4-8689-ababd10ea3a6
+user-agent: DNSimple-Webhook-Notifier/f152781ec87b328bf9edcaa760f0e5342bdd15cf
+content-type: application/json
+content-length: 680
+via: 1.1 vegur
+total-route-time: 0
+connect-time: 0
+connection: keep-alive
 
 {"data": {"contact": {"id": 40099, "fax": "", "city": "Rome", "email": "example@example.com", "label": "Test", "phone": "+39 339 1111111", "country": "IT", "address1": "Some Street", "address2": "", "job_title": "", "last_name": "Bar", "account_id": 123, "created_at": "2018-11-05T12:32:42Z", "first_name": "Foo", "updated_at": "2018-11-05T12:32:56Z", "postal_code": "12345", "state_province": "RM", "organization_name": ""}}, "name": "contact.delete", "actor": {"id": "1120", "entity": "user", "pretty": "hello@example.com"}, "account": {"id": 123, "display": "Personal", "identifier": "foobar"}, "api_version": "v2", "request_identifier": "9d8b58a5-986c-4f0c-b03e-f1a8e512a639"}

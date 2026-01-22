@@ -1,9 +1,9 @@
 POST / HTTP/1.1
-Host: example.com
-Accept-Encoding: gzip
-Content-Type: application/json
-User-Agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
-Content-Length: 638
-Connection: keep-alive
+host: example.com
+accept-encoding: gzip
+content-type: application/json
+user-agent: DNSimple-Webhook-Notifier/8fd98a84516b72d5b863b27f93fcbaef61f06c03
+content-length: 638
+connection: keep-alive
 
 {"data": {"domain": {"id": 181985, "name": "example-beta.com", "state": "hosted", "account_id": 1385, "auto_renew": false, "created_at": "2020-06-04T19:47:05Z", "expires_at": null, "expires_on": null, "updated_at": "2020-06-04T19:47:05Z", "unicode_name": "example-beta.com", "private_whois": false, "registrant_id": null}}, "name": "domain.create", "actor": {"id": "1385", "entity": "account", "pretty": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "account": {"id": 1385, "display": "xxxxxxx-xxxxxxx-xxxxxxx", "identifier": "xxxxxxx-xxxxxxx-xxxxxxx@xxxxx.com"}, "api_version": "v2", "request_identifier": "35e04e69-bec9-46e2-bcf1-1d5a469d82b6"}
