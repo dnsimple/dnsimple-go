@@ -1,0 +1,4 @@
+# Preserve line endings in HTTP fixture files
+# These files contain raw HTTP requests/responses. Treat them as binary
+# to prevent Git from converting line endings.
+**/*.http binary
