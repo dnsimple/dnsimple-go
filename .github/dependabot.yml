@@ -17,3 +17,8 @@ updates:
     labels:
       - task
       - dependencies
+    groups:
+      actions-minor-patch:
+        update-types:
+          - minor
+          - patch
