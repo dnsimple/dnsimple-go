@@ -149,3 +149,30 @@ func TestDomainsService_DeleteDomain(t *testing.T) {
 
 	assert.NoError(t, err)
 }
+
+func TestDomainsService_GetDomainResearchStatus(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/domains/research/status", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/getDomainsResearchStatus/success-unavailable.http")
+
+		testMethod(t, r, "GET")
+		testHeaders(t, r)
+		testQuery(t, r, url.Values{"domain": []string{"example.com"}})
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	accountID := "1010"
+
+	researchStatusResponse, err := client.Domains.GetDomainResearchStatus(context.Background(), accountID, "example.com")
+
+	assert.NoError(t, err)
+	researchStatus := researchStatusResponse.Data
+	assert.Equal(t, "25dd77cb-2f71-48b9-b6be-1dacd2881418", researchStatus.RequestID)
+	assert.Equal(t, "taken.com", researchStatus.Domain)
+	assert.Equal(t, "unavailable", researchStatus.Availability)
+	assert.Empty(t, researchStatus.Errors)
+}

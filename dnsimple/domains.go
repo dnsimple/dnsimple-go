@@ -129,3 +129,33 @@ func (s *DomainsService) DeleteDomain(ctx context.Context, accountID string, dom
 	domainResponse.HTTPResponse = resp
 	return domainResponse, nil
 }
+
+// DomainResearchStatus represents the research status of a domain.
+type DomainResearchStatus struct {
+	RequestID    string   `json:"request_id"`
+	Domain       string   `json:"domain"`
+	Availability string   `json:"availability"`
+	Errors       []string `json:"errors"`
+}
+
+// DomainResearchStatusResponse represents a response from a domain research status request.
+type DomainResearchStatusResponse struct {
+	Response
+	Data *DomainResearchStatus `json:"data"`
+}
+
+// GetDomainResearchStatus fetches the research status for a domain.
+//
+// See https://developer.dnsimple.com/v2/domains/research/#getDomainsResearchStatus
+func (s *DomainsService) GetDomainResearchStatus(ctx context.Context, accountID string, domainName string) (*DomainResearchStatusResponse, error) {
+	path := versioned(fmt.Sprintf("/%v/domains/research/status?domain=%v", accountID, domainName))
+	researchStatusResponse := &DomainResearchStatusResponse{}
+
+	resp, err := s.client.get(ctx, path, researchStatusResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	researchStatusResponse.HTTPResponse = resp
+	return researchStatusResponse, nil
+}
