@@ -1,5 +1,5 @@
-# Local setup
-.tool-versions
-
 # Build
 /coverage.txt
+
+# Developer environment
+.tool-versions
