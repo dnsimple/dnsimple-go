@@ -23,7 +23,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           sign-commits: true
-          add-paths: test/fixtures.http
+          add-paths: fixtures.http
           commit-message: "chore: sync test fixtures as of ${{ steps.sync.outputs.now }}"
           branch: "chore/sync-fixtures-${{ github.run_id }}"
           title: "chore: Sync fixtures as of ${{ steps.sync.outputs.now }}"
