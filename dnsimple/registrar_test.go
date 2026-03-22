@@ -55,6 +55,9 @@ func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	assert.Equal(t, float64(20.0), check.RenewalPrice)
 	assert.Equal(t, float64(20.0), check.RestorePrice)
 	assert.Equal(t, float64(20.0), check.TransferPrice)
+	if check.TrusteeServicePrice != nil {
+		assert.Equal(t, float64(20.0), *check.TrusteeServicePrice)
+	}
 }
 
 func TestRegistrarService_GetDomainRegistration(t *testing.T) {
@@ -82,6 +85,7 @@ func TestRegistrarService_GetDomainRegistration(t *testing.T) {
 	assert.Equal(t, check.State, "registering")
 	assert.Equal(t, check.AutoRenew, false)
 	assert.Equal(t, check.WhoisPrivacy, false)
+	assert.False(t, check.TrusteeService)
 	assert.Equal(t, check.CreatedAt, "2023-01-27T17:44:32Z")
 	assert.Equal(t, check.UpdatedAt, "2023-01-27T17:44:40Z")
 }

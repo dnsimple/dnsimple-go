@@ -34,6 +34,8 @@ func TestTldsService_ListTlds(t *testing.T) {
 	assert.Equal(t, 1, tlds[0].MinimumRegistration)
 	assert.True(t, tlds[0].RegistrationEnabled)
 	assert.True(t, tlds[0].RenewalEnabled)
+	assert.False(t, tlds[0].TrusteeServiceEnabled)
+	assert.False(t, tlds[0].TrusteeServiceRequired)
 	assert.False(t, tlds[0].TransferEnabled)
 }
 
@@ -76,6 +78,8 @@ func TestTldsService_GetTld(t *testing.T) {
 	assert.Equal(t, "com", tld.Tld)
 	assert.Equal(t, 1, tld.TldType)
 	assert.True(t, tld.WhoisPrivacy)
+	assert.False(t, tld.TrusteeServiceEnabled)
+	assert.False(t, tld.TrusteeServiceRequired)
 	assert.False(t, tld.AutoRenewOnly)
 	assert.Equal(t, 1, tld.MinimumRegistration)
 	assert.True(t, tld.RegistrationEnabled)
