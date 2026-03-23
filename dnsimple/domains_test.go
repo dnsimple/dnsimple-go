@@ -127,6 +127,7 @@ func TestDomainsService_GetDomain(t *testing.T) {
 		UpdatedAt:    "2020-06-04T19:15:21Z",
 	}
 	assert.Equal(t, wantSingle, domain)
+	assert.False(t, domain.TrusteeService)
 }
 
 func TestDomainsService_DeleteDomain(t *testing.T) {
