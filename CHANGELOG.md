@@ -2,6 +2,12 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 8.2.0 - 2026-03-23
+
+### Added
+
+- Added support for trustee service. (#248)
+
 ## 8.1.0 - 2026-02-27
 
 ### Added
