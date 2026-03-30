@@ -16,6 +16,7 @@ type AccountsService struct {
 type Account struct {
 	ID             int64  `json:"id,omitempty"`
 	Email          string `json:"email,omitempty"`
+	Name           string `json:"name,omitempty"`
 	PlanIdentifier string `json:"plan_identifier,omitempty"`
 	CreatedAt      string `json:"created_at,omitempty"`
 	UpdatedAt      string `json:"updated_at,omitempty"`

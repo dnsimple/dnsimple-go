@@ -32,4 +32,5 @@ func TestAccountsService_List(t *testing.T) {
 	assert.Len(t, accounts, 2)
 	assert.Equal(t, int64(123), accounts[0].ID)
 	assert.Equal(t, "john@example.com", accounts[0].Email)
+	assert.Equal(t, "John", accounts[0].Name)
 }
