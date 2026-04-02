@@ -38,8 +38,10 @@ type DomainPushesResponse struct {
 
 // DomainPushAttributes represent a domain push payload (see initiate).
 type DomainPushAttributes struct {
-	NewAccountEmail string `json:"new_account_email,omitempty"`
-	ContactID       int64  `json:"contact_id,omitempty"`
+	// Deprecated: Use NewDomainPushIdentifier instead.
+	NewAccountEmail         string `json:"new_account_email,omitempty"`
+	NewDomainPushIdentifier string `json:"new_domain_push_identifier,omitempty"`
+	ContactID               int64  `json:"contact_id,omitempty"`
 }
 
 // InitiatePush initiate a new domain push.
