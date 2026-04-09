@@ -183,7 +183,7 @@ type TransferDomainInput struct {
 	// Set to true to enable the auto-renewal of the domain.
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
-	// Set to true to enable the trustee service for the domain.
+	// Set to true to enable the trustee service for the domain. An extra cost may apply.
 	// Default to false.
 	TrusteeService *bool `json:"trustee_service,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
