@@ -42,7 +42,7 @@ func TestDomainsService_InitiatePush(t *testing.T) {
 	assert.Equal(t, int64(2020), push.AccountID)
 }
 
-func TestDomainsService_InitiatePush_WithDomainPushIdentifier(t *testing.T) {
+func TestDomainsService_InitiatePush_WithAccountIdentifier(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -52,14 +52,14 @@ func TestDomainsService_InitiatePush_WithDomainPushIdentifier(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		want := map[string]interface{}{"new_domain_push_identifier": "abc123"}
+		want := map[string]interface{}{"new_account_identifier": "abc123"}
 		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	pushAttributes := DomainPushAttributes{NewDomainPushIdentifier: "abc123"}
+	pushAttributes := DomainPushAttributes{NewAccountIdentifier: "abc123"}
 
 	pushResponse, err := client.Domains.InitiatePush(context.Background(), "1010", "example.com", pushAttributes)
 
