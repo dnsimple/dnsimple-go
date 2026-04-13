@@ -37,6 +37,11 @@ const (
 	apiVersion = "v2"
 )
 
+// Logger interface allows consumers to provide a custom logger for debug output.
+type Logger interface {
+	Printf(format string, v ...interface{})
+}
+
 // Client represents a client to the DNSimple API.
 type Client struct {
 	// httpClient is the underlying HTTP client
@@ -69,6 +74,10 @@ type Client struct {
 
 	// Set to true to output debugging logs during API calls
 	Debug bool
+
+	// Optional logger for debug output.
+	// If not set, the global log package is used.
+	DebugLogger Logger
 }
 
 // ListOptions contains the common options you can pass to a List method
@@ -118,6 +127,16 @@ func NewClient(httpClient *http.Client) *Client {
 //	customAgentFlag dnsimple-go/1.0
 func (c *Client) SetUserAgent(ua string) {
 	c.UserAgent = ua
+}
+
+func (c *Client) debugLogf(format string, v ...interface{}) {
+	if c.Debug {
+		if c.DebugLogger != nil {
+			c.DebugLogger.Printf(format, v...)
+		} else {
+			log.Printf(format, v...)
+		}
+	}
 }
 
 // formatUserAgent builds the final user agent to use for HTTP requests.
@@ -177,18 +196,14 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 		return nil, err
 	}
 
-	if c.Debug {
-		log.Printf("Request (%v): %#v", req.URL, req)
-	}
+	c.debugLogf("Request (%v): %#v", req.URL, req)
 
 	resp, err := c.request(ctx, req, obj)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.Debug {
-		log.Printf("Response: %#v", resp)
-	}
+	c.debugLogf("Response: %#v", resp)
 
 	return resp, nil
 }
