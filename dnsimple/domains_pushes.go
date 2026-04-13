@@ -41,7 +41,7 @@ type DomainPushAttributes struct {
 	// Deprecated: Use NewAccountIdentifier instead.
 	NewAccountEmail      string `json:"new_account_email,omitempty"`
 	NewAccountIdentifier string `json:"new_account_identifier,omitempty"`
-	ContactID               int64  `json:"contact_id,omitempty"`
+	ContactID            int64  `json:"contact_id,omitempty"`
 }
 
 // InitiatePush initiate a new domain push.
