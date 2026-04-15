@@ -15,17 +15,17 @@ type TldsService struct {
 
 // Tld represents a TLD in DNSimple.
 type Tld struct {
-	Tld                    string `json:"tld"`
-	TldType                int    `json:"tld_type"`
-	WhoisPrivacy           bool   `json:"whois_privacy"`
-	TrusteeSupported       bool   `json:"trustee_service_enabled"`
-	TrusteeRequired        bool   `json:"trustee_service_required"`
-	AutoRenewOnly          bool   `json:"auto_renew_only"`
-	MinimumRegistration    int    `json:"minimum_registration"`
-	RegistrationEnabled    bool   `json:"registration_enabled"`
-	RenewalEnabled         bool   `json:"renewal_enabled"`
-	TransferEnabled        bool   `json:"transfer_enabled"`
-	DnssecInterfaceType    string `json:"dnssec_interface_type"`
+	Tld                 string `json:"tld"`
+	TldType             int    `json:"tld_type"`
+	WhoisPrivacy        bool   `json:"whois_privacy"`
+	TrusteeSupported    bool   `json:"trustee_service_enabled"`
+	TrusteeRequired     bool   `json:"trustee_service_required"`
+	AutoRenewOnly       bool   `json:"auto_renew_only"`
+	MinimumRegistration int    `json:"minimum_registration"`
+	RegistrationEnabled bool   `json:"registration_enabled"`
+	RenewalEnabled      bool   `json:"renewal_enabled"`
+	TransferEnabled     bool   `json:"transfer_enabled"`
+	DnssecInterfaceType string `json:"dnssec_interface_type"`
 }
 
 // TldExtendedAttribute represents an extended attributes supported or required
