@@ -18,8 +18,8 @@ type Tld struct {
 	Tld                    string `json:"tld"`
 	TldType                int    `json:"tld_type"`
 	WhoisPrivacy           bool   `json:"whois_privacy"`
-	TrusteeServiceEnabled  bool   `json:"trustee_service_enabled"`
-	TrusteeServiceRequired bool   `json:"trustee_service_required"`
+	TrusteeSupported       bool   `json:"trustee_service_enabled"`
+	TrusteeRequired        bool   `json:"trustee_service_required"`
 	AutoRenewOnly          bool   `json:"auto_renew_only"`
 	MinimumRegistration    int    `json:"minimum_registration"`
 	RegistrationEnabled    bool   `json:"registration_enabled"`
