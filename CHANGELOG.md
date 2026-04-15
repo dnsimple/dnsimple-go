@@ -2,16 +2,17 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 8.3.0 - 2026-04-15
 
 ### Added
 
-- Added `NewAccountIdentifier` to `DomainPushAttributes` for initiating domain pushes by account identifier.
-- Added `Name` to `Account`.
+- Added `NewAccountIdentifier` to `DomainPushAttributes` for initiating domain pushes by account identifier. (#250)
+- Added `Name` to `Account`. (#250)
+- Added support for trustee service in domain transfers. (#253)
 
 ### Deprecated
 
-- Deprecated `NewAccountEmail` in `DomainPushAttributes`. Use `NewAccountIdentifier` instead.
+- Deprecated `NewAccountEmail` in `DomainPushAttributes`. Use `NewAccountIdentifier` instead. (#250)
 
 ## 8.2.0 - 2026-03-23
 
