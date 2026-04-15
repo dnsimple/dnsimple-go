@@ -124,7 +124,7 @@ type RegisterDomainInput struct {
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain.
-	Trustee *bool `json:"trustee_service,omitempty"`
+	EnableTrustee *bool `json:"trustee_service,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
@@ -185,7 +185,7 @@ type TransferDomainInput struct {
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain. An extra cost may apply.
 	// Default to false.
-	Trustee *bool `json:"trustee_service,omitempty"`
+	EnableTrustee *bool `json:"trustee_service,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.

@@ -267,7 +267,7 @@ func TestRegistrarService_TransferDomain_Trustee(t *testing.T) {
 	})
 
 	trustee := true
-	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", Trustee: &trustee}
+	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", EnableTrustee: &trustee}
 
 	_, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
 
