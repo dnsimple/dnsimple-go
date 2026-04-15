@@ -249,6 +249,31 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestRegistrarService_TransferDomain_TrusteeService(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/registrar/domains/example.com/transfers", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/transferDomain/success.http")
+
+		data, _ := getRequestJSON(r)
+
+		if want, got := true, data["trustee_service"]; !reflect.DeepEqual(want, got) {
+			t.Errorf("TransferDomain() incorrect trustee_service payload, expected `%v`, got `%v`", want, got)
+		}
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	trusteeService := true
+	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", TrusteeService: &trusteeService}
+
+	_, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
+
+	assert.NoError(t, err)
+}
+
 func TestRegistrarService_TransferDomainOut(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
@@ -293,6 +318,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		State:             "cancelled",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
+		TrusteeService:    false,
 		StatusDescription: "Canceled by customer",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:10:01Z",
@@ -325,6 +351,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		State:             "transferring",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
+		TrusteeService:    false,
 		StatusDescription: "",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:08:04Z",
