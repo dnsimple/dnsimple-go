@@ -78,7 +78,6 @@ func TestCertificatesService_GetCertificate(t *testing.T) {
 	wantSingle := &Certificate{
 		ID:                  101967,
 		DomainID:            289333,
-		ContactID:           2511,
 		CommonName:          "www.bingo.pizza",
 		AlternateNames:      []string{},
 		Years:               1,
