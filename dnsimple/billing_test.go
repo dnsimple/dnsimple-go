@@ -39,7 +39,7 @@ func TestBillingService_ListCharges_Success(t *testing.T) {
 	response, err := client.Billing.ListCharges(context.Background(), "1010", ListChargesOptions{})
 
 	assert.NoError(t, err)
-	assert.Equal(t, response.Pagination, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 3})
+	assert.Equal(t, response.Pagination, &Pagination{CurrentPage: 1, PerPage: 30, TotalPages: 1, TotalEntries: 4})
 	assert.Equal(t, response.Data, []Charge{
 		{
 			InvoicedAt:    "2023-08-17T05:53:36Z",
@@ -93,6 +93,22 @@ func TestBillingService_ListCharges_Success(t *testing.T) {
 					ProductId:        0,
 					ProductType:      "manual",
 					ProductReference: "",
+				},
+			},
+		},
+		{
+			InvoicedAt:    "2023-10-24T09:00:00Z",
+			TotalAmount:   toDecimal(t, "20.00"),
+			BalanceAmount: toDecimal(t, "0.00"),
+			Reference:     "5-2",
+			State:         "collected",
+			Items: []ChargeItem{
+				{
+					Description:      "Purchase Certificate www.bubble-registered.com",
+					Amount:           toDecimal(t, "20.00"),
+					ProductId:        42,
+					ProductType:      "certificate-purchase",
+					ProductReference: "42",
 				},
 			},
 		},
