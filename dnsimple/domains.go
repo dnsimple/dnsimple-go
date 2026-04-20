@@ -15,19 +15,19 @@ type DomainsService struct {
 
 // Domain represents a domain in DNSimple.
 type Domain struct {
-	ID             int64  `json:"id,omitempty"`
-	AccountID      int64  `json:"account_id,omitempty"`
-	RegistrantID   int64  `json:"registrant_id,omitempty"`
-	Name           string `json:"name,omitempty"`
-	UnicodeName    string `json:"unicode_name,omitempty"`
-	Token          string `json:"token,omitempty"`
-	State          string `json:"state,omitempty"`
-	AutoRenew      bool   `json:"auto_renew,omitempty"`
-	PrivateWhois   bool   `json:"private_whois,omitempty"`
-	TrusteeService bool   `json:"trustee_service,omitempty"`
-	ExpiresAt      string `json:"expires_at,omitempty"`
-	CreatedAt      string `json:"created_at,omitempty"`
-	UpdatedAt      string `json:"updated_at,omitempty"`
+	ID           int64  `json:"id,omitempty"`
+	AccountID    int64  `json:"account_id,omitempty"`
+	RegistrantID int64  `json:"registrant_id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	UnicodeName  string `json:"unicode_name,omitempty"`
+	Token        string `json:"token,omitempty"`
+	State        string `json:"state,omitempty"`
+	AutoRenew    bool   `json:"auto_renew,omitempty"`
+	PrivateWhois bool   `json:"private_whois,omitempty"`
+	Trustee      bool   `json:"trustee_service,omitempty"`
+	ExpiresAt    string `json:"expires_at,omitempty"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 func domainPath(accountID string, domainIdentifier string) (path string) {
