@@ -9,8 +9,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"net/url"
 	"reflect"
 	"strconv"
@@ -35,12 +36,9 @@ const (
 	defaultUserAgent = "dnsimple-go/" + Version
 
 	apiVersion = "v2"
-)
 
-// Logger interface allows consumers to provide a custom logger for debug output.
-type Logger interface {
-	Printf(format string, v ...interface{})
-}
+	logComponent = "dnsimple-go"
+)
 
 // Client represents a client to the DNSimple API.
 type Client struct {
@@ -72,12 +70,14 @@ type Client struct {
 	Webhooks          *WebhooksService
 	Zones             *ZonesService
 
-	// Set to true to output debugging logs during API calls
-	Debug bool
+	// Logger is the logger used by the client.
+	// If not set, slog.Default() is used.
+	Logger *slog.Logger
 
-	// Optional logger for debug output.
-	// If not set, the global log package is used.
-	DebugLogger Logger
+	// Set to true to output debugging logs during API calls.
+	//
+	// Deprecated: Use Logger and slog levels instead.
+	Debug bool
 }
 
 // ListOptions contains the common options you can pass to a List method
@@ -100,7 +100,10 @@ type ListOptions struct {
 // To authenticate you must provide an http.Client that will perform authentication
 // for you with one of the currently supported mechanisms: OAuth or HTTP Basic.
 func NewClient(httpClient *http.Client) *Client {
-	c := &Client{httpClient: httpClient, BaseURL: defaultBaseURL}
+	c := &Client{
+		httpClient: httpClient,
+		BaseURL:    defaultBaseURL,
+	}
 	c.Identity = &IdentityService{client: c}
 	c.Accounts = &AccountsService{client: c}
 	c.Billing = &BillingService{client: c}
@@ -127,16 +130,6 @@ func NewClient(httpClient *http.Client) *Client {
 //	customAgentFlag dnsimple-go/1.0
 func (c *Client) SetUserAgent(ua string) {
 	c.UserAgent = ua
-}
-
-func (c *Client) debugLogf(format string, v ...interface{}) {
-	if c.Debug {
-		if c.DebugLogger != nil {
-			c.DebugLogger.Printf(format, v...)
-		} else {
-			log.Printf(format, v...)
-		}
-	}
 }
 
 // formatUserAgent builds the final user agent to use for HTTP requests.
@@ -195,17 +188,57 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 	if err != nil {
 		return nil, err
 	}
-
-	c.debugLogf("Request (%v): %#v", req.URL, req)
+	logger := c.resolveLogger()
 
 	resp, err := c.request(ctx, req, obj)
 	if err != nil {
+		logger.DebugContext(ctx, "Request",
+			slog.String("method", req.Method),
+			slog.String("url", req.URL.String()),
+			headerAttrs(req.Header),
+		)
 		return nil, err
 	}
-
-	c.debugLogf("Response: %#v", resp)
-
+	//logger.DebugContext(ctx, "Request", reqAttrs...)
+	logger.DebugContext(ctx, "Request",
+		slog.String("method", req.Method),
+		slog.String("url", req.URL.String()),
+		headerAttrs(req.Header),
+	)
+	logger.DebugContext(ctx, "Response",
+		slog.Int("status", resp.StatusCode),
+		slog.String("status_text", resp.Status),
+		headerAttrs(resp.Header),
+	)
 	return resp, nil
+}
+
+func (c *Client) resolveLogger() *slog.Logger {
+	if c.Logger != nil {
+		return c.Logger
+	}
+
+	if c.Debug {
+		// Backward compat: honour the old Debug flag by enabling debug level
+		handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		})
+		return slog.New(handler).With("component", logComponent)
+	}
+
+	return slog.Default().With("component", logComponent)
+}
+
+// headerAttrs converts relevant headers into a slog.Group
+// so all headers are nested under a single "headers" key.
+// Any header present in the  is included automatically, so new
+// API headers appear in logs without requiring code changes.
+func headerAttrs(h http.Header) slog.Attr {
+	var attrs []any
+	for key, vals := range h {
+		attrs = append(attrs, slog.String(key, strings.Join(vals, ", ")))
+	}
+	return slog.Group("headers", attrs...)
 }
 
 // newRequest creates an API request.

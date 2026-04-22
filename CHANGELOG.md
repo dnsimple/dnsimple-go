@@ -4,9 +4,19 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is
 
 ## main
 
+### Added
+
+- Added `Logger *slog.Logger` to `Client` struct to support structured logging using the `log/slog` standard library package.
+
 ### Changed
 
 - Updated the `listCharges` test fixture to include a certificate purchase entry demonstrating that `ProductReference` is a string even when it represents a numeric ID. (#257)
+- Updated `NewClient` to initialize a default `slog` logger with a `component=dnsimple-go` attribute.
+- Internal logging now uses `slog.Debug` for request and response details.
+
+### Deprecated
+
+- Deprecated `Debug` field in `Client` struct. Use `Logger` and configure the desired `slog.Level` instead.
 
 ### Removed
 
