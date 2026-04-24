@@ -214,16 +214,16 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 }
 
 func (c *Client) resolveLogger() *slog.Logger {
-	if c.Logger != nil {
-		return c.Logger
-	}
-
-	if c.Debug {
-		// Backward compat: honour the old Debug flag by enabling debug level
+	// Check Debug first so the backward compat
+	// path is always reachable.
+	if c.Debug && c.Logger == nil {
 		handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 			Level: slog.LevelDebug,
 		})
 		return slog.New(handler).With("component", logComponent)
+	}
+	if c.Logger != nil {
+		return c.Logger
 	}
 
 	return slog.Default().With("component", logComponent)
