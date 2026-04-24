@@ -11,8 +11,8 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
-	"os"
 	"net/url"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -199,7 +199,7 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 		)
 		return nil, err
 	}
-	//logger.DebugContext(ctx, "Request", reqAttrs...)
+
 	logger.DebugContext(ctx, "Request",
 		slog.String("method", req.Method),
 		slog.String("url", req.URL.String()),
@@ -230,9 +230,7 @@ func (c *Client) resolveLogger() *slog.Logger {
 }
 
 // headerAttrs converts relevant headers into a slog.Group
-// so all headers are nested under a single "headers" key.
-// Any header present in the  is included automatically, so new
-// API headers appear in logs without requiring code changes.
+// so all headers are nested under a "headers" key.
 func headerAttrs(h http.Header) slog.Attr {
 	var attrs []any
 	for key, vals := range h {
