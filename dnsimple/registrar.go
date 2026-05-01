@@ -50,7 +50,7 @@ type DomainPrice struct {
 	RenewalPrice        float64  `json:"renewal_price"`
 	RestorePrice        float64  `json:"restore_price"`
 	TransferPrice       float64  `json:"transfer_price"`
-	TrusteeServicePrice *float64 `json:"trustee_service_price,omitempty"`
+	TrusteePrice        *float64 `json:"trustee_price,omitempty"`
 }
 
 // DomainPriceResponse represents a response from an API method that returns a DomainPrice struct.
@@ -84,7 +84,7 @@ type DomainRegistration struct {
 	State          string `json:"state"`
 	AutoRenew      bool   `json:"auto_renew"`
 	WhoisPrivacy   bool   `json:"whois_privacy"`
-	TrusteeService bool   `json:"trustee_service"`
+	Trustee        bool   `json:"trustee"`
 	CreatedAt      string `json:"created_at,omitempty"`
 	UpdatedAt      string `json:"updated_at,omitempty"`
 }
@@ -124,7 +124,7 @@ type RegisterDomainInput struct {
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain.
-	TrusteeService *bool `json:"trustee_service,omitempty"`
+	Trustee *bool `json:"trustee,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
@@ -157,7 +157,7 @@ type DomainTransfer struct {
 	State             string `json:"state"`
 	AutoRenew         bool   `json:"auto_renew"`
 	WhoisPrivacy      bool   `json:"whois_privacy"`
-	TrusteeService    bool   `json:"trustee_service"`
+	Trustee           bool   `json:"trustee"`
 	StatusDescription string `json:"status_description"`
 	CreatedAt         string `json:"created_at,omitempty"`
 	UpdatedAt         string `json:"updated_at,omitempty"`
@@ -185,7 +185,7 @@ type TransferDomainInput struct {
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain. An extra cost may apply.
 	// Default to false.
-	TrusteeService *bool `json:"trustee_service,omitempty"`
+	Trustee *bool `json:"trustee,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
