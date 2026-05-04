@@ -44,13 +44,13 @@ func (s *RegistrarService) CheckDomain(ctx context.Context, accountID string, do
 
 // DomainPrice represents the result of a domain prices call.
 type DomainPrice struct {
-	Domain              string   `json:"domain"`
-	Premium             bool     `json:"premium"`
-	RegistrationPrice   float64  `json:"registration_price"`
-	RenewalPrice        float64  `json:"renewal_price"`
-	RestorePrice        float64  `json:"restore_price"`
-	TransferPrice       float64  `json:"transfer_price"`
-	TrusteeServicePrice *float64 `json:"trustee_service_price,omitempty"`
+	Domain            string   `json:"domain"`
+	Premium           bool     `json:"premium"`
+	RegistrationPrice float64  `json:"registration_price"`
+	RenewalPrice      float64  `json:"renewal_price"`
+	RestorePrice      float64  `json:"restore_price"`
+	TransferPrice     float64  `json:"transfer_price"`
+	TrusteePrice      *float64 `json:"trustee_price,omitempty"`
 }
 
 // DomainPriceResponse represents a response from an API method that returns a DomainPrice struct.
@@ -77,16 +77,16 @@ func (s *RegistrarService) GetDomainPrices(ctx context.Context, accountID string
 
 // DomainRegistration represents the result of a domain registration call.
 type DomainRegistration struct {
-	ID             int64  `json:"id"`
-	DomainID       int64  `json:"domain_id"`
-	RegistrantID   int64  `json:"registrant_id"`
-	Period         int    `json:"period"`
-	State          string `json:"state"`
-	AutoRenew      bool   `json:"auto_renew"`
-	WhoisPrivacy   bool   `json:"whois_privacy"`
-	TrusteeService bool   `json:"trustee_service"`
-	CreatedAt      string `json:"created_at,omitempty"`
-	UpdatedAt      string `json:"updated_at,omitempty"`
+	ID           int64  `json:"id"`
+	DomainID     int64  `json:"domain_id"`
+	RegistrantID int64  `json:"registrant_id"`
+	Period       int    `json:"period"`
+	State        string `json:"state"`
+	AutoRenew    bool   `json:"auto_renew"`
+	WhoisPrivacy bool   `json:"whois_privacy"`
+	Trustee      bool   `json:"trustee"`
+	CreatedAt    string `json:"created_at,omitempty"`
+	UpdatedAt    string `json:"updated_at,omitempty"`
 }
 
 // DomainRegistrationResponse represents a response from an API method that results in a domain registration.
@@ -124,7 +124,7 @@ type RegisterDomainInput struct {
 	// Default to true.
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain.
-	TrusteeService *bool `json:"trustee_service,omitempty"`
+	Trustee *bool `json:"trustee,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.
@@ -157,7 +157,7 @@ type DomainTransfer struct {
 	State             string `json:"state"`
 	AutoRenew         bool   `json:"auto_renew"`
 	WhoisPrivacy      bool   `json:"whois_privacy"`
-	TrusteeService    bool   `json:"trustee_service"`
+	Trustee           bool   `json:"trustee"`
 	StatusDescription string `json:"status_description"`
 	CreatedAt         string `json:"created_at,omitempty"`
 	UpdatedAt         string `json:"updated_at,omitempty"`
@@ -185,7 +185,7 @@ type TransferDomainInput struct {
 	EnableAutoRenewal bool `json:"auto_renew,omitempty"`
 	// Set to true to enable the trustee service for the domain. An extra cost may apply.
 	// Default to false.
-	TrusteeService *bool `json:"trustee_service,omitempty"`
+	Trustee *bool `json:"trustee,omitempty"`
 	// Required by some TLDs. Use Tlds.GetTldExtendedAttributes() to get the required entries.
 	ExtendedAttributes map[string]string `json:"extended_attributes,omitempty"`
 	// Required as confirmation of the price, only if the domain is premium.

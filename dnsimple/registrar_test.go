@@ -55,8 +55,8 @@ func TestRegistrarService_GetDomainPrices(t *testing.T) {
 	assert.Equal(t, float64(20.0), check.RenewalPrice)
 	assert.Equal(t, float64(20.0), check.RestorePrice)
 	assert.Equal(t, float64(20.0), check.TransferPrice)
-	if check.TrusteeServicePrice != nil {
-		assert.Equal(t, float64(20.0), *check.TrusteeServicePrice)
+	if check.TrusteePrice != nil {
+		assert.Equal(t, float64(20.0), *check.TrusteePrice)
 	}
 }
 
@@ -85,7 +85,7 @@ func TestRegistrarService_GetDomainRegistration(t *testing.T) {
 	assert.Equal(t, check.State, "registering")
 	assert.Equal(t, check.AutoRenew, false)
 	assert.Equal(t, check.WhoisPrivacy, false)
-	assert.False(t, check.TrusteeService)
+	assert.False(t, check.Trustee)
 	assert.Equal(t, check.CreatedAt, "2023-01-27T17:44:32Z")
 	assert.Equal(t, check.UpdatedAt, "2023-01-27T17:44:40Z")
 }
@@ -249,7 +249,7 @@ func TestRegistrarService_TransferDomain_ExtendedAttributes(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestRegistrarService_TransferDomain_TrusteeService(t *testing.T) {
+func TestRegistrarService_TransferDomain_Trustee(t *testing.T) {
 	setupMockServer()
 	defer teardownMockServer()
 
@@ -258,16 +258,16 @@ func TestRegistrarService_TransferDomain_TrusteeService(t *testing.T) {
 
 		data, _ := getRequestJSON(r)
 
-		if want, got := true, data["trustee_service"]; !reflect.DeepEqual(want, got) {
-			t.Errorf("TransferDomain() incorrect trustee_service payload, expected `%v`, got `%v`", want, got)
+		if want, got := true, data["trustee"]; !reflect.DeepEqual(want, got) {
+			t.Errorf("TransferDomain() incorrect trustee payload, expected `%v`, got `%v`", want, got)
 		}
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	trusteeService := true
-	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", TrusteeService: &trusteeService}
+	trustee := true
+	transferRequest := &TransferDomainInput{RegistrantID: 2, AuthCode: "x1y2z3", Trustee: &trustee}
 
 	_, err := client.Registrar.TransferDomain(context.Background(), "1010", "example.com", transferRequest)
 
@@ -318,7 +318,7 @@ func TestRegistrarService_GetDomainTransfer(t *testing.T) {
 		State:             "cancelled",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
-		TrusteeService:    false,
+		Trustee:           false,
 		StatusDescription: "Canceled by customer",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:10:01Z",
@@ -351,7 +351,7 @@ func TestRegistrarService_CancelDomainTransfer(t *testing.T) {
 		State:             "transferring",
 		AutoRenew:         false,
 		WhoisPrivacy:      false,
-		TrusteeService:    false,
+		Trustee:           false,
 		StatusDescription: "",
 		CreatedAt:         "2020-06-05T18:08:00Z",
 		UpdatedAt:         "2020-06-05T18:08:04Z",
