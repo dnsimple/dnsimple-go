@@ -13,7 +13,7 @@ A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 ## Installation
 
 ```shell
-go get github.com/dnsimple/dnsimple-go/v8/dnsimple
+go get github.com/dnsimple/dnsimple-go/v9/dnsimple
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ import (
     "os"
     "strconv"
 
-    "github.com/dnsimple/dnsimple-go/v8/dnsimple"
+    "github.com/dnsimple/dnsimple-go/v9/dnsimple"
 )
 
 func main() {

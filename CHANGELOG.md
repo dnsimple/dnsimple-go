@@ -2,15 +2,17 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## main
+## 9.0.0 - 2026-05-05
 
 ### Changed
 
+- **BREAKING**: Renamed `TrusteeService` to `Trustee` in `Domain`, `DomainRegistration`, and `DomainTransfer` structs to match updated API field names. (#259)
+- **BREAKING**: Renamed `TrusteeServicePrice` to `TrusteePrice` in `DomainPrice` struct. (#259)
 - Updated the `listCharges` test fixture to include a certificate purchase entry demonstrating that `ProductReference` is a string even when it represents a numeric ID. (#257)
 
 ### Removed
 
-- **BREAKING**: Removed the deprecated `ContactID` field from the `Certificate` struct and from `LetsencryptCertificateAttributes`. The field was deprecated on 2022-05-17 and is no longer required for certificate operations.
+- **BREAKING**: Removed the deprecated `ContactID` field from the `Certificate` struct and from `LetsencryptCertificateAttributes`. The field was deprecated on 2022-05-17 and is no longer required for certificate operations. (#256)
 
 ## 8.3.0 - 2026-04-15
 
