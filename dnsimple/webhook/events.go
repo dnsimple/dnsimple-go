@@ -218,9 +218,9 @@ type DomainRegistrationStateChange struct {
 
 // DomainUpdateEventData represents the data node for domain.update webhooks.
 type DomainUpdateEventData struct {
-	Domain      *dnsimple.Domain                `json:"domain"`
+	Domain      *dnsimple.Domain               `json:"domain"`
 	StateChange *DomainRegistrationStateChange `json:"state_change"`
-	Reason      string                          `json:"reason"`
+	Reason      string                         `json:"reason"`
 }
 
 func (d *DomainUpdateEventData) unmarshalEventData(payload []byte) error {
