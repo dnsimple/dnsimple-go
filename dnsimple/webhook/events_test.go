@@ -455,16 +455,16 @@ func TestParseDomainEvent_Domain_Register(t *testing.T) {
 	assert.Equal(t, "example-alpha.com", data.Domain.Name)
 }
 
-func TestParseDomainEvent_Domain_Update(t *testing.T) {
-	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.update/example.http")
+func TestParseDomainEvent_Domain_StateChange(t *testing.T) {
+	payload := getHTTPRequestBodyFromFixture(t, "/webhooks/domain.state_change/example.http")
 
 	event, err := ParseEvent(payload)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "domain.update", event.Name)
+	assert.Equal(t, "domain.state_change", event.Name)
 	assert.Regexp(t, regexpUUID, event.RequestID)
 
-	data, ok := event.GetData().(*DomainUpdateEventData)
+	data, ok := event.GetData().(*DomainStateChangeEventData)
 	assert.True(t, ok)
 	assert.Equal(t, "example-alpha.com", data.Domain.Name)
 	assert.Equal(t, "hosted", data.StateChange.From)
