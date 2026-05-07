@@ -2,6 +2,12 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 9.1.0 - 2026-05-07
+
+### Added
+
+- Added support for `domain.state_change` webhook event parsing. (#261)
+
 ## 9.0.0 - 2026-05-05
 
 ### Changed
