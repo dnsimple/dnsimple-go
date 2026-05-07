@@ -52,6 +52,8 @@ func switchEventData(event *Event) (EventDataContainer, error) {
 		"domain.restore",
 		"domain.transfer":
 		data = &DomainEventData{}
+	case "domain.state_change":
+		data = &DomainStateChangeEventData{}
 	case // domain transfer lock
 		"domain.transfer_lock_enable",
 		"domain.transfer_lock_disable":
@@ -205,6 +207,23 @@ type DomainEventData struct {
 }
 
 func (d *DomainEventData) unmarshalEventData(payload []byte) error {
+	return unmarshalEventData(payload, d)
+}
+
+// DomainRegistrationStateChange represents the state_change object on domain.state_change payloads.
+type DomainRegistrationStateChange struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Reason string `json:"reason"`
+}
+
+// DomainStateChangeEventData represents the data node for domain.state_change webhooks.
+type DomainStateChangeEventData struct {
+	Domain      *dnsimple.Domain               `json:"domain"`
+	StateChange *DomainRegistrationStateChange `json:"state_change"`
+}
+
+func (d *DomainStateChangeEventData) unmarshalEventData(payload []byte) error {
 	return unmarshalEventData(payload, d)
 }
 
