@@ -212,15 +212,15 @@ func (d *DomainEventData) unmarshalEventData(payload []byte) error {
 
 // DomainRegistrationStateChange represents the state_change object on domain.state_change payloads.
 type DomainRegistrationStateChange struct {
-	From string `json:"from"`
-	To   string `json:"to"`
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Reason string `json:"reason"`
 }
 
 // DomainStateChangeEventData represents the data node for domain.state_change webhooks.
 type DomainStateChangeEventData struct {
 	Domain      *dnsimple.Domain               `json:"domain"`
 	StateChange *DomainRegistrationStateChange `json:"state_change"`
-	Reason      string                         `json:"reason"`
 }
 
 func (d *DomainStateChangeEventData) unmarshalEventData(payload []byte) error {

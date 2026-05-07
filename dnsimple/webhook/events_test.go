@@ -469,7 +469,7 @@ func TestParseDomainEvent_Domain_StateChange(t *testing.T) {
 	assert.Equal(t, "example-alpha.com", data.Domain.Name)
 	assert.Equal(t, "hosted", data.StateChange.From)
 	assert.Equal(t, "registered", data.StateChange.To)
-	assert.Equal(t, "registration", data.Reason)
+	assert.Equal(t, "registration", data.StateChange.Reason)
 }
 
 func TestParseDomainEvent_Domain_Renew(t *testing.T) {
