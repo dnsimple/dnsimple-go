@@ -2,6 +2,12 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+### Fixed
+
+- Fixed `CheckResponse` returning a generic parsing error instead of an `*ErrorResponse` when built with Go 1.27. This affects validation errors in the alternate format, such as extended attribute errors on domain registration, as well as batch change zone records errors. (#271)
+
 ## 8.3.0 - 2026-04-15
 
 ### Added

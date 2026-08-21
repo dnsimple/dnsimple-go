@@ -426,9 +426,10 @@ func CheckResponse(resp *http.Response) error {
 		return errorResponse
 	}
 
-	// Handle the case where the errors field is a map of strings
+	// Handle the case where the errors field is a map of strings.
+	// Field is "errors" through Go 1.26, a full path like "errors.deletes.0" from 1.27.
 	var typeErr *json.UnmarshalTypeError
-	if errors.As(err, &typeErr) && typeErr.Field == "errors" {
+	if errors.As(err, &typeErr) && (typeErr.Field == "errors" || strings.HasPrefix(typeErr.Field, "errors.")) {
 		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
 		alternateResponse := &internalAltErrorResponse{}
