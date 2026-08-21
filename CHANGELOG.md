@@ -6,7 +6,7 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is
 
 ### Fixed
 
-- Fixed error response parsing under Go 1.27, which reports the full path to the offending value in `json.UnmarshalTypeError.Field` (e.g. `errors.deletes.0`) rather than just the top-level field name, preventing `CheckResponse` from falling back to the alternate and batch change error formats.
+- Fixed `CheckResponse` returning a generic parsing error instead of an `*ErrorResponse` when built with Go 1.27. This affects validation errors in the alternate format, such as extended attribute errors on domain registration, as well as batch change zone records errors. (#271)
 
 ## 9.1.0 - 2026-05-07
 

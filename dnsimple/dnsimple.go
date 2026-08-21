@@ -427,10 +427,7 @@ func CheckResponse(resp *http.Response) error {
 	}
 
 	// Handle the case where the errors field is a map of strings.
-	// Go 1.26 and earlier report only the top-level struct field name
-	// ("errors") in UnmarshalTypeError.Field; Go 1.27 and later report
-	// the full path to the offending value (e.g. "errors.deletes.0"),
-	// so match both.
+	// Field is "errors" through Go 1.26, a full path like "errors.deletes.0" from 1.27.
 	var typeErr *json.UnmarshalTypeError
 	if errors.As(err, &typeErr) && (typeErr.Field == "errors" || strings.HasPrefix(typeErr.Field, "errors.")) {
 		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
