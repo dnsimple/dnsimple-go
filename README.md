@@ -7,7 +7,7 @@ A Go client for the [DNSimple API v2](https://developer.dnsimple.com/v2/).
 
 ## Requirements
 
-- Go 1.21+
+- Go 1.24+
 - An activated DNSimple account
 
 ## Installation
