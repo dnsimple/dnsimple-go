@@ -19,7 +19,7 @@ type DomainServiceSettings struct {
 
 // AppliedServices lists the applied one-click services for a domain.
 //
-// See https://developer.dnsimple.com/v2/services/domains/#applied
+// See https://developer.dnsimple.com/v2/services/domains/#listDomainAppliedServices
 func (s *ServicesService) AppliedServices(ctx context.Context, accountID string, domainIdentifier string, options *ListOptions) (*ServicesResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, ""))
 	servicesResponse := &ServicesResponse{}
@@ -40,7 +40,7 @@ func (s *ServicesService) AppliedServices(ctx context.Context, accountID string,
 
 // ApplyService applies a one-click services to a domain.
 //
-// See https://developer.dnsimple.com/v2/services/domains/#apply
+// See https://developer.dnsimple.com/v2/services/domains/#applyServiceToDomain
 func (s *ServicesService) ApplyService(ctx context.Context, accountID string, serviceIdentifier string, domainIdentifier string, settings DomainServiceSettings) (*ServiceResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
 	serviceResponse := &ServiceResponse{}
@@ -56,7 +56,7 @@ func (s *ServicesService) ApplyService(ctx context.Context, accountID string, se
 
 // UnapplyService unapplies a one-click services from a domain.
 //
-// See https://developer.dnsimple.com/v2/services/domains/#unapply
+// See https://developer.dnsimple.com/v2/services/domains/#unapplyServiceFromDomain
 func (s *ServicesService) UnapplyService(ctx context.Context, accountID string, serviceIdentifier string, domainIdentifier string) (*ServiceResponse, error) {
 	path := versioned(domainServicesPath(accountID, domainIdentifier, serviceIdentifier))
 	serviceResponse := &ServiceResponse{}

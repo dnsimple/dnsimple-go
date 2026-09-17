@@ -59,7 +59,7 @@ type ServicesResponse struct {
 
 // ListServices lists the one-click services available in DNSimple.
 //
-// See https://developer.dnsimple.com/v2/services/#list
+// See https://developer.dnsimple.com/v2/services/#listServices
 func (s *ServicesService) ListServices(ctx context.Context, options *ListOptions) (*ServicesResponse, error) {
 	path := versioned(servicePath(""))
 	servicesResponse := &ServicesResponse{}
@@ -80,7 +80,7 @@ func (s *ServicesService) ListServices(ctx context.Context, options *ListOptions
 
 // GetService fetches a one-click service.
 //
-// See https://developer.dnsimple.com/v2/services/#get
+// See https://developer.dnsimple.com/v2/services/#getService
 func (s *ServicesService) GetService(ctx context.Context, serviceIdentifier string) (*ServiceResponse, error) {
 	path := versioned(servicePath(serviceIdentifier))
 	serviceResponse := &ServiceResponse{}

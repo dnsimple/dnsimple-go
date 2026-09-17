@@ -16,7 +16,7 @@ type DomainTransferLockResponse struct {
 
 // GetDomainTransferLock gets the domain transfer lock for a domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/#getDomainTransferLock
+// See https://developer.dnsimple.com/v2/registrar/transfer-lock/#getDomainTransferLock
 func (s *RegistrarService) GetDomainTransferLock(ctx context.Context, accountID string, domainIdentifier string) (*DomainTransferLockResponse, error) {
 	path := versioned(fmt.Sprintf("%v/registrar/domains/%v/transfer_lock", accountID, domainIdentifier))
 	transferLockResponse := &DomainTransferLockResponse{}
@@ -32,7 +32,7 @@ func (s *RegistrarService) GetDomainTransferLock(ctx context.Context, accountID 
 
 // EnableDomainTransferLock gets the domain transfer lock for a domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/#enableDomainTransferLock
+// See https://developer.dnsimple.com/v2/registrar/transfer-lock/#enableDomainTransferLock
 func (s *RegistrarService) EnableDomainTransferLock(ctx context.Context, accountID string, domainIdentifier string) (*DomainTransferLockResponse, error) {
 	path := versioned(fmt.Sprintf("%v/registrar/domains/%v/transfer_lock", accountID, domainIdentifier))
 	transferLockResponse := &DomainTransferLockResponse{}
@@ -48,7 +48,7 @@ func (s *RegistrarService) EnableDomainTransferLock(ctx context.Context, account
 
 // DisableDomainTransferLock gets the domain transfer lock for a domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/#disableDomainTransferLock
+// See https://developer.dnsimple.com/v2/registrar/transfer-lock/#disableDomainTransferLock
 func (s *RegistrarService) DisableDomainTransferLock(ctx context.Context, accountID string, domainIdentifier string) (*DomainTransferLockResponse, error) {
 	path := versioned(fmt.Sprintf("%v/registrar/domains/%v/transfer_lock", accountID, domainIdentifier))
 	transferLockResponse := &DomainTransferLockResponse{}

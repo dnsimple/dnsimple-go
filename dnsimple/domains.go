@@ -64,7 +64,7 @@ type DomainListOptions struct {
 
 // ListDomains lists the domains for an account.
 //
-// See https://developer.dnsimple.com/v2/domains/#list
+// See https://developer.dnsimple.com/v2/domains/#listDomains
 func (s *DomainsService) ListDomains(ctx context.Context, accountID string, options *DomainListOptions) (*DomainsResponse, error) {
 	path := versioned(domainPath(accountID, ""))
 	domainsResponse := &DomainsResponse{}
@@ -85,7 +85,7 @@ func (s *DomainsService) ListDomains(ctx context.Context, accountID string, opti
 
 // CreateDomain creates a new domain in the account.
 //
-// See https://developer.dnsimple.com/v2/domains/#create
+// See https://developer.dnsimple.com/v2/domains/#createDomain
 func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, domainAttributes Domain) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, ""))
 	domainResponse := &DomainResponse{}
@@ -101,7 +101,7 @@ func (s *DomainsService) CreateDomain(ctx context.Context, accountID string, dom
 
 // GetDomain fetches a domain.
 //
-// See https://developer.dnsimple.com/v2/domains/#get
+// See https://developer.dnsimple.com/v2/domains/#getDomain
 func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &DomainResponse{}
@@ -117,7 +117,7 @@ func (s *DomainsService) GetDomain(ctx context.Context, accountID string, domain
 
 // DeleteDomain PERMANENTLY deletes a domain from the account.
 //
-// See https://developer.dnsimple.com/v2/domains/#delete
+// See https://developer.dnsimple.com/v2/domains/#deleteDomain
 func (s *DomainsService) DeleteDomain(ctx context.Context, accountID string, domainIdentifier string) (*DomainResponse, error) {
 	path := versioned(domainPath(accountID, domainIdentifier))
 	domainResponse := &DomainResponse{}

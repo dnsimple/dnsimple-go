@@ -40,7 +40,7 @@ type TemplateRecordsResponse struct {
 
 // ListTemplateRecords list the templates for an account.
 //
-// See https://developer.dnsimple.com/v2/templates/records/#list
+// See https://developer.dnsimple.com/v2/templates/records/#listTemplateRecords
 func (s *TemplatesService) ListTemplateRecords(ctx context.Context, accountID string, templateIdentifier string, options *ListOptions) (*TemplateRecordsResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
 	templateRecordsResponse := &TemplateRecordsResponse{}
@@ -61,7 +61,7 @@ func (s *TemplatesService) ListTemplateRecords(ctx context.Context, accountID st
 
 // CreateTemplateRecord creates a new template record.
 //
-// See https://developer.dnsimple.com/v2/templates/records/#create
+// See https://developer.dnsimple.com/v2/templates/records/#createTemplateRecord
 func (s *TemplatesService) CreateTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordAttributes TemplateRecord) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, 0))
 	templateRecordResponse := &TemplateRecordResponse{}
@@ -77,7 +77,7 @@ func (s *TemplatesService) CreateTemplateRecord(ctx context.Context, accountID s
 
 // GetTemplateRecord fetches a template record.
 //
-// See https://developer.dnsimple.com/v2/templates/records/#get
+// See https://developer.dnsimple.com/v2/templates/records/#getTemplateRecord
 func (s *TemplatesService) GetTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &TemplateRecordResponse{}
@@ -93,7 +93,7 @@ func (s *TemplatesService) GetTemplateRecord(ctx context.Context, accountID stri
 
 // DeleteTemplateRecord deletes a template record.
 //
-// See https://developer.dnsimple.com/v2/templates/records/#delete
+// See https://developer.dnsimple.com/v2/templates/records/#deleteTemplateRecord
 func (s *TemplatesService) DeleteTemplateRecord(ctx context.Context, accountID string, templateIdentifier string, templateRecordID int64) (*TemplateRecordResponse, error) {
 	path := versioned(templateRecordPath(accountID, templateIdentifier, templateRecordID))
 	templateRecordResponse := &TemplateRecordResponse{}

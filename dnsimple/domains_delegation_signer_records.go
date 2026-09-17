@@ -40,7 +40,7 @@ type DelegationSignerRecordsResponse struct {
 
 // ListDelegationSignerRecords lists the delegation signer records for a domain.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-list
+// See https://developer.dnsimple.com/v2/domains/dnssec/#listDomainDelegationSignerRecords
 func (s *DomainsService) ListDelegationSignerRecords(ctx context.Context, accountID string, domainIdentifier string, options *ListOptions) (*DelegationSignerRecordsResponse, error) {
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, 0))
 	dsRecordsResponse := &DelegationSignerRecordsResponse{}
@@ -61,7 +61,7 @@ func (s *DomainsService) ListDelegationSignerRecords(ctx context.Context, accoun
 
 // CreateDelegationSignerRecord creates a new delegation signer record.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-create
+// See https://developer.dnsimple.com/v2/domains/dnssec/#createDomainDelegationSignerRecord
 func (s *DomainsService) CreateDelegationSignerRecord(ctx context.Context, accountID string, domainIdentifier string, dsRecordAttributes DelegationSignerRecord) (*DelegationSignerRecordResponse, error) {
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, 0))
 	dsRecordResponse := &DelegationSignerRecordResponse{}
@@ -77,7 +77,7 @@ func (s *DomainsService) CreateDelegationSignerRecord(ctx context.Context, accou
 
 // GetDelegationSignerRecord fetches a delegation signer record.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-get
+// See https://developer.dnsimple.com/v2/domains/dnssec/#getDomainDelegationSignerRecord
 func (s *DomainsService) GetDelegationSignerRecord(ctx context.Context, accountID string, domainIdentifier string, dsRecordID int64) (*DelegationSignerRecordResponse, error) {
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
 	dsRecordResponse := &DelegationSignerRecordResponse{}
@@ -94,7 +94,7 @@ func (s *DomainsService) GetDelegationSignerRecord(ctx context.Context, accountI
 // DeleteDelegationSignerRecord PERMANENTLY deletes a delegation signer record
 // from the domain.
 //
-// See https://developer.dnsimple.com/v2/domains/dnssec/#ds-record-delete
+// See https://developer.dnsimple.com/v2/domains/dnssec/#deleteDomainDelegationSignerRecord
 func (s *DomainsService) DeleteDelegationSignerRecord(ctx context.Context, accountID string, domainIdentifier string, dsRecordID int64) (*DelegationSignerRecordResponse, error) {
 	path := versioned(delegationSignerRecordPath(accountID, domainIdentifier, dsRecordID))
 	dsRecordResponse := &DelegationSignerRecordResponse{}
