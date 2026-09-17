@@ -407,6 +407,9 @@ func TestRegistrarService_RestoreDomain(t *testing.T) {
 	restore := restoreResponse.Data
 	assert.Equal(t, int64(43), restore.ID)
 	assert.Equal(t, int64(214), restore.DomainID)
+	assert.Equal(t, "new", restore.State)
+	assert.Equal(t, "2024-02-14T14:40:42Z", restore.CreatedAt)
+	assert.Equal(t, "2024-02-14T14:40:42Z", restore.UpdatedAt)
 }
 
 func TestRegistrarService_GetDomainRestore(t *testing.T) {
