@@ -345,7 +345,7 @@ type RestoreDomainInput struct {
 
 // RestoreDomain restores a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#domainRestore
+// See https://developer.dnsimple.com/v2/registrar/#restoreDomain
 func (s *RegistrarService) RestoreDomain(ctx context.Context, accountID string, domainName string, input *RestoreDomainInput) (*DomainRestoreResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/restores", accountID, domainName))
 	restoreResponse := &DomainRestoreResponse{}
