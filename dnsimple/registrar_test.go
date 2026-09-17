@@ -394,14 +394,14 @@ func TestRegistrarService_RestoreDomain(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		// want := map[string]interface{}{}
-		// testRequestJSON(t, r, want)
+		want := map[string]interface{}{"premium_price": "109.00"}
+		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	restoreResponse, err := client.Registrar.RestoreDomain(context.Background(), "1010", "example.com", nil)
+	restoreResponse, err := client.Registrar.RestoreDomain(context.Background(), "1010", "example.com", &RestoreDomainInput{PremiumPrice: "109.00"})
 
 	assert.NoError(t, err)
 	restore := restoreResponse.Data
