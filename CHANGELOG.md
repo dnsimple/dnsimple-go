@@ -6,7 +6,7 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is
 
 ### Changed
 
-- **BREAKING**: Changed `RegistrarService.RestoreDomain` to accept a `*RestoreDomainInput` and return a `*DomainRestoreResponse`. It previously accepted a `*RenewDomainInput` and returned a `*DomainRenewalResponse`, which did not match the restore API. (requires major version)
+- **BREAKING**: Changed `RegistrarService.RestoreDomain` to accept a `*RestoreDomainInput` and return a `*DomainRestoreResponse`. It previously accepted a `*RenewDomainInput` and returned a `*DomainRenewalResponse`, which did not match the restore API. (#277) (requires major version)
 
 ## 9.2.0 - 2026-09-17
 
