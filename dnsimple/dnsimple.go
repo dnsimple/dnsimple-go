@@ -460,7 +460,7 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 
 	// options is a pointer
 	// return if the value of the pointer is nil,
-	if opt.Kind() == reflect.Ptr && opt.IsNil() {
+	if opt.Kind() == reflect.Pointer && opt.IsNil() {
 		return path, nil
 	}
 
