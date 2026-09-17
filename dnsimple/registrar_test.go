@@ -369,19 +369,25 @@ func TestRegistrarService_RenewDomain(t *testing.T) {
 		testMethod(t, r, "POST")
 		testHeaders(t, r)
 
-		// want := map[string]interface{}{}
-		// testRequestJSON(t, r, want)
+		want := map[string]interface{}{"period": float64(1), "premium_price": "109.00"}
+		testRequestJSON(t, r, want)
 
 		w.WriteHeader(httpResponse.StatusCode)
 		_, _ = io.Copy(w, httpResponse.Body)
 	})
 
-	renewalResponse, err := client.Registrar.RenewDomain(context.Background(), "1010", "example.com", nil)
+	renewalResponse, err := client.Registrar.RenewDomain(context.Background(), "1010", "example.com", &RenewDomainInput{Period: 1, PremiumPrice: "109.00"})
 
 	assert.NoError(t, err)
-	renewal := renewalResponse.Data
-	assert.Equal(t, int64(1), renewal.ID)
-	assert.Equal(t, int64(999), renewal.DomainID)
+	wantSingle := &DomainRenewal{
+		ID:        1,
+		DomainID:  999,
+		Period:    1,
+		State:     "new",
+		CreatedAt: "2016-12-09T19:46:45Z",
+		UpdatedAt: "2016-12-09T19:46:45Z",
+	}
+	assert.Equal(t, wantSingle, renewalResponse.Data)
 }
 
 func TestRegistrarService_RestoreDomain(t *testing.T) {
@@ -404,12 +410,14 @@ func TestRegistrarService_RestoreDomain(t *testing.T) {
 	restoreResponse, err := client.Registrar.RestoreDomain(context.Background(), "1010", "example.com", &RestoreDomainInput{PremiumPrice: "109.00"})
 
 	assert.NoError(t, err)
-	restore := restoreResponse.Data
-	assert.Equal(t, int64(43), restore.ID)
-	assert.Equal(t, int64(214), restore.DomainID)
-	assert.Equal(t, "new", restore.State)
-	assert.Equal(t, "2024-02-14T14:40:42Z", restore.CreatedAt)
-	assert.Equal(t, "2024-02-14T14:40:42Z", restore.UpdatedAt)
+	wantSingle := &DomainRestore{
+		ID:        43,
+		DomainID:  214,
+		State:     "new",
+		CreatedAt: "2024-02-14T14:40:42Z",
+		UpdatedAt: "2024-02-14T14:40:42Z",
+	}
+	assert.Equal(t, wantSingle, restoreResponse.Data)
 }
 
 func TestRegistrarService_GetDomainRestore(t *testing.T) {
