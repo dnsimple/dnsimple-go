@@ -34,7 +34,7 @@ func (s *ZonesService) CheckZoneDistribution(ctx context.Context, accountID stri
 
 // CheckZoneRecordDistribution checks if a zone is fully distributed across DNSimple nodes.
 //
-// See https://developer.dnsimple.com/v2/zones/#checkZoneRecordDistribution
+// See https://developer.dnsimple.com/v2/zones/records/#checkZoneRecordDistribution
 func (s *ZonesService) CheckZoneRecordDistribution(ctx context.Context, accountID string, zoneName string, recordID int64) (*ZoneDistributionResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/zones/%v/records/%v/distribution", accountID, zoneName, recordID))
 	zoneDistributionResponse := &ZoneDistributionResponse{}

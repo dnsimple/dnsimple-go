@@ -57,7 +57,7 @@ type ContactsResponse struct {
 
 // ListContacts list the contacts for an account.
 //
-// See https://developer.dnsimple.com/v2/contacts/#list
+// See https://developer.dnsimple.com/v2/contacts/#listContacts
 func (s *ContactsService) ListContacts(ctx context.Context, accountID string, options *ListOptions) (*ContactsResponse, error) {
 	path := versioned(contactPath(accountID, 0))
 	contactsResponse := &ContactsResponse{}
@@ -78,7 +78,7 @@ func (s *ContactsService) ListContacts(ctx context.Context, accountID string, op
 
 // CreateContact creates a new contact.
 //
-// See https://developer.dnsimple.com/v2/contacts/#create
+// See https://developer.dnsimple.com/v2/contacts/#createContact
 func (s *ContactsService) CreateContact(ctx context.Context, accountID string, contactAttributes Contact) (*ContactResponse, error) {
 	path := versioned(contactPath(accountID, 0))
 	contactResponse := &ContactResponse{}
@@ -94,7 +94,7 @@ func (s *ContactsService) CreateContact(ctx context.Context, accountID string, c
 
 // GetContact fetches a contact.
 //
-// See https://developer.dnsimple.com/v2/contacts/#get
+// See https://developer.dnsimple.com/v2/contacts/#getContact
 func (s *ContactsService) GetContact(ctx context.Context, accountID string, contactID int64) (*ContactResponse, error) {
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}
@@ -110,7 +110,7 @@ func (s *ContactsService) GetContact(ctx context.Context, accountID string, cont
 
 // UpdateContact updates a contact.
 //
-// See https://developer.dnsimple.com/v2/contacts/#update
+// See https://developer.dnsimple.com/v2/contacts/#updateContact
 func (s *ContactsService) UpdateContact(ctx context.Context, accountID string, contactID int64, contactAttributes Contact) (*ContactResponse, error) {
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}
@@ -126,7 +126,7 @@ func (s *ContactsService) UpdateContact(ctx context.Context, accountID string, c
 
 // DeleteContact PERMANENTLY deletes a contact from the account.
 //
-// See https://developer.dnsimple.com/v2/contacts/#delete
+// See https://developer.dnsimple.com/v2/contacts/#deleteContact
 func (s *ContactsService) DeleteContact(ctx context.Context, accountID string, contactID int64) (*ContactResponse, error) {
 	path := versioned(contactPath(accountID, contactID))
 	contactResponse := &ContactResponse{}

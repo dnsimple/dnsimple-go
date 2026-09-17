@@ -27,7 +27,7 @@ type WhoamiResponse struct {
 
 // Whoami gets the current authenticate context.
 //
-// See https://developer.dnsimple.com/v2/whoami
+// See https://developer.dnsimple.com/v2/identity/#whoami
 func (s *IdentityService) Whoami(ctx context.Context) (*WhoamiResponse, error) {
 	path := versioned("/whoami")
 	whoamiResponse := &WhoamiResponse{}

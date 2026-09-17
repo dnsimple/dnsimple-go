@@ -46,7 +46,7 @@ type TemplatesResponse struct {
 
 // ListTemplates list the templates for an account.
 //
-// See https://developer.dnsimple.com/v2/templates/#list
+// See https://developer.dnsimple.com/v2/templates/#listTemplates
 func (s *TemplatesService) ListTemplates(ctx context.Context, accountID string, options *ListOptions) (*TemplatesResponse, error) {
 	path := versioned(templatePath(accountID, ""))
 	templatesResponse := &TemplatesResponse{}
@@ -67,7 +67,7 @@ func (s *TemplatesService) ListTemplates(ctx context.Context, accountID string, 
 
 // CreateTemplate creates a new template.
 //
-// See https://developer.dnsimple.com/v2/templates/#create
+// See https://developer.dnsimple.com/v2/templates/#createTemplate
 func (s *TemplatesService) CreateTemplate(ctx context.Context, accountID string, templateAttributes Template) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, ""))
 	templateResponse := &TemplateResponse{}
@@ -83,7 +83,7 @@ func (s *TemplatesService) CreateTemplate(ctx context.Context, accountID string,
 
 // GetTemplate fetches a template.
 //
-// See https://developer.dnsimple.com/v2/templates/#get
+// See https://developer.dnsimple.com/v2/templates/#getTemplate
 func (s *TemplatesService) GetTemplate(ctx context.Context, accountID string, templateIdentifier string) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
@@ -99,7 +99,7 @@ func (s *TemplatesService) GetTemplate(ctx context.Context, accountID string, te
 
 // UpdateTemplate updates a template.
 //
-// See https://developer.dnsimple.com/v2/templates/#update
+// See https://developer.dnsimple.com/v2/templates/#updateTemplate
 func (s *TemplatesService) UpdateTemplate(ctx context.Context, accountID string, templateIdentifier string, templateAttributes Template) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}
@@ -115,7 +115,7 @@ func (s *TemplatesService) UpdateTemplate(ctx context.Context, accountID string,
 
 // DeleteTemplate deletes a template.
 //
-// See https://developer.dnsimple.com/v2/templates/#delete
+// See https://developer.dnsimple.com/v2/templates/#deleteTemplate
 func (s *TemplatesService) DeleteTemplate(ctx context.Context, accountID string, templateIdentifier string) (*TemplateResponse, error) {
 	path := versioned(templatePath(accountID, templateIdentifier))
 	templateResponse := &TemplateResponse{}

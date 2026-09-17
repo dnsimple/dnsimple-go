@@ -28,7 +28,7 @@ type DomainCheckResponse struct {
 
 // CheckDomain checks a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#check
+// See https://developer.dnsimple.com/v2/registrar/#checkDomain
 func (s *RegistrarService) CheckDomain(ctx context.Context, accountID string, domainName string) (*DomainCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
 	checkResponse := &DomainCheckResponse{}

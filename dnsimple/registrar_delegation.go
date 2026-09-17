@@ -22,7 +22,7 @@ type VanityDelegationResponse struct {
 
 // GetDomainDelegation gets the current delegated name servers for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/delegation/#get
+// See https://developer.dnsimple.com/v2/registrar/delegation/#getDomainDelegation
 func (s *RegistrarService) GetDomainDelegation(ctx context.Context, accountID string, domainName string) (*DelegationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation", accountID, domainName))
 	delegationResponse := &DelegationResponse{}
@@ -38,7 +38,7 @@ func (s *RegistrarService) GetDomainDelegation(ctx context.Context, accountID st
 
 // ChangeDomainDelegation updates the delegated name severs for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/delegation/#get
+// See https://developer.dnsimple.com/v2/registrar/delegation/#changeDomainDelegation
 func (s *RegistrarService) ChangeDomainDelegation(ctx context.Context, accountID string, domainName string, newDelegation *Delegation) (*DelegationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation", accountID, domainName))
 	delegationResponse := &DelegationResponse{}
@@ -54,7 +54,7 @@ func (s *RegistrarService) ChangeDomainDelegation(ctx context.Context, accountID
 
 // ChangeDomainDelegationToVanity enables vanity name servers for the given domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/delegation/#delegateToVanity
+// See https://developer.dnsimple.com/v2/registrar/delegation/#changeDomainDelegationToVanity
 func (s *RegistrarService) ChangeDomainDelegationToVanity(ctx context.Context, accountID string, domainName string, newDelegation *Delegation) (*VanityDelegationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation/vanity", accountID, domainName))
 	delegationResponse := &VanityDelegationResponse{}
@@ -70,7 +70,7 @@ func (s *RegistrarService) ChangeDomainDelegationToVanity(ctx context.Context, a
 
 // ChangeDomainDelegationFromVanity disables vanity name servers for the given domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/delegation/#dedelegateFromVanity
+// See https://developer.dnsimple.com/v2/registrar/delegation/#changeDomainDelegationFromVanity
 func (s *RegistrarService) ChangeDomainDelegationFromVanity(ctx context.Context, accountID string, domainName string) (*VanityDelegationResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/delegation/vanity", accountID, domainName))
 	delegationResponse := &VanityDelegationResponse{}
