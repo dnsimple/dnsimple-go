@@ -1,7 +1,7 @@
 package webhook
 
 import (
-	"github.com/dnsimple/dnsimple-go/v9/dnsimple"
+	"github.com/dnsimple/dnsimple-go/v10/dnsimple"
 )
 
 func switchEventData(event *Event) (EventDataContainer, error) {
