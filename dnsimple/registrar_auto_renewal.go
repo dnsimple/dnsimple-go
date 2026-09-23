@@ -7,7 +7,7 @@ import (
 
 // EnableDomainAutoRenewal enables auto-renewal for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/auto-renewal/#enable
+// See https://developer.dnsimple.com/v2/registrar/auto-renewal/#enableDomainAutoRenewal
 func (s *RegistrarService) EnableDomainAutoRenewal(ctx context.Context, accountID string, domainName string) (*DomainResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/auto_renewal", accountID, domainName))
 	domainResponse := &DomainResponse{}
@@ -23,7 +23,7 @@ func (s *RegistrarService) EnableDomainAutoRenewal(ctx context.Context, accountI
 
 // DisableDomainAutoRenewal disables auto-renewal for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/auto-renewal/#enable
+// See https://developer.dnsimple.com/v2/registrar/auto-renewal/#disableDomainAutoRenewal
 func (s *RegistrarService) DisableDomainAutoRenewal(ctx context.Context, accountID string, domainName string) (*DomainResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/auto_renewal", accountID, domainName))
 	domainResponse := &DomainResponse{}

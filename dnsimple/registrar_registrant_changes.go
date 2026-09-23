@@ -82,7 +82,7 @@ type RegistrantChangeDeleteResponse struct {
 
 // ListRegistrantChange lists registrant changes in the account.
 //
-// See https://developer.dnsimple.com/v2/registrar/#listRegistrantChanges
+// See https://developer.dnsimple.com/v2/registrar/registrant-changes/#listRegistrantChanges
 func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID string, options *RegistrantChangeListOptions) (*RegistrantChangesListResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes", accountID))
 	changeResponse := &RegistrantChangesListResponse{}
@@ -103,7 +103,7 @@ func (s *RegistrarService) ListRegistrantChange(ctx context.Context, accountID s
 
 // CreateRegistrantChange starts a registrant change.
 //
-// See https://developer.dnsimple.com/v2/registrar/#createRegistrantChange
+// See https://developer.dnsimple.com/v2/registrar/registrant-changes/#createRegistrantChange
 func (s *RegistrarService) CreateRegistrantChange(ctx context.Context, accountID string, input *CreateRegistrantChangeInput) (*RegistrantChangeResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes", accountID))
 	changeResponse := &RegistrantChangeResponse{}
@@ -119,7 +119,7 @@ func (s *RegistrarService) CreateRegistrantChange(ctx context.Context, accountID
 
 // CheckRegistrantChange retrieves the requirements of a registrant change.
 //
-// See https://developer.dnsimple.com/v2/registrar/#checkRegistrantChange
+// See https://developer.dnsimple.com/v2/registrar/registrant-changes/#checkRegistrantChange
 func (s *RegistrarService) CheckRegistrantChange(ctx context.Context, accountID string, input *CheckRegistrantChangeInput) (*RegistrantChangeCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes/check", accountID))
 	checkResponse := &RegistrantChangeCheckResponse{}
@@ -135,7 +135,7 @@ func (s *RegistrarService) CheckRegistrantChange(ctx context.Context, accountID 
 
 // GetRegistrantChange retrieves the details of an existing registrant change.
 //
-// See https://developer.dnsimple.com/v2/registrar/#getRegistrantChange
+// See https://developer.dnsimple.com/v2/registrar/registrant-changes/#getRegistrantChange
 func (s *RegistrarService) GetRegistrantChange(ctx context.Context, accountID string, registrantChange int) (*RegistrantChangeResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes/%v", accountID, registrantChange))
 	checkResponse := &RegistrantChangeResponse{}
@@ -151,7 +151,7 @@ func (s *RegistrarService) GetRegistrantChange(ctx context.Context, accountID st
 
 // DeleteRegistrantChange cancels an ongoing registrant change from the account.
 //
-// See https://developer.dnsimple.com/v2/registrar/#deleteRegistrantChange
+// See https://developer.dnsimple.com/v2/registrar/registrant-changes/#deleteRegistrantChange
 func (s *RegistrarService) DeleteRegistrantChange(ctx context.Context, accountID string, registrantChange int) (*RegistrantChangeDeleteResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/registrant_changes/%v", accountID, registrantChange))
 	deleteResponse := &RegistrantChangeDeleteResponse{}

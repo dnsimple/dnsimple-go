@@ -6,8 +6,20 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is
 
 ### Changed
 
-- Dropped support for Go < 1.26
+- **BREAKING**: Dropped support for Go < 1.26
 - Bump golang.org/x/oauth2 to v0.37.0
+
+## 10.0.0 - 2026-09-22
+
+### Changed
+
+- **BREAKING**: Changed `RegistrarService.RestoreDomain` to accept a `*RestoreDomainInput` and return a `*DomainRestoreResponse`. It previously accepted a `*RenewDomainInput` and returned a `*DomainRenewalResponse`, which did not match the restore API. (#277)
+
+## 9.2.0 - 2026-09-17
+
+### Deprecated
+
+- Deprecated `ParentID` in `ZoneRecord`. The value is always zero, and the field will be removed in the next major version. (#276)
 
 ## 9.1.1 - 2026-08-21
 

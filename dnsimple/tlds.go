@@ -69,7 +69,7 @@ type TldExtendedAttributesResponse struct {
 
 // ListTlds lists the supported TLDs.
 //
-// See https://developer.dnsimple.com/v2/tlds/#list
+// See https://developer.dnsimple.com/v2/tlds/#listTlds
 func (s *TldsService) ListTlds(ctx context.Context, options *ListOptions) (*TldsResponse, error) {
 	path := versioned("/tlds")
 	tldsResponse := &TldsResponse{}
@@ -90,7 +90,7 @@ func (s *TldsService) ListTlds(ctx context.Context, options *ListOptions) (*Tlds
 
 // GetTld fetches a TLD.
 //
-// See https://developer.dnsimple.com/v2/tlds/#get
+// See https://developer.dnsimple.com/v2/tlds/#getTld
 func (s *TldsService) GetTld(ctx context.Context, tld string) (*TldResponse, error) {
 	path := versioned(fmt.Sprintf("/tlds/%s", tld))
 	tldResponse := &TldResponse{}
@@ -106,7 +106,7 @@ func (s *TldsService) GetTld(ctx context.Context, tld string) (*TldResponse, err
 
 // GetTldExtendedAttributes fetches the extended attributes of a TLD.
 //
-// See https://developer.dnsimple.com/v2/tlds/#get
+// See https://developer.dnsimple.com/v2/tlds/#getTldExtendedAttributes
 func (s *TldsService) GetTldExtendedAttributes(ctx context.Context, tld string) (*TldExtendedAttributesResponse, error) {
 	path := versioned(fmt.Sprintf("/tlds/%s/extended_attributes", tld))
 	tldResponse := &TldExtendedAttributesResponse{}

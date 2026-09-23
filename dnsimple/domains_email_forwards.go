@@ -41,7 +41,7 @@ type EmailForwardsResponse struct {
 
 // ListEmailForwards lists the email forwards for a domain.
 //
-// See https://developer.dnsimple.com/v2/domains/email-forwards/#list
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#listEmailForwards
 func (s *DomainsService) ListEmailForwards(ctx context.Context, accountID string, domainIdentifier string, options *ListOptions) (*EmailForwardsResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, 0))
 	forwardsResponse := &EmailForwardsResponse{}
@@ -62,7 +62,7 @@ func (s *DomainsService) ListEmailForwards(ctx context.Context, accountID string
 
 // CreateEmailForward creates a new email forward.
 //
-// See https://developer.dnsimple.com/v2/domains/email-forwards/#create
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#createEmailForward
 func (s *DomainsService) CreateEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardAttributes EmailForward) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, 0))
 	forwardResponse := &EmailForwardResponse{}
@@ -78,7 +78,7 @@ func (s *DomainsService) CreateEmailForward(ctx context.Context, accountID strin
 
 // GetEmailForward fetches an email forward.
 //
-// See https://developer.dnsimple.com/v2/domains/email-forwards/#get
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#getEmailForward
 func (s *DomainsService) GetEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &EmailForwardResponse{}
@@ -94,7 +94,7 @@ func (s *DomainsService) GetEmailForward(ctx context.Context, accountID string, 
 
 // DeleteEmailForward PERMANENTLY deletes an email forward from the domain.
 //
-// See https://developer.dnsimple.com/v2/domains/email-forwards/#delete
+// See https://developer.dnsimple.com/v2/domains/email-forwards/#deleteEmailForward
 func (s *DomainsService) DeleteEmailForward(ctx context.Context, accountID string, domainIdentifier string, forwardID int64) (*EmailForwardResponse, error) {
 	path := versioned(emailForwardPath(accountID, domainIdentifier, forwardID))
 	forwardResponse := &EmailForwardResponse{}

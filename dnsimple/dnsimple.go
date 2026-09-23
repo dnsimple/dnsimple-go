@@ -25,7 +25,7 @@ const (
 	// This is a pro-forma convention given that Go dependencies
 	// tends to be fetched directly from the repo.
 	// It is also used in the user-agent identify the client.
-	Version = "9.1.1"
+	Version = "10.0.0"
 
 	// defaultBaseURL to the DNSimple production API.
 	defaultBaseURL = "https://api.dnsimple.com"
@@ -460,7 +460,7 @@ func addURLQueryOptions(path string, options interface{}) (string, error) {
 
 	// options is a pointer
 	// return if the value of the pointer is nil,
-	if opt.Kind() == reflect.Ptr && opt.IsNil() {
+	if opt.Kind() == reflect.Pointer && opt.IsNil() {
 		return path, nil
 	}
 

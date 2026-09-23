@@ -23,7 +23,7 @@ type WhoisPrivacyResponse struct {
 
 // EnableWhoisPrivacy enables the whois privacy for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/whois-privacy/#enable
+// See https://developer.dnsimple.com/v2/registrar/whois-privacy/#enableWhoisPrivacy
 func (s *RegistrarService) EnableWhoisPrivacy(ctx context.Context, accountID string, domainName string) (*WhoisPrivacyResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy", accountID, domainName))
 	privacyResponse := &WhoisPrivacyResponse{}
@@ -39,7 +39,7 @@ func (s *RegistrarService) EnableWhoisPrivacy(ctx context.Context, accountID str
 
 // DisableWhoisPrivacy disables the whois privacy for the domain.
 //
-// See https://developer.dnsimple.com/v2/registrar/whois-privacy/#enable
+// See https://developer.dnsimple.com/v2/registrar/whois-privacy/#disableWhoisPrivacy
 func (s *RegistrarService) DisableWhoisPrivacy(ctx context.Context, accountID string, domainName string) (*WhoisPrivacyResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/whois_privacy", accountID, domainName))
 	privacyResponse := &WhoisPrivacyResponse{}

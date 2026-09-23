@@ -56,7 +56,7 @@ type AccountsResponse struct {
 
 // ListAccounts list the accounts for an user.
 //
-// See https://developer.dnsimple.com/v2/accounts/#list
+// See https://developer.dnsimple.com/v2/accounts/#listAccounts
 func (s *AccountsService) ListAccounts(ctx context.Context, options *ListOptions) (*AccountsResponse, error) {
 	path := versioned("/accounts")
 	accountsResponse := &AccountsResponse{}

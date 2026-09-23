@@ -7,8 +7,9 @@ import (
 
 // ZoneRecord represents a zone record in DNSimple.
 type ZoneRecord struct {
-	ID           int64    `json:"id,omitempty"`
-	ZoneID       string   `json:"zone_id,omitempty"`
+	ID     int64  `json:"id,omitempty"`
+	ZoneID string `json:"zone_id,omitempty"`
+	// Deprecated: ParentID is deprecated, its value is always zero, and it will be removed in the next major version.
 	ParentID     int64    `json:"parent_id,omitempty"`
 	Type         string   `json:"type,omitempty"`
 	Name         string   `json:"name"`

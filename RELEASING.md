@@ -20,6 +20,8 @@ This document describes the steps to release a new version of DNSimple/Go.
    - **MINOR** version for backwards-compatible functionality additions
    - **PATCH** version for backwards-compatible bug fixes
 
+   Check the `## Unreleased` section in `CHANGELOG.md` for entries prefixed with `**BREAKING**:`. Any such entry requires a **MAJOR** version, whatever the other entries are. Raising the minimum supported Go version is always a breaking change, so its changelog entry must carry this prefix.
+
    The major part of the version number should match the version in the module path in `go.mod` (e.g., if module path is `github.com/dnsimple/dnsimple-go/v5`, the version should be `5.y.z`).
 
 2. **Run tests** and confirm they pass
@@ -44,7 +46,7 @@ This document describes the steps to release a new version of DNSimple/Go.
 
 5. **Update the changelog** with the new version
 
-   Finalize the `## main` section in `CHANGELOG.md` assigning the version.
+   Finalize the `## Unreleased` section in `CHANGELOG.md` assigning the version.
 
 6. **Commit the new version**
 

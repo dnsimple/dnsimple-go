@@ -46,7 +46,7 @@ type BillingService struct {
 
 // Lists the billing charges for the account.
 //
-// See https://developer.dnsimple.com/v2/billing/#listCharges
+// See https://developer.dnsimple.com/v2/billing-charges/#listCharges
 func (s *BillingService) ListCharges(ctx context.Context, account string, options ListChargesOptions) (*ListChargesResponse, error) {
 	path := fmt.Sprintf("/v2/%v/billing/charges", account)
 	listResponse := &ListChargesResponse{}

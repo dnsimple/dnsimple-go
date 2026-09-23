@@ -28,7 +28,7 @@ type DomainCheckResponse struct {
 
 // CheckDomain checks a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#check
+// See https://developer.dnsimple.com/v2/registrar/#checkDomain
 func (s *RegistrarService) CheckDomain(ctx context.Context, accountID string, domainName string) (*DomainCheckResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/check", accountID, domainName))
 	checkResponse := &DomainCheckResponse{}
@@ -337,20 +337,26 @@ func (s *RegistrarService) RenewDomain(ctx context.Context, accountID string, do
 	return renewalResponse, nil
 }
 
+// RestoreDomainInput represents the attributes you can pass to a restore API request.
+type RestoreDomainInput struct {
+	// Required as confirmation of the price, only if the domain is premium.
+	PremiumPrice string `json:"premium_price,omitempty"`
+}
+
 // RestoreDomain restores a domain name.
 //
-// See https://developer.dnsimple.com/v2/registrar/#renewDomain
-func (s *RegistrarService) RestoreDomain(ctx context.Context, accountID string, domainName string, input *RenewDomainInput) (*DomainRenewalResponse, error) {
+// See https://developer.dnsimple.com/v2/registrar/#restoreDomain
+func (s *RegistrarService) RestoreDomain(ctx context.Context, accountID string, domainName string, input *RestoreDomainInput) (*DomainRestoreResponse, error) {
 	path := versioned(fmt.Sprintf("/%v/registrar/domains/%v/restores", accountID, domainName))
-	renewalResponse := &DomainRenewalResponse{}
+	restoreResponse := &DomainRestoreResponse{}
 
-	resp, err := s.client.post(ctx, path, input, renewalResponse)
+	resp, err := s.client.post(ctx, path, input, restoreResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	renewalResponse.HTTPResponse = resp
-	return renewalResponse, nil
+	restoreResponse.HTTPResponse = resp
+	return restoreResponse, nil
 }
 
 // GetDomainRestore gets the details of an existing domain restore.
