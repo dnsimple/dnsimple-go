@@ -2,6 +2,13 @@
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## main
+
+### Changed
+
+- Dropped support for Go < 1.26
+- Bump golang.org/x/oauth2 to v0.37.0
+
 ## 9.1.1 - 2026-08-21
 
 ### Fixed
