@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/google/go-querystring v1.2.0
-	github.com/shopspring/decimal v1.5.0
+	github.com/shopspring/decimal v1.6.0
 	github.com/stretchr/testify v1.12.1
 	golang.org/x/oauth2 v0.37.0
 )
