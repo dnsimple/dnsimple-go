@@ -8,6 +8,7 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/), the format is
 
 - **BREAKING**: Dropped support for Go < 1.26
 - Bump golang.org/x/oauth2 to v0.37.0
+- **BREAKING**: Changed `ZoneRecordAttributes.Priority` and `ZoneRecordUpdateRequest.Priority` from `int` to `*int`, so a priority of `0` is sent instead of being dropped. Use `dnsimple.Int(10)` to set a priority. (#269)
 
 ## 10.0.0 - 2026-09-22
 
