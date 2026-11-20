@@ -2,6 +2,7 @@ package dnsimple
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -353,6 +354,90 @@ func TestZonesService_DeleteRecord(t *testing.T) {
 
 	_, err := client.Zones.DeleteRecord(context.Background(), accountID, "example.com", 2)
 
+	assert.NoError(t, err)
+}
+
+func TestZonesService_CreateRecord_PriorityZero(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/records", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/createZoneRecord/created.http")
+
+		want := map[string]interface{}{"name": "", "content": "mx.example.com", "type": "MX", "priority": float64(0)}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	recordValues := ZoneRecordAttributes{Name: String(""), Content: "mx.example.com", Type: "MX", Priority: Int(0)}
+
+	_, err := client.Zones.CreateRecord(context.Background(), "1010", "example.com", recordValues)
+	assert.NoError(t, err)
+}
+
+func TestZonesService_UpdateRecord_Priority(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	tests := []struct {
+		name     string
+		priority *int
+		want     map[string]interface{}
+	}{
+		{name: "zero", priority: Int(0), want: map[string]interface{}{"priority": float64(0)}},
+		{name: "non-zero", priority: Int(10), want: map[string]interface{}{"priority": float64(10)}},
+		{name: "not provided", priority: nil, want: map[string]interface{}{"content": "mx.example.com"}},
+	}
+
+	for i, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			accountID := fmt.Sprintf("%d", 1010+i)
+			mux.HandleFunc(fmt.Sprintf("/v2/%s/zones/example.com/records/5", accountID), func(w http.ResponseWriter, r *http.Request) {
+				httpResponse := httpResponseFixture(t, "/api/updateZoneRecord/success.http")
+
+				testMethod(t, r, "PATCH")
+				testRequestJSON(t, r, tt.want)
+
+				w.WriteHeader(httpResponse.StatusCode)
+				_, _ = io.Copy(w, httpResponse.Body)
+			})
+
+			recordValues := ZoneRecordAttributes{Priority: tt.priority}
+			if tt.priority == nil {
+				recordValues.Content = "mx.example.com"
+			}
+
+			_, err := client.Zones.UpdateRecord(context.Background(), accountID, "example.com", 5, recordValues)
+			assert.NoError(t, err)
+		})
+	}
+}
+
+func TestZonesService_BatchChangeZoneRecords_UpdatePriorityZero(t *testing.T) {
+	setupMockServer()
+	defer teardownMockServer()
+
+	mux.HandleFunc("/v2/1010/zones/example.com/batch", func(w http.ResponseWriter, r *http.Request) {
+		httpResponse := httpResponseFixture(t, "/api/batchChangeZoneRecords/success.http")
+
+		want := map[string]interface{}{
+			"updates": []interface{}{
+				map[string]interface{}{"id": float64(67622534), "priority": float64(0)},
+			},
+		}
+		testRequestJSON(t, r, want)
+
+		w.WriteHeader(httpResponse.StatusCode)
+		_, _ = io.Copy(w, httpResponse.Body)
+	})
+
+	batchRequest := BatchChangeZoneRecordsRequest{
+		Updates: []ZoneRecordUpdateRequest{{ID: 67622534, Priority: Int(0)}},
+	}
+
+	_, err := client.Zones.BatchChangeZoneRecords(context.Background(), "1010", "example.com", batchRequest)
 	assert.NoError(t, err)
 }
 

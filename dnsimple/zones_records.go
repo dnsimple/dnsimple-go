@@ -27,13 +27,16 @@ type ZoneRecord struct {
 // Compared to most other calls in this library, you should not use ZoneRecord as payload for record calls.
 // This is because it can lead to side effects due to the inability of go to distinguish between a non-present string
 // and an empty string. Name can be both, therefore a specific struct is required.
+//
+// Priority is a pointer for the same reason: 0 is a valid priority (for example for MX records),
+// so a nil Priority is omitted from the request while Int(0) is sent.
 type ZoneRecordAttributes struct {
 	ZoneID   string   `json:"zone_id,omitempty"`
 	Type     string   `json:"type,omitempty"`
 	Name     *string  `json:"name,omitempty"`
 	Content  string   `json:"content,omitempty"`
 	TTL      int      `json:"ttl,omitempty"`
-	Priority int      `json:"priority,omitempty"`
+	Priority *int     `json:"priority,omitempty"`
 	Regions  []string `json:"regions,omitempty"`
 }
 
@@ -165,13 +168,15 @@ type BatchChangeZoneRecordsRequest struct {
 }
 
 // ZoneRecordUpdateRequest represents an update request for a zone record in a batch operation.
+//
+// Priority is a pointer so that a priority of 0 can be sent. See ZoneRecordAttributes.
 type ZoneRecordUpdateRequest struct {
 	ID       int64    `json:"id"`
 	Type     string   `json:"type,omitempty"`
 	Name     *string  `json:"name,omitempty"`
 	Content  string   `json:"content,omitempty"`
 	TTL      int      `json:"ttl,omitempty"`
-	Priority int      `json:"priority,omitempty"`
+	Priority *int     `json:"priority,omitempty"`
 	Regions  []string `json:"regions,omitempty"`
 }
 
