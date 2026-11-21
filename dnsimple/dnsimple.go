@@ -9,9 +9,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -35,6 +36,8 @@ const (
 	defaultUserAgent = "dnsimple-go/" + Version
 
 	apiVersion = "v2"
+
+	logComponent = "dnsimple-go"
 )
 
 // Client represents a client to the DNSimple API.
@@ -67,7 +70,13 @@ type Client struct {
 	Webhooks          *WebhooksService
 	Zones             *ZonesService
 
-	// Set to true to output debugging logs during API calls
+	// Logger is the logger used by the client.
+	// If not set, slog.Default() is used.
+	Logger *slog.Logger
+
+	// Set to true to output debugging logs during API calls.
+	//
+	// Deprecated: Use Logger and slog levels instead.
 	Debug bool
 }
 
@@ -91,7 +100,10 @@ type ListOptions struct {
 // To authenticate you must provide an http.Client that will perform authentication
 // for you with one of the currently supported mechanisms: OAuth or HTTP Basic.
 func NewClient(httpClient *http.Client) *Client {
-	c := &Client{httpClient: httpClient, BaseURL: defaultBaseURL}
+	c := &Client{
+		httpClient: httpClient,
+		BaseURL:    defaultBaseURL,
+	}
 	c.Identity = &IdentityService{client: c}
 	c.Accounts = &AccountsService{client: c}
 	c.Billing = &BillingService{client: c}
@@ -176,21 +188,55 @@ func (c *Client) makeRequest(ctx context.Context, method, path string, payload, 
 	if err != nil {
 		return nil, err
 	}
-
-	if c.Debug {
-		log.Printf("Request (%v): %#v", req.URL, req)
-	}
+	logger := c.resolveLogger()
 
 	resp, err := c.request(ctx, req, obj)
 	if err != nil {
+		logger.DebugContext(ctx, "Request",
+			slog.String("method", req.Method),
+			slog.String("url", req.URL.String()),
+			headerAttrs(req.Header),
+		)
 		return nil, err
 	}
 
-	if c.Debug {
-		log.Printf("Response: %#v", resp)
+	logger.DebugContext(ctx, "Request",
+		slog.String("method", req.Method),
+		slog.String("url", req.URL.String()),
+		headerAttrs(req.Header),
+	)
+	logger.DebugContext(ctx, "Response",
+		slog.Int("status", resp.StatusCode),
+		slog.String("status_text", resp.Status),
+		headerAttrs(resp.Header),
+	)
+	return resp, nil
+}
+
+func (c *Client) resolveLogger() *slog.Logger {
+	// Check Debug first so the backward compat
+	// path is always reachable.
+	if c.Debug && c.Logger == nil {
+		handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		})
+		return slog.New(handler).With("component", logComponent)
+	}
+	if c.Logger != nil {
+		return c.Logger
 	}
 
-	return resp, nil
+	return slog.Default().With("component", logComponent)
+}
+
+// headerAttrs converts relevant headers into a slog.Group
+// so all headers are nested under a "headers" key.
+func headerAttrs(h http.Header) slog.Attr {
+	var attrs []any
+	for key, vals := range h {
+		attrs = append(attrs, slog.String(key, strings.Join(vals, ", ")))
+	}
+	return slog.Group("headers", attrs...)
 }
 
 // newRequest creates an API request.
